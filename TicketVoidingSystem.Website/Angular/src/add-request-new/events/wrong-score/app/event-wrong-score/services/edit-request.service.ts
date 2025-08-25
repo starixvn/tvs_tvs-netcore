@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import { TVSRequestFilterBy } from '../../../../../../utility/constants/config';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
@@ -32,7 +34,7 @@ export class EditRequestService {
     const allChildMatches = await this.relatedEventService.getGetInfoChildMatch(mainEvent.matchId, true, mainEvent.sportType, mainEvent.eventDate.toString());
     childEvents.push(...allChildMatches);
     await this.relatedEventService.assignModelsToEvents(relatedEvents, wrongScoreModels, childEvents, mainEvent.eventDate);
-    relatedEvents = _.orderBy(_.uniqBy(relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    relatedEvents = orderBy(uniqBy(relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
 
     return relatedEvents;
   }
@@ -44,7 +46,7 @@ export class EditRequestService {
       if (model) {
         model.isActive = x.isActive;
       } else {
-        wrongScoreModels.push(_.cloneDeep(x));
+        wrongScoreModels.push(cloneDeep(x));
       }
     });
 

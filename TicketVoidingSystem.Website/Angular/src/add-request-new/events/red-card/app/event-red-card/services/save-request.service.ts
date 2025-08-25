@@ -1,5 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { TvDetectionType } from '../../../../../../utility/constants/config';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
@@ -70,7 +72,7 @@ export class SaveRequestService {
     arg.confirmRedCard.isShowSubIssueType = true;
     arg.confirmRedCard.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmRedCard.isOpen = true;
-    arg.confirmRedCard = _.clone(arg.confirmRedCard);
+    arg.confirmRedCard = clone(arg.confirmRedCard);
   }
 
   async onClickConfirmSave(arg: SaveRequestArg) {
@@ -93,7 +95,7 @@ export class SaveRequestService {
   private validateVarCheck(allEvents: LogInfoRelatedEvent[]): boolean {
     let isSelectedVarAllEvents = true;
     allEvents.forEach(x => {
-      if (StaticService.isShowVarCheck(x.subIssueTypeId) && (_.isNull(x.isCheckedVar) || _.isUndefined(x.isCheckedVar))) {
+      if (StaticService.isShowVarCheck(x.subIssueTypeId) && (isNull(x.isCheckedVar) || isUndefined(x.isCheckedVar))) {
         x.isHighLightVarCheck = true;
         isSelectedVarAllEvents = false;
       }

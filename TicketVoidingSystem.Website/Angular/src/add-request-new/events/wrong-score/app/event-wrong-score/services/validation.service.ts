@@ -1,5 +1,6 @@
 import { Injectable, QueryList } from '@angular/core';
-import * as _ from 'lodash';
+import find from 'lodash/find';
+import last from 'lodash/last';
 import moment from 'moment-timezone';
 import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
@@ -66,7 +67,7 @@ export class ValidationService {
 
   public isFromTimeSameOrAfterDefaultValue(wrongScoreModel: WrongScoreModel, originWrongScoreModels: WrongScoreModel[], tooltip: Tooltip): boolean {
     const momentFromTime = moment(wrongScoreModel.filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
-    const momentDefaultFromTime = moment(_.find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
+    const momentDefaultFromTime = moment(find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterFromTransTime, DateTimeFormat.FULL_DATE_TIME_FORMAT);
 
     if (momentFromTime.isBefore(momentDefaultFromTime)) {
       tooltip.display(this.FROM_DATE_TIME_CLASS, LABELS.FROM_TIME_MUST_GREATER_THAN_DEFAULT);
@@ -161,7 +162,7 @@ export class ValidationService {
   }
 
   public isLastScore(wrongScoreModel: WrongScoreModel, originWrongScoreModels: WrongScoreModel[]): boolean {
-    return wrongScoreModel.scoreId === _.last(originWrongScoreModels).scoreId;
+    return wrongScoreModel.scoreId === last(originWrongScoreModels).scoreId;
   }
 
   public isEditingByAnotherUser(isEdit: boolean, editingBy: number, createdBy: number): boolean {

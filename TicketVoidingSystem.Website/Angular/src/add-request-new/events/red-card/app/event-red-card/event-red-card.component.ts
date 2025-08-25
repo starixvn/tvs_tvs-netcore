@@ -3,7 +3,9 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, 
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
@@ -42,6 +44,7 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+
 
 @Component({
   selector: 'event-red-card',
@@ -163,7 +166,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.mainEvent.parentId = this.eventLeagueComponent?.selectedMatch.parentId;
     this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
     await this.relatedEventService.getDataWhenSearch(this.relatedEvents, this.initAddRelatedEventArgs());
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
       x.filterTimeWithAllowanceComponent?.updateData();
       x.showValidationDetail();
@@ -216,7 +219,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
       await this.logInfoService.getLogInfo(newEvents, this.primitiveProps, this.isEdit, this.requestId, this.filter, this.defaultFilterTimeWithAllowance);
       this.logInfoService.updateIsCheckedVar(newEvents, this.mainEvent.isCheckedVar);
       this.allSelectedEvents.push(...newEvents);
-      this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+      this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
     this.clearInfoSiteDBDownModel();
     this.primitiveProps.isShowRelatedEvents = true;
@@ -225,7 +228,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
 
   async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
-    this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
   }
 
   handleDeleteEvent(matchId: number): void {
@@ -237,7 +240,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
     this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
     this.addChildMatchModel.matchType = matchType;
     this.addChildMatchModel.isOpen = true;
-    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+    this.addChildMatchModel = clone(this.addChildMatchModel);
   }
 
   countChildMatches(): number {

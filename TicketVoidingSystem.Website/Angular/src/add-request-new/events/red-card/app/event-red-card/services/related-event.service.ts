@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
@@ -94,7 +94,7 @@ export class RelatedEventService {
   private async preparingModelGetLogInfo(relatedEvents: ChildMatchModel[], arg: AddRelatedEventArg): Promise<LogInfoRelatedEvent[]> {
     const newChildEvents = relatedEvents.filter(x => !arg.allEvents.some(y => y.matchId === x.matchId) && this.isAutoSelectMatch(arg.mainEvent, x.matchType));
     const newEvents = this.assignChildMatchToLogInfoModel(newChildEvents, arg.defaultFilterTimeWithAllowance, arg.mainEvent.subIssueTypeId);
-    const eventsGetLogInfo = _.cloneDeep(arg.allEvents);
+    const eventsGetLogInfo = cloneDeep(arg.allEvents);
     eventsGetLogInfo.push(...newEvents);
     await this.eventRedCardService.updateSubIssueTypeAndAllowanceTime(eventsGetLogInfo, arg.mainEvent, relatedEvents, arg.defaultFilterTimeWithAllowance);
 

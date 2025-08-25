@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { MatchType, TVSRequestFilterBy } from '../../../../../../utility/constants/config';
 import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
 import { AllowanceTime } from '../../../../../../utility/models/allowance-time.model';
@@ -181,7 +181,7 @@ describe('service', () => {
 
   it('#updateSubIssueTypeAndAllowanceTime should call #getSubIssueTypeLinkMatch', async () => {
     // Arrange
-    const mainEvent = _.cloneDeep(Helper.fakeLogInfoRedCard);
+    const mainEvent = cloneDeep(Helper.fakeLogInfoRedCard);
     mainEvent.subIssueTypeId = 11;
     service['getSubIssueTypeLinkMatch'] = jest.fn();
     service['updateSubIssueType'] = jest.fn();
@@ -219,7 +219,7 @@ describe('service', () => {
 
   it('#getSubIssueTypeId should return expected issue type id when SubIssueTypeLinkMatch.subIssueTypeId is Null', async () => {
     // Arrange
-    const fakeSubIssueTypeLinkMatch = _.cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
+    const fakeSubIssueTypeLinkMatch = cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
     fakeSubIssueTypeLinkMatch.subIssueTypeId = null;
 
     // Action
@@ -231,7 +231,7 @@ describe('service', () => {
 
   it('#getSubIssueTypeId should return expected issue type id', async () => {
     // Arrange
-    const fakeSubIssueTypeLinkMatch = _.cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
+    const fakeSubIssueTypeLinkMatch = cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
     fakeSubIssueTypeLinkMatch.subIssueTypeId = null;
 
     // Action
@@ -243,7 +243,7 @@ describe('service', () => {
 
   it('#getSubIssueTypeId should return expected issue type id when handling matchId is not same', async () => {
     // Arrange
-    const fakeSubIssueTypeLinkMatch = _.cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
+    const fakeSubIssueTypeLinkMatch = cloneDeep(Helper.fakeSubIssueTypeLinkMatch);
     fakeSubIssueTypeLinkMatch.subIssueTypeId = null;
 
     // Action

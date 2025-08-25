@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import * as _ from 'lodash';
+import assignIn from 'lodash/assignIn';
 import moment from 'moment-timezone';
 import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
@@ -77,7 +77,7 @@ export class EventTechnicalErrorComponent implements OnInit {
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventTechnicalErrorService.assignModelsToEvents(this.technicalErrorModel);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], groupBetTypes), true, '', this.filter.isVoided);
     const betTeamsResult = this.technicalErrorModel.betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
@@ -97,7 +97,7 @@ export class EventTechnicalErrorComponent implements OnInit {
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);;
+    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 

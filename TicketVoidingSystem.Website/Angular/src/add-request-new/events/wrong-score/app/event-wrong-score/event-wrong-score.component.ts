@@ -1,7 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
+import cloneDeep from 'lodash/cloneDeep';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
@@ -126,7 +131,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
       }
       else {
         this.originWrongScoreModels = await this.editRequestService.getScoreWrongScoreModels(this.wrongScoreModels, this.matchId);
-        this.wrongScoreModels = _.orderBy(_.uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+        this.wrongScoreModels = orderBy(uniqBy(this.wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
       }
       this.defaultFilterTimeWithAllowance = this.wrongScoreService.getFilterWrongScore(mainWrongScoreModel);
     } else {
@@ -246,7 +251,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     };
 
     this.eventWrongScoreService.updateInfoConfirm(this.confirmWrongScoreModel, updateInfoArgs);
-    this.confirmWrongScoreModel = _.clone(this.confirmWrongScoreModel);
+    this.confirmWrongScoreModel = clone(this.confirmWrongScoreModel);
   }
 
   public getSelectedWrongScores(wrongScoreModels: WrongScoreModel[]): WrongScoreModel[] {
@@ -256,7 +261,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   private async saveWhenRequestNotVoided(): Promise<void> {
     const validation = await this.saveRequestService.checkValidationBeforeSaveRequest(this.createValidationBusinessRuleArgs());
     if (validation.isValid) {
-      this.relatedEvents = this.relatedEvents.map(event => _.cloneDeep(event));
+      this.relatedEvents = this.relatedEvents.map(event => cloneDeep(event));
       this.openConfirmWrongScore();
     } else {
       this.addRequestStore.changeSavingRequestStatus(false);
@@ -314,7 +319,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   validateVarCheck(): boolean {
-    if (this.isShowVarCheck() && (_.isNull(this.primitiveProps.isCheckedVar) || _.isUndefined(this.primitiveProps.isCheckedVar))) {
+    if (this.isShowVarCheck() && (isNull(this.primitiveProps.isCheckedVar) || isUndefined(this.primitiveProps.isCheckedVar))) {
       this.primitiveProps.isHighLightVarCheck = true;
       this.tooltip.display(this.errorTooltipClassName, LABELS.SELECTED_VAR_OPTIONS);
       return false;

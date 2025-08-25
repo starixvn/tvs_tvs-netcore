@@ -1,5 +1,8 @@
 import { EventEmitter, inject, Injectable, QueryList } from '@angular/core';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import find from 'lodash/find';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import moment from 'moment-timezone';
 import { DateTimeFormat, TimeZone } from '../../../../../../utility/constants/config';
 import { StaticService } from '../../../../../../utility/services/static.service';
@@ -48,17 +51,17 @@ export class WrongScoreService {
   async handleCheckedLastScore(originWrongScoreModels: WrongScoreModel[], wrongScoreModel: WrongScoreModel,
     updateByOriginWrongScoreModelEvent: EventEmitter<WrongScoreModel[]>, matchId: number, actionId: number, filterBy: number): Promise<void> {
     const wrongScores = await this.callApiGetWrongScores(matchId);
-    _.find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterToTransTime =
-      _.find(wrongScores, { scoreId: wrongScoreModel.scoreId }).filterToTransTime;
+    find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterToTransTime =
+      find(wrongScores, { scoreId: wrongScoreModel.scoreId }).filterToTransTime;
     if (wrongScores.length !== originWrongScoreModels.length) {
       wrongScores.forEach(x => {
         if (!originWrongScoreModels.some(y => y.scoreId === x.scoreId)) {
           x.matchId =
-            originWrongScoreModels.push(_.cloneDeep(x));
+            originWrongScoreModels.push(cloneDeep(x));
         }
       });
       updateByOriginWrongScoreModelEvent.emit(originWrongScoreModels);
-      wrongScoreModel.filterToTransTime = _.find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterToTransTime;
+      wrongScoreModel.filterToTransTime = find(originWrongScoreModels, { scoreId: wrongScoreModel.scoreId }).filterToTransTime;
     } else {
       await this.getLastTimeTicket(wrongScoreModel, actionId, matchId, filterBy);
     }
@@ -109,10 +112,10 @@ export class WrongScoreService {
   updateByOriginWrongScoreModel(originWrongScoreModels: WrongScoreModel[], wrongScoreModels: WrongScoreModel[]) {
     originWrongScoreModels.forEach(x => {
       if (!wrongScoreModels.some(y => y.scoreId === x.scoreId)) {
-        wrongScoreModels.push(_.cloneDeep(x));
+        wrongScoreModels.push(cloneDeep(x));
       }
     });
-    wrongScoreModels = _.orderBy(_.uniqBy(wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
+    wrongScoreModels = orderBy(uniqBy(wrongScoreModels, x => x.scoreId), ['scoreId'], ['asc']);
   }
 
   getTimeSelectedScore(wrongScoreModels: WrongScoreModel[]): string {

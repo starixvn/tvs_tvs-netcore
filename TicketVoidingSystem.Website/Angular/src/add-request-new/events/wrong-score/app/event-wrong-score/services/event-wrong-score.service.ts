@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { AcceptType, TVSRequestFilterBy } from '../../../../../../utility/constants/config';
 import { LABELS } from '../../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../../utility/models/match.model';
@@ -23,7 +23,7 @@ export class EventWrongScoreService {
     const allWrongScoreModels = await this.wrongScoreService.callApiGetWrongScores(matchId);
     if (allWrongScoreModels.length > 0) {
       wrongScoreModels.length = 0;
-      wrongScoreModels.push(..._.cloneDeep(allWrongScoreModels));
+      wrongScoreModels.push(...cloneDeep(allWrongScoreModels));
     }
 
     return allWrongScoreModels;

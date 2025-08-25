@@ -1,7 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import _ from 'lodash';
+import clone from 'lodash/clone';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import { AddChildMatchComponent } from '../../../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../../../utility/components/add-child-match/add-child-match.model';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
@@ -78,7 +80,7 @@ export class RelatedEventsComponent {
     this.addChildMatchModel.selectedMatchIds = this.relatedEvents.map(x => x.matchId);
     this.addChildMatchModel.matchType = matchType;
     this.addChildMatchModel.isOpen = true;
-    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+    this.addChildMatchModel = clone(this.addChildMatchModel);
   }
 
   countChildMatches(): number {
@@ -104,7 +106,7 @@ export class RelatedEventsComponent {
     const newChildEvents = selectedRelatedEvents.filter(x => !this.relatedEvents.some(y => y.matchId === x.matchId));
     if (newChildEvents.length > 0) {
       await this.relatedEventService.addEventByInputAndSelected(newChildEvents, this.initAddRelatedEventArgs());
-      this.relatedEvents = _.orderBy(_.uniqBy(this.relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
+      this.relatedEvents = orderBy(uniqBy(this.relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
     this.clearInfoSiteDBDownModelEvent();
     this.primitiveProps.isBlock = false;
@@ -113,7 +115,7 @@ export class RelatedEventsComponent {
   async getDataWhenSearch(): Promise<void> {
     this.childEvents = await this.relatedEventService.getGetInfoChildMatch(this.mainEvent.matchId, true, this.mainEvent.sportType, this.mainEvent.eventDate.toString());
     await this.relatedEventService.getDataRelatedEventWhenSearch(this.childEvents, this.initAddRelatedEventArgs());
-    this.relatedEvents = _.orderBy(_.uniqBy(this.relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.relatedEvents = orderBy(uniqBy(this.relatedEvents, x => x.matchId), ['matchCode'], ['asc']);
     this.logInfoComponents.forEach(x => {
       x.filterTimeWithAllowanceComponent?.updateData();
       x.showValidationDetail();

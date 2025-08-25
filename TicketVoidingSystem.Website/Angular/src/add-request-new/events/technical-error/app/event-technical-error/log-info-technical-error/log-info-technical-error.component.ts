@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../../../../utility/components/block-ui/block-ui.directive';
 import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
@@ -56,6 +56,6 @@ export class LogInfoTechnicalErrorComponent {
     this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.isOpen = true;
-    this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
+    this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 }

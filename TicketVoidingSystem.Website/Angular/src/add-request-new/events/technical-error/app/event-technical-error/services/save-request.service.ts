@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { ConfirmAddRequestModel } from '../../../../../component/confirm-add-request/confirm-add-request.model';
@@ -60,7 +60,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
     arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
 
-    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
+    arg.confirmAddRequest = clone(arg.confirmAddRequest);
     arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }
 
