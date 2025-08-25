@@ -45,9 +45,9 @@
                 <span class="text-red"
                   [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml">
                 </span>
-                }&nbsp;
+                }
                 @if (!filter.isVoided) {
-                <span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
+                <span class="ticket-details ms-1" (click)="showAffectedTicketsDetails()">Details</span>
                 }<br />
               </ng-container>
               @if (isMainMatch) {
@@ -61,9 +61,9 @@
                     [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
                   </span>
                   },
-                  Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
+                  Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>
                   @if (!filter.isVoided) {
-                  <span class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
+                  <span class="ticket-details ms-1" (click)="openPoolHouseDetails()">Details</span>
                   }
                 </div>
                 }
