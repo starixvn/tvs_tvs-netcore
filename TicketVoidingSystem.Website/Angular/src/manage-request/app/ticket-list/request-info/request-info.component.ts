@@ -5,7 +5,7 @@ import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
 import isNil from 'lodash/isNil';
 import isUndefined from 'lodash/isUndefined';
 import { AutosizeModule } from 'ngx-autosize';
-import { RequestDetailViewModel } from '../../../../add-request-new/events/models/request.model copy';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { RequestEventModel } from '../../../../edit-request/app/request.model';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { IssueTypeComponent } from '../../../../utility/components/issue-type/issue-type.component';
