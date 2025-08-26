@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
-import { SignalRService } from '../../../../utility/services/signal-r.service.native';
-import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
-import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
-import { RequestModel } from '../../models/request.model';
-import { NotificationPopupService } from '../../../../utility/components/notification-popup/notification-popup.service';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of } from 'rxjs';
+import { NotificationPopupService } from '../../../../utility/components/notification-popup/notification-popup.service';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { TestingModule } from '../../../../utility/modules/testing.module';
+import { SignalRService } from '../../../../utility/services/signal-r.service.native';
+import { RequestModel } from '../../../models/request.model';
+import { AppComponent } from './app.component';
+import { EventTicket14Component } from './event-ticket14/event-ticket14.component';
 
 describe('AppComponent', () => {
   let component: AppComponent;

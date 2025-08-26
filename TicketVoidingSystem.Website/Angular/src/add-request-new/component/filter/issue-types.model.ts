@@ -4,7 +4,6 @@ export class IssueTypes {
   issueTypes: IssueType[] = [];
   subIssueTypes: SubIssueType[] = [];
   issueId: number;
-  selectedSubIssueTypes: SubIssueType[] = [];
   subIssueId: number;
 
   constructor(item = null) {

@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { IssueTypes } from '../../../add-request/app/add-request/filter/issue-types.model';
 import { CommonService } from '../../../utility/services/common.service';
+import { IssueTypes } from '../filter/issue-types.model';
 
 @Injectable({
   providedIn: 'root'

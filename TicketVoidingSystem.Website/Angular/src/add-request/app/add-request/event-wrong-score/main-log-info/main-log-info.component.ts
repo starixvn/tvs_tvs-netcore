@@ -1,13 +1,13 @@
-import { Component, inject, Input } from '@angular/core';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { CommonModule } from '@angular/common';
-import { DateTimeFormat } from '../../../../../utility/constants/config';
-import moment from 'moment';
-import { StaticService } from '../../../../../utility/services/static.service';
-import { EventWrongScoreService } from '../services/event-wrong-score.service';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
+import { Component, inject, Input } from '@angular/core';
 import _ from 'lodash';
+import moment from 'moment-timezone';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { EventWrongScoreService } from '../services/event-wrong-score.service';
 
 @Component({
   standalone: true,

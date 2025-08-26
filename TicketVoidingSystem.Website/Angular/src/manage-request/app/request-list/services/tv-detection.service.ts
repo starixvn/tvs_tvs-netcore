@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { TvDetection, TvDetectionType, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { RequestInfoForCopy } from '../../../../utility/models/copy-request-info.query';

@@ -5,6 +5,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import clone from 'lodash/clone';
 import isUndefined from 'lodash/isUndefined';
 import { Subscription } from 'rxjs';
+import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
 import { TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
@@ -12,7 +13,6 @@ import { AllowanceTime } from '../../../utility/models/allowance-time.model';
 import { IssueType } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { StaticService } from '../../../utility/services/static.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
@@ -106,8 +106,8 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   getSubIssueTypeName(): string {
-    if (this.issueTypes.subIssueId && this.issueTypes.selectedSubIssueTypes && this.issueTypes.selectedSubIssueTypes.length > 0) {
-      const subIssueType = this.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId === this.issueTypes.subIssueId);
+    if (this.issueTypes.subIssueId && this.issueTypes.subIssueTypes && this.issueTypes.subIssueTypes.length > 0) {
+      const subIssueType = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === this.issueTypes.subIssueId);
       return subIssueType ? subIssueType.subIssueTypeName : this.SELECT_SUB_TYPE_TEXT;
     }
 
@@ -153,7 +153,7 @@ export class FilterComponent implements OnInit, OnChanges {
     if (!this.model.issueTypeId) {
       return;
     }
-    
+
     const widthMapping: { [key: number]: { [key: string]: number } } = {
       [IssueTypeConstant.DANGER_ACCEPTED]: { subIssueType: 300, action: 150, sport: 150 },
       [IssueTypeConstant.EARLY_KICK_OFF]: { subIssueType: 150, action: 170, sport: 220 },
@@ -189,7 +189,7 @@ export class FilterComponent implements OnInit, OnChanges {
     if (!this.originActions || !this.issueTypes.issueId) {
       return;
     }
-    
+
     this.model.actions = this.actionVoidService.getVoidActionsSelectionByIssueType(this.issueTypes.issueId, this.abnormalFilterBy, this.isEdit, this.model.action, this.originActions);
     this.model.action = this.isEdit || (this.isExternalUrl && this.model.action) ? this.model.action : this.model.actions[0].value;
   }
@@ -198,7 +198,8 @@ export class FilterComponent implements OnInit, OnChanges {
     this.model.isChangeSubTypeManual = isChangeSubTypeManual;
     this.model.issueTypeId = this.issueTypes.issueId?.toString();
     this.model.subIssueTypeId = this.issueTypes.subIssueId?.toString();
-    this.model.subIssueTypes = this.issueTypes.selectedSubIssueTypes;
+    this.model.subIssueTypes = this.issueTypes.subIssueTypes;
+    this.model = clone(this.model);
     this.modelChange.emit(this.model);
   }
 
@@ -242,10 +243,10 @@ export class FilterComponent implements OnInit, OnChanges {
       if (!this.issueTypes.subIssueTypes || this.issueTypes.subIssueTypes.length === 0) {
         return;
       }
-      
-      this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes
+
+      this.issueTypes.subIssueTypes = this.issueTypes.subIssueTypes
         .filter(x => !this.ignoreSubIssueType.includes(x.subIssueTypeId));
-      this.issueTypes.subIssueId = this.issueTypes.selectedSubIssueTypes[0].subIssueTypeId;
+      this.issueTypes.subIssueId = this.issueTypes.subIssueTypes[0].subIssueTypeId;
     }
   }
 
@@ -253,11 +254,11 @@ export class FilterComponent implements OnInit, OnChanges {
     if (!this.issueTypes.subIssueTypes || this.issueTypes.subIssueTypes.length === 0) {
       return;
     }
-    
+
     const sub = this.issueTypes.subIssueTypes.find(x => x.subIssueTypeId === Number(this.model.subIssueTypeId));
     this.issueTypes.issueId = isUndefined(sub) ? this.issueTypes.issueId : sub.issueTypeId;
     this.issueTypes.subIssueId = isUndefined(sub) ? this.issueTypes.issueId : sub.subIssueTypeId;
-    this.issueTypes.selectedSubIssueTypes = this.issueTypes.subIssueTypes.filter(x => !this.ignoreSubIssueType.includes(x.subIssueTypeId));
+    this.issueTypes.subIssueTypes = this.issueTypes.subIssueTypes.filter(x => !this.ignoreSubIssueType.includes(x.subIssueTypeId));
   }
 
   changeActionWaitingToManualVoid(): void {
@@ -288,7 +289,7 @@ export class FilterComponent implements OnInit, OnChanges {
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR
     ]
-    return this.issueTypes.selectedSubIssueTypes.length > 1
+    return this.issueTypes.subIssueTypes.length > 1
       && !issueTypeNotShowSubType.includes(this.issueTypes.issueId?.toString());
   }
 

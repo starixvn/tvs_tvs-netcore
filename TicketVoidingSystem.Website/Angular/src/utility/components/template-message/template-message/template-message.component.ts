@@ -1,6 +1,6 @@
 import { Component, inject, Input, OnChanges, SimpleChange, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { AbnormalFilterBy, FunctionConst } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventType } from '../../../../utility/constants/sport.constant';
@@ -93,7 +93,7 @@ export class TemplateMessageComponent implements OnChanges {
     await this.init();
     if ((changes['subIssueTypeId'] || changes['value']) && this.subIssueTypeId) {
       this.updateTemplate();
-      this.initialMessage = _.cloneDeep(this.message);
+      this.initialMessage = cloneDeep(this.message);
     }
   }
 
@@ -163,7 +163,7 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateCheckBoxVarMessage() {
     this.updateTemplate();
-    this.initialMessage = _.cloneDeep(this.message);
+    this.initialMessage = cloneDeep(this.message);
   }
 
   updateMessage() {

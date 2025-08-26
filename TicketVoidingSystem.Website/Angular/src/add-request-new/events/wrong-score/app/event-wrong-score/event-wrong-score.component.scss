@@ -1,0 +1,86 @@
+@import '../../../../../assets/styles/mixin.scss';
+
+.input-actual-score {
+  width: 220px;
+}
+
+.margin-left-37 {
+  margin-left: 37px;
+}
+
+.icon-warning-message {
+  color: #cfb107;
+}
+
+.warning-text {
+  color: #856404;
+}
+
+.warning-text-shorten {
+  color: #856404;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+}
+
+.error-text {
+  color: #ed1c24;
+}
+
+.icon-warning-message,
+.icon-error-message {
+  padding-top: 2px;
+  width: 19px;
+}
+
+.text-red {
+  color: red;
+}
+
+.log-info {
+  background-color: #fffef4;
+  width: 791px;
+  border: 1px solid #c6c8ca;
+  padding: 10px;
+}
+
+.highlight-min-aa {
+  color: #ffc90e;
+}
+
+.highlight-min-sa {
+  color: #6699FF;
+}
+
+.highlight-min-pa {
+  color: #00d943;
+}
+
+@media only screen and (max-width: 1134px) {
+  .log-info {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1134px) {
+  .log-info {
+    width: 1065px;
+  }
+}
+
+.var-check-selection {
+  display: inline-block;
+  @include var-check-selection();
+}
+
+.highlight {
+  outline: 2px solid red;
+}
+
+.Log-info-selected-Scores {
+  width: 802px;
+  background-color: #fffef4;
+  border: 1px solid #c6c8ca;
+}

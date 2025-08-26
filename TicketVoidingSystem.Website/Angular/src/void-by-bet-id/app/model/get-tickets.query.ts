@@ -1,6 +1,6 @@
-import { TicketsModel } from "../../../utility/components/tickets/tickets.model";
+import moment from 'moment-timezone';
 import { GroupModel } from "../../../utility/components/tickets/group.model";
-import moment from "moment";
+import { TicketsModel } from "../../../utility/components/tickets/tickets.model";
 
 export class GetTicketsQuery {
     transIds = '';

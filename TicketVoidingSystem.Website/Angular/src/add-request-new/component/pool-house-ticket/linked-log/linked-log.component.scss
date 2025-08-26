@@ -1,0 +1,69 @@
+@import '../../../../assets/styles/mixin.scss';
+
+.container {
+  padding: 0;
+  margin: 0;
+}
+
+.link-logs {
+  width: 500px;
+  margin: 0 0 10px 0;
+  border-color:  #888888;
+  border-style: solid;
+  border-width: 1px;
+  
+  .link-logs-content {
+    overflow: auto;
+    max-height: 130px;
+    @include scroll-style();
+
+    table {
+      tbody {
+        //height: 210px;
+        overflow: auto;
+      }
+    }
+  }
+}
+
+table {
+  width: 100%;
+  thead {
+    th {
+      border-color: #888888;
+      border-style: solid;
+      border-width: 1px;
+      padding: 0 2px;
+    }
+  }
+  tbody {
+    tr {
+      .no-data {
+        background: #fff !important;
+        color: red;
+        font-weight: bold;
+      }
+    }
+
+    td {
+      border-color: #888888;
+      border-style: solid;
+      border-width: 0 1px 1px 1px;
+      line-height: 20px;
+      white-space: normal;
+      padding: 0 2px;
+    }
+  }
+}
+
+.affected-log {
+  color: #00A800;
+}
+
+.icon-warning-message {
+  color: #cfb107;
+}
+
+.warning-text {
+  color: #856404;
+}

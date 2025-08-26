@@ -1,0 +1,35 @@
+<event-base-layout #eventBaseLayout
+  [issueTypeId]="issueTypeId"
+  (saveRequest)="saveRequest()"
+  [model]="model"
+  [eventHeight]="'581px'"
+  [eventContent]="eventContent"
+  [othersContent]="othersContent">
+</event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-issueTypes="issueTypes" let-primitiveProperty="primitiveProperty"
+  let-filterModel="filterModel" let-otherModel="otherModel">
+  <event-wrong-score
+    #eventWrongScore
+    [isEdit]="primitiveProperty.isEdit"
+    [requestId]="primitiveProperty.requestId"
+    [filter]="filterModel"
+    [wrongScoreModels]="eventModel"
+    [others]="otherModel"
+    [issueTypes]="issueTypes"
+    [userId]="primitiveProperty.userId"
+    [requestedBy]="primitiveProperty.requestedBy"
+    [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess"
+    (updateMatchId)="eventBaseLayout.updateMatchInfo($event)">
+  >
+  </event-wrong-score>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+  <others [isEdit]="primitiveProperty.isEdit"
+    [model]="otherModel"
+    [matchId]="primitiveProperty.matchId"
+    [parentMatchId]="primitiveProperty.parentMatchId"
+    [issueTypeId]="issueTypeId">
+  </others>
+</ng-template>

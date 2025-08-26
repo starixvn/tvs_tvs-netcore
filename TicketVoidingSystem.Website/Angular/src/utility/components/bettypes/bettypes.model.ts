@@ -1,4 +1,4 @@
-﻿import * as _ from 'lodash';
+﻿import isUndefined from 'lodash/isUndefined';
 import { Product } from '../../constants/config';
 import { Result } from '../../models/result';
 import { PrimaryBetType } from '../advanced-mode/group-bettypes/group-bettypes.model';
@@ -28,7 +28,7 @@ export class BetTypeModel {
         this.liveIndicator = liveIndicator;
         this.type = type;
         this.isChecked = isChecked;
-        this.value = _.isUndefined(PrimaryBetType.ROOT[this.id]) ? this.id.toString() : PrimaryBetType.ROOT[this.id];
+        this.value = isUndefined(PrimaryBetType.ROOT[this.id]) ? this.id.toString() : PrimaryBetType.ROOT[this.id];
     }
 
     renameNumberGame(id: string, name: string): string {

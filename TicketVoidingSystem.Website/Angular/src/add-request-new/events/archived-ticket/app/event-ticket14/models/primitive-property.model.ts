@@ -1,4 +1,4 @@
-import { PermissionAddRequest } from "../../../../../../add-request-new/events/models/permission-add-request.model";
+import { PermissionAddRequest } from "../../../../../models/permission-add-request.model";
 
 export class PrimitiveProperty {
   isBlockBetIds = false;

@@ -14,7 +14,7 @@
       <label class="col-form-label-sm">Sub Type</label>
       @if (!isShowButtonSelectSubType()) {
       <div class="input-sub-issue-type">
-        <ng-select class="custom-sm" [items]="issueTypes.selectedSubIssueTypes" bindLabel="subIssueTypeName"
+        <ng-select class="custom-sm" [items]="issueTypes.subIssueTypes" bindLabel="subIssueTypeName"
           bindValue="subIssueTypeId" [(ngModel)]="issueTypes.subIssueId" [clearable]="false" [searchable]="false"
           [disabled]="model.isVoided" (change)="updateModel(true)">
         </ng-select>

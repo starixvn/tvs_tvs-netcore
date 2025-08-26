@@ -1,11 +1,11 @@
 ﻿import { Component, ElementRef, inject, Input, OnChanges, SimpleChange } from '@angular/core';
-import * as _ from 'lodash';
+import { FormsModule } from '@angular/forms';
+import isUndefined from 'lodash/isUndefined';
 import { Product } from '../../constants/config';
 import { TEXT } from '../../constants/text';
+import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { BetTypesModel } from './bettypes.model';
-import { FormsModule } from '@angular/forms';
-import { TooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
     standalone: true,
@@ -36,7 +36,7 @@ export class BetTypesComponent implements OnChanges {
 
     ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
         this.changeIsShow();
-        this.display = _.isUndefined(this.model) ? false :
+        this.display = isUndefined(this.model) ? false :
             this.model.checkDisplay() && this.productDisplay.indexOf(this.product) > -1;
     }
 

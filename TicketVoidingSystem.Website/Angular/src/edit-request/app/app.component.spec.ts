@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../utility/modules/testing.module';
-import { AppComponent } from './app.component';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
-import { AppService } from './app.service';
-import { LogInfoService } from '../../add-request-new/events/services/edit-request/log-info.service';
-import { ObjectService } from '../../add-request-new/events/services/edit-request/object.service';
-import { RequestDetailViewModel } from './request.model';
-import { RequestModel } from '../../add-request/app/add-request/models/request.model';
-import { PrimitiveProperty } from './models/primitive-property.model';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule, ToastrService } from 'ngx-toastr';
+import { PrimitiveProperty } from '../../add-request-new/models/primitive-property.model';
+import { LogInfoService } from '../../add-request-new/services/edit-request/log-info.service';
+import { ObjectService } from '../../add-request-new/services/edit-request/object.service';
+import { RequestModel } from '../../add-request/app/add-request/models/request.model';
+import { TestingModule } from '../../utility/modules/testing.module';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { AppComponent } from './app.component';
+import { AppService } from './app.service';
+import { RequestDetailViewModel } from './request.model';
 
 describe('AppComponent', () => {
   let component: AppComponent;

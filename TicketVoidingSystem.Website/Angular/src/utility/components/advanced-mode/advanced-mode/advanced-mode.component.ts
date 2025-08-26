@@ -1,7 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnChanges, SimpleChange, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import assignIn from 'lodash/assignIn';
+import groupBy from 'lodash/groupBy';
+import isEqual from 'lodash/isEqual';
+import uniqWith from 'lodash/uniqWith';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TEXT } from '../../../../utility/constants/text';
 import { DecimalOnlyDirective, MultipleDecimalDirective, } from '../../../../utility/directives/numbers-only.directive';
@@ -322,7 +325,7 @@ export class AdvancedModeComponent implements OnChanges {
         checkedIds.forEach(id => {
           const index = betTypeIds.indexOf(id.toString());
           betTypeIds.splice(index, 1);
-          const betType: CheckedBetType = _.assignIn({ id: parseInt(id, 10) }, item.getResult(id));
+          const betType: CheckedBetType = assignIn({ id: parseInt(id, 10) }, item.getResult(id));
           betTypes.push(betType);
         });
       }
@@ -385,7 +388,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   private updatePlayerCricket(oddsInfo: OddsInfo[]): void {
-    const groupBetTypes = _.groupBy(oddsInfo, 'betTypeId');
+    const groupBetTypes = groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
       const items = this.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
       this.baseSpecialBetTypeCricket.push(new Selection('', `${betTypeId}`, items, true, null, false, false, false, false, false, false));
@@ -395,7 +398,7 @@ export class AdvancedModeComponent implements OnChanges {
   private getItemsPlayerSelection(betTypeId: string, odds: OddsInfo[]): Selection[] {
     const items: Selection[] = [];
     if (AdvancedModeConstants.BETTYPE_NEXT_MAN_OUT.split(',').includes(betTypeId)) {
-      const groupsOdds = _.groupBy(odds, 'oddsId');
+      const groupsOdds = groupBy(odds, 'oddsId');
       for (const oddsId in groupsOdds) {
         const oddsName = groupsOdds[oddsId].map(y => y.playerName).join(' & ');
         groupsOdds[oddsId].forEach(x => {
@@ -423,7 +426,7 @@ export class AdvancedModeComponent implements OnChanges {
     const playerSelection = betTeam.selections.find(x => x.name === 'Player:');
     if (playerSelection) {
       playerSelection.items = betTeam.selections.find(x => x.name === 'Player:').items.filter(x => x.name === 'All');
-      playerSelection.items.push(..._.uniqWith(items, _.isEqual));
+      playerSelection.items.push(...uniqWith(items, isEqual));
     }
     betTeam.selections.forEach(x => {
       if (x.name === 'Player:') {

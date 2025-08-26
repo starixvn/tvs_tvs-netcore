@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { SaveRequestService } from './save-request.service';
-import { AddRequestService } from '../../../../../../add-request-new/events/services/add-request.service';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { AddRequestService } from '../../../../../services/add-request.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { AddRequestQuery } from '../../../../../../add-request-new/events/models/add-request.query';
+import { SaveRequestService } from './save-request.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;

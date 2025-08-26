@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { FilterService } from './filter.service';
-import { HttpService } from '../../../utility/services/http.service';
 import { TestingModule } from '../../../utility/modules/testing.module';
+import { HttpService } from '../../../utility/services/http.service';
+import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
 
 describe('FilterService', () => {
@@ -31,15 +31,14 @@ describe('FilterService', () => {
           { issueTypeId: 2, issueTypeName: 'Issue Type 2' }
         ],
         subIssueTypes: [
-          { 
-            subIssueTypeId: 1, 
-            issueTypeId: 1, 
+          {
+            subIssueTypeId: 1,
+            issueTypeId: 1,
             subIssueTypeName: 'Sub Issue 1',
             subIssueTypeNameCS: 'Sub Issue 1 CS'
           }
         ],
         issueId: 1,
-        selectedSubIssueTypes: [],
         subIssueId: 1
       };
 

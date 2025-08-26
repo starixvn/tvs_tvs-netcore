@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { LABELS } from '../../../../utility/constants/labels';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
@@ -37,7 +37,7 @@ export class GroupBetTypesComponent {
 
   changeGroupBetTypes(group: GroupBetTypeAddRequest) {
     this.changeFilterEvent.emit();
-    this.betTypesEvent.emit(_.cloneDeep(group.betTypes));
+    this.betTypesEvent.emit(cloneDeep(group.betTypes));
   }
 
   changeBetTypeItem(item: BetTypeAddRequest) {

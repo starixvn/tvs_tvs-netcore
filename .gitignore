@@ -47,6 +47,7 @@ MSBUILD.SUMMARY.email
 SUMMARY.DISPLAY.xml
 /packages
 .vs/config/applicationhost.config
+stats.json
 node_modules
 typings
 
@@ -58,6 +59,7 @@ typings
 /OpenCover/
 .axoCover/
 .angular/
+.jest-cache/
 /TicketVoidingSystem.Website/Angular/reports/**
 */Logs/*
 /.idea/

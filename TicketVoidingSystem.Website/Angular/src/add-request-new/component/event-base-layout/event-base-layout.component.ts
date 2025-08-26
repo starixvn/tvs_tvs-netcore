@@ -4,35 +4,23 @@ import { Observable, Subscription } from 'rxjs';
 import { FilterComponent } from '../../../add-request-new/component/filter/filter.component';
 import { FilterModel } from '../../../add-request-new/component/filter/filter.model';
 import { IssueTypes } from '../../../add-request-new/component/filter/issue-types.model';
-import { RequestModel } from '../../../add-request-new/events/models/request.model';
-import { AddRequestStore } from '../../../add-request-new/events/services/add-request.store';
-import { CopyRequestInfoService } from '../../../add-request-new/events/services/copy-request-info.service';
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../../utility/components/menu-bar/menu-bar.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { MatchModel } from '../../../utility/models/match.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { StaticService } from '../../../utility/services/static.service';
-import { EditRequestService } from '../../events/services/edit-request/edit-request.service';
-import { LogAnalysisService } from '../../events/services/log-analysis.service';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
+import { RequestModel } from '../../models/request.model';
+import { AddRequestStore } from '../../services/add-request.store';
+import { CopyRequestInfoService } from '../../services/copy-request-info.service';
+import { EditRequestService } from '../../services/edit-request/edit-request.service';
+import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
-import { OthersModel } from '../others/others.model';
+import { EventContentContext, OthersContentContext } from './base.model';
 import { EventBaseService } from './event-base.service';
-
-// Type definitions for template contexts
-interface EventContentContext {
-  eventModel: unknown; // Can be EventTicket14Model, WrongScoreModel, etc.
-  otherModel: OthersModel;
-  isEdit: boolean;
-  requestId: number;
-  filterModel: FilterModel;
-}
-
-interface OthersContentContext {
-  otherModel: OthersModel;
-  isEdit: boolean;
-}
 
 @Component({
   standalone: true,
@@ -52,13 +40,6 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   @Output() copyLetsTalkRequestInfo = new EventEmitter<void>();
   @ViewChild('filter') filterComponent: FilterComponent;
 
-  title: string;
-  isEdit = false;
-  requestId: number;
-  showCopyInfoButtons = false;
-  isCollapse = false;
-  isDisabledSaveButton = false;
-  isLoadingData = true;
   issueTypes = new IssueTypes();
   savingRequestSubscription: Subscription;
   blockingUiSubscription: Subscription;
@@ -66,6 +47,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   checkValidSubIssueTypeInFilterSubscription: Subscription;
   originActions: Selection[] = [];
   accessIssueTypeCount = new Map<string, number>();
+  primitiveProperty = new PrimitiveProperty();
 
   private readonly signalRService = inject(SignalRService);
   private readonly editRequestService = inject(EditRequestService);
@@ -79,37 +61,57 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   get eventContextData(): EventContentContext {
     return {
-      eventModel: this.model.eventTicket14Model,
+      eventModel: this.getEventModelByIssueType(),
       otherModel: this.model.others,
-      isEdit: this.isEdit,
-      requestId: this.requestId,
-      filterModel: this.model.filter
+      filterModel: this.model.filter,
+      issueTypes: this.issueTypes,
+      primitiveProperty: this.primitiveProperty
     };
+  }
+
+  private getEventModelByIssueType(): unknown {
+    switch (this.issueTypeId) {
+      case IssueTypeConstant.WRONG_HDP:
+      case IssueTypeConstant.WRONG_1ST_HDP:
+        return this.model.wrongHdpModels;
+      case IssueTypeConstant.ARCHIVED_TICKET:
+        return this.model.eventTicket14Model;
+      case IssueTypeConstant.WRONG_SCORE:
+        return this.model.wrongScoreModels;
+      case IssueTypeConstant.DANGER_ACCEPTED:
+        return this.model.dangerAcceptedModels;
+      case IssueTypeConstant.RED_CARD:
+        return this.model.redCardModel;
+      case IssueTypeConstant.TECHNICAL_ERROR:
+        return this.model.technicalErrorModel;
+      default:
+        return this.model.eventTicket14Model;
+    }
   }
 
   get othersContextData(): OthersContentContext {
     return {
       otherModel: this.model.others,
-      isEdit: this.isEdit,
+      primitiveProperty: this.primitiveProperty
     };
   }
 
   async ngOnInit(): Promise<void> {
-    this.isLoadingData = true;
+    this.primitiveProperty.isLoadingData = true;
     await this.initBaseData();
     this.savingRequestSubscription = this.addRequestStore.savingRequestStatus.subscribe(status => {
-      this.isDisabledSaveButton = status;
+      this.primitiveProperty.isDisabledSaveButton = status;
     });
 
     this.checkShowCopyInfoButton();
     this.signalRService.initializeConnection();
-    this.logAnalysisService.writeLogAccessFunction(this.isEdit, this.issueTypeId, this.accessIssueTypeCount);
+    this.logAnalysisService.writeLogAccessFunction(this.primitiveProperty.isEdit, this.issueTypeId, this.accessIssueTypeCount);
   }
 
   async initBaseData(): Promise<void> {
     this.initStaticData();
     await this.runAsyncData();
-    this.isLoadingData = false;
+    this.primitiveProperty.isLoadingData = false;
   }
 
   async runAsyncData(): Promise<void> {
@@ -118,8 +120,8 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
       this.commonService.getVoidActions()
     ];
 
-    if (this.isEdit) {
-      promises.push(this.editRequestService.getDataEditRequest(this.requestId, this.model));
+    if (this.primitiveProperty.isEdit) {
+      promises.push(this.editRequestService.getDataEditRequest(this.primitiveProperty.requestId, this.model, this.primitiveProperty));
     }
 
     const [allIssueTypes, originActions] = await Promise.all(promises);
@@ -128,12 +130,12 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   initStaticData() {
-    this.isEdit = this.editRequestService.isActionEditRequest();
-    if (this.isEdit) {
-      this.requestId = this.editRequestService.getRequestId();
-      this.title = `Home / Manage Request / Edit Request - ${this.requestId}`;
+    this.primitiveProperty.isEdit = this.editRequestService.isActionEditRequest();
+    if (this.primitiveProperty.isEdit) {
+      this.primitiveProperty.requestId = this.editRequestService.getRequestId();
+      this.primitiveProperty.title = `Home / Manage Request / Edit Request - ${this.primitiveProperty.requestId}`;
     } else {
-      this.title = 'Home / Manage Request / Add Request';
+      this.primitiveProperty.title = 'Home / Manage Request / Add Request';
     }
   }
 
@@ -144,7 +146,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
       IssueTypeConstant.WRONG_SCORE
     ]
 
-    this.showCopyInfoButtons = this.model.filter.isVoided && issueTypesShowCopyInfo.includes(this.issueTypeId);
+    this.primitiveProperty.showCopyInfoButtons = this.model.filter.isVoided && issueTypesShowCopyInfo.includes(this.issueTypeId);
   }
 
   ngAfterViewInit(): void {
@@ -163,9 +165,14 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.model.filter = filterModel;
   }
 
+  public updateMatchInfo(matchModel: MatchModel): void {
+    this.primitiveProperty.matchId = matchModel?.matchId;
+    this.primitiveProperty.parentMatchId = matchModel?.parentId;
+  }
+
   public async onSaveRequest(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.isDisabledSaveButton = true;
+    this.primitiveProperty.isDisabledSaveButton = true;
     this.saveRequest.emit();
     this.addRequestStore.changeBlockingUiStatus(false);
   }
@@ -181,9 +188,9 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   async onCopyEmailRequestInfo(): Promise<void> {
     this.addRequestStore.changeBlockingUiStatus(true);
-    this.copyRequestInfoService.copyEmailRequestInfo(this.requestId, this.model.eventDetail.matchId, this.model.others.operatorsList);
+    this.copyRequestInfoService.copyEmailRequestInfo(this.primitiveProperty.requestId, this.model.eventDetail.matchId, this.model.others.operatorsList);
     this.addRequestStore.changeBlockingUiStatus(false);
-    alert(`Request No.${this.requestId} has been copied to clipboard.`);
+    alert(`Request No.${this.primitiveProperty.requestId} has been copied to clipboard.`);
   }
 
   public backToManagePage(): void {

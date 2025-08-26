@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
-import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
+import clone from 'lodash/clone';
+import { ChildMatchModel } from '../../../add-request-new/models/related-event.model';
 import { BlockUiDirective } from '../block-ui/block-ui.directive';
 import { AddChildMatchModel } from './add-child-match.model';
 
@@ -25,7 +25,7 @@ export class AddChildMatchComponent implements OnChanges {
 
   async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (changes['model']) {
-      this.tempRelatedEvents = _.clone(this.relatedEvents);
+      this.tempRelatedEvents = clone(this.relatedEvents);
       this.tempRelatedEvents = this.tempRelatedEvents.filter(x => x.matchType === this.model.matchType);
       this.tempRelatedEvents.forEach(x => {
         x.isChecked = this.model.selectedMatchIds.some(y => y === x.matchId);

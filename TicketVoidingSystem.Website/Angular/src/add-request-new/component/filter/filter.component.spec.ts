@@ -3,15 +3,15 @@ import { TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { Selection } from '../../../utility/models/selection.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { StaticService } from '../../../utility/services/static.service';
-import { AddRequestStore } from '../../events/services/add-request.store';
+import { AddRequestStore } from '../../services/add-request.store';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
 import { IssueTypes } from './issue-types.model';
 import { ActionVoidService } from './services/action-void.service';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog/sub-issue-type-dialog.model';
-import { TestingModule } from '../../../utility/modules/testing.module';
 
 class Helper {
   static fakeIssueTypes: IssueTypes = {
@@ -23,7 +23,6 @@ class Helper {
       { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
     ],
     issueId: 0,
-    selectedSubIssueTypes: [],
     subIssueId: 0
   };
 
@@ -125,7 +124,7 @@ describe('FilterComponent', () => {
         subIssueTypeName: 'Non Live',
         subIssueTypeNameCS: null
       }];
-      component.issueTypes.selectedSubIssueTypes = [{
+      component.issueTypes.subIssueTypes = [{
         subIssueTypeId: 12,
         issueTypeId: 8,
         subIssueTypeName: 'Non Live',
@@ -145,7 +144,7 @@ describe('FilterComponent', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
       component.issueTypes.subIssueId = 12;
-      component.issueTypes.selectedSubIssueTypes = [{
+      component.issueTypes.subIssueTypes = [{
         subIssueTypeId: 12,
         issueTypeId: 8,
         subIssueTypeName: 'Non Live',
@@ -391,7 +390,7 @@ describe('FilterComponent', () => {
     it('should show sub type when multiple sub types available', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
-      component.issueTypes.selectedSubIssueTypes = [
+      component.issueTypes.subIssueTypes = [
         { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null },
         { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
       ];
@@ -407,7 +406,7 @@ describe('FilterComponent', () => {
     it('should not show sub type for wrong OU', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
-      component.issueTypes.selectedSubIssueTypes = [
+      component.issueTypes.subIssueTypes = [
         { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null },
         { subIssueTypeId: 13, issueTypeId: 8, subIssueTypeName: 'Live', subIssueTypeNameCS: null }
       ];
@@ -423,7 +422,7 @@ describe('FilterComponent', () => {
     it('should not show sub type when only one sub type available', () => {
       // Arrange
       component.issueTypes = Helper.fakeIssueTypes;
-      component.issueTypes.selectedSubIssueTypes = [
+      component.issueTypes.subIssueTypes = [
         { subIssueTypeId: 12, issueTypeId: 8, subIssueTypeName: 'Non Live', subIssueTypeNameCS: null }
       ];
 

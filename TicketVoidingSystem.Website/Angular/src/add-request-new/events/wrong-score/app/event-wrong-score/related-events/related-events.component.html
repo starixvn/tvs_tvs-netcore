@@ -1,0 +1,43 @@
+@if (primitiveProps.isShowRelatedEvents) {
+    <div class="related-event-log-info">
+        <label class="col-form-label-sm"><strong>Related Event(s) - Log Info</strong></label>
+        <div class="d-flex mb-3">
+            <div class="input-group input-related-match-id-area align-items-center justify-content-center me-2">
+                <input [(ngModel)]="primitiveProps.inputRelatedMatchId" [disabled]="filter.isVoided"
+                    class="input-related-match-id form-control form-control-sm" placeholder="Input MatchID" type="text"
+                    only-number />
+                <button (click)="handleClickAddRelatedEvent()" [disabled]="filter.isVoided"
+                    class="btn btn-primary btn-sm btn-add-event" type="submit">Add Related Event</button>
+            </div>
+            <div class="d-flex">
+                <button type="submit" class="btn btn-success btn-sm btn-open-modal-related-event me-2"
+                    (click)="showAddChildMatchModal(1)" [disabled]="isDisabledChildMatches()">
+                    Child Match ({{countChildMatches()}})
+                </button>
+                <button type="submit" class="btn btn-danger btn-open-modal-related-event btn-sm"
+                    (click)="showAddChildMatchModal(2)" [disabled]="isDisabledLinkMatches()">
+                    Link Match ({{countLinkMatches()}})
+                </button>
+            </div>
+        </div>
+        @if (relatedEvents.length > 0) {
+        <div>
+            @for (event of relatedEvents; track event; let i = $index) {
+            <div class="mb-2">
+                <log-info-related-event #logInfo [isMainMatch]="false" [isEdit]="isEdit"
+                    [filterBy]="primitiveProps.filterBy"
+                    [transInfoAddRequestModel]="primitiveProps.transInfoAddRequestModel" [requestId]="requestId"
+                    [isDisabled]="filter.isVoided" [subIssueTypes]="issueTypes.subIssueTypes"
+                    [defaultFilterTimeWithAllowance]="defaultFilterTimeWithAllowance" [logInfo]="relatedEvents[i]"
+                    [filter]="filter" (deleteEvent)="handleDeleteEvent($event)" (clearInfoSiteDBDownModel)="clearInfoSiteDBDownModelEvent()">
+                </log-info-related-event>
+            </div>
+            }
+        </div>
+        }
+    </div>
+    
+    <add-child-match [relatedEvents]="childEvents" (selectedEventsChange)="saveRelatedEvent($event)"
+        [model]="addChildMatchModel">
+    </add-child-match>
+}

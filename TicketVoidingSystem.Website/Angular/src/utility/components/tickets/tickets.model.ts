@@ -1,10 +1,9 @@
 ﻿import { ElementRef } from '@angular/core';
-import { AffectedLicensee } from '../licensee-affected-list/licensee-affected-list.model';
-import { Message } from '../template-message/messages/message';
 import { BetID } from '../../models/bet-id.model';
-import { GroupModel } from './group.model';
-import _ from 'lodash';
+import { AffectedLicensee } from '../licensee-affected-list/licensee-affected-list.model';
 import { PagingModel } from '../paging/paging.model';
+import { Message } from '../template-message/messages/message';
+import { GroupModel } from './group.model';
 
 enum IconCheckBox {
     none = 0,

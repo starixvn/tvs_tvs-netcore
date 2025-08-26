@@ -1,0 +1,23 @@
+@{
+Layout = "~/Views/Shared/_LayoutAngular.cshtml";
+var isEditMode = Context.Request.Path.Value?.ToLower().Contains("/edit/") == true;
+ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket Voiding";
+}
+@section Head {
+
+<link href="dist/ticket-voiding-system/red-card/styles.css?8d07af97c68b65a7" rel="stylesheet" />
+
+}
+<script>
+    window.issueTypeId = '@(ViewBag.IssueTypeId?.ToString() ?? "")';
+    window.isEdit = '@isEditMode';
+</script>
+<app-root></app-root>
+
+<script src="dist/ticket-voiding-system/red-card/runtime.js?d6798104a63cc61b"></script>
+
+<script src="dist/ticket-voiding-system/red-card/polyfills.js?6d2f7e0938193000"></script>
+
+<script src="dist/ticket-voiding-system/red-card/main.js?693cb89a78460699"></script>
+
+

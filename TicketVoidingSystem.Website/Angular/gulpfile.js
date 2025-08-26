@@ -13,10 +13,16 @@ let encoding = 'utf8';
 function transform(transformFolder, indexEJSPath) {
   let outputFolder = getOutputFolder();
   let options = readOptions(outputFolder);
+  let inlineScripts = extractInlineScripts(outputFolder);
 
   changeFileNames(outputFolder, transformFolder);
   let template = fs.readFileSync(path.resolve(indexEJSPath), encoding);
   let output = ejs.render(template, options);
+
+  if (inlineScripts.length > 0) {
+    output += '\n' + inlineScripts.join('\n');
+  }
+
   fs.writeFileSync(transformFolder + '/index.cshtml', output, encoding);
 }
 
@@ -63,14 +69,21 @@ function readOptions(outputFolder) {
 
   let styleElements = $('link');
   styleElements.map((index, element) => {
-    let css = changeBundle($(element).attr('href'));
-    files.css.push(css);
+    let href = $(element).attr('href');
+    if (href) {
+      let css = changeBundle(href);
+      files.css.push(css);
+    }
   });
 
   let scriptElements = $('script');
   scriptElements.map((index, element) => {
-    let js = changeBundle($(element).attr('src'));
-    files.js.push(js);
+    let src = $(element).attr('src');
+    if (src) {
+      let js = changeBundle(src);
+      files.js.push(js);
+    }
+    // Skip inline scripts as they will be preserved in the original .cshtml file
   });
 
   let title = $('title').text();
@@ -88,6 +101,24 @@ function changeBundle(fileName) {
   let newFileName = fileName.replace('.' + bundle, '');
   let newBundleName = newFileName + '?' + bundle;
   return newBundleName;
+}
+
+function extractInlineScripts(outputFolder) {
+  let content = fs.readFileSync(outputFolder + '/index.cshtml', encoding);
+  let $ = cheerio.load(content);
+  let inlineScripts = [];
+
+  $('script').each((_, element) => {
+    let src = $(element).attr('src');
+    if (!src) {
+      let scriptContent = $(element).html();
+      if (scriptContent && scriptContent.trim()) {
+        inlineScripts.push(`<script>${scriptContent}</script>`);
+      }
+    }
+  });
+
+  return inlineScripts;
 }
 
 /* Define gulp task */

@@ -1,28 +1,30 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList, 
-  ViewChild, ViewChildren, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+    Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList,
+    ViewChild, ViewChildren, inject
+} from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 import * as _ from 'lodash';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GetPlayersQuery } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { GroupLicenseeModel } from '../../../../../utility/components/licensees/licensees.model';
 import { LicenseesComponent } from '../../../../../utility/components/licensees/licensees.component';
-import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
+import { GroupLicenseeModel } from '../../../../../utility/components/licensees/licensees.model';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
+import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ModeType } from '../../../../../utility/constants/config';
 import { LABELS } from '../../../../../utility/constants/labels';
+import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { GetTicketsQuery, RangeTime } from '../../../models/query.model';
 import { EventType } from '../filter.model';
 import { Duration } from './../../../models/query.model';
 import { Currencies } from './../filter.model';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 
 @Component({
   standalone: true,

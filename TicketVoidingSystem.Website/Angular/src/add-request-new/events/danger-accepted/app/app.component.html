@@ -1,0 +1,34 @@
+<event-base-layout #eventBaseLayout
+  [issueTypeId]="issueTypeId"
+  (saveRequest)="saveRequest()"
+  [model]="model"
+  [eventHeight]="'730px'"
+  [eventContent]="eventContent"
+  [othersContent]="othersContent">
+</event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-issueTypes="issueTypes" let-primitiveProperty="primitiveProperty"
+  let-filterModel="filterModel" let-otherModel="otherModel">
+  <event-danger-accepted
+    #eventDangerAccepted
+    [isEdit]="primitiveProperty.isEdit"
+    [requestId]="primitiveProperty.requestId"
+    [filter]="filterModel"
+    [dangerAcceptedModels]="eventModel"
+    [others]="otherModel"
+    [issueTypes]="issueTypes"
+    [userId]="primitiveProperty.userId"
+    [requestedBy]="primitiveProperty.requestedBy"
+    [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess"
+    (updateMatchId)="eventBaseLayout.updateMatchInfo($event)">
+  </event-danger-accepted>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+  <others [isEdit]="primitiveProperty.isEdit"
+    [model]="otherModel"
+    [matchId]="primitiveProperty.matchId"
+    [parentMatchId]="primitiveProperty.parentMatchId"
+    [issueTypeId]="issueTypeId">
+  </others>
+</ng-template>

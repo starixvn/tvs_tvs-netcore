@@ -1,15 +1,15 @@
 import { inject, Injectable } from "@angular/core";
+import { BetIdsComponent } from "../../../../../../utility/components/bet-ids/bet-ids.component";
+import { LABELS } from "../../../../../../utility/constants/labels";
+import { PermissionAddRequest } from "../../../../../models/permission-add-request.model";
+import { AppService } from "../../app.service";
 import { CheckTicket14Query } from "../models/check-ticket14.query";
 import { CheckTickets14Result } from "../models/check-tickets14-result.model";
 import { ValidationBusinessRuleOutput } from "../models/validation.model";
-import { BetIdsComponent } from "../../../../../../utility/components/bet-ids/bet-ids.component";
-import { PermissionAddRequest } from "../../../../../../add-request-new/events/models/permission-add-request.model";
-import { EventTicket14ApiService } from "../../event-ticket14-api.service";
-import { LABELS } from "../../../../../../utility/constants/labels";
 
 @Injectable()
 export class ValidationService {
-  private readonly eventTicket14ApiService = inject(EventTicket14ApiService);
+  private readonly eventTicket14ApiService = inject(AppService);
 
   public async checkBusinessRule(betIdsComponent: BetIdsComponent, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
     if (!betIdsComponent.isHasBetId()) {
@@ -40,11 +40,7 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(validationResult: CheckTickets14Result, betIdsComponent: BetIdsComponent): void {
-    if (validationResult.invalidTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
-    }
-    if (validationResult.unsupportedDateRangeTransIds?.length > 0) {
-      betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
-    }
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, LABELS.INVALID_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
   }
 }
