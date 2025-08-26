@@ -5,7 +5,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../add-request.store';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { ReducedOverModel } from '../models/event-reduced-over.model';
 import { OthersModel } from '../others/others.model';
 import { FilterReducedOverComponent } from './filter-reduced-over/filter-reduced-over.component';
@@ -25,7 +29,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './event-reduced-over.component.html',
   styleUrls: ['./event-reduced-over.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbModule, EventLeagueComponent, FilterReducedOverComponent, LogInfoReducedOverComponent],
+  imports: [FormsModule, NgbModule, EventLeagueComponent, FilterReducedOverComponent, LogInfoReducedOverComponent, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
   providers: [ValidationService, LogInfoService, SaveRequestService, EventReducedOverService, FilterReducedOverService]
 })
 export class EventReducedOverComponent implements OnInit {
@@ -34,6 +38,7 @@ export class EventReducedOverComponent implements OnInit {
   @Input() requestedBy: string;
   @Input() requestId: number;
   @Input() filter: FilterModel;
+  @Input() issueTypes = new IssueTypes();
   @Input() reducedOverModels: ReducedOverModel[] = [];
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
@@ -46,6 +51,7 @@ export class EventReducedOverComponent implements OnInit {
   originalReducedOverBetTypes: ReducedOverBetType[];
   originalPlayers: OddsInfo[];
   groupReducedOverBetTypes: ReducedOverBetType[];
+  confirmAddRequest = new ConfirmAddRequestModel();
 
   private readonly validationService = inject(ValidationService);
   private readonly addRequestStore = inject(AddRequestStore);
@@ -76,6 +82,7 @@ export class EventReducedOverComponent implements OnInit {
   }
 
   public async clickSearch(): Promise<void> {
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.primitivePropertyEvent.isShowValidation = false;
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterReducedOverComponent)) {
       return;
@@ -108,6 +115,7 @@ export class EventReducedOverComponent implements OnInit {
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
@@ -116,6 +124,7 @@ export class EventReducedOverComponent implements OnInit {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitivePropertyEvent.isShowFilterArea = false;
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
@@ -127,7 +136,16 @@ export class EventReducedOverComponent implements OnInit {
     }
   }
 
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
+  }
+
   public resetLogInfoOfEvent(): void {
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.primitivePropertyEvent.isShowValidation = false;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }

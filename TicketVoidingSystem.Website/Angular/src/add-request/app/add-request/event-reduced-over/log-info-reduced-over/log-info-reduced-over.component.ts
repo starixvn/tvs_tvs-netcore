@@ -5,10 +5,10 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 
 @Component({
   standalone: true,
@@ -20,6 +20,7 @@ import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.p
 export class LogInfoReducedOverComponent {
   @Input() logInfo: LogInfoReducedOver;
   @Input() primitiveProps = new PrimitivePropertyEvent();
+
   private readonly modalService = inject(ModalService);
   public displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);

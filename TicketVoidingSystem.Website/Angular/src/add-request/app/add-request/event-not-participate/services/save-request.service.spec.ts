@@ -1,15 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { SaveRequestService } from './save-request.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { ValidationService } from './validation.service';
-import { LogInfoService } from './log-info.service';
-import { PopupService } from '../../services/popup.service';
-import { AddRequestService } from '../../add-request.service';
-import { EventNotParticipateService } from './event-not-participate.service';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
-import { SaveRequestArg } from '../models/save-request-arg.model';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
+import { PopupService } from '../../services/popup.service';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventNotParticipateService } from './event-not-participate.service';
+import { LogInfoService } from './log-info.service';
+import { SaveRequestService } from './save-request.service';
+import { ValidationService } from './validation.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -20,6 +19,7 @@ describe('SaveRequestService', () => {
   let eventNotParticipateService: EventNotParticipateService;
 
   beforeEach(() => {
+    document.body.innerHTML = '<div id="body" user-id="8"></div>';
     TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [SaveRequestService, ValidationService, LogInfoService,EventNotParticipateService]
@@ -49,18 +49,17 @@ describe('SaveRequestService', () => {
         logInfoEvent: {},
         isEdit: false,
         requestId: '123',
-        primitiveProps: { isShowValidation: true }
+        primitiveProps: { isShowValidation: true },
+        confirmAddRequest: {}
       } as unknown as SaveRequestArg;
 
       jest.spyOn(service as any, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(true);
-      jest.spyOn(service as any, 'proceedSaveRequest').mockImplementation();
 
       // Act
       await service.saveRequest(mockArg);
 
       // Assert
       expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
-      expect(service['proceedSaveRequest']).toHaveBeenCalledWith(mockArg);
       expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
     });
 
@@ -79,14 +78,12 @@ describe('SaveRequestService', () => {
       } as unknown as SaveRequestArg;
 
       jest.spyOn(service as any, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
-      jest.spyOn(service as any, 'proceedSaveRequest').mockImplementation();
 
       // Act
       await service.saveRequest(mockArg);
 
       // Assert
       expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
-      expect(service['proceedSaveRequest']).not.toHaveBeenCalled();
       expect(mockArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
       expect(mockArg.addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
     });
@@ -144,94 +141,6 @@ describe('SaveRequestService', () => {
       expect(result).toBeFalsy();
       expect(mockArg.addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(true);
       expect(validationService.validateCommonData).toHaveBeenCalled();
-    });
-  });
-
-  describe('proceedSaveRequest', () => {
-    it('should show confirmation popup when validation passes', () => {
-      // Arrange
-      const mockArg: SaveRequestArg = {
-        filter: { action: TVSRequestActionType.TAKE_NOTE_ID.toString() },
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn()
-        },
-        logInfoEvent: {},
-        isEdit: false,
-        requestId: '123'
-      } as unknown as SaveRequestArg;
-
-      jest.spyOn(validationService, 'checkCanShowConfirmationNotParticipate').mockReturnValue(true);
-      jest.spyOn(service as any, 'getMessageConfirmationNotParticipate').mockReturnValue('test message');
-      jest.spyOn(popupService, 'showConfirm').mockImplementation();
-
-      // Act
-      service['proceedSaveRequest'](mockArg);
-
-      // Assert
-      expect(validationService.checkCanShowConfirmationNotParticipate).toHaveBeenCalledWith(mockArg);
-      expect(popupService.showConfirm).toHaveBeenCalled();
-    });
-
-    it('should execute save request directly when no confirmation needed', () => {
-      // Arrange
-      const mockArg: SaveRequestArg = {
-        filter: { action: TVSRequestActionType.TAKE_NOTE_ID.toString() },
-        addRequestStore: {
-          changeSavingRequestStatus: jest.fn()
-        },
-        logInfoEvent: {},
-        isEdit: false,
-        requestId: '123'
-      } as unknown as SaveRequestArg;
-
-      jest.spyOn(validationService, 'checkCanShowConfirmationNotParticipate').mockReturnValue(false);
-      jest.spyOn(service as any, 'executeSaveRequestApi').mockImplementation();
-
-      // Act
-      service['proceedSaveRequest'](mockArg);
-
-      // Assert
-      expect(validationService.checkCanShowConfirmationNotParticipate).toHaveBeenCalledWith(mockArg);
-      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockArg);
-    });
-  });
-
-  describe('getMessageConfirmationNotParticipate', () => {
-    it('should include settled tickets warning when applicable', () => {
-      // Arrange
-      const mockArg: SaveRequestArg = {
-        filter: { action: TVSRequestActionType.TAKE_NOTE_ID.toString() },
-        logInfoEvent: {
-          logInfoDetail: { settleCount: 1 }
-        },
-        isEdit: false,
-        requestId: '123'
-      } as unknown as SaveRequestArg;
-
-      // Act
-      const result = service['getMessageConfirmationNotParticipate'](mockArg);
-
-      // Assert
-      expect(result).toContain('The request has settled ticket(s)');
-    });
-
-    it('should include validation warnings when applicable', () => {
-      // Arrange
-      const mockArg: SaveRequestArg = {
-        filter: { action: TVSRequestActionType.TAKE_NOTE_ID.toString() },
-        logInfoEvent: {
-          logInfoDetail: { settleCount: 0 },
-          messageValidationLogInfo: [{ isError: false }]
-        },
-        isEdit: false,
-        requestId: '123'
-      } as unknown as SaveRequestArg;
-
-      // Act
-      const result = service['getMessageConfirmationNotParticipate'](mockArg);
-
-      // Assert
-      expect(result).toContain('There are some warnings in this request');
     });
   });
 
@@ -328,6 +237,7 @@ describe('SaveRequestService', () => {
           decidedBy: 'test',
           remark: 'test'
         },
+        confirmAddRequest: {},
         logInfoEvent: {}
       } as unknown as SaveRequestArg;
 

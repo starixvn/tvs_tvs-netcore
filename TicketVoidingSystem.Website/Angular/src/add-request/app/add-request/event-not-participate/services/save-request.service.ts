@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
@@ -21,7 +21,7 @@ export class SaveRequestService {
     const isDataValid = argNotParticipate.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argNotParticipate);
     argNotParticipate.addRequestStore.changeBlockingUiStatus(true);
     if (isDataValid) {
-      this.proceedSaveRequest(argNotParticipate);
+      this.showPopupConfirmSave(argNotParticipate);
     } else {
       argNotParticipate.addRequestStore.changeSavingRequestStatus(false);
     }
@@ -38,6 +38,7 @@ export class SaveRequestService {
 
     argNotParticipate.addRequestStore.changeBlockingUiStatus(true);
     argNotParticipate.primitiveProps.isShowValidation = false;
+    argNotParticipate.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoNotParticipateService.getLogInfo(argNotParticipate.logInfoEvent, argNotParticipate.isEdit, argNotParticipate.requestId, argNotParticipate.filter, argNotParticipate.primitiveProps);
     argNotParticipate.addRequestStore.changeBlockingUiStatus(false);
     argNotParticipate.primitiveProps.isShowValidation = true;
@@ -49,49 +50,12 @@ export class SaveRequestService {
     return false;
   }
 
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmationNotParticipate(arg)) {
-      this.popupService.showConfirm(
-        this.getMessageConfirmationNotParticipate(arg),
-        async () => {
-          await this.onClickConfirmSave(arg);
-        },
-        () => {
-          arg.addRequestStore.changeSavingRequestStatus(false);
-        });
-    } else {
-      this.executeSaveRequestApi(arg);
-    }
-  }
-
-  private getMessageConfirmationNotParticipate(argNotParticipate: SaveRequestArg): string {
-    let message = '';
-    if (argNotParticipate.logInfoEvent.logInfoDetail.settleCount > 0) {
-      message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
-    }
-
-    if (argNotParticipate.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
-      message = `${message}<div>There are some warnings in this request.</div>`;
-    }
-
-    if (argNotParticipate.isEdit && argNotParticipate.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
-      && argNotParticipate.filter.action !== argNotParticipate.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-    }
-
-    if (argNotParticipate.isEdit && argNotParticipate.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${argNotParticipate.requestId} is confirmed by ${argNotParticipate.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
-  }
-
   private async executeSaveRequestApi(argNotParticipate: SaveRequestArg): Promise<void> {
     const query = this.initAddRequestQuery(argNotParticipate);
     await this.addRequestService.executeSaveRequest(argNotParticipate.isEdit, argNotParticipate.requestId, query, argNotParticipate.addRequestStore);
   }
 
-  private async onClickConfirmSave(argNotParticipate: SaveRequestArg) {
+  async onClickConfirmSave(argNotParticipate: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = argNotParticipate.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argNotParticipate);
     argNotParticipate.addRequestStore.changeBlockingUiStatus(true);
@@ -101,6 +65,19 @@ export class SaveRequestService {
       this.popupService.showError(TEXT.INVALID_DATA_IN_REQUEST);
     }
     argNotParticipate.addRequestStore.changeBlockingUiStatus(false);
+  }
+
+  private showPopupConfirmSave(arg: SaveRequestArg) {
+    if (!arg.filter.isVoided) {
+      arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
+      arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
+      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
+    }
+    arg.confirmAddRequest.isOpen = true;
+    arg.confirmAddRequest.requestId = arg.requestId;
+    arg.confirmAddRequest.requestedBy = arg.requestedBy;
+    arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 
   private initAddRequestQuery(argNotParticipate: SaveRequestArg): AddRequestQuery {
@@ -119,6 +96,8 @@ export class SaveRequestService {
 
     if (!argNotParticipate.filter.isVoided) {
       query.notParticipateInfo = this.eventNotParticipateService.getNotParticipateModel(Number(argNotParticipate.filter.subIssueTypeId), argNotParticipate.logInfoEvent);
+      query.siteDBDownInfoJson = argNotParticipate.confirmAddRequest.isMarkTicketSiteDbDown && argNotParticipate.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argNotParticipate.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

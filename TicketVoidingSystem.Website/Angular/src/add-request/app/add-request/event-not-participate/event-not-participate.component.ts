@@ -3,7 +3,11 @@ import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } fro
 import { FormsModule } from '@angular/forms';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../add-request.store';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
@@ -23,7 +27,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './event-not-participate.component.html',
   styleUrls: ['./event-not-participate.component.scss'],
   standalone: true,
-  imports: [FormsModule, EventLeagueComponent, FilterNotParticipateComponent, LogInfoNotParticipateComponent],
+  imports: [FormsModule, EventLeagueComponent, FilterNotParticipateComponent, LogInfoNotParticipateComponent, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
   providers: [ValidationService, SaveRequestService, EventNotParticipateService, FilterNotParticipateService, LogInfoService]
 })
 export class EventNotParticipateComponent implements OnInit {
@@ -33,6 +37,7 @@ export class EventNotParticipateComponent implements OnInit {
   @Input() requestId: number;
   @Input() filter: FilterModel;
   @Input() issueTypeId: string;
+  @Input() issueTypes = new IssueTypes();
   @Input() notParticipateModels: NotParticipateModel[] = [];
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
@@ -44,6 +49,7 @@ export class EventNotParticipateComponent implements OnInit {
   primitivePropertyEvent = new PrimitivePropertyEvent();
   originalPlayers: Player[];
   originalBetTypes: NotParticipateBetTypeModel[];
+  confirmAddRequest = new ConfirmAddRequestModel();
 
   private readonly validationService = inject(ValidationService);
   private readonly addRequestStore = inject(AddRequestStore);
@@ -74,6 +80,7 @@ export class EventNotParticipateComponent implements OnInit {
 
   public async clickSearch(): Promise<void> {
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterNotParticipateComponent)) {
       return;
     }
@@ -105,6 +112,7 @@ export class EventNotParticipateComponent implements OnInit {
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
@@ -113,6 +121,7 @@ export class EventNotParticipateComponent implements OnInit {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     this.primitivePropertyEvent.isShowFilterArea = false;
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
 
@@ -124,8 +133,17 @@ export class EventNotParticipateComponent implements OnInit {
     }
   }
 
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
+  }
+
   public resetLogInfoOfEvent(): void {
     this.primitivePropertyEvent.isShowValidation = false;
+    this.primitivePropertyEvent.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 

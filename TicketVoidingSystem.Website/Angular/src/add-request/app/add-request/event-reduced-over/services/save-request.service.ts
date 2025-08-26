@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
+import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
@@ -21,7 +21,7 @@ export class SaveRequestService {
     const isDataValid = argReducedOver.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argReducedOver);
     argReducedOver.addRequestStore.changeBlockingUiStatus(true);
     if (isDataValid) {
-      this.proceedSaveRequest(argReducedOver);
+      this.showPopupConfirmSave(argReducedOver);
     } else {
       argReducedOver.addRequestStore.changeSavingRequestStatus(false);
     }
@@ -38,6 +38,7 @@ export class SaveRequestService {
 
     argReducedOver.addRequestStore.changeBlockingUiStatus(true);
     argReducedOver.primitiveProps.isShowValidation = false;
+    argReducedOver.primitiveProps.infoSiteDBDownModel = null;
     await this.logInfoReducedOverService.getLogInfo(argReducedOver.logInfoEvent, argReducedOver.isEdit, argReducedOver.requestId, argReducedOver.filter, argReducedOver.primitiveProps);
     argReducedOver.addRequestStore.changeBlockingUiStatus(false);
     argReducedOver.primitiveProps.isShowValidation = true;
@@ -49,41 +50,17 @@ export class SaveRequestService {
     return false;
   }
 
-  private proceedSaveRequest(arg: SaveRequestArg) {
-    if (this.validationService.checkCanShowConfirmationReducedOver(arg)) {
-      this.popupService.showConfirm(
-        this.getMessageConfirmationReducedOver(arg),
-        async () => {
-          await this.onClickConfirmSave(arg);
-        },
-        () => {
-          arg.addRequestStore.changeSavingRequestStatus(false);
-        });
-    } else {
-      this.executeSaveRequestApi(arg);
+  private showPopupConfirmSave(arg: SaveRequestArg) {
+    if (!arg.filter.isVoided) {
+      arg.confirmAddRequest.isHasWarningTakenNote = StaticService.isHasWarningTakenNote(arg.filter.action, arg.actionIdOfFirstTimeAccess);
+      arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
+      arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     }
-  }
-
-  private getMessageConfirmationReducedOver(argReducedOver: SaveRequestArg): string {
-    let message = '';
-    if (argReducedOver.logInfoEvent.logInfoDetail.settleCount > 0) {
-      message = `${message}<div class="text-red">The request has settled ticket(s).</div>`;
-    }
-
-    if (argReducedOver.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError)) {
-      message = `${message}<div>There are some warnings in this request.</div>`;
-    }
-
-    if (argReducedOver.isEdit && argReducedOver.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString()
-      && argReducedOver.filter.action !== argReducedOver.actionIdOfFirstTimeAccess) {
-      message = `${message}<div>Ticket(s) on request will be unmarked.</div>`;
-    }
-
-    if (argReducedOver.isEdit && argReducedOver.userId !== Number(document.getElementById('body').getAttribute('user-id'))) {
-      message = `${message}<div style="color:red">Please remind this request ${argReducedOver.requestId} is confirmed by ${argReducedOver.requestedBy}.</div>`;
-    }
-
-    return `${message}<div class='mg-top-10'><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO PROCESS WITH ABOVE INFO?</div>`;
+    arg.confirmAddRequest.isOpen = true;
+    arg.confirmAddRequest.requestId = arg.requestId;
+    arg.confirmAddRequest.requestedBy = arg.requestedBy;
+    arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
+    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 
   private async executeSaveRequestApi(argReducedOver: SaveRequestArg): Promise<void> {
@@ -91,7 +68,7 @@ export class SaveRequestService {
     await this.addRequestService.executeSaveRequest(argReducedOver.isEdit, argReducedOver.requestId, query, argReducedOver.addRequestStore);
   }
 
-  private async onClickConfirmSave(argReducedOver: SaveRequestArg) {
+  public async onClickConfirmSave(argReducedOver: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = argReducedOver.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(argReducedOver);
     argReducedOver.addRequestStore.changeBlockingUiStatus(true);
@@ -118,6 +95,8 @@ export class SaveRequestService {
 
     if (!argReducedOver.filter.isVoided) {
       query.reducedOverInfo = this.eventReducedOverService.getReducedOverModel(Number(argReducedOver.filter.subIssueTypeId), argReducedOver.logInfoEvent);
+      query.siteDBDownInfoJson = argReducedOver.confirmAddRequest.isMarkTicketSiteDbDown && argReducedOver.confirmAddRequest.isHasAffectedTicketSiteDBDown
+        ? argReducedOver.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;
