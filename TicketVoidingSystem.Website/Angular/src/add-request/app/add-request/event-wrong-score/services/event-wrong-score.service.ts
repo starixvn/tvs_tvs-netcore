@@ -1,18 +1,18 @@
 import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
 import { AcceptType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { LABELS } from '../../../../../utility/constants/labels';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { ChildMatchModel } from '../../models/related-event.model';
+import { ConfirmWrongScoreModel } from '../confirm-wrong-score/confirm-wrong-score.model';
 import { PrimitiveProperty } from '../event-wrong-score.model';
+import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
+import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
-import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
-import { ConfirmWrongScoreModel } from '../confirm-wrong-score/confirm-wrong-score.model';
-import { LABELS } from '../../../../../utility/constants/labels';
-import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
 
 @Injectable()
 export class EventWrongScoreService {
@@ -120,7 +120,7 @@ export class EventWrongScoreService {
     confirmWrongScoreModel.requestedBy = args.requestedBy;
     confirmWrongScoreModel.issueTypeName = args.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === args.filter.issueTypeId).issueTypeName;
     confirmWrongScoreModel.subIssueTypeName = args.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === args.filter.subIssueTypeId).subIssueTypeName;
-    confirmWrongScoreModel.isHasAffectedTicketSiteDBDown = args.infoSiteDBDownModel?.siteDBDownInfoJson !== null;
+    confirmWrongScoreModel.isHasAffectedTicketSiteDBDown = args.infoSiteDBDownModel?.siteDBDownInfoJson?.length > 0;
     confirmWrongScoreModel.isOpenDialog = true;
   }
 }
