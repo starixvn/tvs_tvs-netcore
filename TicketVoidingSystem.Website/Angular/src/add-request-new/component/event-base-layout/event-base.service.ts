@@ -1,26 +1,17 @@
 import { inject, Injectable } from '@angular/core';
-import { CommonService } from '../../../utility/services/common.service';
-import { RequestModel } from '../../models/request.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { CommonService } from '../../../utility/services/common.service';
 import { IssueTypes } from '../../component/filter/issue-types.model';
-import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
-import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { RedCardModel } from '../../models/event-red-card.model';
 import { TechnicalErrorModel } from '../../models/event-technical-error.model';
+import { EventTicket14Model } from '../../models/event-ticket-14.model';
+import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
+import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
 import { WrongOddsModel } from '../../models/event-wrong-odds.model';
 import { WrongOuModel } from '../../models/event-wrong-ou.model';
-import { WrongOddsSportsBookModel } from '../../models/event-wrong-odds-sports-book.model';
-import { EventTicket14Model } from '../../models/event-ticket-14.model';
-
-type ModelTypes = 
-  | WrongHdpModel[]
-  | WrongScoreModel[]
-  | RedCardModel[]
-  | TechnicalErrorModel
-  | WrongOddsModel[]
-  | WrongOuModel[]
-  | WrongOddsSportsBookModel
-  | EventTicket14Model;
+import { WrongScoreModel } from '../../models/event-wrong-score.model';
+import { RequestModel } from '../../models/request.model';
+import { ModelType } from '../../types/model-type.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +20,7 @@ export class EventBaseService {
   commonService = inject(CommonService);
 
   // Type-safe mapping with generic function & return specific type
-  private readonly issueTypeModelMapping: Record<string, (model: RequestModel) => ModelTypes> = {
+  private readonly issueTypeModelMapping: Record<string, (model: RequestModel) => ModelType> = {
     [IssueTypeConstant.WRONG_HDP]: (model: RequestModel): WrongHdpModel[] => model.wrongHdpModels,
     [IssueTypeConstant.WRONG_1ST_HDP]: (model: RequestModel): WrongHdpModel[] => model.wrongHdpModels,
     [IssueTypeConstant.ARCHIVED_TICKET]: (model: RequestModel): EventTicket14Model => model.eventTicket14Model,
@@ -61,7 +52,7 @@ export class EventBaseService {
   }
 
   // Method with specific return type instead of unknown
-  getEventModelByIssueType(issueTypeId: string, model: RequestModel): ModelTypes {
+  getEventModelByIssueType(issueTypeId: string, model: RequestModel): ModelType {
     const modelGetter = this.issueTypeModelMapping[issueTypeId];
     return modelGetter ? modelGetter(model) : model.eventTicket14Model;
   }

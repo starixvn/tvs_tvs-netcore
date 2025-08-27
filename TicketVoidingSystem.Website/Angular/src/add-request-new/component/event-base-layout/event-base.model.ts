@@ -1,11 +1,11 @@
-import { FilterModel } from '../../component/filter/filter.model';
-import { IssueTypes } from '../../component/filter/issue-types.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
+import { ModelType } from '../../types/model-type.model';
+import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { OthersModel } from '../others/others.model';
 
-// Type definitions for template contexts
 export interface EventContentContext {
-    eventModel: unknown; // Can be EventTicket14Model, WrongScoreModel, etc.
+    eventModel: ModelType;
     otherModel: OthersModel;
     filterModel: FilterModel;
     issueTypes: IssueTypes;

@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { FilterComponent } from '../../component/filter/filter.component';
-import { FilterModel } from '../../component/filter/filter.model';
-import { IssueTypes } from '../../component/filter/issue-types.model';
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../../utility/components/menu-bar/menu-bar.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -12,6 +9,9 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { StaticService } from '../../../utility/services/static.service';
+import { FilterComponent } from '../../component/filter/filter.component';
+import { FilterModel } from '../../component/filter/filter.model';
+import { IssueTypes } from '../../component/filter/issue-types.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestModel } from '../../models/request.model';
 import { AddRequestStore } from '../../services/add-request.store';
@@ -19,7 +19,7 @@ import { CopyRequestInfoService } from '../../services/copy-request-info.service
 import { EditRequestService } from '../../services/edit-request/edit-request.service';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
-import { EventContentContext, OthersContentContext } from './base.model';
+import { EventContentContext, OthersContentContext } from './event-base.model';
 import { EventBaseService } from './event-base.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   @Input() isExternalUrl = false;
   @Input() issueTypeId: string;
   @Input() model: RequestModel;
-  @Input() eventHeight: string;
+  @Input() eventHeight = 'calc(100vh - 145px)';
   @Input() eventContent: TemplateRef<EventContentContext>;
   @Input() othersContent: TemplateRef<OthersContentContext>;
   @Output() saveRequest = new EventEmitter<void>();
