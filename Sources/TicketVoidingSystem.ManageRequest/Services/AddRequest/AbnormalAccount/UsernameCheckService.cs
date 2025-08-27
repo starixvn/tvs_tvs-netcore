@@ -42,7 +42,7 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
     private static ValidationInfo CreateValidationResult(IEnumerable<ValidationInfo> validationResults)
     {
         var results = validationResults.ToList();
-        var siteDBDownInfo = results.Find(x => x.SiteDBDownInfoJson != null);
+        var siteDBDownInfo = results.Find(IsHasAffectedSiteDbDown);
 
         return new ValidationInfo
         {
@@ -58,6 +58,11 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
             SiteDBDownUserNames = siteDBDownInfo?.SiteDBDownUserNames,
             SiteDBDownInfoJson = siteDBDownInfo?.SiteDBDownInfoJson
         };
+    }
+
+    private static bool IsHasAffectedSiteDbDown(ValidationInfo model)
+    {
+        return !string.IsNullOrEmpty(model.SiteDBDownInfoJson) || !string.IsNullOrEmpty(model.SiteDBDownUserNames);
     }
 
     private static string JoinNonEmptyValues(IEnumerable<ValidationInfo> results, Func<ValidationInfo, string> selector)

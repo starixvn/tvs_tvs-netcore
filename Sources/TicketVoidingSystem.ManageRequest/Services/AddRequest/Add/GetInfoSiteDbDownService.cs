@@ -23,7 +23,7 @@ public static class InfoSiteDbDownHelper
 
     public static InfoSiteDBDownModel GetModelForAbnormalAccount(ValidationInfo validationResult)
     {
-        if (string.IsNullOrWhiteSpace(validationResult.SiteDBDownInfoJson))
+        if (string.IsNullOrEmpty(validationResult.SiteDBDownInfoJson) && string.IsNullOrEmpty(validationResult.SiteDBDownUserNames))
         {
             return null;
         }
