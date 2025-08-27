@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import _ from 'lodash';
 import { AcceptType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionModel } from '../../components/tv-detection/tv-detection.model';
@@ -13,7 +13,6 @@ import { UpdateConfirmInfoArgs } from '../models/confirm-wrong-score.model';
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { ValidationService } from './validation.service';
 import { WrongScoreService } from './wrong-score.service';
-import { TEXT } from '../../../../../utility/constants/text';
 
 @Injectable()
 export class EventWrongScoreService {

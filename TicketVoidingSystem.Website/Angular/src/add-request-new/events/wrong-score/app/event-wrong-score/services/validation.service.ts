@@ -6,8 +6,8 @@ import { DateFullTimeNewComponent } from '../../../../../../utility/components/d
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestActionType, TVSRequestFilterBy } from '../../../../../../utility/constants/config';
-import { TEXT } from '../../../../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
@@ -18,7 +18,6 @@ import { FilterWrongScoreComponent } from '../filter-wrong-score/filter-wrong-sc
 import { SubIssueTypeRelatedEvent } from '../models/subIssue-type-related-event.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { WrongScoreInfoComponent } from '../wrong-score-info/wrong-score-info.component';
-import find from 'lodash/find';
 
 @Injectable()
 export class ValidationService {
