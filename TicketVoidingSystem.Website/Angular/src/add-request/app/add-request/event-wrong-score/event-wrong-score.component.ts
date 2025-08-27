@@ -145,7 +145,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public async handleSearchEvent(): Promise<void> {
-    if (!this.validationService.isValidAllSubIssueType(this.relatedEventsComponent.logInfoComponents)) {
+    if (!this.validationService.isValidAllSubIssueType(this.relatedEventsComponent.logInfoComponents) || !this.validateVarCheck()) {
       return;
     }
 
@@ -270,7 +270,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     args.issueTypes = this.issueTypes;
     args.tvDetectionModel = this.tvDetectionModel;
     args.isVoided = this.isVoided;
-    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown && this.confirmWrongScoreModel.isHasAffectedTicketSiteDBDown;
+    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown;
     
     return args;
   }
@@ -324,7 +324,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   isShowLogInfoSelectedScores(wrongScoreModels: WrongScoreModel[]): boolean {
-    const checkedScoresCount = wrongScoreModels.filter(x => x.isChecked).length;
+    const checkedScoresCount = wrongScoreModels.filter(x => x.isChecked && x.logInfoDetail).length;
     const isNotCheckTimeFilter = this.primitiveProps.filterBy !== TVSRequestFilterBy.CHECK_TIME;
 
     return checkedScoresCount > 1 && isNotCheckTimeFilter;

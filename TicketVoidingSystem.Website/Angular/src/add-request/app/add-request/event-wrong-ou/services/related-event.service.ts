@@ -79,6 +79,7 @@ export class RelatedEventService {
       addRelatedEventArg.primitiveProps.isBlock = false;
       addRelatedEventArg.primitiveProps.isShowRelatedEvents = true;
       addRelatedEventArg.primitiveProps.inputRelatedMatchId = null;
+      addRelatedEventArg.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 }

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -78,9 +77,7 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     arg.confirmAddRequest.isShowSubIssueType = !StaticService.isMatchEarlyCompleted(arg.filter.issueTypeId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmAddRequest.isOpen = true;
-    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
 
   private async executeSaveRequestApi(argOtherIssues: SaveRequestArg): Promise<void> {
@@ -108,7 +105,7 @@ export class SaveRequestService {
       } else {
         query.matchEarlyCompletedInfo = otherIssuesInfo;
       }
-      query.siteDBDownInfoJson = argOtherIssues.confirmAddRequest.isMarkTicketSiteDbDown && argOtherIssues.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argOtherIssues.confirmAddRequest.isMarkTicketSiteDbDown
         ? argOtherIssues.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

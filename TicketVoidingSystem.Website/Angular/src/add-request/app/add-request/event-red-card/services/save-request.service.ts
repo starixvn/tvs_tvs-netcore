@@ -68,11 +68,8 @@ export class SaveRequestService {
     arg.confirmRedCard.isHasSettledTicket = arg.allEvents.some(x => x.logInfoDetail?.settleCount > 0);
     arg.confirmRedCard.isHasWarningTicket = arg.allEvents.some(x => x.messageValidationLogInfo?.length > 0);
     arg.confirmRedCard.isShowSubIssueType = true;
-    arg.confirmRedCard.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmRedCard.isOpen = true;
-    arg.confirmRedCard = _.clone(arg.confirmRedCard);
   }
-
   async onClickConfirmSave(arg: SaveRequestArg) {
     // validate again for make sure
     const isDataValidAgain = arg.filter.isVoided ? true : await this.recheckLogInfoBeforeSaveRequest(arg);
@@ -122,7 +119,7 @@ export class SaveRequestService {
       query.redCardInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
         return this.assignEventToModel(x, arg, arg.allEvents.find(y => y.isMainMatch).tvDetectionModel);
       });
-      query.siteDBDownInfoJson = arg.confirmRedCard.isMarkTicketSiteDbDown && arg.confirmRedCard.isHasAffectedTicketSiteDBDown 
+      query.siteDBDownInfoJson = arg.confirmRedCard.isMarkTicketSiteDbDown
         ? arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

@@ -226,6 +226,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
     this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.primitiveProps.infoSiteDBDownModel = null;
   }
 
   handleDeleteEvent(matchId: number): void {

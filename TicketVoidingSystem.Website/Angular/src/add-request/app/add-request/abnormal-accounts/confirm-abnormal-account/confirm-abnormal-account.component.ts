@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CheckboxType } from '../../../../../utility/constants/config';
+import { CheckboxType, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account.model';
 
 @Component({
@@ -14,13 +14,14 @@ import { ConfirmAbnormalAccountModel } from './confirm-abnormal-account.model';
 export class ConfirmAbnormalAccountComponent implements OnChanges {
   @Input() isOpen: boolean;
   @Input() model = new ConfirmAbnormalAccountModel();
+  @Input() siteDBDownInfoJson: string;
+  @Input() action: string;
   @Output() clickCancel = new EventEmitter();
   @Output() clickOk = new EventEmitter();
 
   issueTypeName: string;
   subIssueTypeName: string
   actionName: string;
-
   checkboxType = CheckboxType;
   usernamesOfCreditCashService: string;
   isShowErrorCannotRemoveAllTickets = false;
@@ -28,7 +29,14 @@ export class ConfirmAbnormalAccountComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges) {
     if (changes['isOpen'] && this.isOpen) {
       this.updateData();
+      this.checkMarkTicketSiteDbDown()
     }
+  }
+  
+  private checkMarkTicketSiteDbDown(): void {
+    const isShowCheckbox = this.siteDBDownInfoJson?.length > 0 && this.action !== TVSRequestActionType.TAKE_NOTE_ID.toString();
+    this.model.isHasAffectedTicketSiteDBDown = isShowCheckbox;
+    this.model.isMarkTicketSiteDbDown = isShowCheckbox;
   }
 
   private updateData(): void {

@@ -75,9 +75,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
-    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
-
   }
 
   private async executeSaveRequestApi(args: SaveRequestArg): Promise<void> {
@@ -114,7 +111,7 @@ export class SaveRequestService {
     query.abnormalAccountInfo = this.createAbnormalAccountModel(model);
     query.decidedBy = model.others.decidedBy;
     query.remark = model.others.remark;
-    query.siteDBDownInfoJson = model.confirmAddRequest.isMarkTicketSiteDbDown && model.confirmAddRequest.isHasAffectedTicketSiteDBDown
+    query.siteDBDownInfoJson = model.confirmAddRequest.isMarkTicketSiteDbDown
       ? model.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     return query;
   }

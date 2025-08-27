@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { AddRequestService } from '../../add-request.service';
@@ -96,7 +95,7 @@ export class SaveRequestService {
     query.transInfoJson = args.primitiveProps.transInfoAddRequestModel?.transInfoJson;
     if (!args.filter.isVoided) {
       query.earlyKickOffInfo = args.allEvents.filter(x => !x.isInvalidTotalTickets).map(x => this.getEarlyKickOffModel(x, args.filter.subIssueTypeId));
-      query.siteDBDownInfoJson = args.confirmEarlyKickOff.isMarkTicketSiteDbDown && args.confirmEarlyKickOff.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = args.confirmEarlyKickOff.isMarkTicketSiteDbDown
         ? args.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
@@ -134,7 +133,5 @@ export class SaveRequestService {
     arg.confirmEarlyKickOff.isEditingByAnotherUser = this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
     arg.confirmEarlyKickOff.isHasSettledTicket = arg.allEvents.some(x => x.isHasSettledTicket);
     arg.confirmEarlyKickOff.isOpenDialog = true;
-    arg.confirmEarlyKickOff.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
-    arg.confirmEarlyKickOff = _.clone(arg.confirmEarlyKickOff);
   }
 }

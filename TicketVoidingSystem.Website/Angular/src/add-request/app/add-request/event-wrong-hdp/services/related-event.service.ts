@@ -77,6 +77,7 @@ export class RelatedEventService {
       model.primitiveProps.isBlock = false;
       model.primitiveProps.isShowRelatedEvents = true;
       model.primitiveProps.inputRelatedMatchId = null;
+      model.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 }

@@ -1,3 +1,4 @@
+import { InfoSiteDBDownModel } from "../components/info-site-db-down/info-site-db-down.model";
 
 export class ConfirmAddRequestModel {
   isOpen: boolean;
@@ -12,7 +13,7 @@ export class ConfirmAddRequestModel {
   isEditingByAnotherUser: boolean;
   isShowSubIssueType: boolean;
   isHasAffectedTicketSiteDBDown: boolean;
-  isMarkTicketSiteDbDown = true;
+  isMarkTicketSiteDbDown: boolean;
 }
 
 export class ExtraWarningModel {

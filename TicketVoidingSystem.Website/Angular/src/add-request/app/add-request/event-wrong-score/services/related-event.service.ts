@@ -55,6 +55,7 @@ export class RelatedEventService {
       await this.addEventByInputAndSelected(models, arg);
       arg.primitiveProps.isBlock = false;
       arg.primitiveProps.inputRelatedMatchId = null;
+      arg.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 

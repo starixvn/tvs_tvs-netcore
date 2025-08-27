@@ -96,6 +96,7 @@
   [model]="addChildMatchModel">
 </add-child-match>
 
-<confirm-danger-accepted [model]="confirmDangerAccepted" (clickOk)="onClickConfirmSaveRequest()"
-  (clickCancel)="onClickCancelSaveRequest()"></confirm-danger-accepted>
+<confirm-danger-accepted [isOpen]="confirmDangerAccepted.isOpenDialog" [model]="confirmDangerAccepted" (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()" [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson" [action]="filter.action">
+</confirm-danger-accepted>
 <tooltip [tooltip]="tooltip"></tooltip>

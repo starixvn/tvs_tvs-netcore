@@ -1,9 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
-import { ConfirmAddRequestModel } from '../../confirm-add-request/confirm-add-request.model';
 import { AddRequestQuery } from '../../models/add-request.query';
 import { PopupService } from '../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
@@ -58,10 +56,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
-
-    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
-    arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }
 
   private async executeSaveRequestApi(argTechnicalError: SaveRequestArg): Promise<void> {
@@ -96,7 +90,7 @@ export class SaveRequestService {
     
     if (!argTechnicalError.filter.isVoided) {
       query.technicalErrorInfo = this.eventTechnicalErrorService.getTechnicalErrorModel(Number(argTechnicalError.filter.subIssueTypeId), argTechnicalError.logInfoEvent);
-      query.siteDBDownInfoJson = argTechnicalError.confirmAddRequest.isMarkTicketSiteDbDown && argTechnicalError.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argTechnicalError.confirmAddRequest.isMarkTicketSiteDbDown
         ? argTechnicalError.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

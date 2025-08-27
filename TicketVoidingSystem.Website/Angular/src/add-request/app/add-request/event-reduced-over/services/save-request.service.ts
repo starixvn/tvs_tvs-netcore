@@ -60,7 +60,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 
   private async executeSaveRequestApi(argReducedOver: SaveRequestArg): Promise<void> {
@@ -95,7 +94,7 @@ export class SaveRequestService {
 
     if (!argReducedOver.filter.isVoided) {
       query.reducedOverInfo = this.eventReducedOverService.getReducedOverModel(Number(argReducedOver.filter.subIssueTypeId), argReducedOver.logInfoEvent);
-      query.siteDBDownInfoJson = argReducedOver.confirmAddRequest.isMarkTicketSiteDbDown && argReducedOver.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argReducedOver.confirmAddRequest.isMarkTicketSiteDbDown
         ? argReducedOver.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

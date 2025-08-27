@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CheckboxType } from '../../../../../utility/constants/config';
+import { CheckboxType, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
 
 @Component({
@@ -11,8 +11,11 @@ import { ConfirmAbnormalBetModel } from './confirm-abnormal-bet.model';
   imports: [FormsModule]
 })
 export class ConfirmAbnormalBetComponent implements OnChanges {
+  @Input() isOpen: boolean;
   @Input() model = new ConfirmAbnormalBetModel();
   @Input() isEdit: boolean;
+  @Input() siteDBDownInfoJson: string;
+  @Input() action: string;
   @Output() close = new EventEmitter();
   @Output() save = new EventEmitter();
 
@@ -24,7 +27,7 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   ticketsOfCreditCashService: string;
   isShowErrorCannotRemoveAllTickets = false;
   isConfirmCalculator = true;
-  isMarkTicketSiteDbDown = true;
+  isMarkTicketSiteDbDown: boolean;
 
   onCheckboxToggle(key: CheckboxType): void {
     this.model.checkboxState[key] = !this.model.checkboxState[key];
@@ -32,9 +35,16 @@ export class ConfirmAbnormalBetComponent implements OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['model'] && this.model.isOpenDialog) {
+    if (changes['isOpen'] && this.isOpen) {
       this.updateData();
+      this.onChangeInfoMarkTicketSiteDBDown();
     }
+  }
+
+  private onChangeInfoMarkTicketSiteDBDown() {
+    const isShowCheckbox = this.siteDBDownInfoJson?.length > 0 && this.action !== TVSRequestActionType.TAKE_NOTE_ID.toString();
+    this.model.isHasAffectedTicketSiteDBDown = isShowCheckbox;
+    this.isMarkTicketSiteDbDown = isShowCheckbox;
   }
 
   private updateData(): void {

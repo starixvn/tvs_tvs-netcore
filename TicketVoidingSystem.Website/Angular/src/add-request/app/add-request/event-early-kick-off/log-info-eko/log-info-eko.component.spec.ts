@@ -5,7 +5,6 @@ import { LogInfoService } from '../services/log-info.service';
 import { AddRequestStore } from '../../add-request.store';
 import { FilterModel } from '../../filter/filter.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { IssueTypes } from '../../filter/issue-types.model';
@@ -74,7 +73,6 @@ describe('LogInfoEkoComponent', () => {
     component.logInfo = Helper.fakeLogInfoEko;
     component.requestId = Helper.fakeRequestId;
     component.issueTypes = new IssueTypes();
-    component.primitiveProps = new PrimitiveProperty();
 
     // Mock addRequestStore methods
     addRequestStore.changeBlockingUiStatus = jest.fn();

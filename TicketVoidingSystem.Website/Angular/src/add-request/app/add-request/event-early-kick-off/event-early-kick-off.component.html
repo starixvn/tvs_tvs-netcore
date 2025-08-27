@@ -20,7 +20,7 @@
   <div class="main-match-log-info mb-3">
     <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
     <log-info-eko #logInfo [isMainMatch]="true" [isEdit]="isEdit" [requestId]="requestId"
-      [primitiveProps]="primitiveProps" [logInfo]="mainEvent" [issueTypes]="issueTypes"
+      [logInfo]="mainEvent" [issueTypes]="issueTypes"
       (deleteEvent)="handleDeleteEvent($event)" [filter]="filter">
     </log-info-eko>
   </div>
@@ -51,7 +51,7 @@
       <div class="mb-2">
         @if (!event.isMainMatch) {
         <log-info-eko #logInfo [isMainMatch]="false" [isEdit]="isEdit" [requestId]="requestId"
-          [primitiveProps]="primitiveProps" [logInfo]="allSelectedEvents[i]" [issueTypes]="issueTypes"
+          [logInfo]="allSelectedEvents[i]" [issueTypes]="issueTypes"
           (deleteEvent)="handleDeleteEvent($event)" [filter]="filter">
         </log-info-eko>
         }
@@ -66,6 +66,7 @@
 <add-child-match [relatedEvents]="relatedEvents" (selectedEventsChange)="saveRelatedEvent($event)"
   [model]="addChildMatchModel">
 </add-child-match>
-<confirm-eko [model]="confirmEarlyKickOff" (clickOk)="onClickConfirmSaveRequest()"
-  (clickCancel)="onClickCancelSaveRequest()"></confirm-eko>
+<confirm-eko [isOpen]="confirmEarlyKickOff.isOpenDialog" [model]="confirmEarlyKickOff" (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()" [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson" [action]="filter.action">
+</confirm-eko>
 <tooltip [tooltip]="tooltip"></tooltip>

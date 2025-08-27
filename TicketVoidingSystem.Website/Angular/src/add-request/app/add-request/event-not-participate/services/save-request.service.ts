@@ -77,7 +77,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 
   private initAddRequestQuery(argNotParticipate: SaveRequestArg): AddRequestQuery {
@@ -96,7 +95,7 @@ export class SaveRequestService {
 
     if (!argNotParticipate.filter.isVoided) {
       query.notParticipateInfo = this.eventNotParticipateService.getNotParticipateModel(Number(argNotParticipate.filter.subIssueTypeId), argNotParticipate.logInfoEvent);
-      query.siteDBDownInfoJson = argNotParticipate.confirmAddRequest.isMarkTicketSiteDbDown && argNotParticipate.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argNotParticipate.confirmAddRequest.isMarkTicketSiteDbDown
         ? argNotParticipate.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

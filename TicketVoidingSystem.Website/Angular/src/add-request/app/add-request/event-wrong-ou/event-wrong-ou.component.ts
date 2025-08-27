@@ -181,7 +181,6 @@ export class EventWrongOuComponent implements OnInit {
   }
 
   public async handleClickAddRelatedEvent(): Promise<void> {
-    this.primitiveProps.isShowInfoSiteDBDown = false;
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
   }
 

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -99,7 +98,7 @@ export class SaveRequestService {
         query.wrong1stOuInfo = wrongOuInfo;
       }
 
-      query.siteDBDownInfoJson = saveRequestArg.confirmAddRequest.isMarkTicketSiteDbDown && saveRequestArg.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = saveRequestArg.confirmAddRequest.isMarkTicketSiteDbDown
         ? saveRequestArg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
@@ -140,6 +139,5 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 }

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { AddRequestService } from '../../add-request.service';
@@ -75,9 +74,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
-
-    arg.confirmAddRequest = _.clone(arg.confirmAddRequest);
   }
 
   private initAddRequestQuery(argWrongMarketOffered: SaveRequestArg): AddRequestQuery {
@@ -95,7 +91,7 @@ export class SaveRequestService {
     
     if (!argWrongMarketOffered.filter.isVoided) {
       query.wrongMarketOfferedInfo = this.eventWrongMarketOfferedService.getWrongMarketOfferedModel(Number(argWrongMarketOffered.filter.subIssueTypeId), argWrongMarketOffered.logInfoEvent);
-      query.siteDBDownInfoJson = argWrongMarketOffered.confirmAddRequest.isMarkTicketSiteDbDown && argWrongMarketOffered.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argWrongMarketOffered.confirmAddRequest.isMarkTicketSiteDbDown
         ? argWrongMarketOffered.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

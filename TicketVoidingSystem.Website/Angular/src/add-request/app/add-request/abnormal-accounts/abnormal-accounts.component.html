@@ -62,5 +62,6 @@
 }
 
 <confirm-abnormal-account #confirmAddRequestComponent [model]="confirmAddRequest" [isOpen]="confirmAddRequest.isOpen"
+  [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson" [action]="filter.action"
   (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()">
 </confirm-abnormal-account>
