@@ -38,6 +38,11 @@ export class RequestInfoForCopy {
   totalSingleCount: number;
   totalParlayCount: number;
   totalCancelCashOutCount: number;
+  liveGameEarlySingleCount: number;
+  poolHouseSingleCount: number;
+  poolHouseMainParlayCount: number;
+
+  //Wrong Odds
   filterOddsType: string;
   oddsValue: string;
   fromOdds: string;

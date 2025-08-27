@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import _ from 'lodash';
+import groupBy from 'lodash/groupBy';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
@@ -54,7 +54,7 @@ export class RequestDescriptionService {
   }
 
   private createReducedOversOrAbandonedContent(copyInfoResponse: CopyRequestInfoResponse): string {
-    const groupBetTypes = _.groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.inputtedRuns}+${item.betId}"`);
+    const groupBetTypes = groupBy(copyInfoResponse.betTypeTickets, item => `"${item.betTypeId}+${item.inputtedRuns}+${item.betId}"`);
     let outputContent = '';
 
     for (const key in groupBetTypes) {
@@ -72,7 +72,7 @@ export class RequestDescriptionService {
   }
 
   cloneGroupBetTypes(betTypeTickets: BetTypeTicketsInfo[]) {
-    return _.groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
+    return groupBy(betTypeTickets, item => `"${item.betTypeId}+${item.betId}"`);
   }
 
   private createNotParticipateContent(copyInfoResponse: CopyRequestInfoResponse): string {
@@ -226,12 +226,34 @@ export class RequestDescriptionService {
       + this.generateMistakenBy(copyInfoResponse.requestInfo, isShowMistakenBy)
       + betTypeContent
       + oddsContent
-      + `Void Time: ${moment(copyInfoResponse.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(copyInfoResponse.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
-      + `(Single Count: ${copyInfoResponse.requestInfo.totalSingleCount}, Parlay Count: ${copyInfoResponse.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
+      + this.generateVoidTimeAndTicketCount(copyInfoResponse, cancelCashOutCount)
       + this.generateRemark(copyInfoResponse.requestInfo)
       + this.generateLiveScores(copyInfoResponse.requestInfo);
 
     return content;
+  }
+
+  private generateVoidTimeAndTicketCount(model: CopyRequestInfoResponse, cancelCashOutCount: string): string {
+    const issueTypesHavePoolHouse = [
+      IssueTypeConstant.WRONG_ODDS, IssueTypeConstant.WRONG_HDP, IssueTypeConstant.WRONG_1ST_HDP,
+      IssueTypeConstant.WRONG_OU, IssueTypeConstant.WRONG_1ST_OU
+    ];
+
+    if(issueTypesHavePoolHouse.includes(model.requestInfo.issueTypeId.toString())){
+      return this.generateVoidTimeAndTicketCountIssueTypeHavePoolHouse(model, cancelCashOutCount);
+    }
+    return this.generateVoidTimeAndTicketCountIssueTypeNotHavePoolHouse(model, cancelCashOutCount);
+  }
+
+  private generateVoidTimeAndTicketCountIssueTypeNotHavePoolHouse(model: CopyRequestInfoResponse, cancelCashOutCount: string): string {
+    return `Void Time: ${moment(model.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(model.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)} `
+      + `(Single Count: ${model.requestInfo.totalSingleCount}, Parlay Count: ${model.requestInfo.totalParlayCount}${cancelCashOutCount})\n`
+  }
+
+  private generateVoidTimeAndTicketCountIssueTypeHavePoolHouse(model: CopyRequestInfoResponse, cancelCashOutCount: string): string {
+    return `Void Time: ${moment(model.requestInfo.voidFromTime).format(DateTimeFormat.TIME_FORMAT)} - ${moment(model.requestInfo.voidToTime).format(DateTimeFormat.TIME_FORMAT)}\n`
+      + `LG/Early - Single Count: ${model.requestInfo.liveGameEarlySingleCount}\n`
+      + `PH - Single Count: ${model.requestInfo.poolHouseSingleCount}, Parlay Count: ${model.requestInfo.totalParlayCount}${cancelCashOutCount}\n`
   }
 
   private generateInputtedOuValue(requestInfo: RequestInfoForCopy): string {

@@ -4,7 +4,8 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } fr
 import { FormsModule } from '@angular/forms';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
@@ -181,7 +182,7 @@ export class FilterComponent implements OnInit {
       return false;
     }
 
-    if (!this.filterByMatch && (_.isUndefined(this.model.requestId) || _.isEmpty(this.model.requestId))) {
+    if (!this.filterByMatch && (isUndefined(this.model.requestId) || isEmpty(this.model.requestId))) {
       this.tooltip.display('input-request-id', LABELS.EMPTY_REQUEST);
       return false;
     }

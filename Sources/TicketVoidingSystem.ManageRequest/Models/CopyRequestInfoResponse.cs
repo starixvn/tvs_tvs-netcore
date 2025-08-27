@@ -65,6 +65,12 @@ public class RequestInfoForCopy
 
     public int TotalCancelCashOutCount { get; set; }
 
+    public int LiveGameEarlySingleCount { get; set; }
+
+    public int PoolHouseSingleCount { get; set; }
+
+    public int PoolHouseMainParlayCount { get; set; }
+
     public string FilterOddsType { get; set; }
     public string OddsValue { get; set; }
     public string FromOdds { get; set; }

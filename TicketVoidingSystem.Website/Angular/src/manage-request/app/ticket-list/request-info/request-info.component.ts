@@ -2,7 +2,9 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbAccordionConfig, NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import isNil from 'lodash/isNil';
+import isUndefined from 'lodash/isUndefined';
+import { AutosizeModule } from 'ngx-autosize';
 import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { RequestEventModel } from '../../../../edit-request/app/request.model';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
@@ -28,7 +30,7 @@ import { GeneralInfoViewModel } from './request-info.model';
   selector: 'request-info',
   templateUrl: './request-info.component.html',
   styleUrls: ['./request-info.component.scss'],
-  imports: [BlockUiDirective, MatchInfoComponent, IssueTypeComponent, TicketsComponent, FormsModule, NgbNavModule, CommonModule ]
+  imports: [BlockUiDirective, MatchInfoComponent, IssueTypeComponent, TicketsComponent, FormsModule, NgbNavModule, CommonModule, AutosizeModule ]
 })
 export class RequestInfoComponent implements OnInit, OnChanges {
   @Input() ticketListModal: TicketListModal;
@@ -143,8 +145,8 @@ export class RequestInfoComponent implements OnInit, OnChanges {
 
   private getScoreResult(model: RequestEventModel): string {
     if (model) {
-      const htScore = (!_.isNil(model.htHomeScore) && !_.isNil(model.htAwayScore)) ? `${model.htHomeScore} - ${model.htAwayScore}` : 'N/A';
-      const ftScore = (!_.isNil(model.finalHomeScore) && !_.isNil(model.finalAwayScore)) ?
+      const htScore = (!isNil(model.htHomeScore) && !isNil(model.htAwayScore)) ? `${model.htHomeScore} - ${model.htAwayScore}` : 'N/A';
+      const ftScore = (!isNil(model.finalHomeScore) && !isNil(model.finalAwayScore)) ?
         `${model.finalHomeScore} - ${model.finalAwayScore}` : 'N/A';
       return `HT ${htScore}, FT ${ftScore}`;
     }
@@ -179,7 +181,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   private updateIssue() {
-    if (!_.isUndefined(this.issue.issueTypeId)) {
+    if (!isUndefined(this.issue.issueTypeId)) {
       this.issueTypeName = this.issue.name === this.issue.subIssueTypeName ? this.issue.name : `${this.issue.name} - ${this.issue.subIssueTypeName}`;
 
       if (this.isAbnormalBetIssueType()) {

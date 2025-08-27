@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { AutoRefreshMode } from '../../utility/components/auto-refresh/auto-refresh.model';
+import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../utility/constants/config';
@@ -16,10 +18,8 @@ import { FilterComponent } from './filter/filter.component';
 import { FilterModel } from './filter/filter.model';
 import { GetRequestsQuery } from './models/get-requests.query';
 import { PermissionManage } from './models/permission-manage.model';
-import { RequestModel } from './request-list/request.model';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { RequestListComponent } from './request-list/request-list.component';
+import { RequestModel } from './request-list/request.model';
 
 const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
 @Component({
@@ -94,7 +94,7 @@ export class AppComponent implements OnInit {
     this.isBlock = true;
     const data = await this.appService.getRequests(query);
     this.isBlock = false;
-    this.requests = _.clone(data);
+    this.requests = clone(data);
   }
 
   private async getQuery(): Promise<GetRequestsQuery> {

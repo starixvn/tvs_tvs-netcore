@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
@@ -79,19 +79,19 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   getIssueTypeName(subIssueTypeId: number): string {
-    if (_.isUndefined(subIssueTypeId) || subIssueTypeId === 0) {
+    if (isUndefined(subIssueTypeId) || subIssueTypeId === 0) {
       return '';
     }
     const subIssue = this.issueTypesModel.subIssueTypes.find(x => x.subIssueTypeId === subIssueTypeId);
     const issueType = this.issueTypesModel.issueTypes.find(x => x.issueTypeId === subIssue.issueTypeId);
-    return _.isUndefined(issueType) ? '' :
+    return isUndefined(issueType) ? '' :
       issueType.issueTypeName === subIssue.subIssueTypeName ?
         issueType.issueTypeName : `${issueType.issueTypeName} - ${subIssue.subIssueTypeName}`;
   }
 
   getActionName(id: number): string {
     const action = this.actions.find(x => x.value === id.toString());
-    return _.isUndefined(action) ? '' : action.name;
+    return isUndefined(action) ? '' : action.name;
   }
 
   checkVoided(details: DetailRequestModel[]): boolean {
