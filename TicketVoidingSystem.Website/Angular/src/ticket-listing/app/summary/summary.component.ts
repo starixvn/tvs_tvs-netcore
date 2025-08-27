@@ -1,7 +1,9 @@
 ﻿import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChange, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import filter from 'lodash/filter';
+import reject from 'lodash/reject';
+import sumBy from 'lodash/sumBy';
 import { ClipboardService } from 'ngx-clipboard';
 import { SpecialPlatform } from '../../../utility/constants/special-platform.constant';
 import { SummaryItem } from './summary.model';
@@ -100,25 +102,25 @@ export class SummaryComponent implements OnChanges {
   }
 
   updateTotalBetCount() {
-    const creditGroups = _.filter(this.itemsGroupByLicensee, { name: 'Credit' });
-    this.totalBetCountOfCredit = _.sumBy(creditGroups, 'total');
+    const creditGroups = filter(this.itemsGroupByLicensee, { name: 'Credit' });
+    this.totalBetCountOfCredit = sumBy(creditGroups, 'total');
 
-    const normalLicenseeGroups = _.reject(this.itemsGroupByLicensee, function (o) {
+    const normalLicenseeGroups = reject(this.itemsGroupByLicensee, function (o) {
       return o.name === 'Credit' || o.isChinaView || o.specialPlatform === SpecialPlatform.JOLLY_SPORTS || o.specialPlatform === SpecialPlatform.JOLLY_SPORTS_CV;
     });
-    this.totalBetCountOfNormalLicensee = _.sumBy(normalLicenseeGroups, 'total');
+    this.totalBetCountOfNormalLicensee = sumBy(normalLicenseeGroups, 'total');
     this.totalLicenseeCountOfNormal = normalLicenseeGroups.length;
 
-    const chinaViewGroups = _.filter(this.itemsGroupByLicensee, { isChinaView: true });
-    this.totalBetCountOfChinaView = _.sumBy(chinaViewGroups, 'total');
+    const chinaViewGroups = filter(this.itemsGroupByLicensee, { isChinaView: true });
+    this.totalBetCountOfChinaView = sumBy(chinaViewGroups, 'total');
     this.totalLicenseeCountOfChinaView = chinaViewGroups.length;
 
-    const jollySportGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 2 });
-    this.totalBetCountOfJollySport = _.sumBy(jollySportGroups, 'total');
+    const jollySportGroups = filter(this.itemsGroupByLicensee, { specialPlatform: 2 });
+    this.totalBetCountOfJollySport = sumBy(jollySportGroups, 'total');
     this.totalLicenseeCountOfJollySport = jollySportGroups.length;
 
-    const jollySportCVGroups = _.filter(this.itemsGroupByLicensee, { specialPlatform: 3 });
-    this.totalBetCountOfJollySportCV = _.sumBy(jollySportCVGroups, 'total');
+    const jollySportCVGroups = filter(this.itemsGroupByLicensee, { specialPlatform: 3 });
+    this.totalBetCountOfJollySportCV = sumBy(jollySportCVGroups, 'total');
     this.totalLicenseeCountOfJollySportCV = jollySportCVGroups.length;
   }
 

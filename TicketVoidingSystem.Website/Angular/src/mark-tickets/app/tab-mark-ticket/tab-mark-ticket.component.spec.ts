@@ -1,11 +1,10 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import { By } from '@angular/platform-browser';
 import { AppService } from '../app.service';
 import { DataPermission } from '../models/result.model';
 import { TabMarkTicketComponent } from './tab-mark-ticket.component';
-import { SimpleChange } from '@angular/core';
-import { By } from '@angular/platform-browser';
 
 class Helper {
   static readonly fakeDataPermission: DataPermission = {

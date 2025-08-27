@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
 import { NgbModalConfig } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { TEXT} from '../../../utility/constants/text';
 import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { GetTicketsQuery, MarkedTicketQuery, TicketDetailQuery } from '../models/query.model';
 import { ResultMarkTicketModel } from '../models/result.model';
 import { TicketsModel } from '../tickets-list/tickets.model';
 import { AllMarkedTicketModel } from './all-marked-ticket-list/all-marked-ticket.model';
+import { FilterTicketsComponent } from './filter-tickets/filter-tickets.component';
 import { FilterSearchBy } from './filter-tickets/filter.model';
 import { MarkUnmarkTicketComponent } from './mark-unmark-ticket.component';
-import { FilterTicketsComponent } from './filter-tickets/filter-tickets.component';
 
 class Helper {
   static readonly fakeResultUpdateMarkedTicket = {
@@ -444,7 +444,7 @@ describe('MarkUnmarkTicketComponent', () => {
     });
 
     it('should call appService.updateAllMarkedTickets and refreshAllMarkedTickets when updateAllMarkedTickets is called', async () => {
-      const fakeResultUpdateMarkedTicket = _.cloneDeep(Helper.fakeResultUpdateMarkedTicket);
+      const fakeResultUpdateMarkedTicket = cloneDeep(Helper.fakeResultUpdateMarkedTicket);
       fakeResultUpdateMarkedTicket.isSuccessful = true;
       const openModal = {
         title: 'Mark ticket with Match',
@@ -470,7 +470,7 @@ describe('MarkUnmarkTicketComponent', () => {
         userId: 112,
         createdDate: new Date()
       } as AllMarkedTicketModel;
-      const fakeResultUpdateMarkedTicket = _.cloneDeep(Helper.fakeResultUpdateMarkedTicket);
+      const fakeResultUpdateMarkedTicket = cloneDeep(Helper.fakeResultUpdateMarkedTicket);
       fakeResultUpdateMarkedTicket.isSuccessful = false;
       const openModal = {
         title: 'Mark ticket with Match',
@@ -497,7 +497,7 @@ describe('MarkUnmarkTicketComponent', () => {
 
     it('should call researchMarkedTickets when updateMarkedTicket is called', async () => {
       const query = new MarkedTicketQuery();
-      const fakeResultUpdateMarkedTicket = _.cloneDeep(Helper.fakeResultUpdateMarkedTicket);
+      const fakeResultUpdateMarkedTicket = cloneDeep(Helper.fakeResultUpdateMarkedTicket);
       fakeResultUpdateMarkedTicket.isSuccessful = false;
       const openModal = {
         title: 'Mark tickets result',

@@ -1,25 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../utility/modules/testing.module';
-import { AppComponent } from './app.component';
-import { AppService } from './app.service';
-import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
-import { ModalService } from '../../utility/components/modal/modal.service';
-import { SignalRService } from '../../utility/services/signal-r.service.native';
-import { PasswordService } from '../../utility/services/password.service';
-import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
-import { FilterComponent } from './filter/filter.component';
-import { GetTicketsQuery, FilterParams } from './models/query.model';
-import { TicketsModel } from '../../utility/components/tickets/tickets.model';
-import { MatchModel } from '../../utility/models/match.model';
-import { Result } from '../../utility/models/result';
-import * as _ from 'lodash';
-import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
+import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
+import { ModalService } from '../../utility/components/modal/modal.service';
 import { PagingModel } from '../../utility/components/paging/paging.model';
+import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
+import { GroupModel } from '../../utility/components/tickets/group.model';
+import { TicketsModel } from '../../utility/components/tickets/tickets.model';
 import { SportType } from '../../utility/constants/sport.constant';
 import { BetID } from '../../utility/models/bet-id.model';
-import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
-import { GroupModel } from '../../utility/components/tickets/group.model';
+import { MatchModel } from '../../utility/models/match.model';
+import { Result } from '../../utility/models/result';
+import { TestingModule } from '../../utility/modules/testing.module';
+import { PasswordService } from '../../utility/services/password.service';
+import { SignalRService } from '../../utility/services/signal-r.service.native';
+import { AppComponent } from './app.component';
+import { AppService } from './app.service';
+import { FilterComponent } from './filter/filter.component';
+import { FilterParams, GetTicketsQuery } from './models/query.model';
 
 class Helper {
   static readonly fakeMatchModel = {

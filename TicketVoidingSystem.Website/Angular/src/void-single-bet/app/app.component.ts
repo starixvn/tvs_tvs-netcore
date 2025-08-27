@@ -1,21 +1,34 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Guid } from 'guid-typescript';
-import * as _ from 'lodash';
+import assignIn from 'lodash/assignIn';
+import clone from 'lodash/clone';
+import isNil from 'lodash/isNil';
 import moment from 'moment-timezone';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
+import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
+import { Confirmation } from '../../utility/components/confirmation/confirmation.model';
 import { AffectedLicensee } from '../../utility/components/licensee-affected-list/licensee-affected-list.model';
+import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
+import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { MessagesResult } from '../../utility/components/messages-result/messages-result';
+import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
+import { NotificationComponent } from '../../utility/components/notification/notification.component';
 import { PagingModel } from '../../utility/components/paging/paging.model';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
+import { GroupModel } from '../../utility/components/tickets/group.model';
+import { TicketsComponent } from '../../utility/components/tickets/tickets.component';
+import { TicketsModel } from '../../utility/components/tickets/tickets.model';
+import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { FunctionConst } from '../../utility/constants/config';
+import { SportType } from '../../utility/constants/sport.constant';
 import { TEXT } from '../../utility/constants/text';
 import { CheckingPermissionModel } from '../../utility/models/checking-permission.model';
 import { MatchModel } from '../../utility/models/match.model';
@@ -24,21 +37,10 @@ import { PasswordService } from '../../utility/services/password.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { StaticService } from '../../utility/services/static.service';
 import { AppService } from './app.service';
-import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
-import { Confirmation } from '../../utility/components/confirmation/confirmation.model';
 import { FilterComponent } from './filter/filter.component';
+import { ModalComponent } from './modal/modal.component';
 import { Modal } from './modal/modal.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
-import { GroupModel } from '../../utility/components/tickets/group.model';
-import { TicketsModel } from '../../utility/components/tickets/tickets.model';
-import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
-import { TicketsComponent } from '../../utility/components/tickets/tickets.component';
-import { NotificationComponent } from '../../utility/components/notification/notification.component';
-import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
-import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
-import { ModalComponent } from './modal/modal.component';
-import { SportType } from '../../utility/constants/sport.constant';
 
 @Component({
   standalone: true,
@@ -142,7 +144,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (query.invalidTransDate) {
       this.handleNoTicketLogInfo();
     } else {
-      this.filterParamsBeforeSearch = _.clone(query);
+      this.filterParamsBeforeSearch = clone(query);
       this.isShowTickets = false;
       const data = await this.appService.GetLogInfo(this.getTicketsQuery);
       this.renderDataLogInfo(data);
@@ -191,7 +193,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     if (query.invalidTransDate) {
       this.handleNoTicket();
     } else {
-      this.filterParamsBeforeSearch = _.clone(query);
+      this.filterParamsBeforeSearch = clone(query);
       this.isShowTickets = false;
       await this.getTickets();
     }
@@ -258,9 +260,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.templateValue.isCheckTime = this.getTicketsQuery.timeType === 1;
     this.templateValue.score =
       this.getTicketsQuery.eventType === '1' &&
-        !_.isNil(this.getTicketsQuery.liveHomeScore) &&
+        !isNil(this.getTicketsQuery.liveHomeScore) &&
         this.getTicketsQuery.liveHomeScore.length > 0 &&
-        !_.isNil(this.getTicketsQuery.liveAwayScore) &&
+        !isNil(this.getTicketsQuery.liveAwayScore) &&
         this.getTicketsQuery.liveAwayScore.length > 0
         ? `${this.getTicketsQuery.liveHomeScore}-${this.getTicketsQuery.liveAwayScore}`
         : '';
@@ -277,7 +279,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   renderTickets(data: TicketsModel) {
     this.licenseeAffectedList = data.licenseeAffectedList;
-    this.licenseeAffectedList = _.clone(this.licenseeAffectedList);
+    this.licenseeAffectedList = clone(this.licenseeAffectedList);
     this.ticketsModel.pagingModel = new PagingModel();
     this.ticketsModel.pagingModel.total = data.totalItems;
     this.ticketsModel.pagingModel.page = this.getTicketsQuery.pageIndex + 1;
@@ -371,7 +373,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   async voidTickets() {
-    const query: VoidTicketsQuery = _.assignIn(this.filterParamsBeforeVoid, {
+    const query: VoidTicketsQuery = assignIn(this.filterParamsBeforeVoid, {
       tickets: this.ticketsModel.getTicketEnable(),
       transIdSolds: this.ticketsModel.getTicketSold(),
       transIdCrickets: this.ticketsModel.getTicketCricket(),
@@ -424,7 +426,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.messagesResult.isShow = true;
     this.messagesResult.header = 'Void Bet Result';
     this.messagesResult.results = results;
-    this.messagesResult = _.clone(this.messagesResult);
+    this.messagesResult = clone(this.messagesResult);
   }
 
   async handleAfterVoidPaging() {
@@ -442,7 +444,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   ticketsChange(numberOfTickets: number) {
-    this.templateValue = _.clone(this.templateValue);
+    this.templateValue = clone(this.templateValue);
     this.templateValue.totalTickets = numberOfTickets;
     this.templateValue.checkSettled = this.ticketsModel.checkSettledTickets();
   }
@@ -463,7 +465,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   updateEventType(id: string): void {
-    this.templateValue = _.clone(this.templateValue);
+    this.templateValue = clone(this.templateValue);
     this.templateValue.eventType = id;
   }
 

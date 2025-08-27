@@ -2,7 +2,9 @@
 import { Component, ElementRef, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import filter from 'lodash/filter';
+import isUndefined from 'lodash/isUndefined';
+import reject from 'lodash/reject';
 import { default as moment } from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
@@ -213,7 +215,7 @@ export class FilterComponent implements OnInit {
   }
 
   async blurMatchId() {
-    if (_.isUndefined(this.matchId) || this.matchId === '') {
+    if (isUndefined(this.matchId) || this.matchId === '') {
       this.sportType = 0;
     } else if (this.matchId !== this.preMatchId || this.switchMatch3rd) {
       this.preMatchId = this.matchId;
@@ -361,11 +363,11 @@ export class FilterComponent implements OnInit {
     }
 
     if (this.query.product === Product.SPORTS_BOOK) {
-      const specialGroups = _.filter(data.groupBetTypes, {
+      const specialGroups = filter(data.groupBetTypes, {
         groupName: 'Special'
       });
       if (specialGroups.length > 0) {
-        specialGroups[0].betTypes = _.reject(specialGroups[0].betTypes, {
+        specialGroups[0].betTypes = reject(specialGroups[0].betTypes, {
           name: 'System Parlay'
         });
       }

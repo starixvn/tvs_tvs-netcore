@@ -1,6 +1,10 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild, inject } from '@angular/core';
-import * as _ from 'lodash';
+import { FormsModule } from '@angular/forms';
+import includes from 'lodash/includes';
+import { ClipboardModule } from 'ngx-clipboard';
 import { AutoRefreshMode } from '../../../utility/components/auto-refresh/auto-refresh.model';
+import { MatchDetailComponent } from '../../../utility/components/match-detail/match-detail.component';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging.model';
@@ -12,16 +16,12 @@ import { CommonService } from '../../../utility/services/common.service';
 import { AppService } from '../app.service';
 import { AllMarkedTicketQuery, GetTicketsQuery, MarkedTicketQuery, TicketDetailId, TicketDetailQuery } from '../models/query.model';
 import { DataPermission, ResultMarkTicketModel } from '../models/result.model';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { TicketsModel } from '../tickets-list/tickets.model';
+import { AllMarkedTicketListComponent } from './all-marked-ticket-list/all-marked-ticket-list.component';
 import { AllMarkedTicketModel } from './all-marked-ticket-list/all-marked-ticket.model';
 import { FilterTicketsComponent } from './filter-tickets/filter-tickets.component';
 import { FilterSearchBy } from './filter-tickets/filter.model';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { AllMarkedTicketListComponent } from './all-marked-ticket-list/all-marked-ticket-list.component';
-import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { ClipboardModule } from 'ngx-clipboard';
-import { MatchDetailComponent } from '../../../utility/components/match-detail/match-detail.component';
 
 @Component({
   standalone: true,
@@ -303,7 +303,7 @@ export class MarkUnmarkTicketComponent {
       async () => {
         await this.refreshAllMarkedTickets();
         if (
-          _.includes(matches, {
+          includes(matches, {
             matchId: this.queryTicket.matchId,
             userId: this.queryTicket.userId,
             createdDate: this.queryTicket.createdDate
