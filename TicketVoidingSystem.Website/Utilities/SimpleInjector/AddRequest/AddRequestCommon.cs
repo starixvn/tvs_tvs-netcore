@@ -12,7 +12,6 @@ public static class AddRequestCommon
 {
     public static void AddAddRequestServices(this IServiceCollection services)
     {
-        services.AddTransient<GetTransInfoService, GetTransInfoServiceImp>();
         services.AddTransient<LogInfoService, LogInfoServiceImp>();
         services.AddTransient<GetVoidTimeByAllowanceSettingService, GetVoidTimeByAllowanceSettingServiceImp>();
         services.AddTransient<AddRequestService, AddRequestServiceImp>();

@@ -1,8 +1,8 @@
-﻿using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class CheckTickets14Criteria : CriteriaBase
+public class CheckTickets14Criteria : OnlineServerCriteriaBase
 {
     public string TransIds { get; set; }
 

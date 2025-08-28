@@ -1,28 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
-using TicketVoidingSystem.ManageRequest.Models;
-using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.ViewModels;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 
 public class CheckTickets14HandlerTests
 {
-    private readonly GetTransInfoService getTransInfoService;
     private readonly CheckTickets14Handler handler;
-    private readonly IDynamicRepository repository;
+    private readonly OnlineServerRepository repository = Substitute.For<OnlineServerRepository>();
 
     public CheckTickets14HandlerTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
-        getTransInfoService = Substitute.For<GetTransInfoService>();
-        handler = new CheckTickets14Handler(repository, getTransInfoService);
+        handler = new CheckTickets14Handler(repository);
     }
 
     [Fact]
@@ -36,13 +30,12 @@ public class CheckTickets14HandlerTests
             UnsupportedDateRangeTransIds = "456",
             TransInfoJson = "12"
         };
-        getTransInfoService.GetTransInfoJson(Arg.Any<GetTransInfoQuery>()).ReturnsForAnyArgs(new List<string> { "TransInfo", "" });
-        repository.GetAsync<CheckTickets14ViewModel>(Arg.Any<CheckTickets14Criteria>()).ReturnsForAnyArgs(viewModel);
+        repository.FetchAsync<CheckTickets14ViewModel>(Arg.Any<CheckTickets14Criteria>()).ReturnsForAnyArgs([viewModel]);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        Assert.Equal(viewModel, actual);
+        AssertExtension.Equal(viewModel, actual);
     }
 }
