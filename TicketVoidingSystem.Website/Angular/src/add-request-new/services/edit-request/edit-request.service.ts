@@ -1,10 +1,10 @@
 import { inject, Injectable } from '@angular/core';
 import { EventBaseService } from '../../component/event-base-layout/event-base.service';
+import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestModel } from '../../models/request.model';
 import { AddRequestApiService } from '../add-request-api.service';
 import { LogInfoService } from './log-info.service';
 import { ObjectService } from './object.service';
-import { PrimitiveProperty } from '../../models/primitive-property.model';
 
 @Injectable({
   providedIn: 'root'
@@ -29,9 +29,7 @@ export class EditRequestService {
 
   async getDataEditRequest(requestId: number, requestModel: RequestModel, primitiveProperty: PrimitiveProperty){
     const detailViewModel = await this.addRequestApiService.getRequestById(requestId);
-    if (detailViewModel === null) {
-      this.eventBaseService.backToAccessDeniedPage();
-    } else {
+    if (detailViewModel !== null) {
       const newPrimitiveProperty = this.objectService.getPrimitiveProperty(detailViewModel, requestId);
       Object.assign(primitiveProperty, newPrimitiveProperty);
       await this.logInfoService.getLogInfo(primitiveProperty, detailViewModel);

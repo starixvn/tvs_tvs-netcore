@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
+import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { OthersWrongHdpComponent } from '../../../component/others-wrong-hdp/others-wrong-hdp.component';
-import { EditRequestService } from '../../../services/edit-request/edit-request.service';
-import { RequestModel } from '../../../models/request.model';
 import { PrimitiveProperty } from '../../../models/primitive-property.model';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
+import { RequestModel } from '../../../models/request.model';
+import { EditRequestService } from '../../../services/edit-request/edit-request.service';
 import { EventWrongOddsComponent } from './event-wrong-odds/event-wrong-odds.component';
 
 @Component({

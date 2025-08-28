@@ -48,6 +48,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   originActions: Selection[] = [];
   accessIssueTypeCount = new Map<string, number>();
   primitiveProperty = new PrimitiveProperty();
+  isRequestLoaded = false;
 
   private readonly signalRService = inject(SignalRService);
   private readonly editRequestService = inject(EditRequestService);
@@ -74,6 +75,10 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
       otherModel: this.model.others,
       primitiveProperty: this.primitiveProperty
     };
+  }
+
+  get shouldShowInvalid(): boolean {
+    return this.isRequestLoaded && this.primitiveProperty.isEdit && this.model?.filter?.issueTypeId !== this.issueTypeId;
   }
 
   async ngOnInit(): Promise<void> {
@@ -107,6 +112,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     const [allIssueTypes, originActions] = await Promise.all(promises);
     this.originActions = originActions;
     this.issueTypes = new IssueTypes(allIssueTypes);
+    this.isRequestLoaded = true;
   }
 
   initStaticData() {
