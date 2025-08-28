@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import { LABELS } from '../../constants/labels';
+import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupNumber, NumberItem } from './bet-ids.model';
@@ -64,7 +64,7 @@ export class BetIdsComponent implements OnInit {
 
   isHasBetId(): boolean {
     if (this.groupNumber.getAllNumberItemsAsString() === '') {
-      this.tooltip.display(this.errorTooltipClassName, LABELS.REQUIRED_BETIDS);
+      this.tooltip.display(this.errorTooltipClassName, TEXT.REQUIRED_BETIDS);
       return false;
     }
 
@@ -76,11 +76,11 @@ export class BetIdsComponent implements OnInit {
     let result = true;
     switch (validIndex) {
       case 0:
-        this.tooltip.display(this.errorTooltipClassName, LABELS.REQUIRED_BETIDS);
+        this.tooltip.display(this.errorTooltipClassName, TEXT.REQUIRED_BETIDS);
         result = false;
         break;
       case 1:
-        this.tooltip.display(this.errorTooltipClassName, LABELS.INVALID_BETID);
+        this.tooltip.display(this.errorTooltipClassName, TEXT.INVALID_BETID);
         result = false;
         break;
       case 2:

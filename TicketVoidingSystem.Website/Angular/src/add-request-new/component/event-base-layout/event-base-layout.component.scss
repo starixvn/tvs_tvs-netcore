@@ -22,3 +22,19 @@
 .icon-mail {
   background-image: url('../../../assets/images/icon-mail.png');
 }
+
+.invalid-request {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+  margin: 0 auto;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 24px;
+  font-weight: bold;
+  color: #dc3545;
+}

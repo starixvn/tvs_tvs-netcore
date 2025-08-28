@@ -14,7 +14,7 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -87,7 +87,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   allSelectedEvents: LogInfoRelatedEvent[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
-  tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
+  tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
   getAllowanceTimeSubscription: Subscription;
 
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';

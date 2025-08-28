@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, Output, 
 import { FormsModule } from '@angular/forms';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
-import { LABELS } from '../../constants/labels';
+import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { GroupUsername, UsernameItem } from './user-names.model';
 
@@ -164,7 +164,7 @@ export class UsernamesComponent implements OnChanges {
 
   checkValidation(): boolean {
     if (this.groupUsername.getValue() === '') {
-      this.tooltip.display(this.errorTooltipClassName, LABELS.REQUIRED_USERNAME);
+      this.tooltip.display(this.errorTooltipClassName, TEXT.REQUIRED_USERNAME);
       return false;
     }
 
@@ -174,9 +174,9 @@ export class UsernamesComponent implements OnChanges {
   checkValidItems(): boolean {
     const validIndex = this.groupUsername.checkValidItems();
     const tooltipMessages = {
-      1: LABELS.REQUIRED_USERNAME,
-      2: LABELS.INVALID_USERNAMES,
-      3: LABELS.MAX_USERNAME_EXCEEDED,
+      1: TEXT.REQUIRED_USERNAME,
+      2: TEXT.INVALID_USERNAMES,
+      3: TEXT.MAX_USERNAME_EXCEEDED,
     };
     if (validIndex in tooltipMessages) {
       this.tooltip.display(this.errorTooltipClassName, tooltipMessages[validIndex]);
@@ -216,6 +216,6 @@ export class UsernamesComponent implements OnChanges {
   }
 
   showErrorTicketLimitExceeded() {
-    this.tooltip.display(this.errorTooltipClassName, LABELS.TICKET_LIMIT_EXCEEDED);
+    this.tooltip.display(this.errorTooltipClassName, TEXT.TICKET_LIMIT_EXCEEDED);
   }
 }

@@ -9,7 +9,7 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT } from '../../../../utility/constants/text';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -316,7 +316,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   validateVarCheck(): boolean {
     if (this.isShowVarCheck() && (_.isNull(this.primitiveProps.isCheckedVar) || _.isUndefined(this.primitiveProps.isCheckedVar))) {
       this.primitiveProps.isHighLightVarCheck = true;
-      this.tooltip.display(this.errorTooltipClassName, LABELS.SELECTED_VAR_OPTIONS);
+      this.tooltip.display(this.errorTooltipClassName, TEXT.SELECTED_VAR_OPTIONS);
       return false;
     }
 

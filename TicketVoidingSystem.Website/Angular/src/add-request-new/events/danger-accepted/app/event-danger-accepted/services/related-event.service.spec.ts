@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, SubIssueTypeGroup } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../../utility/constants/text';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
@@ -242,7 +242,7 @@ describe('RelatedEventService', () => {
 
       await service.addRelatedEventByInput(arg);
 
-      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.REQUIRED_MATCHID);
+      expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', TEXT.REQUIRED_MATCHID);
     });
 
     it('should not getLogInfo when InValidInputRelatedEvent', async () => {
@@ -278,7 +278,7 @@ describe('RelatedEventService', () => {
         addRequestApiService.getChildMatches = jest.fn().mockResolvedValue(x);
         await service.addRelatedEventByInput(arg);
 
-        expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', LABELS.INVALID_MATCHID);
+        expect(arg.tooltip.display).toHaveBeenCalledWith('test-class', TEXT.INVALID_MATCHID);
         expect(arg.primitiveProps.isBlock).toBe(false);
       });
     });

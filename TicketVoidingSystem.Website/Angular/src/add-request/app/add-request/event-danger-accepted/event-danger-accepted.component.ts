@@ -28,7 +28,7 @@ import { RedCardModel } from '../models/event-red-card.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
 import { OthersModel } from '../others/others.model';
-import { LABELS } from './../../../../utility/constants/labels';
+import { TEXT } from './../../../../utility/constants/text';
 import { StaticService } from './../../../../utility/services/static.service';
 import { ConfirmDangerAcceptedComponent } from './confirm-danger-accepted/confirm-danger-accepted.component';
 import { ConfirmDangerAcceptedModel } from './confirm-danger-accepted/confirm-danger-accepted.model';
@@ -85,7 +85,7 @@ export class EventDangerAcceptedComponent implements OnInit, OnChanges {
   allSelectedEvents: LogInfoRelatedEvent[] = [];
   relatedEvents: ChildMatchModel[] = [];
   addChildMatchModel = new AddChildMatchModel();
-  tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
+  tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
   getAllowanceTimeSubscription: Subscription;
 
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';

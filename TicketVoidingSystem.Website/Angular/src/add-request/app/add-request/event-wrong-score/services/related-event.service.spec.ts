@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
@@ -204,7 +204,7 @@ describe('RelatedEventService', () => {
 
       await service.addRelatedEventByInput(arg);
 
-      expect(arg.tooltip.display).toHaveBeenCalledWith(arg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
+      expect(arg.tooltip.display).toHaveBeenCalledWith(arg.inputMatchIdClass, TEXT.REQUIRED_MATCHID);
     });
 
     it('should validate and add related event when input is valid', async () => {

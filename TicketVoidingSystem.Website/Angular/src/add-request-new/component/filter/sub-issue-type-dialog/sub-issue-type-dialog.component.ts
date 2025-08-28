@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import cloneDeep from 'lodash/cloneDeep';
-import { AddRequestApiService } from '../../../../add-request-new/services/add-request-api.service';
+import { AddRequestApiService } from '../../../services/add-request-api.service';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';

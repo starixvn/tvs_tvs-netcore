@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { FilterComponent } from '../../../add-request-new/component/filter/filter.component';
-import { FilterModel } from '../../../add-request-new/component/filter/filter.model';
-import { IssueTypes } from '../../../add-request-new/component/filter/issue-types.model';
 import { BlockFullUiComponent } from '../../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../../utility/components/menu-bar/menu-bar.component';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
@@ -12,6 +9,9 @@ import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { SignalRService } from '../../../utility/services/signal-r.service.native';
 import { StaticService } from '../../../utility/services/static.service';
+import { FilterComponent } from '../../component/filter/filter.component';
+import { FilterModel } from '../../component/filter/filter.model';
+import { IssueTypes } from '../../component/filter/issue-types.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestModel } from '../../models/request.model';
 import { AddRequestStore } from '../../services/add-request.store';
@@ -19,7 +19,7 @@ import { CopyRequestInfoService } from '../../services/copy-request-info.service
 import { EditRequestService } from '../../services/edit-request/edit-request.service';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { AddRequestSkeletonComponent } from '../add-request-skeleton/add-request-skeleton.component';
-import { EventContentContext, OthersContentContext } from './base.model';
+import { EventContentContext, OthersContentContext } from './event-base.model';
 import { EventBaseService } from './event-base.service';
 
 @Component({
@@ -33,7 +33,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   @Input() isExternalUrl = false;
   @Input() issueTypeId: string;
   @Input() model: RequestModel;
-  @Input() eventHeight: string;
+  @Input() eventHeight = 'calc(100vh - 145px)';
   @Input() eventContent: TemplateRef<EventContentContext>;
   @Input() othersContent: TemplateRef<OthersContentContext>;
   @Output() saveRequest = new EventEmitter<void>();
@@ -48,6 +48,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
   originActions: Selection[] = [];
   accessIssueTypeCount = new Map<string, number>();
   primitiveProperty = new PrimitiveProperty();
+  isRequestLoaded = false;
 
   private readonly signalRService = inject(SignalRService);
   private readonly editRequestService = inject(EditRequestService);
@@ -61,7 +62,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
 
   get eventContextData(): EventContentContext {
     return {
-      eventModel: this.getEventModelByIssueType(),
+      eventModel: this.eventBaseService.getEventModelByIssueType(this.issueTypeId, this.model),
       otherModel: this.model.others,
       filterModel: this.model.filter,
       issueTypes: this.issueTypes,
@@ -69,31 +70,15 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     };
   }
 
-  private getEventModelByIssueType(): unknown {
-    switch (this.issueTypeId) {
-      case IssueTypeConstant.WRONG_HDP:
-      case IssueTypeConstant.WRONG_1ST_HDP:
-        return this.model.wrongHdpModels;
-      case IssueTypeConstant.ARCHIVED_TICKET:
-        return this.model.eventTicket14Model;
-      case IssueTypeConstant.WRONG_SCORE:
-        return this.model.wrongScoreModels;
-      case IssueTypeConstant.DANGER_ACCEPTED:
-        return this.model.dangerAcceptedModels;
-      case IssueTypeConstant.RED_CARD:
-        return this.model.redCardModel;
-      case IssueTypeConstant.TECHNICAL_ERROR:
-        return this.model.technicalErrorModel;
-      default:
-        return this.model.eventTicket14Model;
-    }
-  }
-
   get othersContextData(): OthersContentContext {
     return {
       otherModel: this.model.others,
       primitiveProperty: this.primitiveProperty
     };
+  }
+
+  get shouldShowInvalid(): boolean {
+    return this.isRequestLoaded && this.primitiveProperty.isEdit && this.model?.filter?.issueTypeId !== this.issueTypeId;
   }
 
   async ngOnInit(): Promise<void> {
@@ -127,6 +112,7 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     const [allIssueTypes, originActions] = await Promise.all(promises);
     this.originActions = originActions;
     this.issueTypes = new IssueTypes(allIssueTypes);
+    this.isRequestLoaded = true;
   }
 
   initStaticData() {

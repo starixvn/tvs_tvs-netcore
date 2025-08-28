@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterModel } from '../../../../../add-request-new/component/filter/filter.model';
-import { OthersModel } from '../../../../../add-request-new/component/others/others.model';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../utility/modules/testing.module';

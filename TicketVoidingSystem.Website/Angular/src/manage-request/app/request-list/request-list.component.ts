@@ -9,7 +9,7 @@ import { PagingComponent } from '../../../utility/components/paging/paging.compo
 import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
@@ -209,12 +209,12 @@ export class RequestListComponent implements OnInit, OnChanges {
     if (item.isCheckedBy) {
       this.modalService.confirm({
         title: 'Check By Confirm',
-        message: `${LABELS.CONFIRM_CHECK_BY}<strong>${item.requestId}</strong>?`
+        message: `${TEXT.CONFIRM_CHECK_BY}<strong>${item.requestId}</strong>?`
       }, () => this.checkBy(item.requestId, true), () => item.isCheckedBy = !item.isCheckedBy);
     } else {
       this.modalService.confirm({
         title: 'UnCheck By Confirm',
-        message: `${LABELS.CONFIRM_UNCHECK_BY}<strong>${item.requestId}</strong>?`
+        message: `${TEXT.CONFIRM_UNCHECK_BY}<strong>${item.requestId}</strong>?`
       }, () => this.checkBy(item.requestId, false), () => item.isCheckedBy = !item.isCheckedBy);
     }
   }

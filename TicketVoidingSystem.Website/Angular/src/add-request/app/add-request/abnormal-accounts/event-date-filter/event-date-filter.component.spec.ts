@@ -3,7 +3,7 @@ import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { EventDateFilterComponent } from './event-date-filter.component';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { StaticService } from '../../../../../utility/services/static.service';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { AbnormalAccountModel } from '../../models/abnormal-account.model';
 import moment from 'moment-timezone';
 import { EventEmitter } from '@angular/core';
@@ -114,7 +114,7 @@ describe('EventDateFilterComponent', () => {
 
     // Assert
     expect(result).toBeFalsy();
-    expect(component.tooltip.display).toHaveBeenCalledWith('to-date', LABELS.INVALID_TO_DATE);
+    expect(component.tooltip.display).toHaveBeenCalledWith('to-date', TEXT.INVALID_TO_DATE);
   });
 
   it('should emit change filter event', () => {

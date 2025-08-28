@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { AbnormalFilterBy, MatchIdConstant, TVSRequestActionType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel, ValidationDuplicateTickets } from '../models/check-duplicate-tickets.model';
@@ -91,12 +91,12 @@ export class ValidationService {
   private highlightInvalidTransIds(model: ValidationDuplicateTickets, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean): void {
     betIdsComponent.groupNumber.updateMoved(model.movedTransIds);
     betIdsComponent.groupNumber.updateDifferent(model.differentMatchTransIds);
-    betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, LABELS.INVALID_TICKETS);
-    betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, LABELS.INVALID_UNSUPPORTED_TICKETS);
-    betIdsComponent.groupNumber.updateInvalidItems(model.existingReqTransIds, LABELS.INVALID_EXISTING_ON_OTHER_REQUEST);
+    betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, TEXT.INVALID_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, TEXT.INVALID_UNSUPPORTED_TICKETS);
+    betIdsComponent.groupNumber.updateInvalidItems(model.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
 
     if (!isHasPermissionAddSettledTicket) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, LABELS.INVALID_SETTLED_TICKETS);
+      betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, TEXT.INVALID_SETTLED_TICKETS);
     }
   }
 

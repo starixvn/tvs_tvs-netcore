@@ -17,7 +17,7 @@ import { GroupLicenseeModel } from '../../../../../utility/components/licensees/
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ModeType } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -127,7 +127,7 @@ export class MatchIdComponent implements OnInit {
   handleGroupBetTypes(data: GroupBetTypesModel) {
     if (data.result.errorCode === 0) {
       if (data.groupBetTypes.length === 0) {
-        this.tooltip.display('match-id', LABELS.INVALID_MATCH);
+        this.tooltip.display('match-id', TEXT.INVALID_MATCH);
         this.isSuccessMatch = false;
       } else {
         this.isSuccessMatch = true;
@@ -165,11 +165,11 @@ export class MatchIdComponent implements OnInit {
 
   checkValidationOfMatch(): boolean {
     if (this.model.matchId === '' || _.isUndefined(this.model.matchId)) {
-      this.tooltip.display('match-id', LABELS.REQUIRED_MATCHID);
+      this.tooltip.display('match-id', TEXT.REQUIRED_MATCHID);
       return false;
     }
     if (!this.isSuccessMatch) {
-      this.tooltip.display('match-id', LABELS.INVALID_MATCHID);
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
       return false;
     }
 
@@ -187,11 +187,11 @@ export class MatchIdComponent implements OnInit {
       return false;
     }
     if (this.getCheckedLicensees().length === 0) {
-      this.tooltip.display('check-group-licensee', LABELS.EMPTY_LICENSEE);
+      this.tooltip.display('check-group-licensee', TEXT.EMPTY_LICENSEE);
       return false;
     }
     if (this.model.currencyIds === '') {
-      this.tooltip.display('currencies-id', LABELS.EMPTY_CURRENCY);
+      this.tooltip.display('currencies-id', TEXT.EMPTY_CURRENCY);
       return false;
     }
 

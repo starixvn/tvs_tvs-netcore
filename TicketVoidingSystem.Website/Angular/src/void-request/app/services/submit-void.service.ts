@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
 import { ResultModelService } from '../../../utility/services/result-model.service';
 import { StaticService } from '../../../utility/services/static.service';
@@ -68,7 +68,7 @@ export class SubmitVoidService {
 
   private checkValidationBeforeVoid(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[]): Result<null> {
     if (voidPageItems.every(x => x.voidTicketsMini.total === 0)) {
-      return ResultModelService.createFailResult(LABELS.ALL_TICKETS_VOIDED, 1);
+      return ResultModelService.createFailResult(TEXT.ALL_TICKETS_VOIDED, 1);
     }
 
     return this.issueTypesHaveMessage(voidPageItems)
@@ -80,7 +80,7 @@ export class SubmitVoidService {
     for (const item of voidPageItems) {
       const textInvalidMatch = item.matchModel ? ` (MatchId: ${item.matchModel.matchId})` : '';
       if (item.voidReason?.reasonEnglish === '' || item.voidReason?.reasonChineseSimplified === '') {
-        return ResultModelService.createFailResult(`${LABELS.INPUT_REASON}${textInvalidMatch}`, 1);
+        return ResultModelService.createFailResult(`${TEXT.INPUT_REASON}${textInvalidMatch}`, 1);
       }
     }
 
@@ -95,13 +95,13 @@ export class SubmitVoidService {
       const textInvalidMatch = item.matchModel ? ` (MatchId: ${item.matchModel.matchId})` : '';
 
       if (!messageComponent.checkValidation()) {
-        return ResultModelService.createFailResult(`${LABELS.INVALID_TEMPLATE_MESSAGE}${textInvalidMatch}`, 1);
+        return ResultModelService.createFailResult(`${TEXT.INVALID_TEMPLATE_MESSAGE}${textInvalidMatch}`, 1);
       }
 
       this.mapValidMessageToVoidPageItem(item, messageComponent);
 
       if (item.voidReason?.reasonEnglish === '' || item.voidReason?.reasonChineseSimplified === '') {
-        return ResultModelService.createFailResult(`${LABELS.INPUT_REASON}${textInvalidMatch}`, 1);
+        return ResultModelService.createFailResult(`${TEXT.INPUT_REASON}${textInvalidMatch}`, 1);
       }
     }
 
@@ -117,7 +117,7 @@ export class SubmitVoidService {
       ? this.getWarningInputsInTemplateMessage(voidPageItems, messageAreaComponents.map(x => x.templateMessageComponent))
       : '';
 
-    return `${warningInputs}<div>${LABELS.CONFIRM_VOID_ALL_TICKETS}</div>`;
+    return `${warningInputs}<div>${TEXT.CONFIRM_VOID_ALL_TICKETS}</div>`;
   }
 
   private getWarningInputsInTemplateMessage(voidPageItem: VoidPageCommonItem[], templateMessageComponents: TemplateMessageComponent[]): string {

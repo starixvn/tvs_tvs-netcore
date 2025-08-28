@@ -5,7 +5,7 @@ import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-i
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { CheckTickets14Result } from '../models/check-tickets14-result.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -98,8 +98,8 @@ describe('ValidationService', () => {
       // Assert
       expect(result.isValid).toBeTruthy();
       expect(result.transInfoJson).toBe('{}');
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', LABELS.INVALID_TICKETS);
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('456', LABELS.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', TEXT.INVALID_TICKETS);
+      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('456', TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
     });
   });
 });

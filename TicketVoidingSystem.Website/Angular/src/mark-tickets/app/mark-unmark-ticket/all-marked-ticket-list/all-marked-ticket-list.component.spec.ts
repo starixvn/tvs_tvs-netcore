@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT} from '../../../../utility/constants/text';
 import { TicketDetailId } from '../../models/query.model';
 import { AllMarkedTicketListComponent } from './all-marked-ticket-list.component';
 import { AllMarkedTicketModel } from './all-marked-ticket.model';
@@ -213,7 +213,7 @@ describe('AllMarkedTicketListComponent', () => {
     component.unmarkAllCheckedMarkedTickets();
 
     // Assert
-    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_MATCH);
+    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', TEXT.EMPTY_MATCH);
   });
 
   it('should emit updateAllMarkedTickets event with checked tickets', () => {

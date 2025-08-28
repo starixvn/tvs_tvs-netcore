@@ -8,7 +8,7 @@ import { AddRequestStore } from './add-request.store';
 import { AddRequestQuery } from './models/add-request.query';
 import { Result } from '../../../utility/models/result';
 import { AddRequestResultModel } from './models/request.model';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 
 describe('AddRequestService', () => {
   let service: AddRequestService;
@@ -155,7 +155,7 @@ describe('AddRequestService', () => {
     expect(popupService['showSaveRequestError']).toHaveBeenCalledWith(
       query,
       result,
-      LABELS.ADD_REQUEST_RESULT_TITLE
+      TEXT.ADD_REQUEST_RESULT_TITLE
     );
     expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalled();
   });
@@ -180,7 +180,7 @@ describe('AddRequestService', () => {
     expect(popupService['showSaveRequestError']).toHaveBeenCalledWith(
       query,
       mockResult,
-      LABELS.EDIT_REQUEST_RESULT_TITLE
+      TEXT.EDIT_REQUEST_RESULT_TITLE
     );
     expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalled();
   });

@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../../utility/constants/labels';
+import { TEXT} from '../../../../utility/constants/text';
 import { DataPermission } from '../../models/result.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TicketDetailId } from './../../models/query.model';
@@ -129,7 +129,7 @@ export class AllMarkedTicketListComponent {
   unmarkAllCheckedMarkedTickets(): void {
     const param = this.getMatchsParam();
     if (param.length === 0 || param === null || param === undefined) {
-      this.tooltip.display('invalid-data', LABELS.EMPTY_MATCH);
+      this.tooltip.display('invalid-data', TEXT.EMPTY_MATCH);
     } else {
       this.updateAllMarkedTickets.emit(param);
     }

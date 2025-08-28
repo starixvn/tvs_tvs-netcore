@@ -1,6 +1,6 @@
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { ModalService } from '../../utility/components/modal/modal.service';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT} from '../../utility/constants/text';
 import { BalanceUp } from '../../utility/models/balance-up.model';
 import { CommonService } from '../../utility/services/common.service';
 import { AppComponent } from './app.component';
@@ -149,7 +149,7 @@ describe('AppComponent', () => {
     modalService.confirm = mockModalServiceConfirm;
     const confirmModal = {
       title: 'Message from webpage',
-      message: LABELS.EXPORT_FROMDATE_BEFORE_BALANCEDAY
+      message: TEXT.EXPORT_FROMDATE_BEFORE_BALANCEDAY
     };
     component.filterComponent.subTypeSelectList = [];
     component.filter.requestId = undefined;

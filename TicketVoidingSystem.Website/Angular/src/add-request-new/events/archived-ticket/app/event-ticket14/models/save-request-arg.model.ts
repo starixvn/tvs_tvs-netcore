@@ -1,5 +1,5 @@
-import { FilterModel } from "../../../../../../add-request-new/component/filter/filter.model";
-import { OthersModel } from "../../../../../../add-request-new/component/others/others.model";
+import { FilterModel } from "../../../../../component/filter/filter.model";
+import { OthersModel } from "../../../../../component/others/others.model";
 import { EventTicket14Model } from "../../../../../models/event-ticket-14.model";
 import { AddRequestStore } from "../../../../../services/add-request.store";
 import { PrimitiveProperty } from "./primitive-property.model";

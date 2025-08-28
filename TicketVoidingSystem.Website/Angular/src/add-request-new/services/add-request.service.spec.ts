@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT } from '../../utility/constants/text';
 import { Result } from '../../utility/models/result';
 import { TestingModule } from '../../utility/modules/testing.module';
 import { CommonService } from '../../utility/services/common.service';
@@ -155,7 +155,7 @@ describe('AddRequestService', () => {
     expect(popupService['showSaveRequestError']).toHaveBeenCalledWith(
       query,
       result,
-      LABELS.ADD_REQUEST_RESULT_TITLE
+      TEXT.ADD_REQUEST_RESULT_TITLE
     );
     expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalled();
   });
@@ -180,7 +180,7 @@ describe('AddRequestService', () => {
     expect(popupService['showSaveRequestError']).toHaveBeenCalledWith(
       query,
       mockResult,
-      LABELS.EDIT_REQUEST_RESULT_TITLE
+      TEXT.EDIT_REQUEST_RESULT_TITLE
     );
     expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalled();
   });

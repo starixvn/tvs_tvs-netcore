@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType, SubIssueTypeGroup } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../../utility/constants/text';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { AddRelatedEventArg } from '../../../../../models/add-related-event.model';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
@@ -49,7 +49,7 @@ export class RelatedEventService {
 
   async addRelatedEventByInput(arg: AddRelatedEventArg): Promise<void> {
     if (!arg.primitiveProps.inputRelatedMatchId) {
-      arg.tooltip.display(arg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
+      arg.tooltip.display(arg.inputMatchIdClass, TEXT.REQUIRED_MATCHID);
     } else {
       const matchId = Number(arg.primitiveProps.inputRelatedMatchId);
       if (!this.validationService.isValidInputRelatedEvent(matchId, arg.inputMatchIdClass, arg.allEvents, arg.tooltip)) {
@@ -65,7 +65,7 @@ export class RelatedEventService {
 
       const models = await this.addRequestApiService.getChildMatches(query);
       if (!models || models.length === 0) {
-        arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
+        arg.tooltip.display(arg.inputMatchIdClass, TEXT.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
         return;
       }

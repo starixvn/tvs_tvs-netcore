@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group-tickets.model';
 import { TicketModel } from './ticket.model';
@@ -192,7 +192,7 @@ describe('TicketsListComponent', () => {
     component.markSelectedTicketsOnPage();
 
     // Assert
-    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_TICKET);
+    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', TEXT.EMPTY_TICKET);
   });
 
   it('should emit updateMarkedTickets event when marking selected tickets on page', () => {
@@ -221,7 +221,7 @@ describe('TicketsListComponent', () => {
     component.markSelectedTicketsAllPage();
 
     // Assert
-    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', LABELS.EMPTY_TICKET);
+    expect(component.tooltip.display).toHaveBeenCalledWith('invalid-data', TEXT.EMPTY_TICKET);
   });
 
   it('should emit updateMarkedTickets event when marking selected tickets on all pages', () => {

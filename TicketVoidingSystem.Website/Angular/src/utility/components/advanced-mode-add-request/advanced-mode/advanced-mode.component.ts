@@ -5,8 +5,7 @@ import groupBy from 'lodash/groupBy';
 import isEqual from 'lodash/isEqual';
 import uniqWith from 'lodash/uniqWith';
 import { Subscription, timer } from 'rxjs';
-import { LABELS } from '../../../../utility/constants/labels';
-import { TEXT } from '../../../../utility/constants/text';
+import { TEXT} from '../../../../utility/constants/text';
 import { Selection as AllBetTypesSelection } from '../../../../utility/models/selection.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -316,7 +315,7 @@ export class AdvancedModeComponent {
         this.showTooltipWhenCollapsed();
       } else {
         const className = `bet-team-${betTeamIndex}-input-${inputIndex}`;
-        this.tooltip.display(className, LABELS.INVALID_VALUE);
+        this.tooltip.display(className, TEXT.INVALID_VALUE);
       }
       return false;
     }

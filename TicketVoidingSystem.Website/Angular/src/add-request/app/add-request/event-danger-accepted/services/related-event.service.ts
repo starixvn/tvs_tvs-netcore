@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType, SubIssueTypeGroup } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
@@ -49,7 +49,7 @@ export class RelatedEventService {
 
   async addRelatedEventByInput(arg: AddRelatedEventArg): Promise<void> {
     if (!arg.primitiveProps.inputRelatedMatchId) {
-      arg.tooltip.display(arg.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
+      arg.tooltip.display(arg.inputMatchIdClass, TEXT.REQUIRED_MATCHID);
     } else {
       const matchId = Number(arg.primitiveProps.inputRelatedMatchId);
       if (!this.validationService.isValidInputRelatedEvent(matchId, arg.inputMatchIdClass, arg.allEvents, arg.tooltip)) {
@@ -65,7 +65,7 @@ export class RelatedEventService {
 
       const models = await this.addRequestApiService.getChildMatches(query);
       if (!models || models.length === 0) {
-        arg.tooltip.display(arg.inputMatchIdClass, LABELS.INVALID_MATCHID);
+        arg.tooltip.display(arg.inputMatchIdClass, TEXT.INVALID_MATCHID);
         arg.primitiveProps.isBlock = false;
         return;
       }

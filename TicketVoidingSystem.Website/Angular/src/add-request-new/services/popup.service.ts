@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT } from '../../utility/constants/text';
 import { Result } from '../../utility/models/result';
 import { StaticService } from '../../utility/services/static.service';
 import { AddRequestQuery } from '../models/add-request.query';
@@ -16,7 +16,7 @@ export class PopupService {
   showError(messageContent: string, onYesCallback?: () => void) {
     this.modalService.open(
       {
-        title: LABELS.ADD_REQUEST_RESULT_TITLE,
+        title: TEXT.ADD_REQUEST_RESULT_TITLE,
         message: `Error: ${messageContent}`,
         type: ModalType.Error
       },
@@ -28,7 +28,7 @@ export class PopupService {
     const matchIdsContent = this.getMatchIdsContent(query, addRequestResult);
     this.modalService.open(
       {
-        title: LABELS.ADD_REQUEST_RESULT_TITLE,
+        title: TEXT.ADD_REQUEST_RESULT_TITLE,
         message: `<div>Request No.<strong>${addRequestResult.requestId}</strong> added successfully</div>${matchIdsContent}`,
         type: ModalType.Alert
       },
@@ -39,7 +39,7 @@ export class PopupService {
   showEditedRequestSuccessful(query: AddRequestQuery, addRequestResult: AddRequestResultModel, onOkCallback: () => void) {
     this.modalService.open(
       {
-        title: LABELS.EDIT_REQUEST_RESULT_TITLE,
+        title: TEXT.EDIT_REQUEST_RESULT_TITLE,
         message: `Request No.<strong>${addRequestResult.requestId}</strong> edited successfully`,
         type: ModalType.Alert
       },

@@ -9,7 +9,7 @@ import { ModalService } from '../../../utility/components/modal/modal.service';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { AcceptType, DateTimeFormat } from '../../../utility/constants/config';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT } from '../../../utility/constants/text';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../utility/services/static.service';
@@ -51,7 +51,7 @@ export class LogInfoRelatedEventComponent {
   isCollapse: boolean;
   isShowValidation = true;
   subIssueTypeDialogModel = new SubIssueTypeDialogModel();
-  tooltipVarMessage = LABELS.SELECTED_VAR_OPTIONS;
+  tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
   acceptTypeName = "";
   tooltip = new Tooltip();
 
@@ -64,7 +64,7 @@ export class LogInfoRelatedEventComponent {
   }
 
   showTooltipSubType() {
-    this.tooltip.display('btn-select-sub-type', LABELS.REQUIRED_SUB_TYPE);
+    this.tooltip.display('btn-select-sub-type', TEXT.REQUIRED_SUB_TYPE);
   }
 
   async refreshLogInfo(): Promise<void> {

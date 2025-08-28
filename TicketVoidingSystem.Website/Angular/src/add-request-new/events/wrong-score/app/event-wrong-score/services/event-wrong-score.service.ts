@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
 import { AcceptType, TVSRequestFilterBy } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { MatchModel } from '../../../../../../utility/models/match.model';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { TvDetectionModel } from '../../../../../component/tv-detection/tv-detection.model';
@@ -95,14 +95,14 @@ export class EventWrongScoreService {
     if (!args.filter.isVoided) {
       args.relatedEvents.forEach(x => {
         x.messageValidationLogInfo?.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          if (t.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE)) {
             confirmWrongScoreModel.warningRelatedEvents.push(x.eventName);
           }
         });
       });
       args.wrongScoreModels.forEach(y => {
         y.messageValidationLogInfo?.forEach(t => {
-          if (t.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE)) {
+          if (t.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE)) {
             confirmWrongScoreModel.warningExcludedScores.push(y.wrongScore);
           }
         });

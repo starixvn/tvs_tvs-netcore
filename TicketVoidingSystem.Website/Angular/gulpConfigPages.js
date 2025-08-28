@@ -154,17 +154,17 @@ const addRequestNavigation = {
   indexEJSPath: './src/add-request-new/navigation/index.ejs'
 };
 
-const addRequestArchivedTicket = {
-  pageName: 'AddRequestArchivedTicket',
+const archivedTicket = {
+  pageName: 'ArchivedTicket',
   tsconfigFiles: [
     'add-request-new/events/archived-ticket/main.ts',
     'polyfills.ts'
   ],
-  deployUrl: 'dist/ticket-voiding-system/archived-ticket/',
-  index: 'src/add-request-new/events/archived-ticket/index.cshtml',
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
   main: 'src/add-request-new/events/archived-ticket/main.ts',
-  transformFolder: '../wwwroot/dist/ticket-voiding-system/archived-ticket',
-  indexEJSPath: './src/add-request-new/events/archived-ticket/index.ejs'
+  deployUrl: 'dist/ticket-voiding-system/archived-ticket',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/archived-ticket'
 };
 
 const redCard = {
@@ -219,6 +219,58 @@ const dangerAccepted = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/danger-accepted'
 };
 
+const wrongHdp = {
+  pageName: 'WrongHdp',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-hdp/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-hdp/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-hdp/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-hdp'
+};
+
+const wrongOu = {
+  pageName: 'WrongOu',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-ou/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-ou/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-ou/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-ou'
+};
+
+const wrongOdds = {
+  pageName: 'WrongOdds',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-odds/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-odds/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-odds/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-odds'
+};
+
+const wrongOddsSportsBook = {
+  pageName: 'WrongOddsSportsBook',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-odds-sports-book/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-odds-sports-book/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-odds-sports-book/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-odds-sports-book'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -231,11 +283,15 @@ const configPages = [
   // addRequest,
   // editRequest,
   //voidByBetId
-  //addRequestArchivedTicket
-  dangerAccepted,
-  redCard,
-  wrongScore,
-  technicalError
+  //archivedTicket,
+  //dangerAccepted,
+  //redCard,
+  //wrongScore,
+  //technicalError,
+  wrongHdp,
+  wrongOu,
+  wrongOdds,
+  wrongOddsSportsBook
 ];
 
 module.exports = configPages;

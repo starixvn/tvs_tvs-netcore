@@ -1,0 +1,74 @@
+.team-favorite {
+	display: flex;
+	overflow: hidden;
+}
+
+.team-favorite-item {
+  height: 29.5px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 11px;
+	border: 1px solid #ced4da;
+	border-right: none;
+	cursor: pointer;
+	user-select: none;
+  line-height: 13px;
+}
+
+.team-favorite-selected {
+  background: #007bff;
+  border-color: #007bff;
+  color: #fff;
+}
+
+.team-favorite-unselected {
+  background: #d6d6d6;
+  color: #000;
+}
+
+.team-favorite-disabled {
+  cursor: not-allowed;
+}
+
+.input-team-favorite {
+  width: 120px;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+}
+
+.hdp-value {
+  display: flex;
+
+  input {
+    width: 120px;
+  }
+}
+
+.actual-market {
+  display: flex;
+
+  label {
+    white-space: nowrap;
+  }
+
+  input {
+    width: 120px;
+  }
+}
+
+.btn-reload {
+    justify-content: center;
+    align-items: center;
+    button {
+        width: 30px;
+        height: 30px;
+        margin-left: 8px;
+        background: #4e71bb;
+        padding: 0;
+        background: -moz-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+        background: -webkit-linear-gradient(#4e71bb, #4e71bb) #4e71bb;
+        color: #fff;
+    }
+}

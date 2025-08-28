@@ -55,34 +55,5 @@ export class IssueTypeConstant {
     [IssueTypeConstant.MATCH_COMPLETED, 'MATCH_COMPLETED'],
     [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'MATCH_EARLY_COMPLETED']
   ]);
-
-  static readonly NAVIGATE_ADD_REQUEST = new Map<string, string>([
-    [IssueTypeConstant.ABNORMAL_BET, 'AbnormalBet'],
-    [IssueTypeConstant.ABNORMAL_ACCOUNT, 'AbnormalAccount'],
-    [IssueTypeConstant.EARLY_KICK_OFF, 'EarlyKickOff'],
-    [IssueTypeConstant.WRONG_KICK_OFF, 'WrongKickOff'],
-    [IssueTypeConstant.DANGER_ACCEPTED, 'DangerAccepted'],
-    [IssueTypeConstant.RED_CARD, 'RedCard'],
-    [IssueTypeConstant.WRONG_ODDS, 'WrongOdds'],
-    [IssueTypeConstant.WRONG_SCORE, 'WrongScore'],
-    [IssueTypeConstant.WRONG_OU, 'WrongOU'],
-    [IssueTypeConstant.WRONG_1ST_OU, 'Wrong1stOU'],
-    [IssueTypeConstant.WRONG_HDP, 'WrongHDP'],
-    [IssueTypeConstant.WRONG_1ST_HDP, 'Wrong1stHDP'],
-    [IssueTypeConstant.WRONG_QUARTER_HDP, 'WrongQuarterHDP'],
-    [IssueTypeConstant.ARCHIVED_TICKET, 'ArchivedTicket'],
-    [IssueTypeConstant.OTHER_ISSUES, 'OtherIssues'],
-    [IssueTypeConstant.REDUCED_OVER, 'ReducedOver'],
-    [IssueTypeConstant.DUPLICATE_TICKETS, 'DuplicateTickets'],
-    [IssueTypeConstant.NOT_PARTICIPATE, 'NotParticipate'],
-    [IssueTypeConstant.RECOVER_TICKET, 'RecoverTicket'],
-    [IssueTypeConstant.ABANDONED, 'Abandoned'],
-    [IssueTypeConstant.WRONG_MARKET_OFFERED, 'WrongMarketOffered'],
-    [IssueTypeConstant.TECHNICAL_ERROR, 'TechnicalError'],
-    [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'WrongOddsSportsBook'],
-    [IssueTypeConstant.WRONG_OFFERED_NAME, 'WrongOfferedName'],
-    [IssueTypeConstant.MATCH_COMPLETED, 'MatchCompleted'],
-    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'MatchEarlyCompleted']
-  ]);
 }
 

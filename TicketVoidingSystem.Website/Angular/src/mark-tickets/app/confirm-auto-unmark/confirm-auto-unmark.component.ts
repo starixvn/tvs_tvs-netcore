@@ -6,7 +6,7 @@ import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ErrorCodeLockMatch, MarkType } from '../../../utility/constants/config';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { SportInfo } from '../../../utility/models/event.model';
 import { Result } from '../../../utility/models/result';
 import { Selection } from '../../../utility/models/selection.model';
@@ -76,7 +76,7 @@ export class ConfirmAutoUnmarkComponent implements OnInit {
       this.paging.pageSize = PagingConstant.SIZE_ONE;
       await this.searchData();
     } else {
-      this.tooltip.display('match-id', LABELS.INVALID_MATCHID);
+      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
     }
 
   }

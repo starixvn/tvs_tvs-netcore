@@ -5,8 +5,7 @@ import { CheckedBetType } from '../../../../../utility/components/advanced-mode/
 import { BetType, GroupBetType, GroupBetTypesModel } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../../../utility/constants/labels';
-import '../../../../../utility/extensions/string.extension';
+import { TEXT } from '../../../../../utility/constants/text';
 import { Currency } from '../../../../../utility/models/currency.model';
 import { FirstTicketTime } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
@@ -16,41 +15,13 @@ import { MatchIdComponent } from './match-id.component';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
+import '../../../../../utility/extensions/string.extension';
 
 class Helper {
   static readonly fakeFirstTicketTime: FirstTicketTime = {
     kickOffTime: '2020-03-12 06:59:59.000',
     minTransDate: '2019-08-12 09:35:06.980'
   };
-
-  static readonly fakeCurrency: Currency[] = [
-    {
-      currencyCode: 'RMB',
-      id: 13
-    },
-    {
-      currencyCode: 'CY',
-      id: 81
-    },
-    {
-      currencyCode: 'UUS',
-      id: 20
-    },
-    {
-      currencyCode: 'AED',
-      id: 90
-    },
-    {
-      currencyCode: 'ARS',
-      id: 86
-    },
-    {
-      currencyCode: 'AUD',
-      id: 9
-    }
-  ];
-
-  static readonly fakeSelectedCurrency: number[] = [20,90,86,9];
 
   static readonly fakeCheckedBetType = { id: 7 } as CheckedBetType;
 
@@ -293,7 +264,7 @@ describe('MatchIdComponent', () => {
       component.handleGroupBetTypes(groupBetTypesModel);
 
       // Assert
-      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.INVALID_MATCH);
+      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', TEXT.INVALID_MATCH);
       expect(component.isSuccessMatch).toBe(false);
       expect(component.changeMatch.emit).toHaveBeenCalledTimes(1);
       expect(component.handleBetType216).toHaveBeenCalledTimes(1);
@@ -424,7 +395,7 @@ describe('MatchIdComponent', () => {
         component.model.matchId = item;
         const actual = component.checkValidationOfMatch();
         expect(actual).toBe(false);
-        expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.REQUIRED_MATCHID);
+        expect(component.tooltip.display).toHaveBeenCalledWith('match-id', TEXT.REQUIRED_MATCHID);
       }
     });
 
@@ -439,7 +410,7 @@ describe('MatchIdComponent', () => {
 
       // Assert
       expect(actual).toBe(false);
-      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', LABELS.INVALID_MATCHID);
+      expect(component.tooltip.display).toHaveBeenCalledWith('match-id', TEXT.INVALID_MATCHID);
     });
 
     it('should return true when validation passes', () => {
@@ -506,7 +477,7 @@ describe('MatchIdComponent', () => {
 
       // Assert
       expect(actual).toBe(false);
-      expect(component.tooltip.display).toHaveBeenCalledWith('check-group-licensee', LABELS.EMPTY_LICENSEE);
+      expect(component.tooltip.display).toHaveBeenCalledWith('check-group-licensee', TEXT.EMPTY_LICENSEE);
     });
 
     it('should return false and display tooltip when no currencies', () => {
@@ -522,7 +493,7 @@ describe('MatchIdComponent', () => {
 
       // Assert
       expect(actual).toBe(false);
-      expect(component.tooltip.display).toHaveBeenCalledWith('currencies-id', LABELS.EMPTY_CURRENCY);
+      expect(component.tooltip.display).toHaveBeenCalledWith('currencies-id', TEXT.EMPTY_CURRENCY);
     });
 
     it('should return false when groupBetTypesComponent and advancedModelComponent are invalid', () => {
@@ -619,7 +590,7 @@ describe('MatchIdComponent', () => {
       // Assert
       expect(actual).toBe(false);
       expect(component.tooltip.display).toBeCalledTimes(1);
-      expect(component.tooltip.display).toHaveBeenCalledWith('from-date-time0', LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      expect(component.tooltip.display).toHaveBeenCalledWith('from-date-time0', TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
     });
 
     it('should return true when validation passes', () => {

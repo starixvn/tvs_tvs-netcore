@@ -5,6 +5,7 @@ using Fanex.NAP.Client.Helpers.Business;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.SharedApi.Services.Analytics;
@@ -149,5 +150,69 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     public ActionResult TechnicalError(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/technical-error/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongHDP, Constant.Policy.Read)]
+    public ActionResult WrongHdp(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.WrongHDP;
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-hdp/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.Wrong1stHDP, Constant.Policy.Read)]
+    public ActionResult Wrong1stHdp(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.Wrong1stHDP;
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-hdp/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOU, Constant.Policy.Read)]
+    public ActionResult WrongOu(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.WrongOU;
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-ou/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.Wrong1stOU, Constant.Policy.Read)]
+    public ActionResult Wrong1stOu(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.Wrong1stOU;
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-ou/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOdds, Constant.Policy.Read)]
+    public ActionResult WrongOdds(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-odds/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOddsSportsBook, Constant.Policy.Read)]
+    public ActionResult WrongOddsSportsBook(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-odds-sports-book/index.cshtml");
     }
 }

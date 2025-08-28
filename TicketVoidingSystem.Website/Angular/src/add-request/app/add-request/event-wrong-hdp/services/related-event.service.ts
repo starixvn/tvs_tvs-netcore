@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT} from '../../../../../utility/constants/text';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { GetChildMatchQuery } from '../../models/get-child-match.query';
 import { ChildMatchModel } from '../../models/related-event.model';
@@ -51,7 +51,7 @@ export class RelatedEventService {
 
   async addRelatedEventByInput(model: AddRelatedEventArg): Promise<void> {
     if (!model.primitiveProps.inputRelatedMatchId) {
-      model.tooltip.display(model.inputMatchIdClass, LABELS.REQUIRED_MATCHID);
+      model.tooltip.display(model.inputMatchIdClass, TEXT.REQUIRED_MATCHID);
     } else {
       const matchId = Number(model.primitiveProps.inputRelatedMatchId);
       if (!this.validationService.isValidInputRelatedEvent(matchId, model.inputMatchIdClass, model.allEvents, model.tooltip)) {
@@ -67,7 +67,7 @@ export class RelatedEventService {
 
       const models = await this.getChildMatches(query);
       if (!models || models.length === 0) {
-        model.tooltip.display(model.inputMatchIdClass, LABELS.INVALID_MATCHID);
+        model.tooltip.display(model.inputMatchIdClass, TEXT.INVALID_MATCHID);
         model.primitiveProps.isBlock = false;
         return;
       }

@@ -7,7 +7,7 @@ import { TvDetectionService } from '../../../../../manage-request/app/request-li
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, TimeZone } from '../../../../../utility/constants/config';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 import { CommonStaticService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -102,7 +102,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
       DateTimeFormat.FULL_DATE_TIME_FORMAT, true);
     const toDateTime = moment(`${StaticService.convertToFullDate(this.toDate)} ${this.toTime}`, DateTimeFormat.FULL_DATE_TIME_FORMAT, true);
     if (!fromDateTime.isSameOrBefore(toDateTime)) {
-      this.tooltip.display('from-date-time', LABELS.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
+      this.tooltip.display('from-date-time', TEXT.FROM_TIME_MUST_SMALLER_THAN_TO_TIME);
 
       return false;
     }
@@ -168,7 +168,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
   private isSettingTimeValid(): boolean {
     if ((this.filterTimeWithAllowanceModel.aaTime?.toString() || this.filterTimeWithAllowanceModel.paTime?.toString() || this.filterTimeWithAllowanceModel.saTime?.toString()) &&
       (!this.filterTimeWithAllowanceModel.aaTime?.toString() || !this.filterTimeWithAllowanceModel.paTime?.toString() || !this.filterTimeWithAllowanceModel.saTime?.toString())) {
-      this.tooltip.display('setting-void-time', LABELS.INVALID_SETTING_TIME);
+      this.tooltip.display('setting-void-time', TEXT.INVALID_SETTING_TIME);
       return false;
     }
 
@@ -185,7 +185,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
 
   isFromTimeValid(): boolean {
     if (!this.isInputTimeValid(this.fromTime)) {
-      this.tooltip.display(this.FROM_TIME_CLASS, LABELS.INVALID_TIME_FORMAT);
+      this.tooltip.display(this.FROM_TIME_CLASS, TEXT.INVALID_TIME_FORMAT);
       return false;
     }
 
@@ -195,7 +195,7 @@ export class FilterTimeWithAllowanceComponent implements OnInit {
 
   isToTimeValid(): boolean {
     if (!this.isInputTimeValid(this.toTime)) {
-      this.tooltip.display(this.TO_TIME_CLASS, LABELS.INVALID_TIME_FORMAT);
+      this.tooltip.display(this.TO_TIME_CLASS, TEXT.INVALID_TIME_FORMAT);
       return false;
     }
 

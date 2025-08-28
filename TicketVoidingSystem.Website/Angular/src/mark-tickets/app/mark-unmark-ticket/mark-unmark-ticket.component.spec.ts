@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { PagingModel } from '../../../utility/components/paging/paging.model';
-import { LABELS } from '../../../utility/constants/labels';
+import { TEXT} from '../../../utility/constants/text';
 import { CheckingPermissionModel } from '../../../utility/models/checking-permission.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';
@@ -26,13 +26,13 @@ class Helper {
 
   static readonly confirmModalMark = {
     title: 'Mark/Unmark Tickets',
-    message: LABELS.CONFIRM_MARK_TICKET,
+    message: TEXT.CONFIRM_MARK_TICKET,
     type: ModalType.Confirm
   };
 
   static readonly confirmModalUnMark = {
     title: 'Mark/Unmark Tickets',
-    message: LABELS.CONFIRM_UNMARK_TICKET,
+    message: TEXT.CONFIRM_UNMARK_TICKET,
     type: ModalType.Confirm
   };
 
@@ -425,7 +425,7 @@ describe('MarkUnmarkTicketComponent', () => {
     it('should call updateAllMarkedTickets when confirmUpdateAllMarkedTickets is called', async () => {
       const confirmModal = {
         title: 'Mark/Unmark All Tickets',
-        message: LABELS.CONFIRM_UNMARK_TICKET,
+        message: TEXT.CONFIRM_UNMARK_TICKET,
         type: ModalType.Confirm
       };
       appService.updateAllMarkedTickets = jest.fn().mockImplementation(() => Promise.resolve(Helper.fakeResultUpdateMarkedTicket));

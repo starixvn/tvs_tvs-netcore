@@ -3,7 +3,7 @@ import moment from 'moment-timezone';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
-import { LABELS } from '../../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
@@ -44,11 +44,11 @@ export class ValidationService {
 
   isValidInputRelatedEvent(inputMatchId: number, inputMatchIdClass: string, allEvents: LogInfoRelatedEvent[], tooltip: Tooltip): boolean {
     if (inputMatchId === allEvents.find(x => x.isMainMatch).matchId) {
-      tooltip.display(inputMatchIdClass, LABELS.INVALID_MATCHID);
+      tooltip.display(inputMatchIdClass, TEXT.INVALID_MATCHID);
       return false;
     }
     if (allEvents.filter(x => !x.isMainMatch).some(x => x.matchId === inputMatchId)) {
-      tooltip.display(inputMatchIdClass, LABELS.MATCH_ID_EXISTS_IN_LIST);
+      tooltip.display(inputMatchIdClass, TEXT.MATCH_ID_EXISTS_IN_LIST);
       return false;
     }
 
@@ -60,7 +60,7 @@ export class ValidationService {
       return false;
     }
 
-    if (!event.isMainMatch && event.messageValidationLogInfo.some(x => x.isError && !x.reason.includes(LABELS.NO_VALID_TICKETS_IN_RANGE))) {
+    if (!event.isMainMatch && event.messageValidationLogInfo.some(x => x.isError && !x.reason.includes(TEXT.NO_VALID_TICKETS_IN_RANGE))) {
       return false;
     }
 

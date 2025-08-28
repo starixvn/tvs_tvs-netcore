@@ -1,50 +1,55 @@
 <menu-bar></menu-bar>
 
-@if(!primitiveProperty.isLoadingData){
-<div class="title">{{ primitiveProperty.title }}</div>
+@if(shouldShowInvalid) {
+  <div class="invalid-request">
+    <div>:/</div>
+    <div>Oops, this request is invalid...</div>
+  </div>
+} @else if(!primitiveProperty.isLoadingData) {
+  <div class="title">{{ primitiveProperty.title }}</div>
 
-<div class="body bg-gray mg-10">
-  <filter #filter [isEdit]="primitiveProperty.isEdit" [(model)]="model.filter" [(issueTypes)]="issueTypes" [isExternalUrl]="isExternalUrl"
-    (modelChange)="updateModel($event)" [issueTypeId]="issueTypeId" [originActions]="originActions">
-  </filter>
+  <div class="body bg-gray mg-10">
+    <filter #filter [isEdit]="primitiveProperty.isEdit" [(model)]="model.filter" [(issueTypes)]="issueTypes" [isExternalUrl]="isExternalUrl"
+      (modelChange)="updateModel($event)" [issueTypeId]="issueTypeId" [originActions]="originActions">
+    </filter>
 
-  <div class="event">
-    <div class="list-group">
-      <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
-        [ngClass]="{'border-bottom-radius':primitiveProperty.isCollapse}" (click)="primitiveProperty.isCollapse=!primitiveProperty.isCollapse">
-        <em class="fa" [ngClass]="{'fa-angle-up':!primitiveProperty.isCollapse, 'fa-angle-down':primitiveProperty.isCollapse}"></em>
-        <strong>&nbsp;{{getEventLabel()}}</strong>
+    <div class="event">
+      <div class="list-group">
+        <div class="list-group-item list-group-item-primary flex-column align-items-start pointer"
+          [ngClass]="{'border-bottom-radius':primitiveProperty.isCollapse}" (click)="primitiveProperty.isCollapse=!primitiveProperty.isCollapse">
+          <em class="fa" [ngClass]="{'fa-angle-up':!primitiveProperty.isCollapse, 'fa-angle-down':primitiveProperty.isCollapse}"></em>
+          <strong>&nbsp;{{getEventLabel()}}</strong>
+        </div>
+        <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="primitiveProperty.isCollapse">
+          <!-- Inject Event content-->
+          <ng-container *ngTemplateOutlet="eventContent, context: eventContextData"></ng-container>
+        </div>
       </div>
-      <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="primitiveProperty.isCollapse">
-        <!-- Inject Event content-->
-        <ng-container *ngTemplateOutlet="eventContent, context: eventContextData"></ng-container>
+    </div>
+
+    <!-- Others section (optional) -->
+    <ng-container *ngTemplateOutlet="othersContent, context: othersContextData"></ng-container>
+
+    <div class="search mg-top-10 d-flex justify-content-between">
+      <div class="d-flex">
+        <button type="submit" class="btn btn-primary btn-sm mg-right-10" (mousedown)="$event.preventDefault()"
+          [disabled]="primitiveProperty.isDisabledSaveButton" (click)="!primitiveProperty.isDisabledSaveButton && onSaveRequest()">
+          Save
+        </button>
+        <button type="submit" class="btn btn-danger btn-sm" [disabled]="primitiveProperty.isDisabledSaveButton"
+          (click)="backToManagePage()">Back
+        </button>
       </div>
+
+      <!-- Copy info buttons (optional) -->
+      @if(primitiveProperty.showCopyInfoButtons){
+      <div *ngIf="primitiveProperty.showCopyInfoButtons" class="d-flex align-content-end">
+        <div class="icon-letstalk icon-copy-info" (click)="onCopyLetsTalkRequestInfo()"></div>
+        <div class="icon-mail icon-copy-info" (click)="onCopyEmailRequestInfo()"></div>
+      </div>
+      }
     </div>
   </div>
-
-  <!-- Others section (optional) -->
-  <ng-container *ngTemplateOutlet="othersContent, context: othersContextData"></ng-container>
-
-  <div class="search mg-top-10 d-flex justify-content-between">
-    <div class="d-flex">
-      <button type="submit" class="btn btn-primary btn-sm mg-right-10" (mousedown)="$event.preventDefault()"
-        [disabled]="primitiveProperty.isDisabledSaveButton" (click)="!primitiveProperty.isDisabledSaveButton && onSaveRequest()">
-        Save
-      </button>
-      <button type="submit" class="btn btn-danger btn-sm" [disabled]="primitiveProperty.isDisabledSaveButton"
-        (click)="backToManagePage()">Back
-      </button>
-    </div>
-
-    <!-- Copy info buttons (optional) -->
-    @if(primitiveProperty.showCopyInfoButtons){
-    <div *ngIf="primitiveProperty.showCopyInfoButtons" class="d-flex align-content-end">
-      <div class="icon-letstalk icon-copy-info" (click)="onCopyLetsTalkRequestInfo()"></div>
-      <div class="icon-mail icon-copy-info" (click)="onCopyEmailRequestInfo()"></div>
-    </div>
-    }
-  </div>
-</div>
 } @else {
   <add-request-skeleton [eventHeight]="eventHeight"></add-request-skeleton>
 }

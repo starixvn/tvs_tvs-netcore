@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT} from '../../utility/constants/text';
 import { Selection } from '../../utility/models/selection.model';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AddUserComponent } from './add-user/add-user.component';
@@ -79,7 +79,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.isBlockingUi = true;
     const getUserModel = await this.userService.getUsers(this.filterModel);
     if (getUserModel.invalidUsername) {
-      this.filterComponent.tooltip.display(this.FILTER_USERNAME_CLASS, LABELS.INVALID_USERNAME);
+      this.filterComponent.tooltip.display(this.FILTER_USERNAME_CLASS, TEXT.INVALID_USERNAME);
       this.userModels = [];
       this.isBlockingUi = false;
       return;

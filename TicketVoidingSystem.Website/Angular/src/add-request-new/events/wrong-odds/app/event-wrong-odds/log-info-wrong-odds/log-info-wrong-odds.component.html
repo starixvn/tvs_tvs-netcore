@@ -1,0 +1,90 @@
+@if (logInfo.isShowValidation) {
+<div>
+  <strong>Main Event - Log Info</strong>
+  <div class="log-info">
+    <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
+      @if (logInfo.isShowValidation) {
+      <div>
+        @if (logInfo.logInfoDetail) {
+        <div class="ticket-count">
+          <ng-container class="void-time">
+            <span>Live Score: </span><strong>{{logInfo.logInfoDetail.liveScores}}</strong>.
+            Void time: <strong>{{displayFullDateTimeFormat(logInfo.logInfoDetail.voidFromTime)}} -
+              {{displayFullDateTimeFormat(logInfo.logInfoDetail.voidToTime)}}</strong><br />
+          </ng-container>
+          @if (isSportTypeSoccer()) {
+          <div class="soccer">
+            <ng-container class="single-count">
+              LG/Early - Single Count: <strong>{{logInfo.logInfoDetail.singleCount}}</strong>
+              @if (isShowCountInfo(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount,
+              logInfo.logInfoDetail.instantlySettleCount)) {
+              <span class="text-red"
+                [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml">
+              </span>
+              }
+              @if (!filter.isVoided) {
+              &nbsp;<span class="ticket-details" (click)="showAffectedTicketsDetails()">Details</span>
+              }<br />
+            </ng-container>
+            <ng-container class="pool-house-count">
+              PH - Single Count: <strong>{{logInfo.logInfoDetail.poolHouseSingleCount}}</strong>
+              @if (isShowCountInfo(logInfo.logInfoDetail.poolHouseCashOutCount,
+              logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount)) {
+              <span class="text-red"
+                [innerHTML]="countInfoContent(logInfo.logInfoDetail.poolHouseCashOutCount, logInfo.logInfoDetail.poolHouseSettleCount, logInfo.logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
+              </span>
+              },
+              Parlay Count: <strong>{{logInfo.logInfoDetail.poolHouseMainParlayCount}}</strong>
+              @if (!filter.isVoided) {
+              &nbsp;<span class="ticket-details" (click)="openPoolHouseDetails()">Details</span>
+              }
+              @if (!logInfo.logInfoDetail && !filter.isVoided) {
+              <span class="ticket-details" (click)="openPoolHouseDetails()">PH Details</span>
+              }
+              @if (logInfo.linkedLogsViewModel.result && !logInfo.linkedLogsViewModel.result?.isSuccessful) {
+              <div class="warning-text d-flex align-items-center">
+                <i class="fa fa-exclamation-triangle icon-warning-message me-1" aria-hidden="true"></i>Cannot get link
+                log, please search again.
+              </div>
+              }
+            </ng-container>
+          </div>
+          }
+          @if (!isSportTypeSoccer()) {
+          <ticket-count-other-sports [logInfoDetail]="logInfo.logInfoDetail" [isVoided]="filter.isVoided"
+            (openTicketDetails)="showAffectedTicketsDetails()">
+          </ticket-count-other-sports>
+          }
+        </div>
+        }
+        @if (logInfo.messageValidationLogInfo?.length > 0) {
+        <div class="message">
+          @for (msg of logInfo.messageValidationLogInfo; track msg) {
+          <span>
+            @if (msg.isError) {
+            <div class="error-text d-flex align-items-center">
+              <i class="fa fa-times-circle icon-error-message me-1" aria-hidden="true"></i>{{msg.reason}}
+            </div>
+            }
+            @if (!msg.isError) {
+            <div [ngClass]="msg.isShowPopup ? 'warning-text-shorten' : 'warning-text'" class="d-flex align-items-center"
+              (click)="msg.isShowPopup && openPopupTransIds(msg.requestId, msg.transIds)">
+              <i class="fa fa-exclamation-triangle icon-warning-message me-1" aria-hidden="true"></i>{{msg.reason}}
+            </div>
+            }
+          </span>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
+
+<pool-house-tickets [model]="poolHouseTicketsModel" (saveEventOutput)="recalculatePoolHouseTicket($event)">
+</pool-house-tickets>
+
+<affected-ticket [model]="affectedTicketsModel">
+</affected-ticket>

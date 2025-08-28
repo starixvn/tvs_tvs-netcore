@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
-import { LABELS } from '../../utility/constants/labels';
+import { TEXT } from '../../utility/constants/text';
 import { Result } from '../../utility/models/result';
 import { TestingModule } from '../../utility/modules/testing.module';
 import { StaticService } from '../../utility/services/static.service';
@@ -40,7 +40,7 @@ describe('PopupService', () => {
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(
         {
-          title: LABELS.ADD_REQUEST_RESULT_TITLE,
+          title: TEXT.ADD_REQUEST_RESULT_TITLE,
           message: `Error: ${messageContent}`,
           type: ModalType.Error
         },
@@ -76,7 +76,7 @@ describe('PopupService', () => {
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(
         {
-          title: LABELS.ADD_REQUEST_RESULT_TITLE,
+          title: TEXT.ADD_REQUEST_RESULT_TITLE,
           message: expect.stringContaining('REQ123'),
           type: ModalType.Alert
         },
@@ -107,7 +107,7 @@ describe('PopupService', () => {
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(
         {
-          title: LABELS.ADD_REQUEST_RESULT_TITLE,
+          title: TEXT.ADD_REQUEST_RESULT_TITLE,
           message: expect.not.stringContaining('Match'),
           type: ModalType.Alert
         },
@@ -138,7 +138,7 @@ describe('PopupService', () => {
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(
         {
-          title: LABELS.EDIT_REQUEST_RESULT_TITLE,
+          title: TEXT.EDIT_REQUEST_RESULT_TITLE,
           message: expect.stringContaining('REQ123'),
           type: ModalType.Alert
         },

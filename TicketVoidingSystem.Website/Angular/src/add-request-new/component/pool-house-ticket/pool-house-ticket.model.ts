@@ -1,3 +1,4 @@
+import { WrongOddsGetLogInfoQuery } from '../../events/wrong-odds/app/event-wrong-odds/models/get-log-info.query';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { GroupBetType, GroupBetTypesModel } from "./group-bettypes-pool-house/group-bettypes-pool-house.model";
 import { LinkedLogsViewModel } from "./linked-log/linked-log.model";
@@ -34,7 +35,7 @@ export class GetPoolHouseTicketQuery {
   filterFromTransTime: string;
   filterToTransTime: string;
   liveIndicator: number;
-  //wrongOddsInfo: WrongOddsGetLogInfoQuery[];
+  wrongOddsInfo: WrongOddsGetLogInfoQuery[];
 }
 
 export class PoolHouseTicketsSection {

@@ -5,7 +5,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
 import clone from 'lodash/clone';
 import isUndefined from 'lodash/isUndefined';
 import { Subscription } from 'rxjs';
-import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
+import { AddRequestStore } from '../../services/add-request.store';
 import { TVSRequestActionType } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';

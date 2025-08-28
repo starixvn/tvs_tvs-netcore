@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@ang
 import { FormsModule } from '@angular/forms';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { LABELS } from '../../../../../utility/constants/labels';
+import { TEXT } from '../../../../../utility/constants/text';
 import { AllowanceTime } from '../../../../../utility/models/allowance-time.model';
 
 @Component({
@@ -34,7 +34,7 @@ export class AllowanceTimeComponent {
   isValidAllowanceTime(): boolean {
     if ((this.aaTime?.toString() || this.paTime?.toString() || this.saTime?.toString()) &&
     (!this.aaTime?.toString() || !this.paTime?.toString() || !this.saTime?.toString())) {
-      this.tooltip.display('allowance-time', LABELS.INVALID_SETTING_TIME);
+      this.tooltip.display('allowance-time', TEXT.INVALID_SETTING_TIME);
       return false;
     }
 
