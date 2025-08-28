@@ -283,11 +283,11 @@ const configPages = [
   // addRequest,
   // editRequest,
   //voidByBetId
-  archivedTicket,
-  dangerAccepted,
-  redCard,
-  wrongScore,
-  technicalError
+  //archivedTicket,
+  //dangerAccepted,
+  //redCard,
+  //wrongScore,
+  //technicalError,
   wrongHdp,
   wrongOu,
   wrongOdds,
