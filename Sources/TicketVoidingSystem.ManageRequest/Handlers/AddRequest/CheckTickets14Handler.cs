@@ -12,12 +12,10 @@ public class CheckTickets14Handler(OnlineServerRepository onlineServerRepository
 {
     public async Task<CheckTickets14ViewModel> Handle(CheckTickets14Request request, CancellationToken cancellationToken)
     {
-        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = new CheckTickets14Criteria
         {
             TransIds = request.TransIds,
-            IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
-            TransInfoJson = currentOnlineServerId
+            IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets
         };
 
         var results = await onlineServerRepository.FetchAsync<CheckTickets14ViewModel>(criteria);
