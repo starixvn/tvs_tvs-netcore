@@ -4,6 +4,7 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 
@@ -19,21 +20,30 @@ public class InsertQueueServiceImp(
     SessionService sessionService,
     MapTicketsService mapTicketsService,
     ValidationTicketsService validationTicketsService,
-    InsertVoidingHistoryService insertVoidingHistoryService)
+    InsertVoidingHistoryService insertVoidingHistoryService,
+    OnlineServerRepository onlineServerRepository)
     : InsertQueueService
 {
     public async Task InsertTicketVoidingQueue(InsertQueueQuery query)
     {
-        var ticketsInsertQueue = await validationTicketsService.RecheckTicketsStatus(query);
-        var siteGroupInCurrentSessionVoid = ticketsInsertQueue.Select(x => x.SiteDbGroupId).Distinct();
         var broadcastSessionId = Guid.NewGuid().ToString();
-        foreach (var siteDbGroupId in siteGroupInCurrentSessionVoid)
+        var ticketsInsertQueue = await validationTicketsService.RecheckTicketsStatus(query);
+        var serverInsertQueue = await GetServerInsertQueue(ticketsInsertQueue);
+        foreach (var siteDbGroupId in serverInsertQueue)
         {
             var ticketsInsertQueueInCurrentServer = ticketsInsertQueue.Where(x => x.SiteDbGroupId == siteDbGroupId);
             var transIds = GetTransIdsInsertVoidingHistory(query.IssueTypeId, ticketsInsertQueueInCurrentServer);
             var voidingHistoryId = await insertVoidingHistoryService.InsertVoidingHistory(query, siteDbGroupId, broadcastSessionId, transIds);
             await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, ticketsInsertQueueInCurrentServer);
         }
+    }
+
+    private async Task<IEnumerable<int>> GetServerInsertQueue(IEnumerable<RequestDetailTicketModel> ticketsInsertQueue)
+    {
+        var serverIdInTickets = ticketsInsertQueue.Select(x => x.SiteDbGroupId).Distinct();
+        var onlineServerId = await onlineServerRepository.GetOnlineServerIdsModel();
+
+        return serverIdInTickets.Where(x => onlineServerId.Any(y => y.Id == x));
     }
 
     private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId, IEnumerable<RequestDetailTicketModel> tickets)
