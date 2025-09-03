@@ -9,169 +9,88 @@ using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.Services.OnlineServerRepository;
 
-public interface OnlineServerRepositoryBaseService
+public class OnlineServerRepositoryBaseServiceImp(SiteDbClientService siteDbClientService, LoggingService loggingService)
 {
-    /// <summary>
-    /// Execute repository call on all online servers and return combined results for multiple types
-    /// </summary>
-
-    Task<List<(T1, T2, T3, T4, T5)>> ExecuteAsync<T1, T2, T3, T4, T5>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4, T5)>> repositoryCall);
-
-    /// <summary>
-    /// Execute repository call on all online servers and return combined results for multiple types
-    /// </summary>
-
-    Task<List<(T1, T2, T3, T4)>> ExecuteAsync<T1, T2, T3, T4>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4)>> repositoryCall);
-
-    /// <summary>
-    /// Execute repository call on all online servers and return combined results for multiple types
-    /// </summary>
-    Task<List<(T1, T2, T3)>> ExecuteAsync<T1, T2, T3>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2, T3)>> repositoryCall);
-
-    /// <summary>
-    /// Execute repository call on all online servers and return combined results for multiple types
-    /// </summary>
-    Task<List<(T1, T2)>> ExecuteAsync<T1, T2>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2)>> repositoryCall);
-
-    /// <summary>
-    /// Execute repository call on all online servers and return combined results
-    /// </summary>
-    Task<List<T>> ExecuteAsync<T>(IOnlineServerCriteria criteria, Func<IOnlineServerCriteria, Task<T>> repositoryCall);
-
-    /// <summary>
-    /// Execute repository call on all online servers and return combined results
-    /// </summary>
-    Task<List<T>> ExecuteAsync<T>(IOnlineServerNonQueryCommand criteria, Func<IOnlineServerNonQueryCommand, Task<T>> repositoryCall);
-
-    /// <summary>
-    /// Return Online Server IDs as a comma-separated string
-    /// </summary>
-    Task<string> GetOnlineServerIds();
-
-    /// <summary>
-    /// Return list of online server IDs as models
-    /// </summary>
-    Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel();
-}
-
-public class OnlineServerRepositoryBaseServiceImp(SiteDbClientService siteDbClientService)
-    : OnlineServerRepositoryBaseService
-{
-    public async Task<List<(T1, T2, T3, T4, T5)>> ExecuteAsync<T1, T2, T3, T4, T5>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4, T5)>> repositoryCall)
-    {
-        var onlineServers = await GetOnlineServer();
-
-        var tasks = onlineServers.Select(server =>
-        {
-            var serverCriteria = (IOnlineServerCriteria)criteria.Clone();
-            serverCriteria.SiteDbGroupId = server.Id;
-            return repositoryCall(serverCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-        return results.ToList();
-    }
-
-    public async Task<List<(T1, T2, T3, T4)>> ExecuteAsync<T1, T2, T3, T4>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4)>> repositoryCall)
-    {
-        var onlineServers = await GetOnlineServer();
-
-        var tasks = onlineServers.Select(server =>
-        {
-            var serverCriteria = (IOnlineServerCriteria)criteria.Clone();
-            serverCriteria.SiteDbGroupId = server.Id;
-            return repositoryCall(serverCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-        return results.ToList();
-    }
-
-    public async Task<List<(T1, T2, T3)>> ExecuteAsync<T1, T2, T3>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2, T3)>> repositoryCall)
-    {
-        var onlineServers = await GetOnlineServer();
-
-        var tasks = onlineServers.Select(server =>
-        {
-            var serverCriteria = (IOnlineServerCriteria)criteria.Clone();
-            serverCriteria.SiteDbGroupId = server.Id;
-            return repositoryCall(serverCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-        return results.ToList();
-    }
-
-    public async Task<List<(T1, T2)>> ExecuteAsync<T1, T2>(
-        IOnlineServerCriteria criteria,
-        Func<IOnlineServerCriteria, Task<(T1, T2)>> repositoryCall)
-    {
-        var onlineServers = await GetOnlineServer();
-
-        var tasks = onlineServers.Select(server =>
-        {
-            var serverCriteria = (IOnlineServerCriteria)criteria.Clone();
-            serverCriteria.SiteDbGroupId = server.Id;
-            return repositoryCall(serverCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-        return results.ToList();
-    }
-
-    public async Task<List<T>> ExecuteAsync<T>(IOnlineServerCriteria criteria, Func<IOnlineServerCriteria, Task<T>> repositoryCall)
-    {
-        var onlineServers = await GetOnlineServer();
-
-        var tasks = onlineServers.Select(server =>
-        {
-            var serverCriteria = (IOnlineServerCriteria)criteria.Clone();
-            serverCriteria.SiteDbGroupId = server.Id;
-            return repositoryCall(serverCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-        return results.ToList();
-    }
-
-    public async Task<List<T>> ExecuteAsync<T>(IOnlineServerNonQueryCommand criteria, Func<IOnlineServerNonQueryCommand, Task<T>> repositoryCall)
-    {
-        var onlineServers = await GetOnlineServer();
-
-        var tasks = onlineServers.Select(server =>
-        {
-            var serverCriteria = (IOnlineServerNonQueryCommand)criteria.Clone();
-            serverCriteria.SiteDbGroupId = server.Id;
-            return repositoryCall(serverCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-        return results.ToList();
-    }
-
-    public async Task<string> GetOnlineServerIds()
+    internal async Task<string> GetOnlineServerIds()
     {
         var onlineServers = await GetOnlineServer();
         return string.Join(",", onlineServers.Select(x => x.Id));
     }
 
-    public async Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel()
+    internal async Task<IEnumerable<SiteDbGroupModel>> GetOnlineServerIdsModel()
     {
         return await GetOnlineServer();
+    }
+
+    internal Task<List<T>> FetchAsync<T>(
+        IOnlineServerCriteria criteria,
+        Func<IOnlineServerCriteria, Task<T>> repositoryCall,
+        ExecutionMode mode)
+    {
+        return ExecuteInternalAsync(criteria, repositoryCall, mode);
+    }
+
+    internal Task<List<T>> ExecuteAsync<T>(
+        IOnlineServerNonQueryCommand command,
+        Func<IOnlineServerNonQueryCommand, Task<T>> repositoryCall,
+        ExecutionMode mode)
+    {
+        return ExecuteInternalAsync(command, repositoryCall, mode);
+    }
+
+    private async Task<List<T>> ExecuteInternalAsync<TInput, T>(
+        TInput input,
+        Func<TInput, Task<T>> repositoryCall,
+        ExecutionMode mode)
+        where TInput : ICloneable, ISiteDbGroupAssignable
+    {
+        return mode is ExecutionMode.FailFast
+            ? await FailFast(input, repositoryCall)
+            : await ContinueOnError(input, repositoryCall);
+    }
+
+    private async Task<List<T>> FailFast<TInput, T>(
+        TInput input,
+        Func<TInput, Task<T>> repositoryCall)
+        where TInput : ICloneable, ISiteDbGroupAssignable
+    {
+        var onlineServers = await GetOnlineServer();
+
+        var tasks = onlineServers.Select(server =>
+        {
+            var cloned = (TInput)input.Clone();
+            cloned.SiteDbGroupId = server.Id;
+            return repositoryCall(cloned);
+        });
+
+        var results = await Task.WhenAll(tasks);
+        return results.ToList();
+    }
+
+    private async Task<List<T>> ContinueOnError<TInput, T>(
+        TInput input,
+        Func<TInput, Task<T>> repositoryCall)
+        where TInput : ICloneable, ISiteDbGroupAssignable
+    {
+        var onlineServers = await GetOnlineServer();
+
+        var tasks = onlineServers.Select(async server =>
+        {
+            try
+            {
+                var serverCriteria = (TInput)input.Clone();
+                serverCriteria.SiteDbGroupId = server.Id;
+                return (Success: true, Result: await repositoryCall(serverCriteria));
+            }
+            catch (Exception e)
+            {
+                await loggingService.ErrorAsync(e);
+                return (Success: false, Result: default);
+            }
+        });
+
+        var results = await Task.WhenAll(tasks);
+        return results.Where(r => r.Success).Select(r => r.Result).ToList();
     }
 
     private async Task<List<SiteDbGroupModel>> GetOnlineServer()

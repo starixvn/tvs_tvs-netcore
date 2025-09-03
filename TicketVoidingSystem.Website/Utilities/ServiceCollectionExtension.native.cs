@@ -138,7 +138,7 @@ public static class ServiceCollectionExtension
 
     public static void AddOnlineServerRepository(this IServiceCollection services)
     {
-        services.AddSingleton<OnlineServerRepositoryBaseService, OnlineServerRepositoryBaseServiceImp>();
+        services.AddSingleton<OnlineServerRepositoryBaseServiceImp>();
         services.AddScoped<OnlineServerRepository, OnlineServerRepositoryImp>();
     }
 
