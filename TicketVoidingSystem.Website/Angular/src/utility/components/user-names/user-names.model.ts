@@ -1,4 +1,4 @@
-import { LABELS } from "../../constants/labels";
+import { TEXT } from "../../constants/text";
 
 export class CSSCLASS {
     public static get VALID(): string { return 'item-username-valid'; }
@@ -113,7 +113,7 @@ export class GroupUsername {
         if (text !== null) {
             const existedItems = text.split(',');
             this.items.forEach(item => {
-                this.setItemWarning(existedItems, item, CSSCLASS.EXISTED, LABELS.INVALID_USERNAME_SITE_DB_DOWN);
+                this.setItemWarning(existedItems, item, CSSCLASS.EXISTED, TEXT.INVALID_USERNAME_SITE_DB_DOWN);
             });
         }
     }
