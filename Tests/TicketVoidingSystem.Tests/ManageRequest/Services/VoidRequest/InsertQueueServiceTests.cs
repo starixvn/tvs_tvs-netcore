@@ -9,6 +9,7 @@ using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 using MapTicketsService = TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue.MapTicketsService;
 
@@ -22,6 +23,7 @@ public class InsertQueueServiceTests
     private readonly SessionService sessionService;
     private readonly MapTicketsService mapTicketsService;
     private readonly ValidationTicketsService validationTicketsService;
+    private readonly OnlineServerRepository onlineServerRepository;
 
     public InsertQueueServiceTests()
     {
@@ -30,7 +32,9 @@ public class InsertQueueServiceTests
         insertVoidingHistoryService = Substitute.For<InsertVoidingHistoryService>();
         mapTicketsService = Substitute.For<MapTicketsService>();
         validationTicketsService = Substitute.For<ValidationTicketsService>();
-        service = new InsertQueueServiceImp(repository, sessionService, mapTicketsService, validationTicketsService, insertVoidingHistoryService);
+        onlineServerRepository = Substitute.For<OnlineServerRepository>();
+        service = new InsertQueueServiceImp(repository, sessionService, mapTicketsService, validationTicketsService,
+            insertVoidingHistoryService, onlineServerRepository);
     }
 
     [Theory]
@@ -59,6 +63,7 @@ public class InsertQueueServiceTests
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
+        onlineServerRepository.GetOnlineServerIdsModel().ReturnsForAnyArgs([new SiteDbGroupModel()]);
 
         // Act
         await service.InsertTicketVoidingQueue(query);
@@ -89,6 +94,7 @@ public class InsertQueueServiceTests
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
+        onlineServerRepository.GetOnlineServerIdsModel().ReturnsForAnyArgs([new SiteDbGroupModel()]);
 
         // Act
         await service.InsertTicketVoidingQueue(query);
@@ -118,6 +124,7 @@ public class InsertQueueServiceTests
         sessionService.GetClientIp().ReturnsForAnyArgs("123");
         repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
         repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
+        onlineServerRepository.GetOnlineServerIdsModel().ReturnsForAnyArgs([new SiteDbGroupModel()]);
 
         // Act
         await service.InsertTicketVoidingQueue(query);
