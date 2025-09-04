@@ -1,15 +1,13 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 
-public class GetVoidedTickets14Criteria : CriteriaBase
+public class GetVoidedTickets14Criteria : OnlineServerCriteriaBase
 {
     public string VoidingHistoryIds { get; set; }
 
-    [SpParam(Ignored = true)]
-    public int SiteDbGroupId { get; set; }
+    public string OnlineServerId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_VoidedTicket14_Select");
 

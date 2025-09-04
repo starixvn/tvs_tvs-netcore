@@ -6,6 +6,7 @@ using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 
@@ -16,6 +17,7 @@ public interface GetRequestsInActiveTableService
 
 public class GetRequestsInActiveTableServiceImp(
     IDynamicRepository repository,
+    OnlineServerRepository onlineServerRepository,
     IMapper mapper,
     BetListService betListService)
     : GetRequestsInActiveTableService
@@ -41,18 +43,14 @@ public class GetRequestsInActiveTableServiceImp(
 
     private async Task<IEnumerable<GetRequestInfoModel>> GetTotalVoidedTickets(string requestInfoJson)
     {
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+        var criteria = new GetTotalVoidedTicketCriteria
         {
-            var criteria = new GetTotalVoidedTicketCriteria
-            {
-                SiteDbGroupId = server.Id,
-                RequestInfo = requestInfoJson
-            };
-            return repository.FetchAsync<GetRequestInfoModel>(criteria);
-        });
-        var results = await Task.WhenAll(tasks);
+            RequestInfo = requestInfoJson,
+            OnlineServerId = currentOnlineServerId
+        };
 
-        return results.SelectMany(item => item);
+        return await onlineServerRepository.FetchAsync<GetRequestInfoModel>(criteria);
     }
 
     private static int GetTotalProcessed(RequestModel request, IEnumerable<GetRequestInfoModel> totalVoidedTicketModels, Func<GetRequestInfoModel, int> selector)

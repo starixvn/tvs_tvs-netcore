@@ -4,6 +4,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 
@@ -14,7 +15,7 @@ public interface GetVoidedTicketsService
     Task<Match> GetMatchInfo(int matchId);
 }
 
-public class GetVoidedTicketsServiceImp(IDynamicRepository repository, IMapper mapper) : GetVoidedTicketsService
+public class GetVoidedTicketsServiceImp(IDynamicRepository repository, OnlineServerRepository onlineServerRepository, IMapper mapper) : GetVoidedTicketsService
 {
     public async Task<IEnumerable<VoidedTicketModel>> GetTickets(GetVoidedTicketsQuery query)
     {
@@ -39,56 +40,29 @@ public class GetVoidedTicketsServiceImp(IDynamicRepository repository, IMapper m
 
     private async Task<IEnumerable<VoidedTicketModel>> GetRecoveredTickets(GetVoidedTicketsQuery query)
     {
-        var criteria = new GetRecoveredTicketsCriteria
-        {
-            RequestId = query.RequestId,
-        };
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+        var criteria = mapper.Map<GetRecoveredTicketsCriteria>(query);
+        criteria.OnlineServerId = currentOnlineServerId;
 
-        var tasks = SiteDbGroupConstant.ServerList
-            .Select(item =>
-            {
-                criteria.SiteDbGroupId = item.Id;
-                return repository.FetchAsync<VoidedTicketModel>(criteria);
-            });
-
-        var responses = await Task.WhenAll(tasks);
-        var recoveredTickets = responses.SelectMany(response => response);
-
-        return recoveredTickets;
+        return await onlineServerRepository.FetchAsync<VoidedTicketModel>(criteria);
     }
 
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets(GetVoidedTicketsQuery query)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = mapper.Map<GetVoidedTicketsCriteria>(query);
+        criteria.OnlineServerId = currentOnlineServerId;
 
-        var tasks = SiteDbGroupConstant.ServerList
-            .Select(item =>
-            {
-                criteria.SiteDbGroupId = item.Id;
-                return repository.FetchAsync<VoidedTicketModel>(criteria);
-            });
-
-        var responses = await Task.WhenAll(tasks);
-        var voidedTickets = responses.SelectMany(response => response);
-
-        return voidedTickets;
+        return await onlineServerRepository.FetchAsync<VoidedTicketModel>(criteria);
     }
 
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets14(GetVoidedTicketsQuery query)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria14 = mapper.Map<GetVoidedTickets14Criteria>(query);
+        criteria14.OnlineServerId = currentOnlineServerId;
 
-        var tasks = SiteDbGroupConstant.ServerList
-            .Select(async item =>
-            {
-                criteria14.SiteDbGroupId = item.Id;
-                return await repository.FetchAsync<VoidedTicketModel>(criteria14);
-            });
-
-        var responses = await Task.WhenAll(tasks);
-        var voidedTickets = responses.SelectMany(response => response);
-
-        return voidedTickets;
+        return await onlineServerRepository.FetchAsync<VoidedTicketModel>(criteria14);
     }
 
     public async Task<Match> GetMatchInfo(int matchId)

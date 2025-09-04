@@ -1,7 +1,7 @@
 ﻿using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
@@ -13,7 +13,7 @@ public class GetBriefInfoRequest : IRequest<IEnumerable<BriefInfoModel>>
     public int RequestId { get; set; }
 }
 
-public class GetBriefInfoHandler(IDynamicRepository repository)
+public class GetBriefInfoHandler(IDynamicRepository repository, OnlineServerRepository onlineServerRepository)
     : IRequestHandler<GetBriefInfoRequest, IEnumerable<BriefInfoModel>>
 {
     public async Task<IEnumerable<BriefInfoModel>> Handle(GetBriefInfoRequest request, CancellationToken cancellationToken)
@@ -69,19 +69,13 @@ public class GetBriefInfoHandler(IDynamicRepository repository)
 
     public async Task<IEnumerable<TicketLicenseeModel>> GetTicketLicenseeTicket(IEnumerable<string> voidingHistoryIds)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var getLicenseCriteria = new GetBriefInfoCriteria
         {
-            VoidingHistoryIds = string.Join(",", Helper.GetIntersectTransIdString(voidingHistoryIds))
+            VoidingHistoryIds = string.Join(",", Helper.GetIntersectTransIdString(voidingHistoryIds)),
+            OnlineServerId = currentOnlineServerId
         };
 
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            getLicenseCriteria.SiteDbGroupId = server.Id;
-            return repository.FetchAsync<TicketLicenseeModel>(getLicenseCriteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-
-        return results.SelectMany(x => x);
+        return await onlineServerRepository.FetchAsync<TicketLicenseeModel>(getLicenseCriteria);
     }
 }
