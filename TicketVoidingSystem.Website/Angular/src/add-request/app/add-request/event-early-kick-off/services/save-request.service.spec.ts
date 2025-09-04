@@ -25,6 +25,7 @@ import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.mo
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { OperatorType } from '../../others/others.model';
+import { ConfirmEarlyKickOffModel } from '../confirm-eko/confirm-eko.model';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -50,7 +51,7 @@ describe('SaveRequestService', () => {
     isEditingByAnotherUser: false,
     isHasSettledTicket: false,
     warningRelatedEvents: []
-  };
+  } as unknown as ConfirmEarlyKickOffModel;
 
   const mockIssueTypes = {
     issueTypes: [
@@ -478,7 +479,7 @@ describe('SaveRequestService', () => {
       const mainEvent = new LogInfoEarlyKickOff();
       mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
       saveRequestArg.mainEvent = mainEvent;
-      
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.addRequestStore = addRequestStore;
 
@@ -649,7 +650,7 @@ describe('SaveRequestService', () => {
       const mainEvent = new LogInfoEarlyKickOff();
       mainEvent.messageValidationLogInfo = [{ isError: false, reason: 'test reason' }];
       saveRequestArg.mainEvent = mainEvent;
-      
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.addRequestStore = addRequestStore;
 
@@ -777,7 +778,7 @@ describe('SaveRequestService', () => {
       
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.addRequestStore = addRequestStore;
-
+      saveRequestArg.confirmEarlyKickOff = mockConfirmEarlyKickOff;
       // Act
       const result = service['initAddRequestQuery'](saveRequestArg);
 

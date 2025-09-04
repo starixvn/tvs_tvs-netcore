@@ -1,9 +1,12 @@
+import { LABELS } from "../../constants/labels";
+
 export class CSSCLASS {
     public static get VALID(): string { return 'item-username-valid'; }
     public static get INVALID(): string { return 'item-username-invalid'; }
     public static get EXISTED(): string { return 'item-username-existed'; }
     public static get MOVED(): string { return 'item-username-move-bet'; }
     public static get SELECTED(): string { return 'item-username-selected'; }
+    public static get SITE_DB_DOWN(): string { return 'item-username-existed'; }
 }
 
 export class GroupUsername {
@@ -77,6 +80,17 @@ export class GroupUsername {
         });
     }
 
+    setItemWarning(list: string[], item: UsernameItem, css: string, toolTipText = '') {
+        list.forEach(invalidItem => {
+            if (item.value === invalidItem) {
+                item.cssClass = css;
+                item.defaultClass = css;
+                item.isShowTooltip = toolTipText.length > 0;
+                item.tooltipText = toolTipText;
+            }
+        });
+    }
+
     updateInvalid(text: string) {
         if (text !== null) {
             const invalidItems = text.split(',');
@@ -91,6 +105,15 @@ export class GroupUsername {
             const existedItems = text.split(',');
             this.items.forEach(item => {
                 this.setItemListValue(existedItems, item, CSSCLASS.EXISTED);
+            });
+        }
+    }
+
+    updateWarningSiteDBDown(text: string) {
+        if (text !== null) {
+            const existedItems = text.split(',');
+            this.items.forEach(item => {
+                this.setItemWarning(existedItems, item, CSSCLASS.EXISTED, LABELS.INVALID_USERNAME_SITE_DB_DOWN);
             });
         }
     }

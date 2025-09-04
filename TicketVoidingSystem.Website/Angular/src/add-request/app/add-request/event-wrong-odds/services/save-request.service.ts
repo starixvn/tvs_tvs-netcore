@@ -41,7 +41,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
   }
 
   async recheckLogInfoBeforeSaveRequest(argWrongOdds: SaveRequestArg): Promise<boolean> {
@@ -96,7 +95,7 @@ export class SaveRequestService {
 
     if (!argWrongOdds.filter.isVoided) {
       query.wrongOddsInfo = this.getWrongOddsInfo(argWrongOdds.logInfoEvent, argWrongOdds.filter.subIssueTypeId);
-      query.siteDBDownInfoJson = argWrongOdds.confirmAddRequest.isMarkTicketSiteDbDown && argWrongOdds.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argWrongOdds.confirmAddRequest.isMarkTicketSiteDbDown
         ? argWrongOdds.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

@@ -21,6 +21,7 @@ import { EventWrongOfferedNameService } from './services/event-wrong-offered-nam
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'event-wrong-offered-name',
@@ -28,7 +29,7 @@ import { ValidationService } from './services/validation.service';
   styleUrls: ['./event-wrong-offered-name.component.scss'],
   standalone: true,
   imports: [FormsModule, NgbModule, EventLeagueComponent, ConfirmAddRequestComponent,
-    FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent],
+    FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent, InfoSiteDBDownComponent],
   providers: [EventWrongOfferedNameService, LogInfoService, SaveRequestService, ValidationService,
     CheckAddPermissionService, AffectedTicketService
   ]
@@ -74,6 +75,7 @@ export class EventWrongOfferedNameComponent implements OnInit {
 
   async changeMatchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfo = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeagueComponent?.selectedMatch?.matchId) {
@@ -85,6 +87,7 @@ export class EventWrongOfferedNameComponent implements OnInit {
 
   async handleSearchEvent(): Promise<void> {
     this.primitiveProps.isShowLogInfo = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOfferedNameComponent)) {
       return;
@@ -118,6 +121,7 @@ export class EventWrongOfferedNameComponent implements OnInit {
 
   resetLogInfo() {
     this.primitiveProps.isShowLogInfo = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
   }
 
   initSaveRequestInput() {

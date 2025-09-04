@@ -1,16 +1,34 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { ConfirmEarlyKickOffModel } from './confirm-eko.model';
+import { FormsModule } from '@angular/forms';
+import { TVSRequestActionType } from '../../../../../utility/constants/config';
 
 @Component({
   selector: 'confirm-eko',
   templateUrl: './confirm-eko.component.html',
   styleUrls: ['./confirm-eko.component.scss'],
-  standalone: true
+  standalone: true,
+  imports: [FormsModule]
 })
-export class ConfirmEkoComponent {
+export class ConfirmEkoComponent implements OnChanges {
   @Input() model = new ConfirmEarlyKickOffModel();
+  @Input() siteDBDownInfoJson: string;
+  @Input() action: string;
+  @Input() isOpen: boolean;
   @Output() clickCancel = new EventEmitter();
   @Output() clickOk = new EventEmitter();
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isOpen'] && this.isOpen) {
+      this.checkMarkTicketSiteDbDown();
+    }
+  }
+
+  private checkMarkTicketSiteDbDown(): void {
+    const isShowCheckbox = this.siteDBDownInfoJson?.length > 0 && this.action !== TVSRequestActionType.TAKE_NOTE_ID.toString();
+    this.model.isHasAffectedTicketSiteDBDown = isShowCheckbox;
+    this.model.isMarkTicketSiteDbDown = isShowCheckbox;
+  }
 
   onClickCancel() {
     this.model.isOpenDialog = false;

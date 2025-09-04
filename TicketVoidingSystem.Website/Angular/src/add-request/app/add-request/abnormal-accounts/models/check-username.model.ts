@@ -1,3 +1,4 @@
+import { InfoSiteDBDownModel } from "../../components/info-site-db-down/info-site-db-down.model";
 import { TransInfoAddRequestModel } from "../../models/trans-info-add-request.model";
 import { AccountWinlostModel } from "./account-winlost.model";
 
@@ -19,6 +20,7 @@ export class CheckUsernamesViewModel {
   validation: ValidationAbnormalAccount;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   accountWinlostModels: AccountWinlostModel[];
+  infoSiteDBDownModel: InfoSiteDBDownModel;
 }
 
 export class ValidationAbnormalAccount {

@@ -5,7 +5,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';
-import { GroupUsername, UsernameItem } from './user-names.model';
+import { CSSCLASS, GroupUsername, UsernameItem } from './user-names.model';
 
 @Component({
   standalone: true,
@@ -217,5 +217,9 @@ export class UsernamesComponent implements OnChanges {
 
   showErrorTicketLimitExceeded() {
     this.tooltip.display(this.errorTooltipClassName, TEXT.TICKET_LIMIT_EXCEEDED);
+  }
+
+  isAllUsernamesOffSiteDbDown(): boolean {
+    return this.groupUsername.items.every(item => item.cssClass === CSSCLASS.SITE_DB_DOWN);
   }
 }

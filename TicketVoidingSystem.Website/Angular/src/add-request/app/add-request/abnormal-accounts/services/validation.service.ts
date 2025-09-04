@@ -27,66 +27,125 @@ export class ValidationService {
     const usernames = args.usernamesComponent.groupUsername.getAllValue();
     try {
       args.primitiveProps.isShowError = false;
-      if (args.primitiveProps.isCancelValidate) {
-        args.primitiveProps.isCancelValidate = false;
-        return { isValid: false } as ValidationBusinessRuleOutput;
+      args.primitiveProps.infoSiteDBDownModel = null;
+
+      const earlyValidationResult = this.performEarlyValidation(args, usernames);
+      if (earlyValidationResult) {
+        return earlyValidationResult;
       }
 
-      if (!this.isValidCommonData(args.productFilterComponent, args.eventDateFilterComponent)) {
-        return { isValid: false } as ValidationBusinessRuleOutput;
-      }
-
-      if (usernames.length === 0) {
-        return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
-      }
-      args.usernamesComponent.groupUsername.resetAllValue();
-      if (args.usernamesComponent.groupUsername.getDuplicatedItems(usernames).length > 0) {
-        args.usernamesComponent.groupUsername.updateDuplicatedItems(usernames);
-        return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
+      const duplicatedResult = this.checkDuplicatedUsernames(args, usernames);
+      if (duplicatedResult) {
+        return duplicatedResult;
       }
 
       const viewModel = await this.getValidation(args);
-      if(viewModel.validation.isTicketLimitExceeded){
-        args.usernamesComponent.showErrorTicketLimitExceeded();
-        return { isValid: false } as ValidationBusinessRuleOutput;
-      }
 
-      const invalidUsernames = viewModel.validation.invalidUserName;
-      if (invalidUsernames) {
-        return {
-          isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames)
-        } as ValidationBusinessRuleOutput;
-      }
+      return this.processValidationResults(args, viewModel, usernames);
 
-      args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
-      if (viewModel.validation.isExceededTotalUsernames) {
-        return {
-          isValid: args.usernamesComponent.checkValidItems(),
-          accountWinlostModels: viewModel.accountWinlostModels
-        } as ValidationBusinessRuleOutput;
-      }
-      if (viewModel.validation.isBeingMoveBetDate || viewModel.validation.isInvalidTotalTicket) {
-        args.primitiveProps.isShowError = true;
-        args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;
-        args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
-        return {
-          isValid: false,
-          accountWinlostModels: viewModel.accountWinlostModels
-         } as ValidationBusinessRuleOutput;
-      }
-
-      return {
-        isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames),
-        numberOfTicketsExistedInRequest: viewModel.validation.numberOfTickets,
-        usernamesOfCreditCashService: viewModel.validation.usernamesOfCreditCashService,
-        transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
-        accountWinlostModels: viewModel.accountWinlostModels
-      } as ValidationBusinessRuleOutput;
     } catch {
       return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, usernames) } as ValidationBusinessRuleOutput;
     } finally {
       args.primitiveProps.isBlockUsernames = false;
     }
+  }
+
+  private performEarlyValidation(args: ValidationBusinessRuleArgs, usernames: string): ValidationBusinessRuleOutput | null {
+    if (args.primitiveProps.isCancelValidate) {
+      args.primitiveProps.isCancelValidate = false;
+      return { isValid: false } as ValidationBusinessRuleOutput;
+    }
+
+    if (!this.isValidCommonData(args.productFilterComponent, args.eventDateFilterComponent)) {
+      return { isValid: false } as ValidationBusinessRuleOutput;
+    }
+
+    if (usernames === '') {
+      return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
+    }
+
+    return null;
+  }
+
+  private checkDuplicatedUsernames(args: ValidationBusinessRuleArgs, usernames: string): ValidationBusinessRuleOutput | null {
+    args.usernamesComponent.groupUsername.resetAllValue();
+    if (args.usernamesComponent.groupUsername.getDuplicatedItems(usernames).length > 0) {
+      args.usernamesComponent.groupUsername.updateDuplicatedItems(usernames);
+      return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
+    }
+    return null;
+  }
+
+  private processValidationResults(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel, usernames: string): ValidationBusinessRuleOutput {
+    const siteDbDownResult = this.handleSiteDbDown(args, viewModel);
+    if (siteDbDownResult) {
+      return siteDbDownResult;
+    }
+
+    if (viewModel.validation.isTicketLimitExceeded) {
+      args.usernamesComponent.showErrorTicketLimitExceeded();
+      return { isValid: false } as ValidationBusinessRuleOutput;
+    }
+
+    const invalidUsernames = viewModel.validation.invalidUserName;
+    if (invalidUsernames) {
+      return {
+        isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames)
+      } as ValidationBusinessRuleOutput;
+    }
+
+    const exceededResult = this.handleExceededTotalUsernames(args, viewModel);
+    if (exceededResult) {
+      return exceededResult;
+    }
+
+    const moveBetResult = this.handleMoveBetDateOrInvalidTicket(args, viewModel);
+    if (moveBetResult) {
+      return moveBetResult;
+    }
+
+    return {
+      isValid: this.highlightInvalidUsernames(args.usernamesComponent, invalidUsernames || ''),
+      numberOfTicketsExistedInRequest: viewModel.validation.numberOfTickets,
+      usernamesOfCreditCashService: viewModel.validation.usernamesOfCreditCashService,
+      transInfoAddRequestModel: viewModel.transInfoAddRequestModel,
+      accountWinlostModels: viewModel.accountWinlostModels
+    } as ValidationBusinessRuleOutput;
+  }
+
+  private handleSiteDbDown(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel): ValidationBusinessRuleOutput | null {
+    args.primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
+    if (viewModel.infoSiteDBDownModel) {
+      args.usernamesComponent.groupUsername.updateWarningSiteDBDown(viewModel.infoSiteDBDownModel.usernames);
+      if (args.usernamesComponent.isAllUsernamesOffSiteDbDown()) {
+        return { isValid: false } as ValidationBusinessRuleOutput;
+      }
+    }
+    return null;
+  }
+
+  private handleExceededTotalUsernames(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel): ValidationBusinessRuleOutput | null {
+    args.usernamesComponent.groupUsername.isExceededTotalUsernames = viewModel.validation.isExceededTotalUsernames;
+    if (viewModel.validation.isExceededTotalUsernames) {
+      return {
+        isValid: args.usernamesComponent.checkValidItems(),
+        accountWinlostModels: viewModel.accountWinlostModels
+      } as ValidationBusinessRuleOutput;
+    }
+    return null;
+  }
+
+  private handleMoveBetDateOrInvalidTicket(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel): ValidationBusinessRuleOutput | null {
+    if (viewModel.validation.isBeingMoveBetDate || viewModel.validation.isInvalidTotalTicket) {
+      args.primitiveProps.isShowError = true;
+      args.primitiveProps.isBeingMoveBetDate = viewModel.validation.isBeingMoveBetDate;
+      args.primitiveProps.isInvalidTotalTicket = viewModel.validation.isInvalidTotalTicket;
+      return {
+        isValid: false,
+        accountWinlostModels: viewModel.accountWinlostModels
+      } as ValidationBusinessRuleOutput;
+    }
+    return null;
   }
 
   async getValidation(args: ValidationBusinessRuleArgs): Promise<CheckUsernamesViewModel> {

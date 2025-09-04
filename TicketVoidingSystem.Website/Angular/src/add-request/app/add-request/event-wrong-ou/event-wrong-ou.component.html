@@ -61,8 +61,9 @@
   [model]="addChildMatchModel">
 </add-child-match>
 
-<confirm-add-request [model]="confirmAddRequest" [issueTypes]="issueTypes" [voidActions]="filter.actions"
+<confirm-add-request [isOpen]="confirmAddRequest.isOpen" [model]="confirmAddRequest" [issueTypes]="issueTypes" [voidActions]="filter.actions"
   [selectedVoidAction]="filter.action" [selectedSubIssueType]="issueTypes.subIssueId"
+  [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson"
   (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()">
 </confirm-add-request>
 

@@ -1,10 +1,9 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class CheckValidUsernamesCriteria : CriteriaBase
+public class CheckValidUsernamesCriteria : OnlineServerCriteriaBase
 {
     public string Usernames { get; set; }
 
@@ -26,8 +25,7 @@ public class CheckValidUsernamesCriteria : CriteriaBase
 
     public bool IsRemoveCreditCashService { get; set; }
 
-    [SpParam(Ignored = true)]
-    public int SiteDbGroupId { get; set; }
+    public string OnlineServerId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_CheckUserName");
 

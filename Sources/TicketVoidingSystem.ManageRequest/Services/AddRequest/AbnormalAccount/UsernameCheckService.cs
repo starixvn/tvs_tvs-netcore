@@ -1,8 +1,7 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Extensions;
+﻿using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Handlers.AddRequest;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount;
 
@@ -13,7 +12,7 @@ public interface UsernameCheckService
     Task<CheckUsernamesInDatabaseResult> GetUsernameInformation(CheckValidUsernamesRequest request);
 }
 
-public class UsernameCheckServiceImp(IDynamicRepository repository)
+public class UsernameCheckServiceImp(OnlineServerRepository onlineServerRepository)
     : UsernameCheckService
 {
     public async Task<CheckUsernamesInDatabaseResult> GetUsernameInformation(CheckValidUsernamesRequest request)
@@ -32,17 +31,9 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
     {
         var accountAdjustments = GetAccountAdjustments(request.AccountWinlostModels);
         var adjustVoidLimitJson = accountAdjustments.ToJson();
-        var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-        {
-            var criteria = CreateCriteria(request, server.Id, adjustVoidLimitJson);
-            return repository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
-        });
-
-        var results = await Task.WhenAll(tasks);
-
-        var validationResults = results.SelectMany(x => x.Item1);
-        var ticketResults = results.SelectMany(x => x.Item2);
-        var accountResults = results.SelectMany(x => x.Item3);
+        var criteria = await CreateCriteria(request, adjustVoidLimitJson);
+        var (validationResults, ticketResults, accountResults) =
+            await onlineServerRepository.FetchMultipleAsync<ValidationInfo, TicketCalculateWinLostAccount, AccountWinlostModel>(criteria);
 
         var validationInfo = CreateValidationResult(validationResults);
         return new TicketResult(validationInfo, ticketResults, accountResults);
@@ -51,6 +42,7 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
     private static ValidationInfo CreateValidationResult(IEnumerable<ValidationInfo> validationResults)
     {
         var results = validationResults.ToList();
+        var siteDBDownInfo = results.Find(IsHasAffectedSiteDbDown);
 
         return new ValidationInfo
         {
@@ -63,14 +55,19 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
             UnMarkTransIds = JoinNonEmptyValues(results, x => x.UnMarkTransIds),
             MarkTransIds = JoinNonEmptyValues(results, x => x.MarkTransIds),
             UsernamesOfCreditCashService = JoinNonEmptyValues(results, x => x.UsernamesOfCreditCashService),
+            SiteDBDownUserNames = siteDBDownInfo?.SiteDBDownUserNames,
+            SiteDBDownInfoJson = siteDBDownInfo?.SiteDBDownInfoJson
         };
+    }
+
+    private static bool IsHasAffectedSiteDbDown(ValidationInfo model)
+    {
+        return !string.IsNullOrEmpty(model.SiteDBDownInfoJson) || !string.IsNullOrEmpty(model.SiteDBDownUserNames);
     }
 
     private static string JoinNonEmptyValues(IEnumerable<ValidationInfo> results, Func<ValidationInfo, string> selector)
     {
-        return string.Join(",",
-            results.Where(x => !string.IsNullOrWhiteSpace(selector(x)))
-                .Select(selector));
+        return string.Join(",", results.Where(x => !string.IsNullOrWhiteSpace(selector(x))).Select(selector));
     }
 
     private static bool DetermineIsInvalidTotalTicket(IReadOnlyCollection<ValidationInfo> results)
@@ -99,11 +96,12 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
         });
     }
 
-    private static CheckValidUsernamesCriteria CreateCriteria(CheckValidUsernamesRequest request, int siteDbGroupId, string adjustVoidLimitJson)
+    private async Task<CheckValidUsernamesCriteria> CreateCriteria(CheckValidUsernamesRequest request, string adjustVoidLimitJson)
     {
+        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
+
         return new CheckValidUsernamesCriteria
         {
-            SiteDbGroupId = siteDbGroupId,
             Usernames = request.Usernames,
             RequestId = request.RequestId,
             ActionId = request.ActionId,
@@ -113,7 +111,8 @@ public class UsernameCheckServiceImp(IDynamicRepository repository)
             StatusIds = request.StatusIds,
             AdjustVoidLimit = adjustVoidLimitJson,
             IsVoidAllArchivedTickets = request.IsVoidAllArchivedTickets,
-            IsRemoveCreditCashService = request.IsRemoveCreditCashService
+            IsRemoveCreditCashService = request.IsRemoveCreditCashService,
+            OnlineServerId = currentOnlineServerId
         };
     }
 }

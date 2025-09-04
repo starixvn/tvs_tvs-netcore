@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { AbnormalFilterBy, TVSRequestActionType } from '../../../../utility/constants/config';
@@ -30,7 +29,8 @@ import { AbExceptionListComponent } from './ab-exception-list/ab-exception-list.
   templateUrl: './event-abnormal-bet.component.html',
   styleUrls: ['./event-abnormal-bet.component.scss'],
   standalone: true,
-  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule, InfoSiteDBDownComponent, AbExceptionListComponent],
+  imports: [FormsModule, BetIdsComponent, ConfirmAbnormalBetComponent, BlockUiDirective, CommonModule, 
+    InfoSiteDBDownComponent, AbExceptionListComponent, ],
   providers: [SaveRequestService, ValidationService]
 })
 export class EventAbnormalBetComponent implements OnInit {
@@ -172,9 +172,7 @@ export class EventAbnormalBetComponent implements OnInit {
     this.confirmAbnormalBetModel.transIds = this.betIdsComponent.getAllBetIds();
     this.confirmAbnormalBetModel.requestId = this.requestId;
     this.confirmAbnormalBetModel.requestedBy = this.requestedBy;
-    this.confirmAbnormalBetModel.isHasAffectedTicketSiteDBDown = this.infoSiteDBDownModel != null;
     this.confirmAbnormalBetModel.ticketsOfSiteDBDown = validationResult.transIdsOfSiteDBDown;
-    this.confirmAbnormalBetModel = _.clone(this.confirmAbnormalBetModel);
   }
 
   initCheckValidBusinessRuleQuery(isValidateFromConfirmPopup: boolean): ValidationBusinessRuleArgs {

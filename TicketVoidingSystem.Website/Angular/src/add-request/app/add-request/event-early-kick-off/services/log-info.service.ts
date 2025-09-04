@@ -10,6 +10,7 @@ import { LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { EventEarlyKickOffService } from './event-eko.service';
+import { PrimitiveProperty } from '../models/primitive-property.model';
 
 @Injectable()
 export class LogInfoService {

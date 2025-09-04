@@ -6,10 +6,10 @@ import { StaticService } from '../../../../../utility/services/static.service';
 import { FilterModel } from '../../filter/filter.model';
 import { IssueTypes } from '../../filter/issue-types.model';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 import { LogInfoService } from '../services/log-info.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
+
 @Component({
   selector: 'log-info-eko',
   templateUrl: './log-info-eko.component.html',
@@ -24,7 +24,6 @@ export class LogInfoEkoComponent {
   @Input() logInfo: LogInfoEarlyKickOff;
   @Input() requestId: number;
   @Input() issueTypes = new IssueTypes();
-  @Input() primitiveProps: PrimitiveProperty;
   @Output() searchTicketEvent = new EventEmitter();
   @Output() deleteEvent = new EventEmitter();
 

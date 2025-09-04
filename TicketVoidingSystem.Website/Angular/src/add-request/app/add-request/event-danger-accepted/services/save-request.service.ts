@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import { TvDetectionType, TVSRequestActionType } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { StaticService } from '../../../../../utility/services/static.service';
@@ -12,6 +11,7 @@ import { PopupService } from '../../services/popup.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestArg } from './save-request.model';
 import { ValidationService } from './validation.service';
+import _ from 'lodash';
 
 @Injectable()
 export class SaveRequestService {
@@ -77,7 +77,6 @@ export class SaveRequestService {
       (arg.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && arg.filter.action !== arg.actionIdOfFirstTimeAccess) ? true : false;
       arg.confirmDangerAccepted.isHasWarningRangeTime = arg.allEvents.some(x => x.logInfoDetail?.isHasWarningRangeTime)
     }
-    arg.confirmDangerAccepted.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
     arg.confirmDangerAccepted.requestId = arg.requestId;
     arg.confirmDangerAccepted.requestedBy = arg.requestedBy;
     arg.confirmDangerAccepted.isEditingByAnotherUser =
@@ -85,7 +84,6 @@ export class SaveRequestService {
     arg.confirmDangerAccepted.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
     arg.confirmDangerAccepted.subIssueTypeName = arg.issueTypes.selectedSubIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
     arg.confirmDangerAccepted.isOpenDialog = true;
-    arg.confirmDangerAccepted = _.clone(arg.confirmDangerAccepted);
   }
 
   async executeSaveRequestApi(args: SaveRequestArg): Promise<void> {
@@ -137,7 +135,7 @@ export class SaveRequestService {
       query.dangerAcceptedInfo = arg.allEvents.filter(x => x.logInfoDetail).map(x => {
         return this.assignEventToModel(x, arg, arg.allEvents.find(y => y.isMainMatch).tvDetectionModel);
       });
-      query.siteDBDownInfoJson = arg.confirmDangerAccepted.isMarkTicketSiteDbDown && arg.confirmDangerAccepted.isHasAffectedTicketSiteDBDown 
+      query.siteDBDownInfoJson = arg.confirmDangerAccepted.isMarkTicketSiteDbDown
         ? arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 

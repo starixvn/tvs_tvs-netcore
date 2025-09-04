@@ -23,13 +23,15 @@ import { ValidationBusinessRuleArgs } from './models/validation.model';
 import { ProductFilterComponent } from './product-filter/product-filter.component';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { InfoSiteDBDownModel } from '../components/info-site-db-down/info-site-db-down.model';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   selector: 'abnormal-accounts',
   templateUrl: './abnormal-accounts.component.html',
   styleUrls: ['./abnormal-accounts.component.scss'],
   standalone: true,
-  imports: [NgbModule, FormsModule, UsernamesComponent, ProductFilterComponent,
+  imports: [NgbModule, FormsModule, UsernamesComponent, ProductFilterComponent, InfoSiteDBDownComponent,
     EventDateFilterComponent, AccountTableComponent, AccountAffectedTicketComponent, BlockUiDirective, ConfirmAbnormalAccountComponent],
   providers: [
     SaveRequestService,
