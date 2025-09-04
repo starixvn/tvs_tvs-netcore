@@ -58,7 +58,7 @@
   <info-site-db-down [infoSiteDBDownModel]="infoSiteDBDownModel"></info-site-db-down>
 </div>
 
-<confirm-abnormal-bet [isOpen]="confirmAbnormalBetModel.isOpenDialog" [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
+<confirm-abnormal-bet #confirmAbnormalBetComponent [isOpen]="confirmAbnormalBetModel.isOpenDialog" [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
   (save)="onYesConfirmWarningModal()" [isEdit]="isEdit" [siteDBDownInfoJson]="infoSiteDBDownModel?.siteDBDownInfoJson" [action]="filter.action">
 </confirm-abnormal-bet>
 @if (primitiveProps.isBlockUI) {
