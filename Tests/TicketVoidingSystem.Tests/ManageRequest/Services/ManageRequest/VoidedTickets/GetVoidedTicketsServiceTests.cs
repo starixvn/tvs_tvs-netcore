@@ -9,22 +9,21 @@ using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.VoidedTickets;
 
 public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
-    private readonly IMapper mapper;
-
-    private readonly IDynamicRepository repository;
+    private readonly IMapper mapper = Substitute.For<IMapper>();
+    private readonly IDynamicRepository repository = Substitute.For<IDynamicRepository>();
+    private readonly OnlineServerRepository onlineServerRepository = Substitute.For<OnlineServerRepository>();
     private readonly GetVoidedTicketsServiceImp service;
 
     public GetVoidedTicketsServiceTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
-        mapper = Substitute.For<IMapper>();
-        service = new GetVoidedTicketsServiceImp(repository, mapper);
+        service = new GetVoidedTicketsServiceImp(repository, onlineServerRepository, mapper);
     }
 
     [Fact]
@@ -33,13 +32,14 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         // Arrange
         var tickets = new List<VoidedTicketModel> { new() { GroupName = "Credit" } };
         var query = new GetVoidedTicketsQuery { IssueTypeId = IssueTypeConstant.RecoverTicket, IsCreditOnly = true };
-        repository.FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>()).ReturnsForAnyArgs(tickets);
+        mapper.Map<GetRecoveredTicketsCriteria>(Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(new GetRecoveredTicketsCriteria());
+        onlineServerRepository.FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>()).ReturnsForAnyArgs(tickets);
 
         // Act
         _ = await service.GetTickets(query);
 
         // Assert
-        await repository.Received().FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>());
+        await onlineServerRepository.Received().FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>());
     }
 
     [Fact]
@@ -52,10 +52,8 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         };
         mapper.Map<GetVoidedTickets14Criteria>(Arg.Any<GetVoidedTicketsQuery>())
             .Returns(new GetVoidedTickets14Criteria());
-        repository.FetchAsync<VoidedTicketModel>(Arg.Is(new GetVoidedTickets14Criteria
-        {
-            SiteDbGroupId = 1
-        })).ReturnsForAnyArgs(new List<VoidedTicketModel>
+        onlineServerRepository.FetchAsync<VoidedTicketModel>(Arg.Any<GetVoidedTickets14Criteria>())
+            .ReturnsForAnyArgs(new List<VoidedTicketModel>
         {
             new()
             {
@@ -69,7 +67,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         // Assert
 
         Assert.NotNull(result);
-        Assert.Equal(4, result.Count());
+        Assert.Equal(1, result.Count());
     }
 
     [Fact]
@@ -81,10 +79,8 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
             IsCreditOnly = true
         };
         mapper.Map<GetVoidedTicketsCriteria>(Arg.Any<GetVoidedTicketsQuery>()).Returns(new GetVoidedTicketsCriteria());
-        repository.FetchAsync<VoidedTicketModel>(Arg.Is(new GetVoidedTicketsCriteria
-        {
-            SiteDbGroupId = 1
-        })).ReturnsForAnyArgs(new List<VoidedTicketModel>
+        onlineServerRepository.FetchAsync<VoidedTicketModel>(Arg.Any<GetVoidedTicketsCriteria>())
+            .ReturnsForAnyArgs(new List<VoidedTicketModel>
         {
             new()
             {
@@ -98,7 +94,7 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(4, result.Count());
+        Assert.Equal(1, result.Count());
     }
 
     [Fact]

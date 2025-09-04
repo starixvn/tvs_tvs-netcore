@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Handlers.ManageRequest;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.MarkTickets.Models.MarkUnmarkTickets;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.ManageRequest;
@@ -22,7 +22,7 @@ public class GetMarkedTicketsCountHandlerTests : IClassFixture<AppSettingFixture
             Total = 10
         };
         var models = new List<AllMarkedTicketModel> { model };
-        var repository = Substitute.For<IDynamicRepository>();
+        var repository = Substitute.For<OnlineServerRepository>();
         var session = Substitute.For<SessionService>();
         repository.FetchAsync<AllMarkedTicketModel>(Arg.Any<AllMarkedTicketsCriteria>()).ReturnsForAnyArgs(models);
         var handler = new GetMarkedTicketsCountHandler(repository, session);
