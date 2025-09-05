@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Constants;
@@ -11,20 +10,21 @@ using TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 using TicketVoidingSystem.ManageRequest.ViewModels;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
 
 public class ReCalculateTicketsServiceTests : IClassFixture<AppSettingFixture>
 {
-    private readonly IDynamicRepository repository;
+    private readonly OnlineServerRepository repository;
     private readonly ReCalculateTicketsServiceImp service;
     private readonly SessionService sessionService;
     private readonly LoggingService loggingService;
 
     public ReCalculateTicketsServiceTests()
     {
-        repository = Substitute.For<IDynamicRepository>();
+        repository = Substitute.For<OnlineServerRepository>();
         sessionService = Substitute.For<SessionService>();
         loggingService = Substitute.For<LoggingService>();
         service = new ReCalculateTicketsServiceImp(repository, sessionService, loggingService);
@@ -38,7 +38,7 @@ public class ReCalculateTicketsServiceTests : IClassFixture<AppSettingFixture>
         const int issueTypeId = IssueTypeConstant.AbnormalBet;
         const string transIds = "1, 2";
         var e = new Exception();
-        repository.ExecuteAsync(Arg.Any<ReCalculateTicketCommand>()).Throws(e);
+        repository.FetchAsync<Result>(Arg.Any<ReCalculateTicketCommand>()).Throws(e);
         sessionService.GetClientIp().Returns("127:00:42");
         var results = new List<Result> { new() { ErrorCode = 1, ErrorMsg = e.Message } };
 
@@ -65,7 +65,7 @@ public class ReCalculateTicketsServiceTests : IClassFixture<AppSettingFixture>
 
         // Assert
         await loggingService.Received(0).ErrorAsync(Arg.Any<Exception>());
-        await repository.Received(0).ExecuteAsync(Arg.Any<ReCalculateTicketCommand>());
+        await repository.Received(0).FetchAsync<Result>(Arg.Any<ReCalculateTicketCommand>());
         AssertExtension.Equal(results, actual);
     }
 
@@ -80,13 +80,14 @@ public class ReCalculateTicketsServiceTests : IClassFixture<AppSettingFixture>
         const string transIds = "1, 2";
         sessionService.GetClientIp().Returns("127:00:42");
         var results = new List<Result> { new() { ErrorMsg = null }, new() { ErrorMsg = null }, new() { ErrorMsg = null }, new() { ErrorMsg = null } };
+        repository.FetchAsync<Result>(Arg.Any<ReCalculateTicketCommand>()).ReturnsForAnyArgs(results);
 
         // Act
         var actual = await service.Execute(abnormalBetInfo, issueTypeId, transIds);
 
         // Assert
         await loggingService.Received(0).ErrorAsync(Arg.Any<Exception>());
-        await repository.Received(4).ExecuteAsync(Arg.Any<ReCalculateTicketCommand>());
+        await repository.Received(1).FetchAsync<Result>(Arg.Any<ReCalculateTicketCommand>());
         AssertExtension.Equal(results, actual);
     }
 }

@@ -1,10 +1,9 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Constants;
+﻿using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.Edit;
 
@@ -14,7 +13,7 @@ public interface ReCalculateTicketsService
 }
 
 public class ReCalculateTicketsServiceImp(
-    IDynamicRepository repository,
+    OnlineServerRepository onlineServerRepository,
     SessionService sessionService,
     LoggingService loggingService)
     : ReCalculateTicketsService
@@ -27,8 +26,8 @@ public class ReCalculateTicketsServiceImp(
             if (issueTypeId.IsAbnormalBet() && !string.IsNullOrWhiteSpace(transIds) && abnormalBetInfo.IsConfirmCalculator)
             {
                 var matchId = abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay ? 29 : 0;
-
-                results = [.. await ExecuteParallel(matchId, transIds)];
+                var x = await ExecuteParallel(matchId, transIds);
+                results = [.. x];
             }
         }
         catch (Exception e)
@@ -42,7 +41,7 @@ public class ReCalculateTicketsServiceImp(
 
     private async Task<IEnumerable<Result>> ExecuteParallel(int? matchId, string transIds)
     {
-        var command = new ReCalculateTicketCommand
+        var criteria = new ReCalculateTicketCommand
         {
             MatchId = matchId,
             TransIds = transIds,
@@ -50,13 +49,6 @@ public class ReCalculateTicketsServiceImp(
             Ip = sessionService.GetClientIp()
         };
 
-        var tasks = SiteDbGroupConstant.ServerList.Select(item =>
-        {
-            command.SiteDbGroupId = item.Id;
-            repository.ExecuteAsync(command);
-            return Task.FromResult(new Result { ErrorCode = command.ErrCode, ErrorMsg = command.ErrMsg });
-        });
-
-        return await Task.WhenAll(tasks);
+        return await onlineServerRepository.FetchAsync<Result>(criteria);
     }
 }
