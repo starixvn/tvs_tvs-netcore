@@ -1,11 +1,13 @@
 import { CommonModule } from '@angular/common';
 import {
-    Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList,
-    ViewChild, ViewChildren, inject
+  Component, ElementRef, EventEmitter, Input, OnInit, Output, QueryList,
+  ViewChild, ViewChildren, inject
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GetPlayersQuery } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
@@ -77,7 +79,7 @@ export class MatchIdComponent implements OnInit {
   addRangeTimes() {
     let rangeTime = new RangeTime();
     if(this.rangeTimes[0].isValid()) {
-      rangeTime = _.cloneDeep(this.rangeTimes[0]);
+      rangeTime = cloneDeep(this.rangeTimes[0]);
     }
     this.rangeTimes.push(rangeTime);
   }
@@ -99,10 +101,10 @@ export class MatchIdComponent implements OnInit {
   async setFromDate() {
     if (this.model.matchId.toString() !== '') {
       const firstTime = await this.commonService.getFirstTimeAndKickOffTime(parseInt(this.model.matchId, 10));
-      if (!_.isNull(firstTime)) {
+      if (!isNull(firstTime)) {
         const currentDate = this.eventType.value !== '1' ? firstTime.minTransDate : firstTime.kickOffTime;
         const date = new Date(currentDate);
-        if (!_.isNull(currentDate)) {
+        if (!isNull(currentDate)) {
           const year = parseInt(currentDate.split('-')[0], 10);
           const minValidYear = 100;
           if (year < minValidYear) {
@@ -164,7 +166,7 @@ export class MatchIdComponent implements OnInit {
   }
 
   checkValidationOfMatch(): boolean {
-    if (this.model.matchId === '' || _.isUndefined(this.model.matchId)) {
+    if (this.model.matchId === '' || isUndefined(this.model.matchId)) {
       this.tooltip.display('match-id', TEXT.REQUIRED_MATCHID);
       return false;
     }

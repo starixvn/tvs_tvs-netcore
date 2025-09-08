@@ -535,27 +535,29 @@ export class BetTeam {
   }
 
   private getSetValue(ballName: string){
-    const LENGTH_OF_OVER = 3;
-    const LENGTH_OF_BALL = 2;
-    let overValue = this.inputs.find(x => x.name === 'Over:').value;
-    let ballValue = this.inputs.find(x => x.name === ballName).value;
-
-    if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
-      overValue = overValue.padStart(LENGTH_OF_OVER, '0');
-    }
-    if (ballValue.length < LENGTH_OF_BALL && ballValue.length > 0) {
-      ballValue = ballValue.padStart(LENGTH_OF_BALL, '0');
-    }
+    const overValue = this.inputs.find(x => x.name === 'Over:').value;
+    const ballValue = this.inputs.find(x => x.name === ballName).value;
 
     if (overValue.length === 0 && ballValue.length === 0) {
       return 'All';
     }
+    const updatedBallValue = this.getSingleBallValue(ballValue);
     if (overValue.length === 0) {
-      return `____${ballValue}`;
+      return `____${updatedBallValue}`;
     }
 
-    return ballValue.length === 0 ? `_${overValue}__`: `_${overValue}${ballValue}`
+    const updatedOverValues = this.getMultipleSetValueSeparateByAnd(overValue, '_');
+    return updatedOverValues.map(x => `${x}${updatedBallValue}`).join(',');
+  }
 
+  private getSingleBallValue(ballValue: string): string {
+    const LENGTH_OF_BALL = 2;
+    if (ballValue.length === 0) {
+      return '__';
+    } else if (ballValue.length < LENGTH_OF_BALL && ballValue.length > 0) {
+      ballValue = ballValue.padStart(LENGTH_OF_BALL, '0');
+    }
+    return ballValue;
   }
 
   private updateForBetType9089(result: BetTeamResult, betTypeId: string): void { // format "Set" attribute: 8XXYY
@@ -593,24 +595,25 @@ export class BetTeam {
 
   private updateForBetTypesCricketWithOverWicket(result: BetTeamResult, betTypeId: string): void { //format "Over: Wicket: Over/Wicket:" value: 8XXX
     if (AdvancedModeConstants.BETTYPES_CRICKET_UPDATE_OVER_OR_WICKET.split(',').includes(betTypeId)) {
-      const LENGTH_OF_OVER = 3;
-      const PREFIX = '8';
       const input = this.inputs.find(x => x.xmlAttribute === 'Set');
       if (input) {
-        let overValue = input.value;
-
-        if (overValue.length === 0) {
-          result.set = overValue;
+        if (input.value.length === 0) {
+          result.set = input.value;
           return;
         }
-
-        if (overValue.length < LENGTH_OF_OVER && overValue.length > 0) {
-          overValue = overValue.padStart(LENGTH_OF_OVER, '0');
-        }
-
-        result.set = `${PREFIX}${overValue}`;
+        result.set = this.getMultipleSetValueSeparateByAnd(input.value, '8').join(',');
       }
     }
+  }
+
+  private getMultipleSetValueSeparateByAnd(overValue: string, prefix: string): string[] {
+    const LENGTH_OF_OVER = 3;
+    return overValue.split('&').map(x => {
+      if (x.length < LENGTH_OF_OVER && x.length > 0) {
+        x = x.padStart(LENGTH_OF_OVER, '0');
+      }
+      return `${prefix}${x}`;
+    });
   }
 
   private updateForBetTypesWithRuns(result: BetTeamResult, betTypeId: string): void {

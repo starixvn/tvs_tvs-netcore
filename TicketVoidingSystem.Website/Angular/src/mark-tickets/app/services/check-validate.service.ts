@@ -1,17 +1,17 @@
 import { inject, Injectable } from '@angular/core';
+import isUndefined from 'lodash/isUndefined';
 import { GetBetTypesQuery } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ModeType } from '../../../utility/constants/config';
 import { TEXT} from '../../../utility/constants/text';
 import { CommonService } from '../../../utility/services/common.service';
-import * as _ from 'lodash';
 
 @Injectable()
 export class CheckValidateService {
   private readonly commonService = inject(CommonService);
 
   async checkValidMatch(matchId: string, tooltip: Tooltip): Promise<boolean> {
-    if (matchId === '' || matchId === null || _.isUndefined(matchId)) {
+    if (matchId === '' || matchId === null || isUndefined(matchId)) {
       return true;
     }
 

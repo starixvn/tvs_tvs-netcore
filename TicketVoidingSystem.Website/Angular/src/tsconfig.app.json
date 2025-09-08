@@ -4,6 +4,6 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
-  "files": ["add-request-new/events/wrong-odds-sports-book/main.ts", "polyfills.ts"],
+  "files": ["ticket-listing/main.ts", "polyfills.ts"],
   "exclude": ["test.ts", "**/*.spec.ts"]
 }

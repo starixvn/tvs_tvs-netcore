@@ -1,20 +1,20 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import filter from 'lodash/filter';
 import moment from 'moment-timezone';
+import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
+import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
+import { PagingComponent } from '../../../../utility/components/paging/paging.component';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
+import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { TEXT} from '../../../../utility/constants/text';
+import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
 import { DataPermission } from '../../models/result.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TicketDetailId } from './../../models/query.model';
 import { AllMarkedTicketModel } from './all-marked-ticket.model';
-import { AutoRefreshComponent } from '../../../../utility/components/auto-refresh/auto-refresh.component';
-import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
-import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
-import { PagingComponent } from '../../../../utility/components/paging/paging.component';
-import { SanitizeHtmlPipe } from '../../../../utility/modules/sanitize-html.pipe';
 
 enum IconCheckBox {
   none = 0,
@@ -104,7 +104,7 @@ export class AllMarkedTicketListComponent {
   }
 
   getMatchsParam(): AllMarkedTicketModel[] {
-    return _.filter(this.model, { isChecked: true });
+    return filter(this.model, { isChecked: true });
   }
 
   changeIconCheckBox() {

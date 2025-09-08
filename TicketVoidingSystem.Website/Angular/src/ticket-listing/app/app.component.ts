@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import * as _ from 'lodash';
+import assignIn from 'lodash/assignIn';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
@@ -152,7 +152,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
     const singleOrSubParlay = this.getSingleOrSubParlayParam(item);
 
-    return _.assignIn({}, this.commonQuery,
+    return assignIn({}, this.commonQuery,
       {
         licenseeName: item.licenseeName,
         betTypes: betTypes,
@@ -204,7 +204,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private getQueryExportExcel(item: SummaryItem): ExportExcelQuery {
     const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
     const singleOrSubParlay = this.getSingleOrSubParlayParam(item);
-    const query: ExportExcelQuery = _.assignIn({}, this.commonQuery, {
+    const query: ExportExcelQuery = assignIn({}, this.commonQuery, {
       isGroup: item.isGroup,
       betTypes: betTypes,
       singleOrSubParlay: singleOrSubParlay,
@@ -263,7 +263,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const betTypes = item.betTypes === '29' ? this.commonQuery.betTypes : item.betTypes;
     const singleOrSubParlay = this.getSingleOrSubParlayParam(item);
 
-    return _.assignIn({}, this.commonQuery, {
+    return assignIn({}, this.commonQuery, {
       betTypes: betTypes,
       singleOrSubParlay: singleOrSubParlay,
       betTypeName: item.betTypeName,
