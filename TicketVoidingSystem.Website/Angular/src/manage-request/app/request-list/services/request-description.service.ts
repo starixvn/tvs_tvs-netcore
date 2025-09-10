@@ -222,7 +222,7 @@ export class RequestDescriptionService {
       + `Match: ${copyInfoResponse.requestInfo.matchEvent}\n`
       + `Match ID: ${copyInfoResponse.requestInfo.matchId}\n`
       + `Request No: ${copyInfoResponse.requestInfo.requestId}\n`
-      + `Issue Type: ${issueTypeName}` + this.generateInputtedOuValue(copyInfoResponse.requestInfo) + '\n'
+      + `Issue Type: ${issueTypeName}` + this.generateInputtedOuValue(copyInfoResponse.requestInfo) + this.generateInputtedHdpValue(copyInfoResponse.requestInfo) + '\n'
       + this.generateMistakenBy(copyInfoResponse.requestInfo, isShowMistakenBy)
       + betTypeContent
       + oddsContent
@@ -261,6 +261,17 @@ export class RequestDescriptionService {
     if(requestInfo.issueTypeId.toString() === IssueTypeConstant.WRONG_ODDS && subTypeOverUnder.includes(requestInfo.subIssueTypeId)){
       return ` @${requestInfo.wrongOu}`;
     }
+    return '';
+  }
+
+  private generateInputtedHdpValue(requestInfo: RequestInfoForCopy): string {
+    const subTypeHandicap = [SubIssueTypeConstant.HANDICAP, SubIssueTypeConstant.FIRST_HALF_HANDICAP];
+    if(requestInfo.issueTypeId.toString() === IssueTypeConstant.WRONG_ODDS && subTypeHandicap.includes(requestInfo.subIssueTypeId)){
+      return requestInfo.filterFavoriteType === 'h'
+        ? ` @Home -${requestInfo.favoriteValue}`
+        : ` @Away -${requestInfo.actualMarket}`;
+    }
+
     return '';
   }
 
