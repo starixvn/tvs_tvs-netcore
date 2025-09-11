@@ -90,20 +90,19 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
 
   private getSubIssueTypeWrongScoreConfig(): Category[] {
     const subIssueTypeWrongScoreConfig = _.cloneDeep(SubIssueTypeWrongScoreConfig);
-    const mainCategoryName = "Main Event";
+    const relatedCategoryName = "Related Event";
     if (this.isMainEvent) {
-      const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);
-      mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards
-        ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x))
-        : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
+      const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== relatedCategoryName);
+      mainEventSubIssueTypes.forEach(category => {
+        category.groups = this.isCheckedWrongScoreOnwards
+          ? category.groups.filter(x => this.isHasSubTypeOnWards(x))
+          : category.groups.filter(x => this.isHasSubTypeNoOnWards(x))
+      })
 
       return mainEventSubIssueTypes;
     }
 
-    const relatedEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== mainCategoryName);
-    relatedEventSubIssueTypes[0].isCollapse = false;
-
-    return relatedEventSubIssueTypes;
+    return subIssueTypeWrongScoreConfig.filter(x => x.categoryName === relatedCategoryName);
   }
 
   public isDangerAccepted(): boolean {

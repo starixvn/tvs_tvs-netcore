@@ -1,8 +1,8 @@
 [
   {
-    "categoryName": "Main Event",
+    "categoryName": "No Indication Score",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 27,
@@ -251,7 +251,14 @@
         ],
         "note":"",
         "noteEditable": false
-      },
+      }
+    ]
+  },
+  {
+    "categoryName": "Wrong Indication Score",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 31,
         "name": "Wrong Indication Goal (No Onwards)<div class='text-danger'>Filter by Trans Time",
@@ -299,7 +306,14 @@
         ],
         "note":"",
         "noteEditable": false
-      },
+      }
+    ]
+  },
+  {
+    "categoryName": "Wrong Indication Swap Team Score",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 33,
         "name": "Wrong Indication Swap Team Score (No Onwards)<div class='text-danger'>Filter by Trans Time & Accept Time",
