@@ -269,7 +269,7 @@ export class RequestDescriptionService {
     if(requestInfo.issueTypeId.toString() === IssueTypeConstant.WRONG_ODDS && subTypeHandicap.includes(requestInfo.subIssueTypeId)){
       return requestInfo.filterFavoriteType === 'h'
         ? ` @Home -${requestInfo.favoriteValue}`
-        : ` @Away -${requestInfo.actualMarket}`;
+        : ` @Away -${requestInfo.favoriteValue}`;
     }
 
     return '';
