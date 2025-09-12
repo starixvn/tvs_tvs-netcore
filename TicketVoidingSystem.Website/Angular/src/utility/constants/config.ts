@@ -302,6 +302,9 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
     SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING,
     SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
+    SubIssueTypeConstant.WRONG_INDICATION_CORNER_NO_ONWARDS,
+    SubIssueTypeConstant.WRONG_INDICATION_GOAL_KICK_NO_ONWARDS,
+    SubIssueTypeConstant.WRONG_INDICATION_BOOKING_NO_ONWARDS
   ];
 
   static readonly SUBTYPE_ONWARDS: number[] = [
@@ -322,7 +325,10 @@ export class SubIssueTypeGroup {
     SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER_AWAY,
     SubIssueTypeConstant.WRONG_SCORE_NEXT_CORNER,
     SubIssueTypeConstant.WRONG_SCORE_NEXT_BOOKING,
-    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK
+    SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_KICK,
+    SubIssueTypeConstant.WRONG_INDICATION_CORNER_ONWARDS,
+    SubIssueTypeConstant.WRONG_INDICATION_GOAL_KICK_ONWARDS,
+    SubIssueTypeConstant.WRONG_INDICATION_BOOKING_ONWARDS,
   ];
   static readonly SUBTYPE_WRONG_SCORE_RELATED_EVENT: number[] = [
     SubIssueTypeConstant.WRONG_SCORE_NEXT_GOAL_HOME,
