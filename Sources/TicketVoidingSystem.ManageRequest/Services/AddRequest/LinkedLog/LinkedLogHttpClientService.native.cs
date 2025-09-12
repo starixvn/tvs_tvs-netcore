@@ -42,6 +42,7 @@ public class LinkedLogHttpClientServiceImp : LinkedLogHttpClientService
     {
         var requestContent = response.RequestMessage?.Content != null ? await response.RequestMessage.Content.ReadAsStringAsync() : string.Empty;
         var responseContent = await response.Content.ReadAsStringAsync();
+        responseContent = responseContent.Replace("\r", "").Replace("\n", "");
 
         return $"{AppSettingService.AppSetting.LinkedLogUrl}{actionName}" +
                $"{Environment.NewLine}RequestContent:{Environment.NewLine}{requestContent}" +
