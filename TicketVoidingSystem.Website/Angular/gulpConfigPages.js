@@ -275,11 +275,11 @@ const configPages = [
   //homePage,
   //manageVoidServices,
   //abExceptionList,
-  markTickets,
-  ticketListing,
+  //markTickets,
+  //ticketListing,
   //voidSingleBet,
   //voidRequest,
-  //manageRequest,
+  manageRequest,
   // addRequest,
   // editRequest,
   //voidByBetId
@@ -288,10 +288,10 @@ const configPages = [
   //redCard,
   //wrongScore,
   //technicalError,
-  wrongHdp,
-  wrongOu,
-  wrongOdds,
-  wrongOddsSportsBook
+  //wrongHdp,
+  //wrongOu,
+  //wrongOdds,
+  //wrongOddsSportsBook
 ];
 
 module.exports = configPages;
