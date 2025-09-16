@@ -94,12 +94,12 @@ public class LinkedLogValidationServiceTests
     [InlineData("1.5", 2.0, false)]
     [InlineData("0", 0, true)]
     [InlineData("-1.5", -1.5, true)]
-    public void CheckHdpWrongOddsByWrongOu_ShouldReturnExpectedResult(string wrongOU, decimal odds1a, bool expected)
+    public void CheckHdpWrongOddsByWrongOu_ShouldReturnExpectedResult(string wrongOU, decimal hdp1, bool expected)
     {
         // Arrange
         var linkedOddsInfo = new LinkedOddsInfo
         {
-            Odds1a = odds1a
+            Hdp1 = hdp1
         };
 
         var getLinkedLogModel = new GetLinkedLogModel

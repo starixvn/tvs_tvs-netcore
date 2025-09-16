@@ -171,6 +171,6 @@ public class LinkedLogValidationServiceImp : LinkedLogValidationService
 
     internal static bool CheckHdpWrongOddsByWrongOu(LinkedOddsInfo linkedOddsInfo, GetLinkedLogModel getLinkedLogModel)
     {
-        return decimal.Parse(getLinkedLogModel.WrongOU) == linkedOddsInfo.Odds1a;
+        return decimal.Parse(getLinkedLogModel.WrongOU) == linkedOddsInfo.Hdp1;
     }
 }
