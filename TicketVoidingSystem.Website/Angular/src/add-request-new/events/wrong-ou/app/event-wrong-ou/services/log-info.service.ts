@@ -4,7 +4,6 @@ import { StaticService } from '../../../../../../utility/services/static.service
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { GetLogInfoQuery } from '../../../../../models/add-request.query';
 import { GetLogInfoModel } from '../../../../../models/get-log-info.model';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
@@ -44,10 +43,6 @@ export class LogInfoService {
       if (logInfoModel) {
         event.logInfoDetail = logInfoModel.logInfoDetail;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
-        event.isPoolHouseAffected = logInfoModel.validation.isPoolHouseAffected;
-        if (!logInfoModel.validation.isPoolHouseAffected) {
-          event.poolHouseCheckedBetTypes = PoolHouseTicketValue.NOT_AFFECTED;
-        }
       }
     });
   }

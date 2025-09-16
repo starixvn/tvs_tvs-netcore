@@ -21,7 +21,6 @@ export class GetLogInfoModel {
 
 export class Validation {
   wrongScore?: string;
-  isPoolHouseAffected: boolean;
   isInvalidTotalTickets: boolean;
   isExistedInOtherRequest: boolean;
   isExistsSecondAccept: boolean;

@@ -31,20 +31,13 @@
           </span>
           }<br />
           @if (isHavePoolHouse) {
-            @if (isPoolHouseAffected) {
-              <div>
-                PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
+            PH - Single Count: <strong>{{logInfoDetail.poolHouseSingleCount}}</strong>
                 @if (isShowCountInfo(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount)) {
                   <span class="text-red"
                     [innerHTML]="countInfoContent(logInfoDetail.poolHouseCashOutCount, logInfoDetail.poolHouseSettleCount, logInfoDetail.poolHouseInstantlySettleCount) | sanitizeHtml">
                   </span>
                   },
                   Parlay Count: <strong>{{logInfoDetail.poolHouseMainParlayCount}}</strong>&nbsp;
-                </div> 
-              }
-              @if (!isPoolHouseAffected) {
-                <div>PH - Not affected.</div> 
-              }
             }
           }
     </div>

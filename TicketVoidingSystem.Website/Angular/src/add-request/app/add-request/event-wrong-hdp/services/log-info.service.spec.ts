@@ -1,19 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { LogInfoService } from './log-info.service';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { EventWrongHdpService } from './event-wrong-hdp.service';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { FilterModel } from '../../filter/filter.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { GetLogInfoModel } from '../../models/get-log-info.model';
+import { GetLogInfoViewModel } from '../../../../../add-request-new/models/get-log-info.model';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
-import { GetLogInfoViewModel } from '../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { Validation } from '../../models/get-log-info.model';
-import { WrongHdpGetLogInfoQuery } from '../models/get-log-info.query';
-import { ValidationMessage } from '../../models/get-log-info.model';
+import { CommonService } from '../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { FilterModel } from '../../filter/filter.model';
+import { GetLogInfoModel, Validation, ValidationMessage } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
+import { WrongHdpGetLogInfoQuery } from '../models/get-log-info.query';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { EventWrongHdpService } from './event-wrong-hdp.service';
+import { LogInfoService } from './log-info.service';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -50,7 +48,6 @@ class Helper {
     isExistsSecondAccept: false,
     isHasSettledTicket: false,
     isHasInstantlySettledTicket: false,
-    isPoolHouseAffected: true
   } as Validation;
 
   static readonly fakeGetLogInfoModel = {
@@ -139,7 +136,6 @@ describe('LogInfoService', () => {
         isMainMatch: true,
         leagueName: 'Test League',
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: PoolHouseTicketValue.SELECT_ALL_BETTYPE,
         logInfoDetail: null,
         messageValidationLogInfo: null,
@@ -170,52 +166,7 @@ describe('LogInfoService', () => {
       expect(primitiveProps.transInfoAddRequestModel).toBeDefined();
       expect(allEvents[0].logInfoDetail).toBeDefined();
       expect(allEvents[0].messageValidationLogInfo).toBeDefined();
-      expect(allEvents[0].isPoolHouseAffected).toBe(true);
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
-    });
-
-    it('should get log info and assign results for non-pool house affected event', async () => {
-      // Arrange
-      const allEvents: LogInfoWrongHdp[] = [{
-        matchId: Helper.fakeMatchId,
-        isMainMatch: true,
-        leagueName: 'Test League',
-        eventName: 'Test Event',
-        isPoolHouseAffected: false,
-        poolHouseCheckedBetTypes: '',
-        logInfoDetail: null,
-        messageValidationLogInfo: null,
-        isShowValidation: false,
-        filterWithHdp: null,
-        linkedLogsViewModel: null,
-        eventDate: null,
-        sportType: 1
-      } as LogInfoWrongHdp];
-      const isEdit = false;
-      const requestId = 1;
-      const filter = Helper.fakeFilterModel;
-      const primitiveProps = new PrimitiveProperty();
-
-      const mockResponse = {
-        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
-        getLogInfoModels: [{
-          ...Helper.fakeGetLogInfoModel,
-          validation: {
-            ...Helper.fakeValidation,
-            isPoolHouseAffected: false
-          }
-        }]
-      } as GetLogInfoViewModel;
-
-      commonService.getLogInfo.mockResolvedValue(mockResponse);
-      eventWrongHdpService.getWrongHdpModel.mockReturnValue([Helper.fakeWrongHdpGetLogInfoQuery]);
-
-      // Act
-      await service.getLogInfo(allEvents, isEdit, requestId, filter, primitiveProps);
-
-      // Assert
-      expect(allEvents[0].isPoolHouseAffected).toBe(false);
-      expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.NOT_AFFECTED);
     });
   });
 
@@ -227,7 +178,6 @@ describe('LogInfoService', () => {
         isMainMatch: true,
         leagueName: 'Test League',
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         logInfoDetail: Helper.fakeLogInfoDetail,
         messageValidationLogInfo: [Helper.fakeValidationMessage],

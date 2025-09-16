@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { FilterTimeItemComponent } from './filter-time-item.component';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { FilterWrongMarketOfferedModel } from '../../models/filter-wrong-market-offered.model';
+import { FilterTimeItemComponent } from './filter-time-item.component';
 
 class Helper {
   static readonly fakeFilterModel: FilterWrongMarketOfferedModel = {
@@ -14,7 +14,6 @@ class Helper {
     actualMarket: '',
     marketValue: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false
   } as FilterWrongMarketOfferedModel;
 }
 

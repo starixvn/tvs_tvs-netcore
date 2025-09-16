@@ -16,7 +16,6 @@ import { AffectedTicketService } from '../../affected-ticket/affected-ticket.ser
 import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { PoolHouseTicketComponent } from '../../pool-house-ticket/pool-house-ticket.component';
-import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { TicketCountOtherSportsComponent } from '../../ticket-count-other-sports/ticket-count-other-sports.component';
@@ -152,7 +151,7 @@ export class LogInfoWrongOuComponent implements OnInit {
   }
 
   public resetPoolHouseCheckedBetTypes(): void {
-    this.logInfo.poolHouseCheckedBetTypes = this.logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
+    this.eventWrongOuService.resetPoolHouseCheckedBetTypes(this.logInfo);
   }
 
   public openPopupTransIds(requestId: number, transIds: string): void {

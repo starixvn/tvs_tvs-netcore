@@ -14,7 +14,6 @@ export class VoidMatch extends VoidPageCommonItem {
   hdpValue?: string;
   isCheckedVar?: boolean;
   isMainMatch: boolean;
-  isPoolHouseAffected: boolean;
 
   // Wrong Odds
   filterFavoriteType?: string;

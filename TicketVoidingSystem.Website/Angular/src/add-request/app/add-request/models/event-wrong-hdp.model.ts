@@ -17,7 +17,6 @@ export class WrongHdpModel {
   actualMarket: string;
   hdpValue: string;
   poolHouseCheckedBetTypes : string;
-  isPoolHouseAffected: boolean;
   logInfoDetail: LogInfoDetail;
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;

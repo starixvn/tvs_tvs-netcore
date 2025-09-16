@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-import { LogInfoService } from './log-info.service';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../utility/services/common.service';
-import { EventNotParticipateService } from './event-not-participate.service';
 import { FilterModel } from '../../filter/filter.model';
 import { GetLogInfoViewModel, ValidationMessage } from '../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { EventNotParticipateService } from './event-not-participate.service';
+import { LogInfoService } from './log-info.service';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
@@ -87,7 +87,6 @@ describe('LogInfoService', () => {
           logInfoDetail: mockLogInfoDetail,
           validation: {
             wrongScore: null,
-            isPoolHouseAffected: false,
             isInvalidTotalTickets: false,
             isExistedInOtherRequest: false,
             isExistsSecondAccept: false,

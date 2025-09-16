@@ -9,7 +9,6 @@ export class LogInfoWrongHdp {
   leagueName: string;
   isMainMatch: boolean;
   eventName: string;
-  isPoolHouseAffected: boolean;
   poolHouseCheckedBetTypes: string;
   filterWithHdp = new FilterWithHdpModel();
   logInfoDetail = new LogInfoDetail();

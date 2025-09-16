@@ -1,18 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { LogInfoService } from './log-info.service';
-import { CommonService } from '../../../../../../utility/services/common.service';
-import { EventWrongOuService } from './event-wrong-ou.service';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { GetLogInfoModel } from '../../../../../models/get-log-info.model';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
-import { GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
-import { Validation } from '../../../../../models/get-log-info.model';
-import { ValidationMessage } from '../../../../../models/get-log-info.model';
+import { CommonService } from '../../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { GetLogInfoModel, GetLogInfoViewModel, Validation, ValidationMessage } from '../../../../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { EventWrongOuService } from './event-wrong-ou.service';
+import { LogInfoService } from './log-info.service';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -49,7 +46,6 @@ class Helper {
     isExistsSecondAccept: false,
     isHasSettledTicket: false,
     isHasInstantlySettledTicket: false,
-    isPoolHouseAffected: true
   } as Validation;
 
   static readonly fakeGetLogInfoModel = {
@@ -121,7 +117,6 @@ describe('LogInfoService', () => {
         isMainMatch: true,
         leagueName: 'Test League',
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: PoolHouseTicketValue.SELECT_ALL_BETTYPE,
         logInfoDetail: null,
         messageValidationLogInfo: null,
@@ -166,7 +161,6 @@ describe('LogInfoService', () => {
       expect(primitiveProps.transInfoAddRequestModel).toBeDefined();
       expect(allEvents[0].logInfoDetail).toBeDefined();
       expect(allEvents[0].messageValidationLogInfo).toBeDefined();
-      expect(allEvents[0].isPoolHouseAffected).toBe(true);
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
     });
 
@@ -177,7 +171,6 @@ describe('LogInfoService', () => {
         isMainMatch: true,
         leagueName: 'Test League',
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         logInfoDetail: null,
         messageValidationLogInfo: null,
@@ -198,7 +191,6 @@ describe('LogInfoService', () => {
           ...Helper.fakeGetLogInfoModel,
           validation: {
             ...Helper.fakeValidation,
-            isPoolHouseAffected: false
           }
         }]
       } as GetLogInfoViewModel;
@@ -224,7 +216,6 @@ describe('LogInfoService', () => {
       await service.getLogInfo(allEvents, isEdit, requestId, filter, primitiveProps);
 
       // Assert
-      expect(allEvents[0].isPoolHouseAffected).toBe(false);
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.NOT_AFFECTED);
     });
   });
@@ -237,7 +228,6 @@ describe('LogInfoService', () => {
         isMainMatch: true,
         leagueName: 'Test League',
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         logInfoDetail: Helper.fakeLogInfoDetail,
         messageValidationLogInfo: [Helper.fakeValidationMessage],

@@ -46,7 +46,6 @@ class Helper {
     isAllLiveTickets: false,
     isCheckedEarlyEvent: false,
     isMainMatch: false,
-    isPoolHouseAffected: false,
     isAllNonLiveTickets: true,
     licenseeAffectedList: [],
     detailViewModel: new RequestDetailViewModel()

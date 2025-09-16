@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
+import { SportType } from '../../../../../../utility/constants/sport.constant';
+import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { LinkedLogsViewModel } from '../../../../../component/pool-house-ticket/linked-log/linked-log.model';
+import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { WrongOuModel } from '../../../../../models/event-wrong-ou.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { EventWrongOuService } from './event-wrong-ou.service';
 import { ValidationService } from './validation.service';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
-import { WrongOuModel } from '../../../../../models/event-wrong-ou.model';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
-import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
-import { SportType } from '../../../../../../utility/constants/sport.constant';
-import { LinkedLogsViewModel } from '../../../../../component/pool-house-ticket/linked-log/linked-log.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -28,7 +28,6 @@ class Helper {
     logInfoDetail: null,
     isLinkGroup1X2: true,
     isLinkGroupAIO: false,
-    isPoolHouseAffected: true,
     liveIndicator: 1,
     poolHouseCheckedBetTypes: 'All',
     filterBetIdX: 'X',
@@ -94,7 +93,6 @@ describe('EventWrongOuService', () => {
       expect(allEvents[0].eventName).toBe(Helper.fakeWrongOuModel.name);
       expect(allEvents[0].logInfoDetail).toBe(Helper.fakeWrongOuModel.logInfoDetail);
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(Helper.fakeWrongOuModel.poolHouseCheckedBetTypes);
-      expect(allEvents[0].isPoolHouseAffected).toBe(Helper.fakeWrongOuModel.isPoolHouseAffected);
       expect(allEvents[0].linkedLogsViewModel.isLinkGroup1X2).toBe(Helper.fakeWrongOuModel.isLinkGroup1X2);
       expect(allEvents[0].linkedLogsViewModel.isLinkGroupAIO).toBe(Helper.fakeWrongOuModel.isLinkGroupAIO);
       expect(allEvents[0].filterWrongOu.filterFromTransTime).toBe(Helper.fakeWrongOuModel.filterFromTransTime);

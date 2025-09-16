@@ -19,7 +19,6 @@ export class WrongOuModel {
   filterBetIdY: string;
   filterBetTypeId: string;
   poolHouseCheckedBetTypes : string;
-  isPoolHouseAffected: boolean;
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
   liveIndicator: number;

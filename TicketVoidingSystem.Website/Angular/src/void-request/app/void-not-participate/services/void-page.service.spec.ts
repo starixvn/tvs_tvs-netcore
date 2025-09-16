@@ -115,7 +115,6 @@ class Helper {
     validation: {
       isInvalidTotalTickets: false,
       isExistedInOtherRequest: true,
-      isPoolHouseAffected: false
     } as Validation,
     ticketRequest: [{
       transIds: '123456789',

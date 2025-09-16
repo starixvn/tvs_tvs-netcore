@@ -1,14 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { AllowanceRate } from "../../../../../../utility/constants/config";
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { LinkedLogsViewModel } from '../../../../../component/pool-house-ticket/linked-log/linked-log.model';
 import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { WrongOddsModel } from '../../../../../models/event-wrong-odds.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterFavoriteTypeConstant, FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { EventWrongOddsService } from './event-wrong-odds.service';
 import { ValidationService } from './validation.service';
-import { WrongOddsModel } from '../../../../../models/event-wrong-odds.model';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -20,7 +20,6 @@ class Helper {
     event.matchId = Helper.fakeMatchId;
     event.sportType = Helper.fakeSportType;
     event.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
-    event.isPoolHouseAffected = false;
     event.filterWrongOdds = new FilterWrongOddsModel();
     event.filterWrongOdds.spread = '0.5';
     event.linkedLogsViewModel = {
@@ -48,7 +47,6 @@ class Helper {
     model.fromOddsNotVoidAwayUnder = '2.0';
     model.toOddsNotVoidAwayUnder = '3.0';
     model.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
-    model.isPoolHouseAffected = false;
     model.isLinkGroup1X2 = false;
     model.isLinkGroupAIO = false;
     model.filterFavoriteType = FilterFavoriteTypeConstant.HOME;
@@ -143,7 +141,7 @@ describe('EventWrongOddsService', () => {
       const logInfoEvent = Helper.getFakeLogInfoWrongOdds();
       const filter = Helper.getFakeFilterModel();
       const mockLinkedLogsViewModel = Helper.getFakeLinkedLogsViewModel();
-      
+
       logInfoEvent.filterWrongOdds.filterFromTransTime = '2024-03-20T10:00:00';
       logInfoEvent.filterWrongOdds.filterToTransTime = '2024-03-20T11:00:00';
       logInfoEvent.filterWrongOdds.liveIndicator = 1;
@@ -191,7 +189,7 @@ describe('EventWrongOddsService', () => {
       const logInfoEvent = Helper.getFakeLogInfoWrongOdds();
       const filter = Helper.getFakeFilterModel();
       const mockLinkedLogsViewModel = Helper.getFakeLinkedLogsViewModel();
-      
+
       logInfoEvent.filterWrongOdds.wrongOU = '2.5';
       logInfoEvent.filterWrongOdds.filterFromTransTime = '2024-03-20T10:00:00';
       logInfoEvent.filterWrongOdds.filterToTransTime = '2024-03-20T11:00:00';
@@ -224,7 +222,7 @@ describe('EventWrongOddsService', () => {
       // Arrange
       const logInfoEvent = Helper.getFakeLogInfoWrongOdds();
       const filter = Helper.getFakeFilterModel();
-      
+
       logInfoEvent.filterWrongOdds.filterFromTransTime = '2024-03-20T10:00:00';
       logInfoEvent.filterWrongOdds.filterToTransTime = '2024-03-20T11:00:00';
       logInfoEvent.filterWrongOdds.liveIndicator = 1;
@@ -339,7 +337,6 @@ describe('EventWrongOddsService', () => {
       expect(result.matchId).toBe(inputModels.matchId);
       expect(result.sportType).toBe(inputModels.sportType);
       expect(result.poolHouseCheckedBetTypes).toBe(inputModels.poolHouseCheckedBetTypes);
-      expect(result.isPoolHouseAffected).toBe(inputModels.isPoolHouseAffected);
       expect(result.linkedLogsViewModel.isLinkGroup1X2).toBe(inputModels.isLinkGroup1X2);
       expect(result.linkedLogsViewModel.isLinkGroupAIO).toBe(inputModels.isLinkGroupAIO);
       expect(result.filterWrongOdds.filterFromTransTime).toBe(inputModels.filterFromTransTime);

@@ -2,11 +2,11 @@ import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../../utility/constants/config";
 import { SportType } from "../../../../../../utility/constants/sport.constant";
-import { AddRequestApiService } from "../../../../../services/add-request-api.service";
 import { FilterModel } from "../../../../../component/filter/filter.model";
-import { WrongHdpModel } from "../../../../../models/event-wrong-hdp.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from "../../../../../component/pool-house-ticket/linked-log/linked-log.model";
 import { PoolHouseTicketValue } from "../../../../../component/pool-house-ticket/pool-house-ticket.constant";
+import { WrongHdpModel } from "../../../../../models/event-wrong-hdp.model";
+import { AddRequestApiService } from "../../../../../services/add-request-api.service";
 import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { WrongHdpGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongHdp } from "../models/log-info-wrong-hdp.model";
@@ -48,7 +48,6 @@ export class EventWrongHdpService {
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
       event.poolHouseCheckedBetTypes = x.poolHouseCheckedBetTypes;
-      event.isPoolHouseAffected = x.isPoolHouseAffected;
       event.linkedLogsViewModel = {
         isLinkGroup1X2: x.isLinkGroup1X2,
         isLinkGroupAIO: x.isLinkGroupAIO,

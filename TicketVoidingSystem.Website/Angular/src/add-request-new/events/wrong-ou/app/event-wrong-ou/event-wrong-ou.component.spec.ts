@@ -1,24 +1,24 @@
+import { QueryList, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { MatchType } from '../../../../../utility/constants/config';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
+import { LinkedLogsViewModel } from '../../../../component/pool-house-ticket/linked-log/linked-log.model';
+import { WrongOuModel } from '../../../../models/event-wrong-ou.model';
+import { ChildMatchModel } from '../../../../models/related-event.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventWrongOuComponent } from './event-wrong-ou.component';
-import { ValidationService } from './services/validation.service';
+import { LogInfoWrongOuComponent } from './log-info-wrong-ou/log-info-wrong-ou.component';
+import { LogInfoWrongOu } from './models/log-info-wrong-ou.model';
 import { EventWrongOuService } from './services/event-wrong-ou.service';
 import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
 import { RelatedEventService } from './services/related-event.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
-import { FilterModel } from '../../../../component/filter/filter.model';
-import { WrongOuModel } from '../../../../models/event-wrong-ou.model';
-import { OthersModel } from '../../../../component/others/others.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { QueryList, SimpleChange } from '@angular/core';
-import { LogInfoWrongOuComponent } from './log-info-wrong-ou/log-info-wrong-ou.component';
-import { MatchType } from '../../../../../utility/constants/config';
-import { LogInfoWrongOu } from './models/log-info-wrong-ou.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LinkedLogsViewModel } from '../../../../component/pool-house-ticket/linked-log/linked-log.model';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 jest.mock('moment-timezone', () => {
     const actualMoment = jest.requireActual('moment-timezone');
@@ -62,7 +62,6 @@ class Helper {
     filterBetIdY: '',
     filterBetTypeId: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,
     liveIndicator: 0,
@@ -130,7 +129,6 @@ describe('EventWrongOuComponent', () => {
         leagueName: 'Test League',
         isMainMatch: true,
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         logInfoDetail: new LogInfoDetail(),
         linkedLogsViewModel: new LinkedLogsViewModel(),
@@ -202,7 +200,6 @@ describe('EventWrongOuComponent', () => {
         leagueName: 'Test League',
         isMainMatch: true,
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         logInfoDetail: new LogInfoDetail(),
         linkedLogsViewModel: new LinkedLogsViewModel(),
@@ -262,7 +259,6 @@ describe('EventWrongOuComponent', () => {
         logInfoDetail: new LogInfoDetail(),
         linkedLogsViewModel: new LinkedLogsViewModel(),
         isShowValidation: false,
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         sportType: 1
       } as LogInfoWrongOu,
@@ -275,7 +271,6 @@ describe('EventWrongOuComponent', () => {
         logInfoDetail: new LogInfoDetail(),
         linkedLogsViewModel: new LinkedLogsViewModel(),
         isShowValidation: false,
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         sportType: 1
       } as LogInfoWrongOu

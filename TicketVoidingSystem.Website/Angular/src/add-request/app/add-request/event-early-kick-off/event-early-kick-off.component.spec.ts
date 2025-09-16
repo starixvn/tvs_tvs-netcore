@@ -1,27 +1,27 @@
+import { QueryList, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
+import { MatchType } from '../../../../utility/constants/config';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { EventEarlyKickOffComponent } from './event-early-kick-off.component';
-import { ValidationService } from './services/validation.service';
-import { EventEarlyKickOffService } from './services/event-eko.service';
-import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
-import { RelatedEventService } from './services/related-event.service';
+import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { EarlyKickOffModel } from '../models/event-eko.model';
-import { OthersModel } from '../others/others.model';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { QueryList, SimpleChange } from '@angular/core';
-import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
-import { MatchType } from '../../../../utility/constants/config';
-import { LogInfoEarlyKickOff } from './models/log-info-eko.model';
-import { ChildMatchModel } from '../models/related-event.model';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { TableTicketsModel } from './tickets-list/table-tickets.model';
-import { AddRequestApiService } from '../add-request-api.service';
 import { GetLogInfoViewModel } from '../models/get-log-info.model';
-import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
+import { ChildMatchModel } from '../models/related-event.model';
+import { OthersModel } from '../others/others.model';
+import { EventEarlyKickOffComponent } from './event-early-kick-off.component';
+import { LogInfoEkoComponent } from './log-info-eko/log-info-eko.component';
+import { LogInfoEarlyKickOff } from './models/log-info-eko.model';
+import { EventEarlyKickOffService } from './services/event-eko.service';
+import { LogInfoService } from './services/log-info.service';
+import { RelatedEventService } from './services/related-event.service';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
+import { TableTicketsModel } from './tickets-list/table-tickets.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -101,7 +101,6 @@ describe('EventEarlyKickOffComponent', () => {
       } as MatchModel,
       isCollapse: false,
       templateValue: {},
-      isPoolHouseAffected: false,
       poolHouseCheckedBetTypes: '',
       linkedLogsViewModel: null
     } as unknown as LogInfoEarlyKickOff;
@@ -182,7 +181,6 @@ describe('EventEarlyKickOffComponent', () => {
       matchModel: {} as MatchModel,
       isCollapse: false,
       templateValue: {},
-      isPoolHouseAffected: false,
       poolHouseCheckedBetTypes: '',
       linkedLogsViewModel: null
     } as unknown as LogInfoEarlyKickOff];
@@ -281,7 +279,6 @@ describe('EventEarlyKickOffComponent', () => {
         matchModel: {} as MatchModel,
         isCollapse: false,
         templateValue: {},
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         linkedLogsViewModel: null
       } as unknown as LogInfoEarlyKickOff,
@@ -299,7 +296,6 @@ describe('EventEarlyKickOffComponent', () => {
         matchModel: {} as MatchModel,
         isCollapse: false,
         templateValue: {},
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         linkedLogsViewModel: null
       } as unknown as LogInfoEarlyKickOff

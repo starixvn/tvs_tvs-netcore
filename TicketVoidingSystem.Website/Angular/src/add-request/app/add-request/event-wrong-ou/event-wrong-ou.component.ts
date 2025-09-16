@@ -11,8 +11,13 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { TooltipComponent } from '../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../utility/constants/config';
+import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
 import { AddRequestStore } from '../add-request.store';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { WrongOuModel } from '../models/event-wrong-ou.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
 import { ChildMatchModel } from '../models/related-event.model';
@@ -27,18 +32,13 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { OnlyNumberDirective } from '../../../../utility/directives/number.directive';
-import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
-import { IssueTypes } from '../filter/issue-types.model';
-import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
-import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 
 @Component({
   selector: 'event-wrong-ou',
   templateUrl: './event-wrong-ou.component.html',
   styleUrls: ['./event-wrong-ou.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent, 
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent,
     LogInfoWrongOuComponent, OnlyNumberDirective, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
   providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService]
 })
@@ -86,6 +86,7 @@ export class EventWrongOuComponent implements OnInit {
     }
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.resetLogInfoAndHideEvents();
+      this.eventWrongOuService.resetPoolHouseCheckedBetTypes(this.mainEvent);
       this.filter.isChangeSubTypeManual = false;
     }
   }

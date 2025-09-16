@@ -1,14 +1,14 @@
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
+import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
-import { StaticService } from '../../../utility/services/static.service';
 import { SportType } from '../../../utility/constants/sport.constant';
-import { CommonModule } from '@angular/common';
+import { LogInfoDetail } from '../../../utility/models/log-info-detail.model';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
-import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
+import { StaticService } from '../../../utility/services/static.service';
 
 @Component({
   standalone: true,
@@ -24,7 +24,6 @@ export class LogInfoComponent {
   @Input() filterBy: number;
   @Input() correctOddsHomeOver: string;
   @Input() correctOddsAwayUnder: string;
-  @Input() isPoolHouseAffected: boolean;
   @Input() sportType: number;
 
   acceptTypeName = "";

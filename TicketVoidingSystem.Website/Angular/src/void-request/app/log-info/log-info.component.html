@@ -33,20 +33,13 @@
                   [innerHTML]="countInfoContent(item.cashOutCount, item.settleCount, item.instantlySettleCount) | sanitizeHtml">
                 </span>
                 }<br />
-                @if (isPoolHouseAffected) {
-                  <div>
-                    PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
-                    @if (isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)) {
-                      <span class="text-red"
-                        [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
-                      </span>
-                      },
-                      Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
-                    </div>
-                  }
-                  @if (!isPoolHouseAffected) {
-                    <div>PH - Not affected.</div>
-                  }
+                PH - Single Count: <strong>{{item.poolHouseSingleCount}}</strong>
+                @if (isShowCountInfo(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount)) {
+                  <span class="text-red"
+                    [innerHTML]="countInfoContent(item.poolHouseCashOutCount, item.poolHouseSettleCount, item.poolHouseInstantlySettleCount) | sanitizeHtml">
+                  </span>
+                  },
+                  Parlay Count: <strong>{{item.poolHouseMainParlayCount}}</strong>&nbsp;
                 }
               </div>
             }

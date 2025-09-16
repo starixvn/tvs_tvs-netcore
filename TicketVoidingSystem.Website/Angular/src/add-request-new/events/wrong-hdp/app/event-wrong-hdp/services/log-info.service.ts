@@ -7,7 +7,6 @@ import { GetLogInfoModel } from '../../../../../models/get-log-info.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from './event-wrong-hdp.service';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
 
 @Injectable()
 export class LogInfoService {
@@ -44,10 +43,6 @@ export class LogInfoService {
       if (logInfo) {
         event.logInfoDetail = logInfo.logInfoDetail;
         event.messageValidationLogInfo = StaticService.getValidationMessageList(logInfo);
-        event.isPoolHouseAffected = logInfo.validation.isPoolHouseAffected;
-        if (!logInfo.validation.isPoolHouseAffected) {
-          event.poolHouseCheckedBetTypes = PoolHouseTicketValue.NOT_AFFECTED;
-        }
       }
     });
   }

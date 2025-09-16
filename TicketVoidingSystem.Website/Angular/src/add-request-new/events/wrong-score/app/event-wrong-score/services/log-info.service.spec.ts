@@ -252,7 +252,6 @@ describe('LogInfoService', () => {
         },
         validation: {
           isInvalidTotalTickets: false,
-          isPoolHouseAffected: false,
           isExistedInOtherRequest: false,
           isExistsSecondAccept: false,
           isHasSettledTicket: false,
@@ -286,7 +285,6 @@ describe('LogInfoService', () => {
         },
         validation: {
           isInvalidTotalTickets: false,
-          isPoolHouseAffected: false,
           isExistedInOtherRequest: false,
           isExistsSecondAccept: false,
           isHasSettledTicket: false,
