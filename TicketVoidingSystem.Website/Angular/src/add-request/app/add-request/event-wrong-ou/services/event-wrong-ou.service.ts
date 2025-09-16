@@ -45,7 +45,6 @@ export class EventWrongOuService {
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
       event.poolHouseCheckedBetTypes = x.poolHouseCheckedBetTypes;
-      event.isPoolHouseAffected = x.isPoolHouseAffected;
       event.linkedLogsViewModel = {
         isLinkGroup1X2: x.isLinkGroup1X2,
         isLinkGroupAIO: x.isLinkGroupAIO,
@@ -106,5 +105,9 @@ export class EventWrongOuService {
       }
       return logInfoQuery;
     });
+  }
+
+  public resetPoolHouseCheckedBetTypes(logInfo: LogInfoWrongOu): void {
+    logInfo.poolHouseCheckedBetTypes = logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
   }
 }

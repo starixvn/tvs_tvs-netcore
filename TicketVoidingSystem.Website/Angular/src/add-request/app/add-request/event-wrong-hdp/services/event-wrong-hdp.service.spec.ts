@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { FilterModel } from '../../filter/filter.model';
+import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
+import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { EventWrongHdpService } from './event-wrong-hdp.service';
 import { ValidationService } from './validation.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { WrongHdpModel } from '../../models/event-wrong-hdp.model';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { FilterModel } from '../../filter/filter.model';
-import { PoolHouseTicketValue } from '../../pool-house-ticket/pool-house-ticket.constant';
-import { SubIssueTypeConstant } from '../../../../../utility/constants/sub-issue-type.constant';
 
 class Helper {
   static readonly fakeMatchId = 12345;
@@ -28,7 +28,6 @@ class Helper {
     logInfoDetail: null,
     isLinkGroup1X2: true,
     isLinkGroupAIO: false,
-    isPoolHouseAffected: true,
     liveIndicator: 1,
     poolHouseCheckedBetTypes: 'All',
     filterBetIdX: 'X',
@@ -90,7 +89,6 @@ describe('EventWrongHdpService', () => {
       expect(allEvents[0].eventName).toBe(Helper.fakeWrongHdpModel.name);
       expect(allEvents[0].logInfoDetail).toBe(Helper.fakeWrongHdpModel.logInfoDetail);
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(Helper.fakeWrongHdpModel.poolHouseCheckedBetTypes);
-      expect(allEvents[0].isPoolHouseAffected).toBe(Helper.fakeWrongHdpModel.isPoolHouseAffected);
       expect(allEvents[0].linkedLogsViewModel.isLinkGroup1X2).toBe(Helper.fakeWrongHdpModel.isLinkGroup1X2);
       expect(allEvents[0].linkedLogsViewModel.isLinkGroupAIO).toBe(Helper.fakeWrongHdpModel.isLinkGroupAIO);
       expect(allEvents[0].filterWithHdp.filterFromTransTime).toBe(Helper.fakeWrongHdpModel.filterFromTransTime);

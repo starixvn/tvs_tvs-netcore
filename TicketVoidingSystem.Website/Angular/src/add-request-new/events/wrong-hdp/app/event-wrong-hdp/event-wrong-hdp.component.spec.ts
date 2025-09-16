@@ -1,25 +1,25 @@
+import { QueryList, SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { MatchType } from '../../../../../utility/constants/config';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
+import { LinkedLogsViewModel } from '../../../../component/pool-house-ticket/linked-log/linked-log.model';
+import { WrongHdpModel } from '../../../../models/event-wrong-hdp.model';
+import { ChildMatchModel } from '../../../../models/related-event.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventWrongHdpComponent } from './event-wrong-hdp.component';
-import { ValidationService } from './services/validation.service';
+import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp/log-info-wrong-hdp.component';
+import { FilterWithHdpModel } from './models/filter-with-hdp.model';
+import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
 import { EventWrongHdpService } from './services/event-wrong-hdp.service';
 import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
 import { RelatedEventService } from './services/related-event.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
-import { FilterModel } from '../../../../component/filter/filter.model';
-import { WrongHdpModel } from '../../../../models/event-wrong-hdp.model';
-import { OthersModel } from '../../../../component/others/others.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { QueryList, SimpleChange } from '@angular/core';
-import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp/log-info-wrong-hdp.component';
-import { MatchType } from '../../../../../utility/constants/config';
-import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
-import { ChildMatchModel } from '../../../../models/related-event.model';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { LinkedLogsViewModel } from '../../../../component/pool-house-ticket/linked-log/linked-log.model';
-import { FilterWithHdpModel } from './models/filter-with-hdp.model';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -48,7 +48,6 @@ class Helper {
     actualMarket: '',
     hdpValue: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
     logInfoDetail: new LogInfoDetail(),
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,
@@ -178,7 +177,6 @@ describe('EventWrongHdpComponent', () => {
         leagueName: 'Test League',
         isMainMatch: true,
         eventName: 'Test Event',
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         filterWithHdp: new FilterWithHdpModel(),
         logInfoDetail: new LogInfoDetail(),
@@ -230,7 +228,6 @@ describe('EventWrongHdpComponent', () => {
         logInfoDetail: new LogInfoDetail(),
         linkedLogsViewModel: new LinkedLogsViewModel(),
         isShowValidation: false,
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         sportType: 1
       } as LogInfoWrongHdp,
@@ -244,7 +241,6 @@ describe('EventWrongHdpComponent', () => {
         logInfoDetail: new LogInfoDetail(),
         linkedLogsViewModel: new LinkedLogsViewModel(),
         isShowValidation: false,
-        isPoolHouseAffected: false,
         poolHouseCheckedBetTypes: '',
         sportType: 1
       } as LogInfoWrongHdp

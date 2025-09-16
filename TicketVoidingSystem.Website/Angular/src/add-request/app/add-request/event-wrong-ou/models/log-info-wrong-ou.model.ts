@@ -9,7 +9,6 @@ export class LogInfoWrongOu {
   leagueName: string;
   isMainMatch: boolean;
   eventName: string;
-  isPoolHouseAffected: boolean;
   poolHouseCheckedBetTypes: string;
   filterWrongOu = new FilterWrongOuModel();
   logInfoDetail = new LogInfoDetail();

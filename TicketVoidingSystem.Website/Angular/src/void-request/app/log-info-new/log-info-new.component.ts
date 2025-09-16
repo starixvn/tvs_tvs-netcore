@@ -20,7 +20,6 @@ import { TicketCountOtherSportsComponent } from './../../../add-request-new/comp
 export class LogInfoNewComponent {
   @Input() issueTypeId: number;
   @Input() isHavePoolHouse: boolean;
-  @Input() isPoolHouseAffected: boolean;
   @Input() logInfoDetail: LogInfoDetail;
   @Input() sportType: number;
   acceptTypeName = "";

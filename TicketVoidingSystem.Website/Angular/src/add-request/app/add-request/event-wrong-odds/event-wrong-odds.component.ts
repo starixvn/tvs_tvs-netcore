@@ -4,10 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
 import { AddRequestApiService } from '../add-request-api.service';
 import { AddRequestStore } from '../add-request.store';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../filter/filter.model';
+import { IssueTypes } from '../filter/issue-types.model';
 import { WrongOddsModel } from '../models/event-wrong-odds.model';
 import { OthersModel } from '../others/others.model';
-import { PoolHouseTicketValue } from '../pool-house-ticket/pool-house-ticket.constant';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds/log-info-wrong-odds.component';
 import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
@@ -19,10 +22,6 @@ import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
-import { ConfirmAddRequestComponent } from '../confirm-add-request/confirm-add-request.component';
-import { IssueTypes } from '../filter/issue-types.model';
-import { ConfirmAddRequestModel } from '../confirm-add-request/confirm-add-request.model';
 
 @Component({
   standalone: true,
@@ -74,6 +73,7 @@ export class EventWrongOddsComponent implements OnInit {
         this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = await this.GetMaxBetAndSpreadOfEvent();
       }
 
+      this.resetPoolHouseCheckedBetTypes();
       this.calculateOddsService.resetOddsInfo(this.filterWrongOddsComponent.filterWrongOddsModel, this.filter.subIssueTypeId);
     }
   }
@@ -142,7 +142,7 @@ export class EventWrongOddsComponent implements OnInit {
   }
 
   public resetPoolHouseCheckedBetTypes(): void {
-    this.logInfoEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
+    this.eventWrongOddsService.resetPoolHouseCheckedBetTypes(this.logInfoEvent);
   }
 
   

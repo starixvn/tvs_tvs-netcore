@@ -2,12 +2,12 @@ import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { DateTimeFormat } from "../../../../../../utility/constants/config";
 import { SportType } from "../../../../../../utility/constants/sport.constant";
-import { AddRequestApiService } from "../../../../../services/add-request-api.service";
-import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
 import { FilterModel } from "../../../../../component/filter/filter.model";
-import { WrongOuModel } from "../../../../../models/event-wrong-ou.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../../../../component/pool-house-ticket/linked-log/linked-log.model';
 import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
+import { WrongOuModel } from "../../../../../models/event-wrong-ou.model";
+import { AddRequestApiService } from "../../../../../services/add-request-api.service";
 import { FilterWrongOuModel } from "../models/filter-wrong-ou.model";
 import { WrongOuGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOu } from "../models/log-info-wrong-ou.model";
@@ -45,7 +45,6 @@ export class EventWrongOuService {
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
       event.poolHouseCheckedBetTypes = x.poolHouseCheckedBetTypes;
-      event.isPoolHouseAffected = x.isPoolHouseAffected;
       event.linkedLogsViewModel = {
         isLinkGroup1X2: x.isLinkGroup1X2,
         isLinkGroupAIO: x.isLinkGroupAIO,

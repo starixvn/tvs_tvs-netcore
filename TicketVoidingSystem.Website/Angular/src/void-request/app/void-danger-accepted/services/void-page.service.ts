@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
@@ -12,7 +13,6 @@ import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsService } from '../../services/tickets.service';
 import { TemplateMessageService } from './template-message.service';
-import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 
 export class VoidPageService {
   commonService = inject(CommonService);
@@ -49,7 +49,6 @@ export class VoidPageService {
       voidMatchInfo.actualScore = element.actualScore;
       voidMatchInfo.wrongScore = element.wrongScore;
       voidMatchInfo.filterBy = element.filterBy;
-      voidMatchInfo.isPoolHouseAffected = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).validation.isPoolHouseAffected;
       voidMatchInfo.subIssueTypeId = element.subIssueTypeId;
       voidMatches.push(voidMatchInfo);
     }

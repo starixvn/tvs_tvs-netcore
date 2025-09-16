@@ -6,7 +6,6 @@ import { FilterWrongOddsModel } from "./filter-wrong-odds.model";
 
 export class LogInfoWrongOdds {
   matchId: number;
-  isPoolHouseAffected: boolean;
   poolHouseCheckedBetTypes: string;
   filterWrongOdds = new FilterWrongOddsModel();
   logInfoDetail = new LogInfoDetail();

@@ -96,7 +96,6 @@ export class EventWrongOddsService {
     event.sportType = inputModels.sportType;
     event.logInfoDetail = inputModels.logInfoDetail;
     event.poolHouseCheckedBetTypes = inputModels.poolHouseCheckedBetTypes;
-    event.isPoolHouseAffected = inputModels.isPoolHouseAffected;
     event.linkedLogsViewModel = {
       isLinkGroup1X2: inputModels.isLinkGroup1X2,
       isLinkGroupAIO: inputModels.isLinkGroupAIO,
@@ -126,5 +125,9 @@ export class EventWrongOddsService {
     }
 
     return event;
+  }
+
+  public resetPoolHouseCheckedBetTypes(logInfo: LogInfoWrongOdds): void {
+    logInfo.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
   }
 }

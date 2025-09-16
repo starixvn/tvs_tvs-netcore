@@ -1,25 +1,25 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
-import { ValidationService } from '../services/validation.service';
-import { LogInfoService } from '../services/log-info.service';
-import { EventWrongOuService } from '../services/event-wrong-ou.service';
-import { AddRequestStore } from '../../add-request.store';
-import { FilterModel } from '../../filter/filter.model';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { OthersModel } from '../../others/others.model';
-import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { StaticService } from '../../../../../utility/services/static.service';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { AddRequestApiService } from '../../add-request-api.service';
-import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
-import { LogAnalysisService } from '../../services/log-analysis.service';
-import { DateTimeFormat } from '../../../../../utility/constants/config';
 import moment from 'moment-timezone';
-import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
-import { PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SportType } from '../../../../../utility/constants/sport.constant';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AddRequestApiService } from '../../add-request-api.service';
+import { AddRequestStore } from '../../add-request.store';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { FilterModel } from '../../filter/filter.model';
+import { OthersModel } from '../../others/others.model';
+import { PoolHouseTicketsModel } from '../../pool-house-ticket/pool-house-ticket.model';
+import { LogAnalysisService } from '../../services/log-analysis.service';
+import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { EventWrongOuService } from '../services/event-wrong-ou.service';
+import { LogInfoService } from '../services/log-info.service';
+import { ValidationService } from '../services/validation.service';
+import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -45,7 +45,6 @@ class Helper {
     filterToTransTime: '',
     wrongMarket: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
     logInfoDetail: null,
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,

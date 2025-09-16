@@ -60,7 +60,6 @@ public class Validation
     public int MatchId { get; set; }
     public bool IsInvalidTotalTickets { get; set; }
     public bool IsExistedInOtherRequest { get; set; }
-    public bool IsPoolHouseAffected { get; set; }
     public bool IsExistsSecondAccept { get; set; }
     public bool IsHasSettledTicket { get; set; }
     public bool IsHasInstantlySettledTicket { get; set; }

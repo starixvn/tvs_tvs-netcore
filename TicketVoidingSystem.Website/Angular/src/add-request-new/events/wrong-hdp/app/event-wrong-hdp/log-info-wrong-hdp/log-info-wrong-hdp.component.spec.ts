@@ -1,24 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
-import { ValidationService } from '../services/validation.service';
-import { LogInfoService } from '../services/log-info.service';
-import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
-import { AddRequestStore } from '../../../../../services/add-request.store';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
-import { PrimitiveProperty } from '../models/primitive-property.model';
-import { StaticService } from '../../../../../../utility/services/static.service';
-import { ModalService } from '../../../../../../utility/components/modal/modal.service';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
-import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
-import { LogAnalysisService } from '../../../../../services/log-analysis.service';
-import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import moment from 'moment-timezone';
+import { ModalService } from '../../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
-import { PoolHouseTicketsModel } from '../../../../../component/pool-house-ticket/pool-house-ticket.model';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { OthersModel } from '../../../../../component/others/others.model';
+import { PoolHouseTicketsModel } from '../../../../../component/pool-house-ticket/pool-house-ticket.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
+import { LogAnalysisService } from '../../../../../services/log-analysis.service';
+import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
+import { LogInfoService } from '../services/log-info.service';
+import { ValidationService } from '../services/validation.service';
+import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp.component';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -47,7 +47,6 @@ class Helper {
     actualMarket: '',
     hdpValue: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
     logInfoDetail: null,
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,

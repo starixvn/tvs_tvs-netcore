@@ -6,12 +6,12 @@ import { SportType } from '../../../../../../utility/constants/sport.constant';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../../services/add-request.store';
 import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
-import { ValidationMessage } from '../../../../../models/get-log-info.model';
 import { PoolHouseTicketsModel } from '../../../../../component/pool-house-ticket/pool-house-ticket.model';
+import { ValidationMessage } from '../../../../../models/get-log-info.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
 import { LogAnalysisService } from '../../../../../services/log-analysis.service';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
@@ -60,7 +60,6 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     poolHouseCheckedBetTypes: null,
-    isPoolHouseAffected: false,
     linkedLogsViewModel: {
       isLinkGroup1X2: false,
       isLinkGroupAIO: false

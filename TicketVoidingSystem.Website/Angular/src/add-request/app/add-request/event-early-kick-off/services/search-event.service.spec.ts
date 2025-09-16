@@ -1,22 +1,22 @@
 import { TestBed } from '@angular/core/testing';
-import { SearchEventService } from './search-event.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { LogInfoService } from './log-info.service';
-import { RelatedEventService } from './related-event.service';
-import { ValidationService } from './validation.service';
-import { CheckAddPermissionService } from '../../services/check-permission.service';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { ChildMatchModel } from '../../models/related-event.model';
-import { MatchType } from '../../../../../utility/constants/config';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { DateFullTimeNewComponent } from '../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { MatchType } from '../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterModel } from '../../filter/filter.model';
+import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { PermissionAddRequest } from '../../models/permission-add-request.model';
+import { ChildMatchModel } from '../../models/related-event.model';
+import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
+import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { FilterModel } from '../../filter/filter.model';
-import { PermissionAddRequest } from '../../models/permission-add-request.model';
-import { TransInfoAddRequestModel } from '../../models/trans-info-add-request.model';
-import { GetLogInfoViewModel } from '../../models/get-log-info.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventEarlyKickOffService } from './event-eko.service';
+import { LogInfoService } from './log-info.service';
+import { RelatedEventService } from './related-event.service';
+import { SearchEventService } from './search-event.service';
+import { ValidationService } from './validation.service';
 
 describe('SearchEventService', () => {
   let service: SearchEventService;
@@ -94,36 +94,34 @@ describe('SearchEventService', () => {
 
       jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
       jest.spyOn(logInfoService, 'resetLogInfoOfEvent');
-      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue({ 
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue({
         getLogInfoModels: [
-          { 
-            matchId: 1, 
-            validation: { 
+          {
+            matchId: 1,
+            validation: {
               isInvalidTotalTickets: false,
               isHasSettledTicket: false,
               isHasInstantlySettledTicket: false,
-              isPoolHouseAffected: false,
               isExistedInOtherRequest: false,
               isExistsSecondAccept: false
             },
             ticketRequest: null,
             logInfoDetail: null
-          }, 
-          { 
-            matchId: 2, 
-            validation: { 
+          },
+          {
+            matchId: 2,
+            validation: {
               isInvalidTotalTickets: false,
               isHasSettledTicket: false,
               isHasInstantlySettledTicket: false,
-              isPoolHouseAffected: false,
               isExistedInOtherRequest: false,
               isExistsSecondAccept: false
             },
             ticketRequest: null,
             logInfoDetail: null
           }
-        ], 
-        transInfoAddRequestModel: {} as TransInfoAddRequestModel 
+        ],
+        transInfoAddRequestModel: {} as TransInfoAddRequestModel
       } as GetLogInfoViewModel);
       jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
       jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(false);
@@ -152,36 +150,34 @@ describe('SearchEventService', () => {
 
       jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
       jest.spyOn(logInfoService, 'resetLogInfoOfEvent');
-      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue({ 
+      jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue({
         getLogInfoModels: [
-          { 
-            matchId: 1, 
-            validation: { 
+          {
+            matchId: 1,
+            validation: {
               isInvalidTotalTickets: false,
               isHasSettledTicket: false,
               isHasInstantlySettledTicket: false,
-              isPoolHouseAffected: false,
               isExistedInOtherRequest: false,
               isExistsSecondAccept: false
             },
             ticketRequest: null,
             logInfoDetail: null
-          }, 
-          { 
-            matchId: 2, 
-            validation: { 
+          },
+          {
+            matchId: 2,
+            validation: {
               isInvalidTotalTickets: false,
               isHasSettledTicket: false,
               isHasInstantlySettledTicket: false,
-              isPoolHouseAffected: false,
               isExistedInOtherRequest: false,
               isExistsSecondAccept: false
             },
             ticketRequest: null,
             logInfoDetail: null
           }
-        ], 
-        transInfoAddRequestModel: {} as TransInfoAddRequestModel 
+        ],
+        transInfoAddRequestModel: {} as TransInfoAddRequestModel
       } as GetLogInfoViewModel);
       jest.spyOn(logInfoService, 'assignResultLogInfoToEvents');
       jest.spyOn(checkPermissionService, 'isAccountHasAddRequestPermission').mockReturnValue(true);
@@ -219,19 +215,19 @@ describe('SearchEventService', () => {
 
       const logInfoResult = {
         getLogInfoModels: [
-          { 
-            matchId: 1, 
-            validation: { 
+          {
+            matchId: 1,
+            validation: {
               isInvalidTotalTickets: false,
               isHasSettledTicket: false,
               isHasInstantlySettledTicket: false
             },
             ticketRequest: null,
             logInfoDetail: null
-          }, 
-          { 
-            matchId: 2, 
-            validation: { 
+          },
+          {
+            matchId: 2,
+            validation: {
               isInvalidTotalTickets: false,
               isHasSettledTicket: false,
               isHasInstantlySettledTicket: false
@@ -340,4 +336,4 @@ describe('SearchEventService', () => {
       expect(saveRequestArg.allEvents[2].matchId).toBe(3);
     });
   });
-}); 
+});

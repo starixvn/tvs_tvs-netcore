@@ -22,7 +22,6 @@ public static class LogInfoHelper
             IsHasInstantlySettledTicket = selectedItems.Exists(x => x.IsHasInstantlySettledTicket),
             IsHasSettledTicket = selectedItems.Exists(x => x.IsHasSettledTicket),
             IsInvalidTotalTickets = selectedItems.TrueForAll(x => x.IsInvalidTotalTickets),
-            IsPoolHouseAffected = selectedItems.Exists(x => x.IsPoolHouseAffected)
         };
     }
 

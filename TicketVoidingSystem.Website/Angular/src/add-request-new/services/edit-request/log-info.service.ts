@@ -114,7 +114,6 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.wrongHdpModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
-      model.isPoolHouseAffected = x.validation.isPoolHouseAffected;
     });
   }
 
@@ -135,7 +134,6 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.wrongOuModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
-      model.isPoolHouseAffected = x.validation.isPoolHouseAffected;
     });
   }
 
@@ -152,7 +150,6 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.wrongOddsModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
-      model.isPoolHouseAffected = x.validation.isPoolHouseAffected;
     });
   }
 

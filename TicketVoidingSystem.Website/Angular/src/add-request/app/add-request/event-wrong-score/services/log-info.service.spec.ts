@@ -1,17 +1,17 @@
+import { TestBed } from '@angular/core/testing';
+import moment from 'moment-timezone';
+import { DateTimeFormat, TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { CommonService } from '../../../../../utility/services/common.service';
+import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { FilterModel } from '../../filter/filter.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
-import { LogInfoService } from './log-info.service';
-import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { EventWrongScoreService } from './event-wrong-score.service';
-import { FilterTimeWithAllowance } from '../../event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
-import { DateTimeFormat, TVSRequestFilterBy } from '../../../../../utility/constants/config';
-import { LogInfoRelatedEvent } from '../../components/log-info-related-event/log-info-related-event.model';
 import { GetLogInfoModel, ValidationMessage } from '../../models/get-log-info.model';
 import { GetLogInfoParams } from '../models/get-log-info-params.model';
-import moment from 'moment-timezone';
+import { EventWrongScoreService } from './event-wrong-score.service';
+import { LogInfoService } from './log-info.service';
+import { ValidationService } from './validation.service';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
@@ -252,7 +252,6 @@ describe('LogInfoService', () => {
         },
         validation: {
           isInvalidTotalTickets: false,
-          isPoolHouseAffected: false,
           isExistedInOtherRequest: false,
           isExistsSecondAccept: false,
           isHasSettledTicket: false,
@@ -286,7 +285,6 @@ describe('LogInfoService', () => {
         },
         validation: {
           isInvalidTotalTickets: false,
-          isPoolHouseAffected: false,
           isExistedInOtherRequest: false,
           isExistsSecondAccept: false,
           isHasSettledTicket: false,
@@ -333,7 +331,7 @@ describe('LogInfoService', () => {
       const wrongScoreModels = [new WrongScoreModel()];
       const events = [new LogInfoRelatedEvent()];
       const mainEvent = new LogInfoRelatedEvent();
-      
+
       events[0].logInfoDetail = new LogInfoDetail();
       events[0].messageValidationLogInfo = [new ValidationMessage()];
       mainEvent.logInfoDetail = new LogInfoDetail();

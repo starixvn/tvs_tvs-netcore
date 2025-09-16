@@ -1,22 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { EventNotParticipateComponent } from './event-not-participate.component';
-import { ValidationService } from './services/validation.service';
-import { EventNotParticipateService } from './services/event-not-participate.service';
-import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
-import { FilterNotParticipateService } from './services/filter-not-participate.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
+import { EventNotParticipateComponent } from './event-not-participate.component';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
-import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
-import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
 import { FilterNotParticipateModel } from './models/filter-not-participate.model';
+import { LogInfoNotParticipate } from './models/log-info-not-participate.model';
+import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
+import { EventNotParticipateService } from './services/event-not-participate.service';
+import { FilterNotParticipateService } from './services/filter-not-participate.service';
+import { LogInfoService } from './services/log-info.service';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -44,7 +44,6 @@ class Helper {
     actualMarket: '',
     hdpValue: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
     logInfoDetail: new LogInfoDetail(),
     isLinkGroup1X2: false,
     isLinkGroupAIO: false,

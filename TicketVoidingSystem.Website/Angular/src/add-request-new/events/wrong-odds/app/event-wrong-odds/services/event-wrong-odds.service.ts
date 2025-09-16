@@ -1,11 +1,11 @@
 import { inject, Injectable } from "@angular/core";
 import moment from 'moment-timezone';
 import { AllowanceRate, DateTimeFormat } from "../../../../../../utility/constants/config";
-import { AddRequestApiService } from "../../../../../services/add-request-api.service";
 import { FilterModel } from "../../../../../component/filter/filter.model";
-import { WrongOddsModel } from "../../../../../models/event-wrong-odds.model";
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../../../../../component/pool-house-ticket/linked-log/linked-log.model';
 import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { WrongOddsModel } from "../../../../../models/event-wrong-odds.model";
+import { AddRequestApiService } from "../../../../../services/add-request-api.service";
 import { FilterFavoriteTypeConstant, FilterWrongOddsModel } from "../models/filter-wrong-odds.model";
 import { WrongOddsGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoWrongOdds } from "../models/log-info-wrong-odds.model";
@@ -96,7 +96,6 @@ export class EventWrongOddsService {
     event.sportType = inputModels.sportType;
     event.logInfoDetail = inputModels.logInfoDetail;
     event.poolHouseCheckedBetTypes = inputModels.poolHouseCheckedBetTypes;
-    event.isPoolHouseAffected = inputModels.isPoolHouseAffected;
     event.linkedLogsViewModel = {
       isLinkGroup1X2: inputModels.isLinkGroup1X2,
       isLinkGroupAIO: inputModels.isLinkGroupAIO,

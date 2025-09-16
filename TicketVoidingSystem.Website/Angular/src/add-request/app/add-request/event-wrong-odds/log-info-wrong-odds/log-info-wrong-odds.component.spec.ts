@@ -60,7 +60,6 @@ class Helper {
     logInfoDetail: Helper.fakeLogInfoDetail,
     messageValidationLogInfo: Helper.fakeValidationMessage,
     poolHouseCheckedBetTypes: null,
-    isPoolHouseAffected: false,
     linkedLogsViewModel: {
       isLinkGroup1X2: false,
       isLinkGroupAIO: false

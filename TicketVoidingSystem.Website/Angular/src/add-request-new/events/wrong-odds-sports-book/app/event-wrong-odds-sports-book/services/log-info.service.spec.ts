@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { LogInfoService } from './log-info.service';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
-import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { GetLogInfoModel, GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
+import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { WrongOddsSportsBookGetLogInfoQuery } from '../models/get-log-info.query';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
-import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
-import { WrongOddsSportsBookGetLogInfoQuery } from '../models/get-log-info.query';
+import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
+import { LogInfoService } from './log-info.service';
 
 describe('LogInfoService', () => {
   let service: LogInfoService;
@@ -78,7 +78,6 @@ describe('LogInfoService', () => {
           validation: {
             isHasSettledTicket: true,
             isHasInstantlySettledTicket: false,
-            isPoolHouseAffected: false,
             isInvalidTotalTickets: false,
             isExistedInOtherRequest: false,
             isExistsSecondAccept: false
@@ -208,7 +207,6 @@ describe('LogInfoService', () => {
         validation: {
           isHasSettledTicket: true,
           isHasInstantlySettledTicket: false,
-          isPoolHouseAffected: false,
           isInvalidTotalTickets: false,
           isExistedInOtherRequest: false,
           isExistsSecondAccept: false
@@ -257,7 +255,6 @@ describe('LogInfoService', () => {
         validation: {
           isHasSettledTicket: true,
           isHasInstantlySettledTicket: false,
-          isPoolHouseAffected: false,
           isInvalidTotalTickets: false,
           isExistedInOtherRequest: false,
           isExistsSecondAccept: false

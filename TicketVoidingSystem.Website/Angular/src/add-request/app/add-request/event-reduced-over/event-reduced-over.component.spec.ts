@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { EventReducedOverComponent } from './event-reduced-over.component';
-import { ValidationService } from './services/validation.service';
-import { EventReducedOverService } from './services/event-reduced-over.service';
-import { LogInfoService } from './services/log-info.service';
-import { SaveRequestService } from './services/save-request.service';
-import { FilterReducedOverService } from './services/filter-reduced-over.service';
 import { AddRequestStore } from '../add-request.store';
 import { FilterModel } from '../filter/filter.model';
 import { ReducedOverModel } from '../models/event-reduced-over.model';
 import { OthersModel } from '../others/others.model';
-import { EventLeagueComponent } from '../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { LogInfoReducedOver } from './models/log-info-reduced-over.model';
+import { EventReducedOverComponent } from './event-reduced-over.component';
 import { ReducedOverBetType } from './models/bet-type-reduced-over-json.model';
-import { OddsInfo } from '../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { LogInfoReducedOver } from './models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from './models/primitive-property-event.model';
+import { EventReducedOverService } from './services/event-reduced-over.service';
+import { FilterReducedOverService } from './services/filter-reduced-over.service';
+import { LogInfoService } from './services/log-info.service';
+import { SaveRequestService } from './services/save-request.service';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -44,7 +44,6 @@ class Helper {
     actualMarket: '',
     hdpValue: '',
     poolHouseCheckedBetTypes: '',
-    isPoolHouseAffected: false,
     logInfoDetail: null,
     liveIndicator: 0,
     filterBetIdX: '',
