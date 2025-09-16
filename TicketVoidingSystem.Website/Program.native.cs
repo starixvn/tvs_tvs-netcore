@@ -47,6 +47,7 @@ services.AddMediatR();
 services.AddAutoMapper();
 services.AddTvsSignalR();
 services.AddTvsSiteDbStatus();
+services.AddIssueTypeAuth();
 services.AddOnlineServerRepository();
 services.AddHttpContextAccessor();
 services.AddResponseCompression(options => { options.MimeTypes = ["text/html", "text/css", "application/javascript", "application/json"]; });
