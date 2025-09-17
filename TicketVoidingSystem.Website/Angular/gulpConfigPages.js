@@ -284,6 +284,32 @@ const earlyKickOff = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/early-kick-off'
 };
 
+const wrongMarketOffered = {
+  pageName: 'WrongMarketOffered',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-market-offered/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-market-offered/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-market-offered/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-market-offered'
+};
+
+const wrongOfferedName = {
+  pageName: 'WrongOfferedName',
+  tsconfigFiles: [
+    'add-request-new/events/wrong-offered-name/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/wrong-offered-name/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/wrong-offered-name/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-offered-name'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -305,7 +331,9 @@ const configPages = [
   //wrongOu,
   //wrongOdds,
   //wrongOddsSportsBook,
-  earlyKickOff
+  // earlyKickOff,
+  wrongMarketOffered,
+  wrongOfferedName
 ];
 
 module.exports = configPages;

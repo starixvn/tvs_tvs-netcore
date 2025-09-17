@@ -1,0 +1,60 @@
+<label class="col-form-label-sm">Filter</label>
+<div class="filter">
+  <div class="filter-currency-team-league">
+    <div class="filter-currency me-3">
+      <label class="col-form-label-sm">Currency</label>
+      <div class="dropdown-select-currency">
+        <multiple-selection class="multiple-selection filter-currency-dropdown" [isDisabled]="filterModel.isVoided"
+          [selectedItems]="model.currencyIds" [multipleSelect]="multipleSelectCurrency"
+          (checkedItems)="changeFilter();updateSelectedCurrency($event)">
+        </multiple-selection>
+      </div>
+    </div>
+    @if (!isSubTypeChinese()) {
+    <div class="input-name">
+      <div class="me-3">
+        <label class="col-form-label-sm">Wrong Name</label>
+        <input type="text" [(ngModel)]="model.wrongName" [disabled]="filterModel.isVoided"
+          (ngModelChange)="changeFilter()" class="form-control form-control-sm" title="{{model.wrongName}}" />
+      </div>
+      <div>
+        <label class="col-form-label-sm">Actual Name</label>
+        <input type="text" [(ngModel)]="model.actualName" [disabled]="filterModel.isVoided"
+          (ngModelChange)="changeFilter()" class="form-control form-control-sm" title="{{model.actualName}}" />
+      </div>
+    </div>
+    }
+    @if (isSubTypeChinese()) {
+    <div>
+      <div class="input-name">
+        <div class="me-3">
+          <label class="col-form-label-sm">Wrong Name (Traditional)</label>
+          <input type="text" [(ngModel)]="model.wrongNameT" [disabled]="filterModel.isVoided"
+            (ngModelChange)="changeFilter()" class="form-control form-control-sm" title="{{model.wrongNameT}}" />
+        </div>
+        <div>
+          <label class="col-form-label-sm">Wrong Name (Simplified)</label>
+          <input type="text" [(ngModel)]="model.wrongNameS" [disabled]="filterModel.isVoided"
+            (ngModelChange)="changeFilter()" class="form-control form-control-sm" title="{{model.wrongNameS}}" />
+        </div>
+      </div>
+      <div class="input-name">
+        <div class="me-3">
+          <label class="col-form-label-sm">Actual Name (Traditional)</label>
+          <input type="text" [(ngModel)]="model.actualNameT" [disabled]="filterModel.isVoided"
+            (ngModelChange)="changeFilter()" class="form-control form-control-sm" title="{{model.actualNameT}}" />
+        </div>
+        <div>
+          <label class="col-form-label-sm">Actual Name (Simplified)</label>
+          <input type="text" [(ngModel)]="model.actualNameS" [disabled]="filterModel.isVoided"
+            (ngModelChange)="changeFilter()" class="form-control form-control-sm" title="{{model.actualNameS}}" />
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  <licensees [model]="groupLicenseeModel" [disabled]="filterModel.isVoided"
+    (groupLicenseesChange)="changeFilter();updateLicense($event)">
+  </licensees>
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

@@ -200,6 +200,28 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongMarketOffered, Constant.Policy.Read)]
+    public ActionResult WrongMarketOffered(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.WrongMarketOffered;
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-market-offered/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOfferedName, Constant.Policy.Read)]
+    public ActionResult WrongOfferedName(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.WrongOfferedName;
+        return View("~/wwwroot/dist/ticket-voiding-system/wrong-offered-name/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
     [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOU, Constant.Policy.Read)]
     public ActionResult WrongOu(int id)
     {

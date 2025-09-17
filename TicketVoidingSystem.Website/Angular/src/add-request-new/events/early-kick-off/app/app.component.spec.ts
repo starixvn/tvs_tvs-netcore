@@ -57,14 +57,14 @@ describe('AppComponent', () => {
       expect(component.model).toBeInstanceOf(RequestModel);
     });
 
-    it('should set issueTypeId to WRONG_SCORE constant', () => {
+    it('should set issueTypeId to EARLY_KICK_OFF constant', () => {
       expect(component.issueTypeId).toBe(IssueTypeConstant.EARLY_KICK_OFF);
       expect(component.issueTypeId).toBe('3');
     });
   });
 
   describe('saveRequest Method', () => {
-    it('should call eventWrongScoreComponent.saveRequest when saveRequest is called', async () => {
+    it('should call eventEarlyKickOffComponent.saveRequest when saveRequest is called', async () => {
       // Arrange - mock đã được khởi tạo ở beforeEach
       component.eventEarlyKickOffComponent = {} as EventEarlyKickOffComponent;
       component.eventEarlyKickOffComponent.saveRequest = jest.fn();
