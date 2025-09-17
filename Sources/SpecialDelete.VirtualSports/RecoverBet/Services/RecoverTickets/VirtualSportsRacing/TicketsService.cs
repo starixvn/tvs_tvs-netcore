@@ -1,6 +1,5 @@
 ﻿using System.Text.Json;
 using Fanex.Data.Repository;
-using Fanex.Logging;
 using Settlement.Business.Services;
 using SpecialDelete.VirtualSports.Common.Models;
 using SpecialDelete.VirtualSports.RecoverBet.Criteria;
@@ -94,26 +93,17 @@ public class TicketsServicesImp(IDynamicRepository repository, TicketValueServic
         }
 
         var maxWinLimit = (await winLimitService.GetMaxWinLimit(settledTickets)).ToList();
-
-        LogService.Info($"INPUT -- RECOVER VS: Settle tickets" +
-                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(settledTickets)}" +
-                        $"{Environment.NewLine}maxWinLimit: {Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(maxWinLimit)}");
-
         settledTickets.ForEach(item => ticketValueService.RecoverSetValue(item, maxWinLimit));
         await historyDataService.Insert(settledTickets);
-        LogService.Info($"OUTPUT -- RECOVER VS: Settle tickets" +
-                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(settledTickets)}");
+
         return settledTickets;
     }
 
     public IEnumerable<TicketsBetTransModel> ProcessRefundTickets(IEnumerable<TicketsBetTransModel> tickets)
     {
         var refundTickets = tickets.Where(x => string.Equals(x.Action, SettlementAction.Refund, StringComparison.OrdinalIgnoreCase)).ToList();
-        LogService.Info($"INPUT -- RECOVER VS: Refund tickets" +
-                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(refundTickets)}");
         refundTickets.ForEach(ticket => ticketValueService.SetValue(ticket, true));
-        LogService.Info($"OUTPUT -- RECOVER VS: Refund tickets" +
-                        $"{Environment.NewLine}{Newtonsoft.Json.JsonConvert.SerializeObject(refundTickets)}");
+
         return refundTickets;
     }
 }

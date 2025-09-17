@@ -14,20 +14,16 @@ public interface OnlineServerRepositoryBaseService
     /// <summary>
     /// Execute repository call on all online servers and return combined results for multiple types
     /// </summary>
-#pragma warning disable S2436
 
     Task<List<(T1, T2, T3, T4, T5)>> ExecuteAsync<T1, T2, T3, T4, T5>(
-#pragma warning restore S2436
         IOnlineServerCriteria criteria,
         Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4, T5)>> repositoryCall);
 
     /// <summary>
     /// Execute repository call on all online servers and return combined results for multiple types
     /// </summary>
-#pragma warning disable S2436
 
     Task<List<(T1, T2, T3, T4)>> ExecuteAsync<T1, T2, T3, T4>(
-#pragma warning restore S2436
         IOnlineServerCriteria criteria,
         Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4)>> repositoryCall);
 
@@ -69,10 +65,7 @@ public interface OnlineServerRepositoryBaseService
 public class OnlineServerRepositoryBaseServiceImp(SiteDbClientService siteDbClientService)
     : OnlineServerRepositoryBaseService
 {
-#pragma warning disable S2436
-
     public async Task<List<(T1, T2, T3, T4, T5)>> ExecuteAsync<T1, T2, T3, T4, T5>(
-#pragma warning restore S2436
         IOnlineServerCriteria criteria,
         Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4, T5)>> repositoryCall)
     {
@@ -89,10 +82,7 @@ public class OnlineServerRepositoryBaseServiceImp(SiteDbClientService siteDbClie
         return results.ToList();
     }
 
-#pragma warning disable S2436
-
     public async Task<List<(T1, T2, T3, T4)>> ExecuteAsync<T1, T2, T3, T4>(
-#pragma warning restore S2436
         IOnlineServerCriteria criteria,
         Func<IOnlineServerCriteria, Task<(T1, T2, T3, T4)>> repositoryCall)
     {
