@@ -271,6 +271,19 @@ const wrongOddsSportsBook = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-odds-sports-book'
 };
 
+const earlyKickOff = {
+  pageName: 'EarlyKickOff',
+  tsconfigFiles: [
+    'add-request-new/events/early-kick-off/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/early-kick-off/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/early-kick-off/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/early-kick-off'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -292,6 +305,7 @@ const configPages = [
   //wrongOu,
   //wrongOdds,
   //wrongOddsSportsBook,
+  earlyKickOff
 ];
 
 module.exports = configPages;

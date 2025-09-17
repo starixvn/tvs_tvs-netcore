@@ -178,6 +178,28 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.EKOandWrongKO, Constant.Policy.Read)]
+    public ActionResult EarlyKickOffTime(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.EarlyKickOffTime;
+        return View("~/wwwroot/dist/ticket-voiding-system/early-kick-off/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.EKOandWrongKO, Constant.Policy.Read)]
+    public ActionResult WrongKickOffTime(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.WrongKickOffTime;
+        return View("~/wwwroot/dist/ticket-voiding-system/early-kick-off/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
     [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOU, Constant.Policy.Read)]
     public ActionResult WrongOu(int id)
     {

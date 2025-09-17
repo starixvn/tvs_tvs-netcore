@@ -1,11 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewChild, OnInit } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { EventWrongHdpComponent } from './event-wrong-hdp/event-wrong-hdp.component';
 import { OthersWrongHdpComponent } from '../../../component/others-wrong-hdp/others-wrong-hdp.component';
-import { EditRequestService } from '../../../services/edit-request/edit-request.service';
 import { RequestModel } from '../../../models/request.model';
-import { PrimitiveProperty } from '../../../models/primitive-property.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 
 @Component({
@@ -16,10 +14,7 @@ import { IssueTypeConstant } from '../../../../utility/constants/issue-type.cons
 })
 export class AppComponent implements OnInit {
   @ViewChild('eventWrongHDP') eventWrongHDPComponent: EventWrongHdpComponent;
-  editRequestService = inject(EditRequestService);
-
   model = new RequestModel();
-  primitiveProperty = new PrimitiveProperty();
   issueTypeId: string;
 
   ngOnInit() {
