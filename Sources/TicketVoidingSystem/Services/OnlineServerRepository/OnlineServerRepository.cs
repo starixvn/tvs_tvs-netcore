@@ -27,20 +27,14 @@ public interface OnlineServerRepository
     /// <summary>
     /// Execute FetchMultipleAsync on all online servers for 4 types and flatten results
     /// </summary>
-#pragma warning disable S2436
 
     Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> FetchMultipleAsync<T1, T2, T3, T4>(IOnlineServerCriteria criteria);
-
-#pragma warning restore S2436
 
     /// <summary>
     /// Execute FetchMultipleAsync on all online servers for 5 types and flatten results
     /// </summary>
-#pragma warning disable S2436
 
     Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> FetchMultipleAsync<T1, T2, T3, T4, T5>(IOnlineServerCriteria criteria);
-
-#pragma warning restore S2436
 
     /// <summary>
     /// Execute ExecuteAsync on all online servers
@@ -93,10 +87,7 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
         return (item1Results, item2Results, item3Results);
     }
 
-#pragma warning disable S2436
-
     public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>)> FetchMultipleAsync<T1, T2, T3, T4>(IOnlineServerCriteria criteria)
-#pragma warning restore S2436
     {
         var results = await onlineServerBaseService.ExecuteAsync(criteria,
             async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3, T4>(serverCriteria));
@@ -109,10 +100,7 @@ public class OnlineServerRepositoryImp(IDynamicRepository repository,
         return (item1Results, item2Results, item3Results, item4Results);
     }
 
-#pragma warning disable S2436
-
     public async Task<(IEnumerable<T1>, IEnumerable<T2>, IEnumerable<T3>, IEnumerable<T4>, IEnumerable<T5>)> FetchMultipleAsync<T1, T2, T3, T4, T5>(IOnlineServerCriteria criteria)
-#pragma warning restore S2436
     {
         var results = await onlineServerBaseService.ExecuteAsync(criteria,
             async (serverCriteria) => await repository.FetchMultipleAsync<T1, T2, T3, T4, T5>(serverCriteria));

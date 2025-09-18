@@ -1,8 +1,8 @@
 [
   {
-    "categoryName": "Main Event",
+    "categoryName": "No Indication Score",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 27,
@@ -251,10 +251,17 @@
         ],
         "note":"",
         "noteEditable": false
-      },
+      }
+    ]
+  },
+  {
+    "categoryName": "Wrong Indication Score",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 31,
-        "name": "Wrong Indication Goal (No Onwards)<div class='text-danger'>Filter by Trans Time",
+        "name": "Wrong Indication Goal (No Onwards)<div class='text-danger'>Filter by Trans Time</div>",
         "iconClass": "",
         "buttonSelectHomeAway": [],
         "buttonSelectAll": [
@@ -278,7 +285,7 @@
       },
       {
         "groupId": 32,
-        "name": "Wrong Indication Goal (Onwards)<div class='text-danger'>Filter by Trans Time",
+        "name": "Wrong Indication Goal (Onwards)<div class='text-danger'>Filter by Trans Time</div>",
         "iconClass": "",
         "buttonSelectHomeAway": [],
         "buttonSelectAll": [
@@ -300,6 +307,157 @@
         "note":"",
         "noteEditable": false
       },
+      {
+        "groupId": 43,
+        "name": "Wrong Indication Corner (Onwards)<div class='text-danger'>Filter by Trans Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 150,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Corner, all 0-1 need void all. Single team O/U home team score 0-0 accept after Corner valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 44,
+        "name": "Wrong Indication Corner (No Onwards)<div class='text-danger'>Filter by Trans Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 151,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Corner, all 0-1 need void all. Single team O/U home team score 0-0 accept after Corner valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 45,
+        "name": "Wrong Indication Goal Kick (Onwards)<div class='text-danger'>Filter by Trans Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 152,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Goal Kick, all 0-1 need void all. Single team O/U home team score 0-0 accept after Goal Kick valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 46,
+        "name": "Wrong Indication Goal Kick (No Onwards)<div class='text-danger'>Filter by Trans Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 153,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Goal Kick, all 0-1 need void all. Single team O/U home team score 0-0 accept after Goal Kick valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 47,
+        "name": "Wrong Indication Booking (Onwards)<div class='text-danger'>Filter by Trans Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 154,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Booking, all 0-1 need void all. Single team O/U home team score 0-0 accept after Booking valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      },
+      {
+        "groupId": 48,
+        "name": "Wrong Indication Booking (No Onwards)<div class='text-danger'>Filter by Trans Time</div>",
+        "iconClass": "",
+        "buttonSelectHomeAway": [],
+        "buttonSelectAll": [
+          {
+            "name": "All Tickets",
+            "subIssueTypeId": 155,
+            "btnClass": "btn-all"
+          }
+        ],
+        "aa": "",
+        "pa": "",
+        "sa": "",
+        "description": [
+          "Provider wrong display Home/Away Score and/or in fact there is no Score awarded.",
+          "=> Wrong update Home/Away score -> But there is 'No Score' awarded.",
+          "Example: 0-0 to 0-1, Cancel Booking, all 0-1 need void all. Single team O/U home team score 0-0 accept after Booking valid.",
+          "<span class='text-danger'>We use transtime to void, TVS will auto detect wrong score range time.</span>"
+        ],
+        "note":"",
+        "noteEditable": false
+      }
+    ]
+  },
+  {
+    "categoryName": "Wrong Indication Swap Team Score",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 33,
         "name": "Wrong Indication Swap Team Score (No Onwards)<div class='text-danger'>Filter by Trans Time & Accept Time",

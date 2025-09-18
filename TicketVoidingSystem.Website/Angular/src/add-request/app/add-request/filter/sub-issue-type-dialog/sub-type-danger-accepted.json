@@ -2,7 +2,7 @@
   {
     "categoryName": "Main Match",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 1,
@@ -314,7 +314,7 @@
   {
     "categoryName": "Corner Product",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 10,
@@ -389,7 +389,7 @@
   {
     "categoryName": "Booking Product",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 12,
@@ -448,7 +448,7 @@
   {
     "categoryName": "Goal Kick Product",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 14,
@@ -501,7 +501,7 @@
   {
     "categoryName": "Futsal (Real)",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 16,
@@ -573,7 +573,7 @@
   {
     "categoryName": "Esoccer Virtual SABA",
     "isShowCategoryName": true,
-    "isCollapse": false,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 18,
