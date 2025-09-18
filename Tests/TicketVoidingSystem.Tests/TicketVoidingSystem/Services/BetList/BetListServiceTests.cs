@@ -207,7 +207,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         service = new BetListServiceImp(null, null);
 
         // Act
-        var actual = service.GetStatus(ticket, ticketHelper, new List<ITicketData>(), false);
+        var actual = service.GetStatus(ticket, ticketHelper, [], false);
 
         // Assert
         Assert.Equal(expected, actual);

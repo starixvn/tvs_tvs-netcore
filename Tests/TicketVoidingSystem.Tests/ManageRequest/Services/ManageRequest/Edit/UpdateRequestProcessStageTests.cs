@@ -59,7 +59,6 @@ public class UpdateRequestProcessStageTests
             IssueTypeId = IssueTypeConstant.AbnormalAccount,
             SiteDBDownInfoJson = "test-site-db-down-info"
         };
-        var markedTicketsSuccessful = new List<long> { 1, 2 };
         mapper.Map<EditRequestCommand>(query).Returns(new EditRequestCommand());
         sessionService.GetClientIp().Returns("127:00:42");
         getUpdateResultService.CreateSuccessResult(query.RequestId, query.MatchId.ToString())

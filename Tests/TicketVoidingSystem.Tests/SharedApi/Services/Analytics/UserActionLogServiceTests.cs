@@ -1,9 +1,6 @@
-using System;
-using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.SharedApi.Criteria.Analytics;
 using TicketVoidingSystem.SharedApi.Services.Analytics;
 using Xunit;
 
