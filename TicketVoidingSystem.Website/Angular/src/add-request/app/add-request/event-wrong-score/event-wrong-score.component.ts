@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
@@ -14,6 +14,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AddRequestStore } from '../add-request.store';
+import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 import { LogInfoRelatedEvent } from '../components/log-info-related-event/log-info-related-event.model';
 import { TvDetectionComponent } from '../components/tv-detection/tv-detection.component';
 import { TvDetectionModel } from '../components/tv-detection/tv-detection.model';
@@ -27,22 +28,21 @@ import { ConfirmWrongScoreComponent } from './confirm-wrong-score/confirm-wrong-
 import { ConfirmWrongScoreModel } from './confirm-wrong-score/confirm-wrong-score.model';
 import { PrimitiveProperty } from './event-wrong-score.model';
 import { FilterWrongScoreComponent } from './filter-wrong-score/filter-wrong-score.component';
+import { MainLogInfoComponent } from './main-log-info/main-log-info.component';
+import { UpdateConfirmInfoArgs } from './models/confirm-wrong-score.model';
+import { SaveRequestArg } from './models/save-request.model';
+import { SubIssueTypeRelatedEvent } from './models/subIssue-type-related-event.model';
+import { ValidationBusinessRuleArgs } from './models/validation.model';
+import { RelatedEventsComponent } from './related-events/related-events.component';
+import { CreateMapService } from './services/create-map.service';
 import { EditRequestService } from './services/edit-request.service';
 import { EventWrongScoreService } from './services/event-wrong-score.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
-import { SaveRequestArg } from './models/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
-import { ValidationBusinessRuleArgs } from './models/validation.model';
 import { ValidationService } from './services/validation.service';
 import { WrongScoreService } from './services/wrong-score.service';
 import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.component';
-import { MainLogInfoComponent } from './main-log-info/main-log-info.component';
-import { SubIssueTypeRelatedEvent } from './models/subIssue-type-related-event.model';
-import { CreateMapService } from './services/create-map.service';
-import { UpdateConfirmInfoArgs } from './models/confirm-wrong-score.model';
-import { RelatedEventsComponent } from './related-events/related-events.component';
-import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
 
 @Component({
   standalone: true,
@@ -160,7 +160,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     if (this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
       this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
       this.mainEvent.isMainMatch = true;
+      this.mainEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
       this.mainEvent.parentId = this.eventLeagueComponent.selectedMatch.parentId;
+      this.mainEvent.eventDate = this.eventLeagueComponent.selectedMatch.eventDate;
       await this.relatedEventsComponent.getDataWhenSearch();
     }
     else {
