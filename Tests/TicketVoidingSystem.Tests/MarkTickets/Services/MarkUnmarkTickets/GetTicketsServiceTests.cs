@@ -41,7 +41,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
         var criteria = new GetTicketsCriteria();
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(null)
             .ReturnsForAnyArgs((validation, ticketList));
         var expectedTickets = new List<GetTicketModel> { new() { BetId = 123 }, new() { BetId = 123 }, new() { BetId = 123 }, new() { BetId = 123 } };
 
@@ -61,7 +61,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
         var criteria = new GetTicketsCriteria();
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(null)
             .ReturnsForAnyArgs((validation, ticketList));
 
         // Act
@@ -80,7 +80,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var ticketList = new List<GetTicketModel> { new() { BetId = 123 } };
         var criteria = new GetTicketsCriteria();
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(null)
             .ReturnsForAnyArgs((validation, ticketList));
 
         // Act
@@ -101,7 +101,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var criteria = new GetTicketsCriteria();
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).ReturnsForAnyArgs(criteria);
         userPermissionService.GetUserPermission().ReturnsForAnyArgs(userPermission);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(null)
             .ReturnsForAnyArgs((validation, ticketList));
         var tickets = new List<ExcelTicketModel>();
         mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>())
@@ -122,7 +122,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         var expected = new List<GetTicketModel> { new() { BetId = 123 } };
         var criteria = new GetDetailTicketsCriteria();
         mapper.Map<GetDetailTicketsCriteria>(Arg.Any<GetDetailTicketsQuery>()).ReturnsForAnyArgs(criteria);
-        repository.FetchAsync<GetTicketModel>(default).ReturnsForAnyArgs(expected);
+        repository.FetchAsync<GetTicketModel>(null).ReturnsForAnyArgs(expected);
 
         // Act
         var tickets = await service.GetDetailTickets(query);
@@ -144,7 +144,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         repository.FetchAsync<GetTicketModel>(Arg.Any<GetDetailTicketsCriteria>()).ReturnsForAnyArgs(ticketModels);
         mapper.Map<GetDetailTicketsCriteria>(Arg.Any<GetDetailTicketsQuery>()).ReturnsForAnyArgs(criteria);
         userPermissionService.GetUserPermission().ReturnsForAnyArgs(userPermission);
-        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(default)
+        repository.FetchMultipleAsync<GetTicketValidationModel, GetTicketModel>(null)
             .ReturnsForAnyArgs((validation, ticketList));
         var tickets = new List<ExcelTicketModel>();
         mapTicketService.MapToExcelTicketModel(Arg.Any<IEnumerable<GetTicketModel>>(), Arg.Any<UserPermission>())
@@ -163,7 +163,7 @@ public class GetTicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFi
         // Arrange
         var expected = new List<AllMarkedTicketModel> { new() { MatchId = 123 } };
         var criteria = new AllMarkedTicketsCriteria();
-        repository.FetchAsync<AllMarkedTicketModel>(default).ReturnsForAnyArgs(expected);
+        repository.FetchAsync<AllMarkedTicketModel>(null).ReturnsForAnyArgs(expected);
         mapper.Map<AllMarkedTicketsCriteria>(Arg.Any<AllMarkedTicketsQuery>()).ReturnsForAnyArgs(criteria);
         // Act
         var tickets = await service.GetAllMarkedTickets(new AllMarkedTicketsQuery());

@@ -15,7 +15,7 @@ public class CheckAccessRequestPermissionHandlerTests
         // Arrange
         var request = new CheckAccessRequestPermissionRequest();
         var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
-        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(0).ReturnsForAnyArgs(true);
 
         var handler = new CheckAccessRequestPermissionHandler(checkPermissionOnRequestService);
 

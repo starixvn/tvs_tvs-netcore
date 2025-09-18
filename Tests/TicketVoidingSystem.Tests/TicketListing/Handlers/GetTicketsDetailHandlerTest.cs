@@ -17,7 +17,7 @@ public class GetTicketsDetailHandlerTest
         var expected = new TicketsViewModel { TotalItems = 123456 };
         var request = new GetTicketsDetailRequest { MatchId = 987654 };
         var getTicketsService = Substitute.For<GetTicketsService>();
-        getTicketsService.GetTickets(default!).ReturnsForAnyArgs(expected);
+        getTicketsService.GetTickets(null!).ReturnsForAnyArgs(expected);
         var handler = new GetTicketsDetailHandler(getTicketsService);
 
         // Act

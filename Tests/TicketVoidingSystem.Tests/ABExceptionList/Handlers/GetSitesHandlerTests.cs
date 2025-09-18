@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -27,7 +28,7 @@ public class GetSitesHandlerTests
         var handler = new GetSitesHandler(repository);
 
         // Act
-        var actual = await handler.Handle(new GetSitesRequest(), default);
+        var actual = await handler.Handle(new GetSitesRequest(), CancellationToken.None);
 
         // Assert
         await repository.Received(1).FetchAsync<LicenseeSite>(Arg.Any<GetSitesCriteria>());

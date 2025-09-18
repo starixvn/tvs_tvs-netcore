@@ -53,7 +53,7 @@ public class GetTicketsHandlerTests
         getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
         mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
             .ReturnsForAnyArgs(new Group<TicketViewModel>());
-        pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
+        pagingService.Paging(data, 0, 0).ReturnsForAnyArgs(new List<GetTicketModel> { new() });
         pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
         var expected = new TicketsViewModel
         {
@@ -83,7 +83,7 @@ public class GetTicketsHandlerTests
         mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
             .ReturnsForAnyArgs(new Group<TicketViewModel>
             { Name = "Parlay", Tickets = new List<TicketViewModel> { new() { IsParlay = true } } });
-        pagingService.Paging(data, default, default).ReturnsForAnyArgs(tickets);
+        pagingService.Paging(data, 0, 0).ReturnsForAnyArgs(tickets);
         pagingService.Groups(Arg.Is<IEnumerable<GetTicketModel>>(x => x.SequenceEqual(tickets)),
             Arg.Any<Func<GetTicketModel, string>>()).Returns(listGroup);
         pagingService.Groups(Arg.Is<IEnumerable<GetTicketModel>>(x => x.Count() == singleCount),
@@ -118,7 +118,7 @@ public class GetTicketsHandlerTests
         getTicketsService.GetTickets(request).ReturnsForAnyArgs(data);
         mapTicketsService.MapToGroupTicketViewModel(Arg.Any<GroupTicketsMappingParameters>())
             .ReturnsForAnyArgs(new Group<TicketViewModel>());
-        pagingService.Paging(data, default, default).ReturnsForAnyArgs(new List<GetTicketModel>());
+        pagingService.Paging(data, 0, 0).ReturnsForAnyArgs(new List<GetTicketModel>());
         pagingService.Groups(data, ticket => ticket.GroupName).ReturnsForAnyArgs(listGroup);
 
         // Act

@@ -19,9 +19,9 @@ public class ConfirmAutoUnmarkServiceTests : IClassFixture<RemotingRefFixture>, 
         // Arrange
         var query = new GetDataForConfirmAutoUnmarkQuery { MatchId = matchId };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.GetAsync<string>(default)
+        repository.GetAsync<string>(null)
             .ReturnsForAnyArgs("");
-        repository.FetchAsync<ConfirmAutoUnmarkModel>(default)
+        repository.FetchAsync<ConfirmAutoUnmarkModel>(null)
             .ReturnsForAnyArgs(new List<ConfirmAutoUnmarkModel>());
 
         var service = new ConfirmAutoUnmarkServiceImp(repository);

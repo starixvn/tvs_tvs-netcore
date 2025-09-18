@@ -25,7 +25,7 @@ public class AllMarkedTicketsHandlerTests
             new () { MatchId = 12543, UserId = 1, CreatedDate = DateTime.Today, HomeId = 3, AwayId = 5, Total = 12}
         };
         var getTicketsService = Substitute.For<GetTicketsService>();
-        getTicketsService.GetAllMarkedTickets(default).ReturnsForAnyArgs(data);
+        getTicketsService.GetAllMarkedTickets(null).ReturnsForAnyArgs(data);
         var pagingService = Substitute.For<PagingService>();
         var remotingRefWrapperService = Substitute.For<RemotingRefWrapperService>();
         pagingService.Paging(data, request.PageIndex, request.PageSize).ReturnsForAnyArgs(data);

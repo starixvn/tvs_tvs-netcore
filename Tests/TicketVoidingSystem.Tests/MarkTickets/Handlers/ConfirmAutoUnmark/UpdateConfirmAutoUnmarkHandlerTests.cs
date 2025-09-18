@@ -21,7 +21,7 @@ public class UpdateConfirmAutoUnmarkHandlerTests
             NegativeBalanceUsers = ""
         };
         var autoUnmarkService = Substitute.For<UpdateConfirmAutoUnmarkService>();
-        autoUnmarkService.UpdateConfirmAutoUnmark(default, default)
+        autoUnmarkService.UpdateConfirmAutoUnmark(null, null)
             .ReturnsForAnyArgs(expected);
         var handler = new UpdateConfirmAutoUnmarkHandler(autoUnmarkService);
 

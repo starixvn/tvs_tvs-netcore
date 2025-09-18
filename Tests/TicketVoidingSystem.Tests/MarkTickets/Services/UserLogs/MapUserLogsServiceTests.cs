@@ -51,7 +51,7 @@ public class MapUserLogsServiceTests
         };
 
         var remotingRefService = Substitute.For<RemotingRefWrapperService>();
-        remotingRefService.GetTeamName(default, default, default).ReturnsForAnyArgs("");
+        remotingRefService.GetTeamName(0, null, null).ReturnsForAnyArgs("");
         var service = new MapUserLogsServiceImp(remotingRefService);
 
         // Act

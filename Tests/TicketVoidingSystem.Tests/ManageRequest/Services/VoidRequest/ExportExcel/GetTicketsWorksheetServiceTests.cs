@@ -44,7 +44,7 @@ public class GetTicketsWorksheetServiceTests
                 Tickets = new List<ExcelTicketModel> { new() }
             }
         };
-        cellService.CreateTitle(default).ReturnsForAnyArgs("1");
+        cellService.CreateTitle(0).ReturnsForAnyArgs("1");
         getTicketsForExportExcelService.GetGroupsExcelTickets(Arg.Any<GetTicketsQuery>())
             .ReturnsForAnyArgs(groupsExcelTickets);
 

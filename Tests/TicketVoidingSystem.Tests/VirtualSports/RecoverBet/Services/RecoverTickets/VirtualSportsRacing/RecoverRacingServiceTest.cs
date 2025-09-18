@@ -197,7 +197,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 new() { TransId = "101", MatchId = 1, SiteDbGroupId = 1 }
             };
 
-            ticketsService.GetTicketVs2Racing(default, default).ReturnsForAnyArgs<IEnumerable<TicketsBetTransModel>>(
+            ticketsService.GetTicketVs2Racing(null, 0).ReturnsForAnyArgs<IEnumerable<TicketsBetTransModel>>(
                     _ => throw new Exception("Database connection failed"));
 
             // Act

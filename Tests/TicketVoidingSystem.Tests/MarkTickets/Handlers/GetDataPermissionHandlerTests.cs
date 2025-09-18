@@ -18,7 +18,7 @@ public class GetDataPermissionHandlerTests
         // Arrange
         var request = new GetDataPermissionRequest();
         var sessionService = Substitute.For<SessionService>();
-        sessionService.HasPermission(default, default)
+        sessionService.HasPermission(null, default)
             .ReturnsForAnyArgs(true);
         var handler = new GetDataPermissionHandler(sessionService);
 

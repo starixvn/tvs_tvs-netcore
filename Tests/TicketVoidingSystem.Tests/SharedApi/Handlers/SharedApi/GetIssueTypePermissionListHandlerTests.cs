@@ -35,7 +35,7 @@ public class GetIssueTypePermissionListHandlerTests
         {
             new() { Key = SpecialDeleteFunctionKeys.AbnormalBet }
         };
-        sessionService.GetPermissionsAsync(default, default).ReturnsForAnyArgs(mockResults);
+        sessionService.GetPermissionsAsync(null, default).ReturnsForAnyArgs(mockResults);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);

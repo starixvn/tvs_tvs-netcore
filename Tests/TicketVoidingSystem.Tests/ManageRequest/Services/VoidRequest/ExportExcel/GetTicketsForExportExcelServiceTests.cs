@@ -70,7 +70,7 @@ public class GetTicketsForExportExcelServiceTests
                 }
             }
         };
-        pagingService.Groups(Arg.Any<List<GetTicketModel>>(), default).ReturnsForAnyArgs(groups);
+        pagingService.Groups(Arg.Any<List<GetTicketModel>>(), null).ReturnsForAnyArgs(groups);
         var ticketDetail = new TicketViewModel
         {
             BetId = "1",
@@ -82,7 +82,7 @@ public class GetTicketsForExportExcelServiceTests
         var excelTicket = new ExcelTicketNoMatchModel();
         mapper.Map<ExcelTicketNoMatchModel>(Arg.Any<TicketViewModel>()).ReturnsForAnyArgs(excelTicket);
         mapTicketsService
-            .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), Arg.Any<Match>(), default, default)
+            .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), Arg.Any<Match>(), default, 0)
             .ReturnsForAnyArgs(ticketDetail);
 
         mapper.Map<ExcelTicketModel>(Arg.Any<TicketViewModel>()).ReturnsForAnyArgs(new ExcelTicketModel());
@@ -125,11 +125,11 @@ public class GetTicketsForExportExcelServiceTests
             Status = "1",
             Choice = "123"
         };
-        pagingService.Groups(Arg.Any<List<GetTicketModel>>(), default).ReturnsForAnyArgs(groups);
+        pagingService.Groups(Arg.Any<List<GetTicketModel>>(), null).ReturnsForAnyArgs(groups);
         var excelTicket = new ExcelTicketNoMatchModel();
         mapper.Map<ExcelTicketNoMatchModel>(Arg.Any<TicketViewModel>()).ReturnsForAnyArgs(excelTicket);
         mapTicketsService
-            .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), Arg.Any<Match>(), default, default)
+            .MapFromGetTicketModelToTicketViewModel(Arg.Any<GetTicketModel>(), Arg.Any<Match>(), default, 0)
             .ReturnsForAnyArgs(ticketDetail);
         // Act
         var result = service.GetGroupsExcelTicketsRequestNoMatch(query);

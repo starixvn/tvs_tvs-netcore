@@ -39,7 +39,7 @@ public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassF
             }
         };
 
-        repository.FetchAsync<BetTypeModel>(default).ReturnsForAnyArgs(betTypes);
+        repository.FetchAsync<BetTypeModel>(null).ReturnsForAnyArgs(betTypes);
 
         // Act
         var result = await service.GetBetTypes(criteria);

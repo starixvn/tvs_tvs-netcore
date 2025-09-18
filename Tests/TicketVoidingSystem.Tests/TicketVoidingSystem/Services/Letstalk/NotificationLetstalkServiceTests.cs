@@ -78,7 +78,7 @@ public class NotificationLetstalkServiceTests : IClassFixture<AppSettingFixture>
     {
         // Arrange
         // Act
-        _ = await service.SendToGroupTicketListing777(default, default, default);
+        _ = await service.SendToGroupTicketListing777(null, null, false);
 
         // Assert
         await groupTicketListingService.Received(1).SendMessage(Arg.Any<LetstalkModel>(), Arg.Any<LetstalkAttachment>());

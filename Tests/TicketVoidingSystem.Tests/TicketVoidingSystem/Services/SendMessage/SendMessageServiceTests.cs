@@ -102,7 +102,7 @@ public class SendMessageServiceTests
         var tickets = new List<TicketEmailModel> { new() { Site = "cn88" } };
         const int messageId = 1;
         const int creatorId = 1;
-        messageItemService.CreateMessageItems(Arg.Any<IEnumerable<ReceivedUser>>(), default)
+        messageItemService.CreateMessageItems(Arg.Any<IEnumerable<ReceivedUser>>(), 0)
             .ReturnsForAnyArgs("messageXml");
         repository.ExecuteAsync(Arg.Any<SendMessageCommand>()).ReturnsForAnyArgs(1);
 

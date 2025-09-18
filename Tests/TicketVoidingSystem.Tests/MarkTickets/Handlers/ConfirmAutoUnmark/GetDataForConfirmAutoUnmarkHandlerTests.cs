@@ -27,11 +27,11 @@ public class GetDataForConfirmAutoUnmarkHandlerTests
         };
 
         var confirmAutoUnmarkService = Substitute.For<ConfirmAutoUnmarkService>();
-        confirmAutoUnmarkService.GetDataForConfirmAutoUnmark(default).ReturnsForAnyArgs(data);
+        confirmAutoUnmarkService.GetDataForConfirmAutoUnmark(null).ReturnsForAnyArgs(data);
         var pagingService = Substitute.For<PagingService>();
         pagingService.Paging(data, request.PageIndex, request.PageSize).ReturnsForAnyArgs(data);
         var mapDataService = Substitute.For<MapDataForConfirmAutoUnmarkService>();
-        mapDataService.MapToConfirmAutoUnmarkViewModels(default).ReturnsForAnyArgs(new List<ConfirmAutoUnmarkViewModel>());
+        mapDataService.MapToConfirmAutoUnmarkViewModels(null).ReturnsForAnyArgs(new List<ConfirmAutoUnmarkViewModel>());
         var handler = new GetDataForConfirmAutoUnmarkHandler(confirmAutoUnmarkService, pagingService, mapDataService);
 
         // Act

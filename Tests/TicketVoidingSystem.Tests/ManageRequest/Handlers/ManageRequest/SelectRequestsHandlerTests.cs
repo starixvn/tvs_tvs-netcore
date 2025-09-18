@@ -69,7 +69,7 @@ public class SelectRequestsHandlerTests
         var renderRequestService = Substitute.For<RenderRequestService>();
         var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
         var expectedViewModel = new List<RequestViewModel>();
-        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(false);
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(0).ReturnsForAnyArgs(false);
         var request = new SelectRequestsRequest
         {
             RequestId = "123",
@@ -93,7 +93,7 @@ public class SelectRequestsHandlerTests
         var getRequestService = Substitute.For<GetRequestsService>();
         var renderRequestService = Substitute.For<RenderRequestService>();
         var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
-        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(0).ReturnsForAnyArgs(true);
         var viewModel = new RequestViewModel();
         renderRequestService.Render(Arg.Any<GroupRequestModel>()).ReturnsForAnyArgs(viewModel);
         var models = new List<RequestModel>
@@ -175,7 +175,7 @@ public class SelectRequestsHandlerTests
         var getRequestService = Substitute.For<GetRequestsService>();
         var renderRequestService = Substitute.For<RenderRequestService>();
         var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
-        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(0).ReturnsForAnyArgs(true);
 
         var viewModel1 = new RequestViewModel { RequestId = 1 };
         var viewModel2 = new RequestViewModel { RequestId = 2 };
@@ -214,7 +214,7 @@ public class SelectRequestsHandlerTests
         var getRequestService = Substitute.For<GetRequestsService>();
         var renderRequestService = Substitute.For<RenderRequestService>();
         var checkPermissionOnRequestService = Substitute.For<CheckPermissionOnRequestService>();
-        checkPermissionOnRequestService.IsHasPermissionOnRequest(default).ReturnsForAnyArgs(true);
+        checkPermissionOnRequestService.IsHasPermissionOnRequest(0).ReturnsForAnyArgs(true);
 
         var errorMessages = new List<string> { "Error 1", "Error 2" };
         getRequestService.GetRequests(Arg.Any<SelectRequestsRequest>()).ReturnsForAnyArgs((new List<RequestModel>(), errorMessages));

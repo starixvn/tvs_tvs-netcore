@@ -33,8 +33,8 @@ public class GetTicketsServiceTests
         var query = new GetTicketsQuery
         { IssueTypeId = issueTypeId, RequestId = 2, Match = new Match { MatchId = 1 } };
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
-        mapper.Map<GetTicketsCriteria>(default).ReturnsForAnyArgs(new GetTicketsCriteria());
-        onlineServerRepository.FetchAsync<GetTicketModel>(default).ReturnsForAnyArgs(ticketModels);
+        mapper.Map<GetTicketsCriteria>(null).ReturnsForAnyArgs(new GetTicketsCriteria());
+        onlineServerRepository.FetchAsync<GetTicketModel>(null).ReturnsForAnyArgs(ticketModels);
 
         // Act
         var result = service.GetTickets(query);

@@ -19,7 +19,7 @@ public class GetDetailTicketsWorkSheetServiceTests
         var worksheet = SetupTestingSheet.CreateTestingSheet();
         var model = new GetDetailTicketsQuery { Match = new Match { MatchId = matchId }, MatchId = matchId };
         var cellService = Substitute.For<CellService>();
-        cellService.CreateTitle(default).ReturnsForAnyArgs(matchId.ToString());
+        cellService.CreateTitle(0).ReturnsForAnyArgs(matchId.ToString());
         var getTicketsService = Substitute.For<GetTicketsService>();
         var service = new GetDetailTicketsWorkSheetService(cellService, getTicketsService);
 

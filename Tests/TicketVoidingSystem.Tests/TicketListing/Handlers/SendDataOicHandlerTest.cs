@@ -26,7 +26,7 @@ public class SendDataOicHandlerTest
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
         sendDataToOicService.Send(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
-        affectTicketsFromSettlementHistoryService.GetTickets(default, default).ReturnsForAnyArgs("");
+        affectTicketsFromSettlementHistoryService.GetTickets(false, 0).ReturnsForAnyArgs("");
 
         var handler = new SendDataOicHandler(sendDataToOicService, affectTicketsFromSettlementHistoryService);
 
@@ -50,7 +50,7 @@ public class SendDataOicHandlerTest
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
         sendDataToOicService.Send(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
-        affectTicketsFromSettlementHistoryService.GetTickets(default, default).ReturnsForAnyArgs("");
+        affectTicketsFromSettlementHistoryService.GetTickets(false, 0).ReturnsForAnyArgs("");
 
         var handler = new SendDataOicHandler(sendDataToOicService, affectTicketsFromSettlementHistoryService);
 
@@ -74,7 +74,7 @@ public class SendDataOicHandlerTest
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var sendDataToOicService = Substitute.For<SendDataToOicService>();
         sendDataToOicService.Send(new List<SendFileQuery>(), "").ReturnsForAnyArgs(expected);
-        affectTicketsFromSettlementHistoryService.GetTickets(default, default).ReturnsForAnyArgs("");
+        affectTicketsFromSettlementHistoryService.GetTickets(false, 0).ReturnsForAnyArgs("");
 
         var handler = new SendDataOicHandler(sendDataToOicService, affectTicketsFromSettlementHistoryService);
 

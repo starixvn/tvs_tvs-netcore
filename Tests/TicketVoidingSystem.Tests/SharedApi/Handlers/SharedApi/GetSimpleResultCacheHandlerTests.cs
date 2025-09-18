@@ -15,7 +15,7 @@ public class GetSimpleResultCacheHandlerTests
     {
         // Arrange
         var resultCacheService = Substitute.For<ResultCacheService>();
-        resultCacheService.GetSimpleResultCache(default).ReturnsForAnyArgs(new Result());
+        resultCacheService.GetSimpleResultCache(null).ReturnsForAnyArgs(new Result());
         var handler = new GetSimpleResultCacheHandler(resultCacheService);
         var request = new GetSimpleResultCacheRequest { Guid = "1" };
 

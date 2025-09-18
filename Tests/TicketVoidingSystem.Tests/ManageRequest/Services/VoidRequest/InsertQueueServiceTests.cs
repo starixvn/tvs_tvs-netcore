@@ -38,6 +38,8 @@ public class InsertQueueServiceTests
 
         var service = CreateService(repository, validation, history, signalR);
         var query = new InsertQueueQuery { RequestId = 123, IssueTypeId = IssueTypeConstant.DangerAccepted };
+        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>())
 
         // Act
         await service.InsertTicketVoidingQueue(query);
@@ -68,8 +70,8 @@ public class InsertQueueServiceTests
             new() { SiteDbGroupId = 10, VoidingTypeId = VoidingTypeConstant.Parlay + 999, TransId = 222 }
         };
         validation.RecheckTicketsStatus(Arg.Any<InsertQueueQuery>()).Returns(tickets);
-        repository.GetServerInsertQueue(tickets).Returns([10]);
-        history.InsertVoidingHistory(default!, default, default!, default!)
+        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
             .ReturnsForAnyArgs(999); // dummy id
 
         var service = CreateService(repository, validation, history, signalR);
@@ -103,8 +105,8 @@ public class InsertQueueServiceTests
             new() { SiteDbGroupId = 1, VoidingTypeId = VoidingTypeConstant.Parlay + 1, TransId = 2 }
         };
         validation.RecheckTicketsStatus(Arg.Any<InsertQueueQuery>()).Returns(tickets);
-        repository.GetServerInsertQueue(tickets).Returns([1]);
-        history.InsertVoidingHistory(default!, default, default!, default!)
+        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
+        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
             .ReturnsForAnyArgs(1);
 
         var service = CreateService(repository, validation, history, signalR);

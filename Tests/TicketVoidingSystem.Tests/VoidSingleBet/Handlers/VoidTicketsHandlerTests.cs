@@ -45,14 +45,14 @@ public class VoidTicketsHandlerTests
         var netPositionForCricketService = Substitute.For<NetPositionForCricketService>();
         var voidResultCacheService = Substitute.For<ResultCacheService>();
         voidResultCacheService.IsExistResult(Arg.Compat.Any<string>()).ReturnsForAnyArgs(false);
-        netPositionForCricketService.Update(default).ReturnsForAnyArgs(("", new List<BetId>()));
-        var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, default, default);
+        netPositionForCricketService.Update(null).ReturnsForAnyArgs(("", new List<BetId>()));
+        var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, null, null);
 
         // Act
         var actual = await handler.Handle(new VoidTicketsRequest(), CancellationToken.None);
 
         // Assert
-        await voidResultCacheService.ReceivedWithAnyArgs(2).SetVoidResultsCache(default, default);
+        await voidResultCacheService.ReceivedWithAnyArgs(2).SetVoidResultsCache(null, null);
         var iEnumerable = actual.ToList();
         Assert.Single(iEnumerable);
         Assert.Equal(ErrorCode.ExecuteQueryAPIFail, iEnumerable.First().ErrorCode);
@@ -74,10 +74,10 @@ public class VoidTicketsHandlerTests
         var afterVoidService = Substitute.For<AfterVoidService>();
         var voidResultCacheService = Substitute.For<ResultCacheService>();
         voidResultCacheService.IsExistResult(Arg.Any<string>()).ReturnsForAnyArgs(false);
-        netPositionForCricketService.Update(default).ReturnsForAnyArgs(("", new List<BetId> { new() }));
-        afterVoidService.ExecuteWhenVoidSuccess(default, default, default)
+        netPositionForCricketService.Update(null).ReturnsForAnyArgs(("", new List<BetId> { new() }));
+        afterVoidService.ExecuteWhenVoidSuccess(null, null, null)
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 0 } });
-        afterVoidService.ExecuteWhenVoidFailed(default)
+        afterVoidService.ExecuteWhenVoidFailed(null)
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 1 } });
         voidTicketsService.VoidBet(Arg.Any<VoidTicketsQuery>()).Returns(new VoidTicketsModel());
         var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, voidTicketsService, afterVoidService);
@@ -86,7 +86,7 @@ public class VoidTicketsHandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await voidResultCacheService.ReceivedWithAnyArgs(2).SetVoidResultsCache(default, default);
+        await voidResultCacheService.ReceivedWithAnyArgs(2).SetVoidResultsCache(null, null);
         await netPositionForCricketService.ReceivedWithAnyArgs(1).Rollback(Arg.Any<VoidTicketsModel>());
         await voidTicketsService.ReceivedWithAnyArgs(1).VoidBet(Arg.Any<VoidTicketsQuery>());
         Assert.Equal(2, actual.Count());

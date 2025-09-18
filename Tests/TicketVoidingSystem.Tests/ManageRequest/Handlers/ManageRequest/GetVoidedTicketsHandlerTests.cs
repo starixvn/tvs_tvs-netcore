@@ -63,7 +63,7 @@ public class GetVoidedTicketsHandlerTests
         mapTicketsService.MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsQuery>())
             .ReturnsForAnyArgs(groups);
         var groupViewModel = new Group<VoidedTicketViewModel>();
-        mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
+        mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), 0,
                 Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
         await handler.Handle(request, CancellationToken.None);
@@ -91,7 +91,7 @@ public class GetVoidedTicketsHandlerTests
         mapTicketsService.MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsQuery>())
             .ReturnsForAnyArgs(groups);
         var groupViewModel = new Group<VoidedTicketViewModel>();
-        mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default,
+        mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), 0,
                 Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(groupViewModel);
         // Act
         await handler.Handle(request, CancellationToken.None);
@@ -120,7 +120,7 @@ public class GetVoidedTicketsHandlerTests
         mapTicketsService.MapToGroupVoidedTickets(Arg.Any<List<VoidedTicketModel>>(), Arg.Any<GetVoidedTicketsQuery>())
             .ReturnsForAnyArgs(groups);
         var groupViewModel = new Group<VoidedTicketViewModel>();
-        mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), default, Arg.Any<GetVoidedTicketsQuery>())
+        mapTicketsService.MapToGroupVoidedTicketsViewModel(Arg.Any<Group<VoidedTicketModel>>(), Arg.Any<Match>(), 0, Arg.Any<GetVoidedTicketsQuery>())
             .ReturnsForAnyArgs(groupViewModel);
         // Act
         await handler.Handle(request, CancellationToken.None);

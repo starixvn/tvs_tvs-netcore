@@ -48,7 +48,7 @@ public class DuplicateTicketsEmailItSupportServiceTests
             new DuplicateTicketsEmailItSupportServiceImp(sitesEmailService, emailSimpleService,
                 emailContentService);
         // Act
-        await service.Send(default, default, duplicateTickets);
+        await service.Send(null, null, duplicateTickets);
 
         // Assert
         sitesEmailService.Received(1).GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa);
@@ -72,7 +72,7 @@ public class DuplicateTicketsEmailItSupportServiceTests
             new DuplicateTicketsEmailItSupportServiceImp(sitesEmailService, emailSimpleService,
                 emailContentService);
         // Act
-        await service.Send(default, default, duplicateTickets);
+        await service.Send(null, null, duplicateTickets);
 
         // Assert
         sitesEmailService.Received(1).GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa);

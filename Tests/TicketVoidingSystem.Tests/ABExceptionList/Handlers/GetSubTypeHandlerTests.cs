@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
@@ -29,7 +30,7 @@ public class GetSubTypeHandlerTests
         var handler = new GetSubTypeHandler(repository);
 
         // Act
-        var actualResult = await handler.Handle(request, default);
+        var actualResult = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         await repository.Received(1).FetchAsync<AbExceptionSubTypeViewModel>(request);

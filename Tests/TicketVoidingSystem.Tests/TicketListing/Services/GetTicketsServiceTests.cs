@@ -21,7 +21,7 @@ public class GetTicketsServiceTests
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var mapTicketService = Substitute.For<MapTicketService>();
-        repository.FetchAsync<DetailTicketModel>(default).ReturnsForAnyArgs(new List<DetailTicketModel>());
+        repository.FetchAsync<DetailTicketModel>(null).ReturnsForAnyArgs(new List<DetailTicketModel>());
         var service = new GetTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, mapTicketService);
 
         // Act
@@ -41,7 +41,7 @@ public class GetTicketsServiceTests
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var mapTicketService = Substitute.For<MapTicketService>();
-        repository.FetchAsync<DetailTicketModel>(default).ReturnsForAnyArgs(new List<DetailTicketModel>());
+        repository.FetchAsync<DetailTicketModel>(null).ReturnsForAnyArgs(new List<DetailTicketModel>());
         var service = new GetTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, mapTicketService);
 
         // Act
