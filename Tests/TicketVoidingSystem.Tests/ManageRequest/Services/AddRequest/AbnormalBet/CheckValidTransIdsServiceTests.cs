@@ -8,7 +8,6 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 

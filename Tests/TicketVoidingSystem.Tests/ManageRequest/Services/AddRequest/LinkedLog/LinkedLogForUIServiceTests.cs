@@ -45,7 +45,7 @@ public class LinkedLogForUIServiceTests
         var notAffectedGroup = result.Where(x => !x.IsAffectedGroup && x.LogsData.IsNullOrEmpty());
 
         // Assert
-        Assert.Equal(2, result.Count());
+        Assert.Equal(2, result.Count);
         Assert.Single(affectedGroup);
         Assert.Single(notAffectedGroup);
     }
@@ -66,7 +66,7 @@ public class LinkedLogForUIServiceTests
         var notAffectedGroupDefault = result.Where(x => !x.IsAffectedGroup && x.LogsData.IsNullOrEmpty());
 
         // Assert
-        Assert.Equal(2, result.Count());
+        Assert.Equal(2, result.Count);
         Assert.Single(notAffectedGroupDefault);
         Assert.Single(notAffectedGroupHaveData);
     }
@@ -87,7 +87,7 @@ public class LinkedLogForUIServiceTests
         var notAffectedGroup = result.Where(x => !x.IsAffectedGroup && x.LogsData.Any(y => y.Contains("Score[33:44]")));
 
         // Assert
-        Assert.Equal(2, result.Count());
+        Assert.Equal(2, result.Count);
         Assert.Single(affectedGroup);
         Assert.Single(notAffectedGroup);
     }
@@ -112,7 +112,7 @@ public class LinkedLogForUIServiceTests
         var notAffectedGroup = result.Where(x => !x.IsAffectedGroup && x.LogsData.IsNullOrEmpty());
 
         // Assert
-        Assert.Equal(2, result.Count());
+        Assert.Equal(2, result.Count);
         Assert.Single(affectedGroup);
         Assert.Single(notAffectedGroup);
     }

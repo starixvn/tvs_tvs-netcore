@@ -9,14 +9,12 @@ namespace TicketVoidingSystem.Tests.SharedApi.Services.Analytics;
 public class UserActionLogServiceTests
 {
     private readonly UserActionLogService userActionLogService;
-    private readonly SessionService sessionService;
-    private readonly IDynamicRepository repository;
 
     public UserActionLogServiceTests()
     {
-        sessionService = Substitute.For<SessionService>();
-        repository = Substitute.For<IDynamicRepository>();
-        userActionLogService = new UserActionLogServiceImp(sessionService, repository);
+        var sessionService1 = Substitute.For<SessionService>();
+        var repository1 = Substitute.For<IDynamicRepository>();
+        userActionLogService = new UserActionLogServiceImp(sessionService1, repository1);
     }
 
     [Fact]

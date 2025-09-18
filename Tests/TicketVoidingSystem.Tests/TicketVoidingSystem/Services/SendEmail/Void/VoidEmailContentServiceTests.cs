@@ -33,7 +33,7 @@ public class VoidEmailContentServiceTests
     }
 
     [Fact]
-    public async void Create_HasNoValidTicket_ReturnNewMailRecord()
+    public async Task Create_HasNoValidTicket_ReturnNewMailRecord()
     {
         // Arrange
         var tickets = new List<TicketEmailModel>();

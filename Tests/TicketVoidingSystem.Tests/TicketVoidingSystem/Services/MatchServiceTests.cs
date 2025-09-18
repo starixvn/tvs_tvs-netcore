@@ -23,7 +23,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatch_HasRequestIsGetMatchInfoCriteriarepositoryHasGetAsync()
+    public void GetMatch_HasRequestIsGetMatchInfoCriteriaRepositoryHasGetAsync()
     {
         // Arrange
         var query = new GetMatchInfoCriteria();
@@ -36,7 +36,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrencyrepositoryHasGetAsync()
+    public void GetMatchVoidByCurrencyRepositoryHasGetAsync()
     {
         // Arrange
         // Act
@@ -47,7 +47,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasInputIsGetMatchIdrepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasInputIsGetMatchIdRepositoryHasGetAsync()
     {
         // Arrange
         // Act
@@ -58,7 +58,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatch_HasRequestIsIdrepositoryHasGetAsync()
+    public void GetMatch_HasRequestIsIdRepositoryHasGetAsync()
     {
         // Arrange
         const int query = 1;
@@ -71,7 +71,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasRequestIsCriteriarepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasRequestIsCriteriaRepositoryHasGetAsync()
     {
         // Arrange
         var query = new GetMatchInfoVoidByCurrencyCriteria();
