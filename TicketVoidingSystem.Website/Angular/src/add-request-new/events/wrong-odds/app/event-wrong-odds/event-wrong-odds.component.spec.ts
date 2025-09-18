@@ -1,23 +1,23 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
+import { PoolHouseTicketValue } from '../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { WrongOddsModel } from '../../../../models/event-wrong-odds.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventWrongOddsComponent } from './event-wrong-odds.component';
-import { ValidationService } from './services/validation.service';
+import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
+import { FilterWrongOddsModel, MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
+import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
+import { CalculateOddsService } from './services/calculate-odds.service';
 import { EventWrongOddsService } from './services/event-wrong-odds.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { CalculateOddsService } from './services/calculate-odds.service';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
-import { FilterModel } from '../../../../component/filter/filter.model';
-import { WrongOddsModel } from '../../../../models/event-wrong-odds.model';
-import { OthersModel } from '../../../../component/others/others.model';
-import { LogInfoWrongOdds } from './models/log-info-wrong-odds.model';
-import { FilterWrongOddsModel, MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { PoolHouseTicketValue } from '../../../../component/pool-house-ticket/pool-house-ticket.constant';
-import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
-import { SimpleChange } from '@angular/core';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;

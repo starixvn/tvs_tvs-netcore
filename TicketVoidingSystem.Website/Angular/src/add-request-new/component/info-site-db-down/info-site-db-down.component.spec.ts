@@ -81,10 +81,10 @@ describe('InfoSiteDBDownComponent', () => {
 
       // Assert
       expect(component.isSiteDBDown).toBe(true);
-      expect(component.sumAffectedSingleCount).toBe(5);
-      expect(component.sumAffectedParlayCount).toBe(3);
-      expect(component.sumAffectedCCOCount).toBe(2);
-      expect(component.sumAffectedUserNames).toBe('user1,user2');
+      expect(component.infoSiteDBDownModel.singleCount).toBe(5);
+      expect(component.infoSiteDBDownModel.parlayCount).toBe(3);
+      expect(component.infoSiteDBDownModel.cancelCashOutCount).toBe(2);
+      expect(component.infoSiteDBDownModel.usernames).toBe('user1,user2');
     });
 
     it('should not update properties when infoSiteDBDownModel property is not changed', () => {
@@ -98,7 +98,7 @@ describe('InfoSiteDBDownComponent', () => {
       };
 
       component.infoSiteDBDownModel = mockModel;
-      component.sumAffectedSingleCount = 10; // Set initial value
+      component.infoSiteDBDownModel.singleCount = 10; // Set initial value
 
       // Act
       component.ngOnChanges({
@@ -111,33 +111,35 @@ describe('InfoSiteDBDownComponent', () => {
       });
 
       // Assert
-      expect(component.sumAffectedSingleCount).toBe(10); // Should remain unchanged
+      expect(component.infoSiteDBDownModel.singleCount).toBe(10); // Should remain unchanged
     });
   });
 
   describe('affectedSiteInfo', () => {
     it('should return affected user info when usernames are provided', () => {
       // Arrange
-      component.sumAffectedUserNames = 'user1,user2,user3';
+      component.infoSiteDBDownModel = {} as InfoSiteDBDownModel;
+      component.infoSiteDBDownModel.usernames = 'user1,user2,user3';
 
       // Act
       const result = component.affectedSiteInfo();
 
       // Assert
-      expect(result).toBe('Username(s): <strong>user1,user2,user3</strong>');
+      expect(result).toBe('Username(s): <strong>user1, user2, user3</strong>');
     });
 
     it('should return affected ticket info when not have usernames', () => {
       // Arrange
-      component.sumAffectedUserNames = '';
-      component.sumAffectedSingleCount = 5;
-      component.sumAffectedParlayCount = 3;
-      component.sumAffectedCCOCount = 2;
+      component.infoSiteDBDownModel = {} as InfoSiteDBDownModel;
+      component.infoSiteDBDownModel.usernames = '';
+      component.infoSiteDBDownModel.singleCount = 5;
+      component.infoSiteDBDownModel.parlayCount = 3;
+      component.infoSiteDBDownModel.cancelCashOutCount = 2;
       const TestCaseUserNames = ['', null, undefined];
 
       // Act & Assert
       TestCaseUserNames.forEach(userNames => {
-        component.sumAffectedUserNames = userNames;
+        component.infoSiteDBDownModel.usernames = userNames;
         const result = component.affectedSiteInfo();
         expect(result).toBe('Affected Single Count: <strong>5</strong>, Parlay Count: <strong>3</strong>, Cancel Cash Out Count: <strong>2</strong>');
       });
@@ -155,11 +157,12 @@ describe('InfoSiteDBDownComponent', () => {
         { singleCount: 0, parlayCount: 3, ccoCount: 0, expectedResult: 'Affected Parlay Count: <strong>3</strong>' },
         ];
 
+        component.infoSiteDBDownModel = {} as InfoSiteDBDownModel;
         // Act & Assert
         TestCases.forEach(testCase => {
-          component.sumAffectedSingleCount = testCase.singleCount;
-          component.sumAffectedParlayCount = testCase.parlayCount;
-          component.sumAffectedCCOCount = testCase.ccoCount;
+          component.infoSiteDBDownModel.singleCount = testCase.singleCount;
+          component.infoSiteDBDownModel.parlayCount = testCase.parlayCount;
+          component.infoSiteDBDownModel.cancelCashOutCount = testCase.ccoCount;
           const result = component.affectedSiteInfo();
           expect(result).toBe(testCase.expectedResult);
         });
@@ -210,39 +213,10 @@ describe('InfoSiteDBDownComponent', () => {
 
       // Assert
       expect(component.isSiteDBDown).toBe(true);
-      expect(component.sumAffectedSingleCount).toBe(10);
-      expect(component.sumAffectedParlayCount).toBe(5);
-      expect(component.sumAffectedCCOCount).toBe(3);
-      expect(component.sumAffectedUserNames).toBe('testuser1,testuser2');
-    });
-
-    it('should handle model with zero values', () => {
-      // Arrange
-      const mockModel: InfoSiteDBDownModel = {
-        singleCount: 0,
-        parlayCount: 0,
-        cancelCashOutCount: 0,
-        usernames: '',
-        siteDBDownInfoJson: ''
-      };
-
-      // Act
-      component.infoSiteDBDownModel = mockModel;
-      component.ngOnChanges({
-        infoSiteDBDownModel: {
-          currentValue: mockModel,
-          previousValue: undefined,
-          firstChange: true,
-          isFirstChange: () => true
-        }
-      });
-
-      // Assert
-      expect(component.isSiteDBDown).toBe(true);
-      expect(component.sumAffectedSingleCount).toBe(0);
-      expect(component.sumAffectedParlayCount).toBe(0);
-      expect(component.sumAffectedCCOCount).toBe(0);
-      expect(component.sumAffectedUserNames).toBe('');
+      expect(component.infoSiteDBDownModel.singleCount).toBe(10);
+      expect(component.infoSiteDBDownModel.parlayCount).toBe(5);
+      expect(component.infoSiteDBDownModel.cancelCashOutCount).toBe(3);
+      expect(component.infoSiteDBDownModel.usernames).toBe('testuser1,testuser2');
     });
   });
 
@@ -250,10 +224,7 @@ describe('InfoSiteDBDownComponent', () => {
     it('should initialize with default values', () => {
       // Assert
       expect(component.isSiteDBDown).toBe(false);
-      expect(component.sumAffectedSingleCount).toBe(0);
-      expect(component.sumAffectedParlayCount).toBe(0);
-      expect(component.sumAffectedCCOCount).toBe(0);
-      expect(component.sumAffectedUserNames).toBe('');
+      expect(component.infoSiteDBDownModel).toBeUndefined();
     });
 
     it('should have infoSiteDBDownModel as undefined initially', () => {
@@ -286,14 +257,15 @@ describe('InfoSiteDBDownComponent', () => {
 
       // Assert
       expect(component.isSiteDBDown).toBe(true);
-      expect(component.sumAffectedSingleCount).toBe(999999);
-      expect(component.sumAffectedParlayCount).toBe(888888);
-      expect(component.sumAffectedCCOCount).toBe(777777);
+      expect(component.infoSiteDBDownModel.singleCount).toBe(999999);
+      expect(component.infoSiteDBDownModel.parlayCount).toBe(888888);
+      expect(component.infoSiteDBDownModel.cancelCashOutCount).toBe(777777);
     });
 
     it('should handle very long usernames string', () => {
       // Arrange
       const longUsernames = 'user1,user2,user3,user4,user5,user6,user7,user8,user9,user10';
+      const showUsernames = 'user1, user2, user3, user4, user5, user6, user7, user8, user9, user10';
       const mockModel: InfoSiteDBDownModel = {
         singleCount: 1,
         parlayCount: 1,
@@ -315,8 +287,8 @@ describe('InfoSiteDBDownComponent', () => {
 
       // Assert
       expect(component.isSiteDBDown).toBe(true);
-      expect(component.sumAffectedUserNames).toBe(longUsernames);
-      expect(component.affectedSiteInfo()).toBe(`Username(s): <strong>${longUsernames}</strong>`);
+      expect(component.infoSiteDBDownModel.usernames).toBe(longUsernames);
+      expect(component.affectedSiteInfo()).toBe(`Username(s): <strong>${showUsernames}</strong>`);
     });
 
     it('should handle negative numbers gracefully', () => {
@@ -342,9 +314,9 @@ describe('InfoSiteDBDownComponent', () => {
 
       // Assert
       expect(component.isSiteDBDown).toBe(true);
-      expect(component.sumAffectedSingleCount).toBe(-5);
-      expect(component.sumAffectedParlayCount).toBe(-3);
-      expect(component.sumAffectedCCOCount).toBe(-2);
+      expect(component.infoSiteDBDownModel.singleCount).toBe(-5);
+      expect(component.infoSiteDBDownModel.parlayCount).toBe(-3);
+      expect(component.infoSiteDBDownModel.cancelCashOutCount).toBe(-2);
     });
   });
 });

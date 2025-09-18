@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { CalculateOddsService } from './calculate-odds.service';
-import { TestingModule } from "../../../../../../utility/modules/testing.module";
 import { MatchModel } from "../../../../../../utility/models/match.model";
-import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
+import { TestingModule } from "../../../../../../utility/modules/testing.module";
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wrong-odds.model';
+import { CalculateOddsService } from './calculate-odds.service';
 
 describe('CalculateOddsService', () => {
   let service: CalculateOddsService;

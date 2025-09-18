@@ -3,7 +3,6 @@ import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
 import { GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { WrongOddsGetLogInfoQuery } from '../models/get-log-info.query';
@@ -55,7 +54,6 @@ describe('LogInfoService', () => {
       const mockLogInfoWrongOdds = new LogInfoWrongOdds();
       mockLogInfoWrongOdds.logInfoDetail = mockLogInfoDetail;
       mockLogInfoWrongOdds.messageValidationLogInfo = [{ isError: false, reason: '' }];
-      mockLogInfoWrongOdds.poolHouseCheckedBetTypes = PoolHouseTicketValue.NOT_AFFECTED;
 
       const mockFilter = new FilterModel();
       const mockPrimitiveProps = new PrimitiveProperty();
@@ -84,7 +82,6 @@ describe('LogInfoService', () => {
       expect(mockPrimitiveProps.transInfoAddRequestModel).toEqual(mockGetLogInfoResponse.transInfoAddRequestModel);
       expect(mockLogInfoWrongOdds.logInfoDetail).toBeDefined();
       expect(mockLogInfoWrongOdds.messageValidationLogInfo).toBeDefined();
-      expect(mockLogInfoWrongOdds.poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.NOT_AFFECTED);
     });
 
     it('should handle case when log info model is not found', async () => {
@@ -93,7 +90,6 @@ describe('LogInfoService', () => {
       mockLogInfoWrongOdds.matchId = 123;
       mockLogInfoWrongOdds.logInfoDetail = new LogInfoDetail();
       mockLogInfoWrongOdds.messageValidationLogInfo = [{ isError: false, reason: '' }];
-      mockLogInfoWrongOdds.poolHouseCheckedBetTypes = PoolHouseTicketValue.NOT_AFFECTED;
 
       const mockFilter = new FilterModel();
       const mockPrimitiveProps = new PrimitiveProperty();

@@ -2,6 +2,7 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import assignIn from 'lodash/assignIn';
+import { InfoSiteDBDownComponent } from 'src/add-request-new/component/info-site-db-down/info-site-db-down.component';
 import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
 import { GroupBetTypesAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
@@ -9,15 +10,15 @@ import { GetBetTypesQuery, TimeRangeModel } from '../../../../../utility/compone
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { ModeType } from '../../../../../utility/constants/config';
 import { CommonService } from '../../../../../utility/services/common.service';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
 import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-request/confirm-add-request.component';
 import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../../../component/filter/filter.model';
 import { IssueTypes } from '../../../../component/filter/issue-types.model';
+import { OthersModel } from '../../../../component/others/others.model';
 import { WrongOddsSportsBookModel } from '../../../../models/event-wrong-odds-sports-book.model';
 import { PermissionAddRequest } from '../../../../models/permission-add-request.model';
-import { OthersModel } from '../../../../component/others/others.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { CheckAddPermissionService } from '../../../../services/check-permission.service';
 import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
 import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book/log-info-wrong-odds-sports-book.component';
@@ -35,9 +36,11 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './event-wrong-odds-sports-book.component.html',
   styleUrls: ['./event-wrong-odds-sports-book.component.scss'],
   standalone: true,
-  imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule, LogInfoWrongOddsSportsBookComponent,
-    AdvancedModeAddRequestComponent, ConfirmAddRequestComponent],
-  providers: [EventWrongOddsSportsBookService, LogInfoService, SaveRequestService, ValidationService, CheckAddPermissionService]
+  imports: [EventLeagueComponent, FilterWrongOddsSportsBookComponent, FormsModule, InfoSiteDBDownComponent,
+    LogInfoWrongOddsSportsBookComponent, AdvancedModeAddRequestComponent, ConfirmAddRequestComponent],
+  providers: [EventWrongOddsSportsBookService, LogInfoService, SaveRequestService, ValidationService,
+    CheckAddPermissionService
+  ]
 })
 export class EventWrongOddsSportsBookComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -113,6 +116,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   async handleSearchEvent(): Promise<void> {
     this.logInfoEvent.betTeamsResult = this.advancedMode.getCheckedBetTypes();
     this.primitiveProps.isShowValidation = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsSportsBookComponent, this.advancedMode)) {
       return;
@@ -153,6 +157,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   resetLogInfo(): void {
     this.primitiveProps.isShowErrorNoBetType = false;
     this.primitiveProps.isShowValidation = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 
@@ -187,6 +192,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
 
   public async changeMatchEvent(): Promise<void> {
     this.primitiveProps.isShowValidation = false;
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     if (this.eventLeagueComponent?.selectedMatch.matchId) {

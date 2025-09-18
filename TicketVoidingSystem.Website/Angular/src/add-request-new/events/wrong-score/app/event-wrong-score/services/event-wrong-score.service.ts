@@ -120,7 +120,6 @@ export class EventWrongScoreService {
     confirmWrongScoreModel.requestedBy = args.requestedBy;
     confirmWrongScoreModel.issueTypeName = args.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === args.filter.issueTypeId).issueTypeName;
     confirmWrongScoreModel.subIssueTypeName = args.issueTypes.subIssueTypes.find(x => x.subIssueTypeId.toString() === args.filter.subIssueTypeId).subIssueTypeName;
-    confirmWrongScoreModel.isHasAffectedTicketSiteDBDown = args.infoSiteDBDownModel?.siteDBDownInfoJson !== null;
     confirmWrongScoreModel.isOpenDialog = true;
   }
 }

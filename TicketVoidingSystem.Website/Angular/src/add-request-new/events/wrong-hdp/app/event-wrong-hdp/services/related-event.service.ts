@@ -1,12 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import moment from 'moment-timezone';
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
+import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
 import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
 import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
@@ -78,6 +78,7 @@ export class RelatedEventService {
       model.primitiveProps.isBlock = false;
       model.primitiveProps.isShowRelatedEvents = true;
       model.primitiveProps.inputRelatedMatchId = null;
+      model.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 }

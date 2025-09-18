@@ -1,16 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { FilterWithHdpComponent } from './filter-with-hdp.component';
-import { ValidationService } from '../services/validation.service';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { TeamFavorite } from '../../../../../../utility/constants/config';
-import { StaticService } from '../../../../../../utility/services/static.service';
-import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
-import { TEXT } from '../../../../../../utility/constants/text';
 import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
+import { DateTimeFormat, TeamFavorite } from '../../../../../../utility/constants/config';
+import { TEXT } from '../../../../../../utility/constants/text';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
+import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { ValidationService } from '../services/validation.service';
+import { FilterWithHdpComponent } from './filter-with-hdp.component';
 
 class Helper {
   static readonly fakeFilterModel: FilterModel = {

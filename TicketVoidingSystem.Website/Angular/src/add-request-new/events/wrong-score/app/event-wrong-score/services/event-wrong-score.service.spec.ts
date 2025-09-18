@@ -198,7 +198,7 @@ describe('EventWrongScoreService', () => {
         ],
         filter: { isVoided: false, action: 'action' },
         relatedEvents: [
-          {
+          { 
             eventName: 'Event 1',
             messageValidationLogInfo: [{ reason: TEXT.NO_VALID_TICKETS_IN_RANGE }]
           }

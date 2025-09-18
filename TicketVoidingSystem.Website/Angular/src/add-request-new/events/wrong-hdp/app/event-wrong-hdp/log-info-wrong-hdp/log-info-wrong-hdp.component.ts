@@ -7,25 +7,24 @@ import { BlockUiDirective } from '../../../../../../utility/components/block-ui/
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { SportType } from '../../../../../../utility/constants/sport.constant';
+import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../../services/add-request.store';
 import { AffectedTicketComponent } from '../../../../../component/affected-ticket/affected-ticket.component';
 import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
-import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
+import { PoolHouseTicketComponent } from '../../../../../component/pool-house-ticket/pool-house-ticket.component';
 import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../../../../component/pool-house-ticket/pool-house-ticket.model';
+import { TicketCountOtherSportsComponent } from '../../../../../component/ticket-count-other-sports/ticket-count-other-sports.component';
+import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
+import { LogAnalysisService } from '../../../../../services/log-analysis.service';
 import { FilterWithHdpComponent } from '../filter-with-hdp/filter-with-hdp.component';
 import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongHdpService } from '../services/event-wrong-hdp.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
-import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';
-import { TicketCountOtherSportsComponent } from '../../../../../component/ticket-count-other-sports/ticket-count-other-sports.component';
-import { PoolHouseTicketComponent } from '../../../../../component/pool-house-ticket/pool-house-ticket.component';
-import { LogAnalysisService } from '../../../../../services/log-analysis.service';
 
 @Component({
   selector: 'log-info-wrong-hdp',
@@ -130,10 +129,11 @@ export class LogInfoWrongHdpComponent {
     this.logInfo.isShowValidation = false;
     this.logInfo.logInfoDetail = null;
     this.logInfo.messageValidationLogInfo = null;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
   }
 
   public resetPoolHouseCheckedBetTypes(): void {
-    this.logInfo.poolHouseCheckedBetTypes = this.logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
+    this.eventWrongHdpService.resetPoolHouseCheckedBetTypes(this.logInfo);
   }
 
   public emitSearchEvent(): void {

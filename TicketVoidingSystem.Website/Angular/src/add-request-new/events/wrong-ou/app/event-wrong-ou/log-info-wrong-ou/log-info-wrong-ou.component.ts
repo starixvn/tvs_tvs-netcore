@@ -9,22 +9,21 @@ import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { SportType } from '../../../../../../utility/constants/sport.constant';
 import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../../../../component/affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { PoolHouseTicketComponent } from '../../../../../component/pool-house-ticket/pool-house-ticket.component';
+import { GetPoolHouseTicketQuery, PoolHouseTicketsModel } from '../../../../../component/pool-house-ticket/pool-house-ticket.model';
+import { TicketCountOtherSportsComponent } from '../../../../../component/ticket-count-other-sports/ticket-count-other-sports.component';
+import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
+import { LogAnalysisService } from '../../../../../services/log-analysis.service';
 import { FilterWrongOuComponent } from '../filter-wrong-ou/filter-wrong-ou.component';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
-import { PoolHouseTicketComponent } from '../../../../../component/pool-house-ticket/pool-house-ticket.component';
-import { AffectedTicketComponent } from '../../../../../component/affected-ticket/affected-ticket.component';
-import { PoolHouseTicketsModel, GetPoolHouseTicketQuery } from '../../../../../component/pool-house-ticket/pool-house-ticket.model';
-import { TicketCountOtherSportsComponent } from '../../../../../component/ticket-count-other-sports/ticket-count-other-sports.component';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
-import { AddRequestStore } from '../../../../../services/add-request.store';
-import { PoolHouseTicketValue } from '../../../../../component/pool-house-ticket/pool-house-ticket.constant';
-import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
-import { LogAnalysisService } from '../../../../../services/log-analysis.service';
 
 @Component({
   selector: 'log-info-wrong-ou',
@@ -152,7 +151,7 @@ export class LogInfoWrongOuComponent implements OnInit {
   }
 
   public resetPoolHouseCheckedBetTypes(): void {
-    this.logInfo.poolHouseCheckedBetTypes = this.logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
+    this.eventWrongOuService.resetPoolHouseCheckedBetTypes(this.logInfo);
   }
 
   public openPopupTransIds(requestId: number, transIds: string): void {

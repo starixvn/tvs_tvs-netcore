@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
 import { AppService } from '../../app.service';
@@ -35,7 +35,7 @@ describe('ValidationService', () => {
       const mockPermission = {} as PermissionAddRequest;
 
       // Act
-      const result = await service.checkBusinessRule(mockBetIdsComponent, mockPermission);
+      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
 
       // Assert
       expect(result.isValid).toBeFalsy();
@@ -57,26 +57,26 @@ describe('ValidationService', () => {
         isVoidAllArchivedTickets: false
       } as PermissionAddRequest;
 
-      eventTicket14ApiService.checkTickets14 = jest.fn().mockResolvedValue(null);
+      jest.spyOn(eventTicket14ApiService, 'checkTickets14').mockResolvedValue(null);
 
       // Act
-      const result = await service.checkBusinessRule(mockBetIdsComponent, mockPermission);
+      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
 
       // Assert
       expect(result.isValid).toBeFalsy();
+      expect(eventTicket14ApiService.checkTickets14).toHaveBeenCalled();
     });
 
     it('should highlight invalid trans IDs and return valid result', async () => {
       // Arrange
-      const mockUpdateInvalidItems = jest.fn();
       const mockBetIdsComponent = {
         isHasBetId: () => true,
         groupNumber: {
           resetAllItemsToValid: () => {},
           checkDuplicatedItems: () => {},
-          updateInvalidItems: mockUpdateInvalidItems
+          updateInvalidItems: jest.fn()
         },
-        isAllBetIdsValid: () => false,
+        isAllBetIdsValid: () => true,
         getAllBetIds: () => ['123', '456']
       } as unknown as BetIdsComponent;
 
@@ -90,15 +90,16 @@ describe('ValidationService', () => {
         transInfoJson: '{}'
       };
 
-      eventTicket14ApiService.checkTickets14 = jest.fn().mockResolvedValue(mockValidationResult);
+      jest.spyOn(eventTicket14ApiService, 'checkTickets14').mockResolvedValue(mockValidationResult);
 
       // Act
-      const result = await service.checkBusinessRule(mockBetIdsComponent, mockPermission);
+      const result = await service.checkBusinessRule(mockBetIdsComponent, '1', mockPermission);
 
       // Assert
-      expect(result.isValid).toBeFalsy();
-      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('123', TEXT.INVALID_TICKETS);
-      expect(mockUpdateInvalidItems).toHaveBeenCalledWith('456', TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+      expect(result.isValid).toBeTruthy();
+      expect(result.transInfoJson).toBe('{}');
+      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', TEXT.INVALID_TICKETS);
+      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('456', TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
     });
   });
 });

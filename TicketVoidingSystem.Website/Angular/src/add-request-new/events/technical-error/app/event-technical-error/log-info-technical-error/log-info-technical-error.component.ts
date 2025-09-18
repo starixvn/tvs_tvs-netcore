@@ -1,6 +1,6 @@
 import { Component, inject, Input } from '@angular/core';
-import moment from 'moment-timezone';
 import clone from 'lodash/clone';
+import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../../../../utility/components/block-ui/block-ui.directive';
 import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
@@ -29,7 +29,7 @@ export class LogInfoTechnicalErrorComponent {
   @Input() issueTypeId: string;
 
   private readonly affectedTicketService = inject(AffectedTicketService);
-
+  
   groupBetTypesCount: GroupBetTypeCountModel[] = [];
   affectedTicketsModel = new AffectedTicketsModel();
   isBlock: boolean;

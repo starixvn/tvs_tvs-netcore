@@ -19,7 +19,7 @@ export class LogInfoService {
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
     primitiveProps.isShowBetTypeCount = false;
     primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
-    
+
     this.assignResultLogInfoToEvents(logInfoEvent, viewModel.getLogInfoModels);
   }
 

@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MatchType } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { AddRelatedEventArg } from '../../../../../models/add-related-event.model';
@@ -84,6 +84,7 @@ describe('RelatedEventService', () => {
           sportType: 1,
           matchType: MatchType.NORMAL,
           isChecked: false,
+          isSpecialChildMatch: false
         }
       ] as ChildMatchModel[];
 

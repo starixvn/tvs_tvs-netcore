@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType } from '../../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../../utility/constants/issue-type.constant';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
@@ -55,6 +55,7 @@ export class RelatedEventService {
       await this.addEventByInputAndSelected(models, arg);
       arg.primitiveProps.isBlock = false;
       arg.primitiveProps.inputRelatedMatchId = null;
+      arg.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 

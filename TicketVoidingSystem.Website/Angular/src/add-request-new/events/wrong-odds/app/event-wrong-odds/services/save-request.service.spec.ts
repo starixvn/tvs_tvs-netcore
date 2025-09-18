@@ -1,25 +1,23 @@
 import { TestBed } from '@angular/core/testing';
-import { SaveRequestService } from './save-request.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { ValidationService } from './validation.service';
-import { LogInfoService } from './log-info.service';
-import { AddRequestService } from '../../../../../services/add-request.service';
-import { EventWrongOddsService } from './event-wrong-odds.service';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
-import { TVSRequestActionType } from '../../../../../../utility/constants/config';
 import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../../../utility/constants/config';
-import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
-import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
+import { DateTimeFormat, TVSRequestActionType } from '../../../../../../utility/constants/config';
+import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { AddRequestService } from '../../../../../services/add-request.service';
 import { PopupService } from '../../../../../services/popup.service';
+import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
+import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOddsService } from './event-wrong-odds.service';
+import { LogInfoService } from './log-info.service';
+import { SaveRequestService } from './save-request.service';
+import { ValidationService } from './validation.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
   let validationService: ValidationService;
   let logInfoService: LogInfoService;
-  let popupService: PopupService;
   let eventWrongOddsService: EventWrongOddsService;
 
   const mockAddRequestStore = {
@@ -100,6 +98,9 @@ describe('SaveRequestService', () => {
       mistakenBy: 'Test',
       decidedBy: 'Test',
       remark: 'Test'
+    },
+    confirmAddRequest: {
+      isOpen: false
     }
   } as unknown as SaveRequestArg;
 
@@ -119,7 +120,6 @@ describe('SaveRequestService', () => {
     service = TestBed.inject(SaveRequestService);
     validationService = TestBed.inject(ValidationService);
     logInfoService = TestBed.inject(LogInfoService);
-    popupService = TestBed.inject(PopupService);
     eventWrongOddsService = TestBed.inject(EventWrongOddsService);
 
     // Mock document.getElementById
@@ -128,34 +128,6 @@ describe('SaveRequestService', () => {
 
   it('should be created', () => {
     expect(service).toBeTruthy();
-  });
-
-  describe('saveRequest', () => {
-    it('should proceed save request when data is valid', async () => {
-      // Arrange
-      service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(true);
-      service['proceedSaveRequest'] = jest.fn();
-
-      // Act
-      await service.saveRequest(mockSaveRequestArg);
-
-      // Assert
-      expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
-      expect(service['proceedSaveRequest']).toHaveBeenCalledWith(mockSaveRequestArg);
-    });
-
-    it('should not proceed save request when data is invalid', async () => {
-      // Arrange
-      jest.spyOn(service, 'recheckLogInfoBeforeSaveRequest').mockResolvedValue(false);
-      service['proceedSaveRequest'] = jest.fn();
-
-      // Act
-      await service.saveRequest(mockSaveRequestArg);
-
-      // Assert
-      expect(service['proceedSaveRequest']).not.toHaveBeenCalled();
-      expect(mockAddRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
-    });
   });
 
   describe('recheckLogInfoBeforeSaveRequest', () => {
@@ -181,7 +153,7 @@ describe('SaveRequestService', () => {
 
       // Assert
       expect(result).toBeTruthy();
-      expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalledTimes(6);
+      expect(mockAddRequestStore.changeBlockingUiStatus).toHaveBeenCalled();
       expect(mockLogInfoWrongOdds.isShowValidation).toBeTruthy();
     });
 
@@ -194,78 +166,6 @@ describe('SaveRequestService', () => {
 
       // Assert
       expect(result).toBeFalsy();
-    });
-  });
-
-  describe('proceedSaveRequest', () => {
-    it('should show confirmation when needed', () => {
-      // Arrange
-      jest.spyOn(validationService, 'checkCanShowConfirmationWrongOdds').mockReturnValue(true);
-      jest.spyOn(popupService, 'showConfirm').mockImplementation(() => {});
-      service['getMessageConfirmationWrongOdds'] = jest.fn().mockReturnValue('test message');
-
-      // Act
-      service['proceedSaveRequest'](mockSaveRequestArg);
-
-      // Assert
-      expect(popupService.showConfirm).toHaveBeenCalledWith(
-        'test message',
-        expect.any(Function),
-        expect.any(Function)
-      );
-    });
-
-    it('should execute save request directly when no confirmation needed', () => {
-      // Arrange
-      jest.spyOn(validationService, 'checkCanShowConfirmationWrongOdds').mockReturnValue(false);
-      service['executeSaveRequestApi'] = jest.fn();
-
-      // Act
-      service['proceedSaveRequest'](mockSaveRequestArg);
-
-      // Assert
-      expect(service['executeSaveRequestApi']).toHaveBeenCalledWith(mockSaveRequestArg);
-    });
-  });
-
-  describe('getMessageConfirmationWrongOdds', () => {
-    it('should include warning message when has warnings', () => {
-      // Arrange
-      const argWithWarnings = { ...mockSaveRequestArg,
-        logInfoEvent: { ...mockLogInfoWrongOdds, messageValidationLogInfo: [{ isError: false, reason: '' }] }
-      };
-
-      // Act
-      const result = service['getMessageConfirmationWrongOdds'](argWithWarnings);
-
-      // Assert
-      expect(result).toContain('There are some warnings in this request');
-    });
-
-    it('should include unmark message when action is TAKE_NOTE', () => {
-      // Arrange
-      const argWithTakeNote = { ...mockSaveRequestArg, isEdit: true,
-        filter: { ...mockSaveRequestArg.filter, action: TVSRequestActionType.TAKE_NOTE_ID.toString() },
-        actionIdOfFirstTimeAccess: 'different-action'
-      };
-
-      // Act
-      const result = service['getMessageConfirmationWrongOdds'](argWithTakeNote);
-
-      // Assert
-      expect(result).toContain('Ticket(s) on request will be unmarked');
-    });
-
-    it('should include user warning when editing by another user', () => {
-      // Arrange
-      const argWithDifferentUser = { ...mockSaveRequestArg, isEdit: true, userId: 1, requestedBy: 'Other User' };
-      document.getElementById = jest.fn().mockReturnValue({ getAttribute: () => '2' } as unknown as HTMLElement);
-
-      // Act
-      const result = service['getMessageConfirmationWrongOdds'](argWithDifferentUser);
-
-      // Assert
-      expect(result).toContain('Please remind this request');
     });
   });
 

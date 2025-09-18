@@ -3,11 +3,11 @@ import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
 import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
@@ -80,6 +80,7 @@ export class RelatedEventService {
       addRelatedEventArg.primitiveProps.isBlock = false;
       addRelatedEventArg.primitiveProps.isShowRelatedEvents = true;
       addRelatedEventArg.primitiveProps.inputRelatedMatchId = null;
+      addRelatedEventArg.primitiveProps.infoSiteDBDownModel = null;
     }
   }
 }

@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import cloneDeep from 'lodash/cloneDeep';
 import moment from 'moment-timezone';
 import { DateTimeFormat, MatchType, SubIssueTypeGroup } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
 import { AddRelatedEventArg } from '../../../../../models/add-related-event.model';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';

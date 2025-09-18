@@ -1,10 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { FilterOddsTypeConstant } from '../models/filter-wrong-odds-sports-book.model';
-import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 import { WrongOddsSportsBookModel } from '../../../../../models/event-wrong-odds-sports-book.model';
+import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
+import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
 
 describe('EventWrongOddsSportsBookService', () => {
   let service: EventWrongOddsSportsBookService;

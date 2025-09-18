@@ -20,9 +20,9 @@
 </div>
 
 @if(isShowFilterBetType()){
-<hdp-filter-bet-type [sportTypeId]="sportTypeId" [issueTypeId]="filter.issueTypeId"
-  [filterBetType]="filterWithHdpModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter()">
-</hdp-filter-bet-type>
+  <hdp-filter-bet-type [sportTypeId]="sportTypeId" [issueTypeId]="filter.issueTypeId"
+    [filterBetType]="filterWithHdpModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter()">
+  </hdp-filter-bet-type>
 }
 
 <div class="d-flex">

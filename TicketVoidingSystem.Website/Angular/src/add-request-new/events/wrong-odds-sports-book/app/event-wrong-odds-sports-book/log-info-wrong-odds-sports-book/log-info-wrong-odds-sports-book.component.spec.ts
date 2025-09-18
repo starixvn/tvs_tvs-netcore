@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book.component';
+import moment from 'moment-timezone';
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
-import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { LogInfoWrongOddsSportsBookComponent } from './log-info-wrong-odds-sports-book.component';
 
 class Helper {
   static readonly fakeLogInfo: LogInfoWrongOddsSportsBook = {

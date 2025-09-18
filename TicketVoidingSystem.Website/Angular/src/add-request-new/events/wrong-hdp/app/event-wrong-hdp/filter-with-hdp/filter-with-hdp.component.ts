@@ -11,10 +11,10 @@ import { DateTimeFormat, TeamFavorite } from '../../../../../../utility/constant
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
-import { ValidationService } from '../services/validation.service';
 import { HdpFilterBetTypeComponent } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.component';
 import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
+import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'filter-with-hdp',

@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { MatchType } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
 import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
 import { FilterBetType, FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { RelatedEventService } from './related-event.service';
@@ -63,7 +63,8 @@ describe('RelatedEventService', () => {
           leagueName: 'League 1',
           sportType: 1,
           matchType: MatchType.NORMAL,
-          isChecked: false
+          isChecked: false,
+          isSpecialChildMatch: false
         }
       ] as ChildMatchModel[];
 
@@ -89,7 +90,8 @@ describe('RelatedEventService', () => {
           leagueName: 'League 1',
           sportType: 1,
           matchType: MatchType.NORMAL,
-          isChecked: false
+          isChecked: false,
+          isSpecialChildMatch: false
         }
       ] as ChildMatchModel[];
 
@@ -120,7 +122,8 @@ describe('RelatedEventService', () => {
           leagueName: 'League 1',
           sportType: 1,
           matchType: MatchType.NORMAL,
-          isChecked: false
+          isChecked: false,
+          isSpecialChildMatch: false
         }
       ] as ChildMatchModel[];
 
@@ -235,7 +238,8 @@ describe('RelatedEventService', () => {
           leagueName: 'League 1',
           sportType: 1,
           matchType: MatchType.NORMAL,
-          isChecked: false
+          isChecked: false,
+          isSpecialChildMatch: false
         }
       ] as ChildMatchModel[];
 

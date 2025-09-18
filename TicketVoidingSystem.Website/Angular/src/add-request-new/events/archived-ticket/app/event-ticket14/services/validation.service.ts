@@ -11,7 +11,7 @@ import { ValidationBusinessRuleOutput } from "../models/validation.model";
 export class ValidationService {
   private readonly eventTicket14ApiService = inject(AppService);
 
-  public async checkBusinessRule(betIdsComponent: BetIdsComponent, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
+  public async checkBusinessRule(betIdsComponent: BetIdsComponent, issueTypeId: string, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
     if (!betIdsComponent.isHasBetId()) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }

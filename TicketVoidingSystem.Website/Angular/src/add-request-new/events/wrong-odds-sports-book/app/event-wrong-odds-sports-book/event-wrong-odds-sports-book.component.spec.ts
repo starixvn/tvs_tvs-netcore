@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { of } from 'rxjs';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../../utility/services/common.service';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
+import { WrongOddsSportsBookModel } from '../../../../models/event-wrong-odds-sports-book.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book.component';
-import { ValidationService } from './services/validation.service';
+import { LogInfoWrongOddsSportsBook } from './models/log-info-wrong-odds-sports-book.model';
 import { EventWrongOddsSportsBookService } from './services/event-wrong-odds-sports-book.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
-import { AddRequestStore } from '../../../../services/add-request.store';
-import { FilterModel } from '../../../../component/filter/filter.model';
-import { WrongOddsSportsBookModel } from '../../../../models/event-wrong-odds-sports-book.model';
-import { OthersModel } from '../../../../component/others/others.model';
-import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
-import { MatchModel } from '../../../../../utility/models/match.model';
-import { LogInfoWrongOddsSportsBook } from './models/log-info-wrong-odds-sports-book.model';
-import { AddRequestApiService } from '../../../../services/add-request-api.service';
-import { CommonService } from '../../../../../utility/services/common.service';
-import { of } from 'rxjs';
+import { ValidationService } from './services/validation.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -214,4 +214,4 @@ describe('EventWrongOddsSportsBookComponent', () => {
     // Assert
     expect(component.primitiveProps.isShowErrorNoBetType).toBeTruthy();
   });
-}); 
+});

@@ -157,7 +157,7 @@ describe('LogInfoService', () => {
       const events = [ Helper.fakeLogInfoRelatedEvent ] as LogInfoRelatedEvent[];
       events[0].isCheckedVar = false;
       events[0].isHighLightVarCheck = true;
-
+      
       jest.spyOn(StaticService, 'isShowVarCheck').mockReturnValue(false);
 
       service.updateIsCheckedVar(events, true);

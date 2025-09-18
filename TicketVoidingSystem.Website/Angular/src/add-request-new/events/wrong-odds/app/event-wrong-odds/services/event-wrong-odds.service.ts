@@ -126,4 +126,8 @@ export class EventWrongOddsService {
 
     return event;
   }
+
+  public resetPoolHouseCheckedBetTypes(logInfo: LogInfoWrongOdds): void {
+    logInfo.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
+  }
 }

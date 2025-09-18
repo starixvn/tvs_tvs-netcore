@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 import { MatchType } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
 import { GetChildMatchQuery } from '../../../../../models/get-child-match.query';
 import { ChildMatchModel } from '../../../../../models/related-event.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { AddRelatedEventArg } from '../models/add-related-event-arg.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { RelatedEventService } from './related-event.service';

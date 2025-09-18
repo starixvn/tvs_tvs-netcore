@@ -1,17 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
+import moment from 'moment-timezone';
+import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
+import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
+import { DateTimeFormat, TVSRequestActionType } from '../../../../../../utility/constants/config';
+import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
+import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
 import { FilterWrongOddsModel } from '../models/filter-wrong-odds.model';
 import { LogInfoWrongOdds } from '../models/log-info-wrong-odds.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
-import { TVSRequestActionType } from '../../../../../../utility/constants/config';
-import moment from 'moment-timezone';
-import { DateTimeFormat } from '../../../../../../utility/constants/config';
-import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
-import { FilterWrongOddsComponent } from '../filter-wrong-odds/filter-wrong-odds.component';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;

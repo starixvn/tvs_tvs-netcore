@@ -2,12 +2,15 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { IssueTypes } from '../../../../component/filter/issue-types.model';
+import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down/info-site-db-down.component';
+import { OthersModel } from '../../../../component/others/others.model';
+import { WrongOddsModel } from '../../../../models/event-wrong-odds.model';
 import { AddRequestApiService } from '../../../../services/add-request-api.service';
 import { AddRequestStore } from '../../../../services/add-request.store';
-import { FilterModel } from '../../../../component/filter/filter.model';
-import { WrongOddsModel } from '../../../../models/event-wrong-odds.model';
-import { OthersModel } from '../../../../component/others/others.model';
-import { PoolHouseTicketValue } from '../../../../component/pool-house-ticket/pool-house-ticket.constant';
 import { FilterWrongOddsComponent } from './filter-wrong-odds/filter-wrong-odds.component';
 import { LogInfoWrongOddsComponent } from './log-info-wrong-odds/log-info-wrong-odds.component';
 import { MaxBetAndSpreadInfo } from './models/filter-wrong-odds.model';
@@ -24,9 +27,11 @@ import { ValidationService } from './services/validation.service';
   standalone: true,
   selector: 'event-wrong-odds',
   templateUrl: './event-wrong-odds.component.html',
-  imports: [EventLeagueComponent, FilterWrongOddsComponent, FormsModule, LogInfoWrongOddsComponent],
-  providers: [ ValidationService, EventWrongOddsService, LogInfoService, SaveRequestService,
-    CalculateOddsService, AddRequestApiService ]
+  imports: [EventLeagueComponent, FilterWrongOddsComponent, FormsModule, LogInfoWrongOddsComponent, InfoSiteDBDownComponent,
+    ConfirmAddRequestComponent
+  ],
+  providers: [ ValidationService, EventWrongOddsService, LogInfoService,
+    SaveRequestService, CalculateOddsService, AddRequestApiService ]
 })
 export class EventWrongOddsComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -37,11 +42,13 @@ export class EventWrongOddsComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOddsModels: WrongOddsModel[] = [];
+  @Input() issueTypes = new IssueTypes();
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChild('filterWrongOdds') filterWrongOddsComponent: FilterWrongOddsComponent;
   logInfoEvent = new LogInfoWrongOdds();
   primitiveProps = new PrimitiveProperty();
+  confirmAddRequest = new ConfirmAddRequestModel();
 
   private readonly validationService = inject(ValidationService);
   private readonly eventWrongOddsService = inject(EventWrongOddsService);
@@ -65,6 +72,7 @@ export class EventWrongOddsComponent implements OnInit {
         this.filterWrongOddsComponent.filterWrongOddsModel.maxBetAndSpreadInfo = await this.GetMaxBetAndSpreadOfEvent();
       }
 
+      this.resetPoolHouseCheckedBetTypes();
       this.calculateOddsService.resetOddsInfo(this.filterWrongOddsComponent.filterWrongOddsModel, this.filter.subIssueTypeId);
     }
   }
@@ -76,6 +84,7 @@ export class EventWrongOddsComponent implements OnInit {
 
   public async handleSearchEvent(): Promise<void> {
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
+    this.primitiveProps.infoSiteDBDownModel = null;
 
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsComponent)) {
       return;
@@ -112,6 +121,7 @@ export class EventWrongOddsComponent implements OnInit {
     arg.eventLeagueComponent = this.eventLeagueComponent;
     arg.logInfoEvent = this.logInfoEvent;
     arg.addRequestStore = this.addRequestStore;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
@@ -121,14 +131,25 @@ export class EventWrongOddsComponent implements OnInit {
     this.logInfoEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
     await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds, this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId)
   }
 
   public resetLogInfoOfEvent(): void {
+    this.primitiveProps.infoSiteDBDownModel = null;
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
   }
 
   public resetPoolHouseCheckedBetTypes(): void {
-    this.logInfoEvent.poolHouseCheckedBetTypes = PoolHouseTicketValue.SELECT_ALL_BETTYPE;
+    this.eventWrongOddsService.resetPoolHouseCheckedBetTypes(this.logInfoEvent);
+  }
+
+  
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 }

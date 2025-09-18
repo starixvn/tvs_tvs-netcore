@@ -1,4 +1,3 @@
-
 export class ConfirmAddRequestModel {
   isOpen: boolean;
   requestId: number;
@@ -12,7 +11,7 @@ export class ConfirmAddRequestModel {
   isEditingByAnotherUser: boolean;
   isShowSubIssueType: boolean;
   isHasAffectedTicketSiteDBDown: boolean;
-  isMarkTicketSiteDbDown = true;
+  isMarkTicketSiteDbDown: boolean;
 }
 
 export class ExtraWarningModel {

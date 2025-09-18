@@ -44,15 +44,14 @@ import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-
 @Component({
   standalone: true,
   selector: 'event-danger-accepted',
   templateUrl: './event-danger-accepted.component.html',
   styleUrls: ['./event-danger-accepted.component.scss'],
-  imports: [FormsModule, CommonModule, TooltipComponent, EventLeagueComponent, BlockUiDirective,
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbCollapseModule, EventLeagueComponent, BlockUiDirective,
     TvDetectionComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    ConfirmDangerAcceptedComponent, OnlyNumberDirective, InfoSiteDBDownComponent, NgbCollapseModule],
+    ConfirmDangerAcceptedComponent, OnlyNumberDirective, InfoSiteDBDownComponent],
   providers: [
     LogInfoService,
     ValidationService,

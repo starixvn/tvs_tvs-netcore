@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import clone from 'lodash/clone';
 import orderBy from 'lodash/orderBy';
@@ -44,14 +45,13 @@ import { SaveRequestArg } from './services/save-request.model';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
-
 @Component({
   selector: 'event-red-card',
   templateUrl: './event-red-card.component.html',
   styleUrls: ['./event-red-card.component.scss'],
   standalone: true,
   imports: [FormsModule, CommonModule, EventLeagueComponent, FilterTimeAreaComponent, LogInfoRelatedEventComponent, AddChildMatchComponent,
-    NgSelectModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective,
+    NgSelectModule, NgbCollapseModule, TooltipComponent, BlockUiDirective, ConfirmAddRequestComponent, TvDetectionComponent, OnlyNumberDirective,
     InfoSiteDBDownComponent],
   providers: [EventRedCardService, LogInfoService, SaveRequestService, ValidationService, RelatedEventService, TvDetectionService]
 })
@@ -228,6 +228,7 @@ export class EventRedCardComponent implements OnInit, OnChanges {
   async handleClickAddRelatedEvent(): Promise<void> {
     await this.relatedEventService.addRelatedEventByInput(this.initAddRelatedEventArgs());
     this.allSelectedEvents = orderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+    this.primitiveProps.infoSiteDBDownModel = null;
   }
 
   handleDeleteEvent(matchId: number): void {

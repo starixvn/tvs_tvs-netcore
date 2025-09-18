@@ -1,7 +1,7 @@
 import { Tooltip } from "../../../../../../utility/components/tooltip/tooltip.model";
-import { AddRequestStore } from "../../../../../services/add-request.store";
 import { FilterModel } from "../../../../../component/filter/filter.model";
 import { ChildMatchModel } from "../../../../../models/related-event.model";
+import { AddRequestStore } from "../../../../../services/add-request.store";
 import { FilterWithHdpModel } from "./filter-with-hdp.model";
 import { LogInfoWrongHdp } from "./log-info-wrong-hdp.model";
 import { PrimitiveProperty } from "./primitive-property.model";
