@@ -69,7 +69,6 @@ public class GetTicketsServiceTests
     {
         // Arrange
         var query = new GetTicketsQuery { IssueTypeId = 1, RequestId = 0, Match = null };
-        var tickets = new List<BetId> { new(), new() };
         var ticketModels = new List<GetTicketModel> { new() { IsMixParlay = true } };
 
         mapper.Map<GetTicketsCriteria>(Arg.Any<GetTicketsQuery>()).Returns(new GetTicketsCriteria());

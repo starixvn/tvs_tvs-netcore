@@ -64,7 +64,6 @@ public class NotificationLetstalkServiceTests : IClassFixture<AppSettingFixture>
     public async Task SendToGroupAbnormalBetRequest_ValidRequest_ReturnNotImplementedException()
     {
         // Arrange
-        var attachment = new LetstalkAttachment();
 
         // Act
         _ = await service.SendToGroupAbnormalBetRequest("", "", true);

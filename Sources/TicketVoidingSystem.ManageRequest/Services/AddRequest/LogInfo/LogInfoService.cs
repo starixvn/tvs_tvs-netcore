@@ -248,9 +248,9 @@ public class LogInfoServiceImp(
             new GetLogInfoModel
             {
                 MatchId = query.WrongOddsSportsBookModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, x => true),
+                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
                 TicketRequest = ticketRequests,
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true)
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true)
             }
         ];
     }
@@ -263,9 +263,9 @@ public class LogInfoServiceImp(
             new GetLogInfoModel
             {
                 MatchId = query.WrongOfferedNameModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, x => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true)
+                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true)
             }
         ];
     }
@@ -278,9 +278,9 @@ public class LogInfoServiceImp(
             new GetLogInfoModel
             {
                 MatchId = query.OtherIssuesModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, x => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
+                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true),
             }
         ];
     }
@@ -294,9 +294,9 @@ public class LogInfoServiceImp(
             new GetLogInfoModel
             {
                 MatchId = query.MatchEarlyCompletedModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, x => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
+                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true),
                 BetTypeCount = preparedBetTypeCount
             }
         ];
@@ -311,9 +311,9 @@ public class LogInfoServiceImp(
             new GetLogInfoModel
             {
                 MatchId = query.TechnicalErrorModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, x => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
+                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true),
                 BetTypeCount = preparedBetTypeCount
             }
         ];
@@ -326,9 +326,9 @@ public class LogInfoServiceImp(
         [
             new GetLogInfoModel
             {
-                Validation = LogInfoHelper.CombineValidations(validations, x => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true)
+                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true)
             }
         ];
     }

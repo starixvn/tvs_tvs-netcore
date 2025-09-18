@@ -59,13 +59,13 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
 
             var preparedTickets1 = new List<TicketsBetTransModel>
             {
-                new() { TransId = 101, MatchId = 1, OddsType = (short)1 }
+                new() { TransId = 101, MatchId = 1, OddsType = 1 }
             };
             ticketsService.PrepareTickets(ticketsGroup1).Returns(preparedTickets1);
 
             var preparedTickets2 = new List<TicketsBetTransModel>
             {
-                new() { TransId = 201, MatchId = 2, OddsType = (short)2 }
+                new() { TransId = 201, MatchId = 2, OddsType = 2 }
             };
             ticketsService.PrepareTickets(ticketsGroup2).Returns(preparedTickets2);
 

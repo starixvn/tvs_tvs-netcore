@@ -32,7 +32,7 @@
     </script>
 </head>
 <body user-name="@userName" root-url="@Url.Content("~/")">
-        @await Html.PartialAsync("_LogOut", @userName)
+        @await Html.PartialAsync("_LogOut", userName)
 
         <header>
         @await Component.InvokeAsync(nameof(Menu), session.MenuItemList)

@@ -96,7 +96,7 @@ public class GetTicketsHandlerTests
         // Arrange
         InitGetTicketsHandlerTests();
         var request = new GetTicketsRequest { MatchId = 1 };
-        getTicketsService.GetTickets(request).ReturnsForAnyArgs(x => Task.FromException<IList<GetTicketModel>>(new System.Exception("Test exception")));
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(_ => Task.FromException<IList<GetTicketModel>>(new System.Exception("Test exception")));
         var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
 
         // Act & Assert

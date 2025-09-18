@@ -20,7 +20,7 @@ public class CashOutApiServiceTests
     {
         cashOutHttpClientService = Substitute.For<CashOutHttpClientService>();
         loggingService = Substitute.For<LoggingService>();
-        service = new CashOutApiServiceImp(cashOutHttpClientService, loggingService);
+        service = new CashOutApiServiceImp(cashOutHttpClientService);
     }
 
     [Fact]

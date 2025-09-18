@@ -32,7 +32,7 @@ public class GetIssueTypeHomePageHandler(IDynamicRepository repository)
 
             return result;
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return [];
         }

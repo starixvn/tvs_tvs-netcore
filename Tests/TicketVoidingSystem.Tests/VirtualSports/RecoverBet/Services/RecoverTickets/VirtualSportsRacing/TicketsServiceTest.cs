@@ -16,21 +16,19 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
     public class TicketsServiceTest
     {
         private readonly IDynamicRepository repository;
-        private readonly TicketValueService ticketValueService;
-        private readonly WinLimitService winLimitService;
         private readonly TicketsServicesImp ticketsService;
 
         public TicketsServiceTest()
         {
             // Setup mocks
             repository = Substitute.For<IDynamicRepository>();
-            ticketValueService = Substitute.For<TicketValueService>();
-            winLimitService = Substitute.For<WinLimitService>();
+            var ticketValueService1 = Substitute.For<TicketValueService>();
+            var winLimitService1 = Substitute.For<WinLimitService>();
             var sessionService = Substitute.For<SessionService>();
             var historyDataService = Substitute.For<HistoryDataService>();
 
             // Create service instance
-            ticketsService = new TicketsServicesImp(repository, ticketValueService, winLimitService, sessionService, historyDataService);
+            ticketsService = new TicketsServicesImp(repository, ticketValueService1, winLimitService1, sessionService, historyDataService);
         }
 
         [Fact]

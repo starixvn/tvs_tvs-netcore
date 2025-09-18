@@ -16,7 +16,7 @@ public interface CashOutApiService
     Task UndoVoidBet(CashOutApiModel requestModel);
 }
 
-public class CashOutApiServiceImp(CashOutHttpClientService cashOutHttpClientService, LoggingService loggingService)
+public class CashOutApiServiceImp(CashOutHttpClientService cashOutHttpClientService)
     : CashOutApiService
 {
     public async Task VoidBet(CashOutApiModel requestModel)
