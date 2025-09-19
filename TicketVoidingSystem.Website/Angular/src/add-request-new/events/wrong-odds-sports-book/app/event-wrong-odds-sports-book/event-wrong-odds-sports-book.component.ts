@@ -2,7 +2,6 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import assignIn from 'lodash/assignIn';
-import { InfoSiteDBDownComponent } from 'src/add-request-new/component/info-site-db-down/info-site-db-down.component';
 import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
 import { GroupBetTypesAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
@@ -14,6 +13,7 @@ import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-re
 import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../../../component/filter/filter.model';
 import { IssueTypes } from '../../../../component/filter/issue-types.model';
+import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down/info-site-db-down.component';
 import { OthersModel } from '../../../../component/others/others.model';
 import { WrongOddsSportsBookModel } from '../../../../models/event-wrong-odds-sports-book.model';
 import { PermissionAddRequest } from '../../../../models/permission-add-request.model';
