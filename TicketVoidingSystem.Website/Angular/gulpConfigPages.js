@@ -163,7 +163,7 @@ const archivedTicket = {
   index: 'src/add-request-new/shared/index.cshtml',
   indexEJSPath: './src/add-request-new/shared/index.ejs',
   main: 'src/add-request-new/events/archived-ticket/main.ts',
-  deployUrl: 'dist/ticket-voiding-system/archived-ticket',
+  deployUrl: 'dist/ticket-voiding-system/archived-ticket/',
   transformFolder: '../wwwroot/dist/ticket-voiding-system/archived-ticket'
 };
 
@@ -280,10 +280,10 @@ const configPages = [
   //voidSingleBet,
   //voidRequest,
   //manageRequest,
-   addRequest,
-   editRequest,
+  // addRequest,
+  // editRequest,
   //voidByBetId
-  //archivedTicket,
+  archivedTicket,
   //dangerAccepted,
   //redCard,
   //wrongScore,
@@ -291,7 +291,7 @@ const configPages = [
   //wrongHdp,
   //wrongOu,
   //wrongOdds,
-  //wrongOddsSportsBook
+  //wrongOddsSportsBook,
 ];
 
 module.exports = configPages;

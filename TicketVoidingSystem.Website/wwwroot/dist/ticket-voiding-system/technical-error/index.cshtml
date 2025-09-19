@@ -9,8 +9,7 @@ ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket
 
 }
 <script>
-    window.issueTypeId = '@(ViewBag.IssueTypeId?.ToString() ?? "")';
-    window.isEdit = '@isEditMode';
+    window.issueTypeId = '@ViewBag.IssueTypeId';
 </script>
 <app-root></app-root>
 
@@ -18,6 +17,6 @@ ViewBag.Title = isEditMode ? "Edit Request Ticket Voiding" : "Add Request Ticket
 
 <script src="dist/ticket-voiding-system/technical-error/polyfills.js?6d2f7e0938193000"></script>
 
-<script src="dist/ticket-voiding-system/technical-error/main.js?2b7b4435b7ab7cee"></script>
+<script src="dist/ticket-voiding-system/technical-error/main.js?8936ee95858f7c7e"></script>
 
 
