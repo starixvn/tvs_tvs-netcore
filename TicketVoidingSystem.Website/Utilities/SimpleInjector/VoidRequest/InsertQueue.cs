@@ -10,5 +10,6 @@ public static class InsertQueue
         services.AddTransient<InsertQueueService, InsertQueueServiceImp>();
         services.AddTransient<MapTicketsService, MapTicketsServiceImp>();
         services.AddTransient<ValidationTicketsService, ValidationTicketsServiceImp>();
+        services.AddTransient<RepositoryService, RepositoryServiceImp>();
     }
 }

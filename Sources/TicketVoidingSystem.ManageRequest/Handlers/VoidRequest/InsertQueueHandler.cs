@@ -3,7 +3,6 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.SignalR;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 
@@ -13,7 +12,7 @@ public class InsertQueueHandler(
     InsertQueueService insertQueueService,
     SessionService sessionService,
     LoggingService loggingService,
-    NotificationSignalRService signalRService)
+    RepositoryService repositoryService)
     : IRequestHandler<InsertQueueRequest, Result>
 {
     public async Task<Result> Handle(InsertQueueRequest request, CancellationToken cancellationToken)
@@ -41,8 +40,7 @@ public class InsertQueueHandler(
             query.CricketTickets ??= [];
             query.CancelCashOutTickets ??= [];
             await insertQueueService.InsertTicketVoidingQueue(query);
-            await insertQueueService.UpdateIsProcessed(query);
-            await UpdateRunningRequest(query.RequestId);
+            await repositoryService.UpdateIsProcessed(query);
         }
         else
         {
@@ -51,18 +49,5 @@ public class InsertQueueHandler(
         }
 
         return result;
-    }
-
-    private async Task UpdateRunningRequest(int requestId)
-    {
-        var requestStatus = new List<RequestStatus>
-            {
-                new()
-                {
-                    RequestId = requestId,
-                    Status = "Running"
-                }
-            };
-        await signalRService.UpdateRequestStatusToAllUser(requestStatus);
     }
 }

@@ -1,162 +1,173 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
+using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.OnlineServerRepository;
+using TicketVoidingSystem.SignalR;
 using Xunit;
-using MapTicketsService = TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue.MapTicketsService;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.VoidRequest;
 
 public class InsertQueueServiceTests
 {
-    private readonly InsertVoidingHistoryService insertVoidingHistoryService;
-    private readonly IDynamicRepository repository;
-    private readonly InsertQueueServiceImp service;
-    private readonly SessionService sessionService;
-    private readonly MapTicketsService mapTicketsService;
-    private readonly ValidationTicketsService validationTicketsService;
-    private readonly OnlineServerRepository onlineServerRepository;
+    private static InsertQueueServiceImp CreateService(
+        RepositoryService repositoryService,
+        ValidationTicketsService validationTicketsService,
+        InsertVoidingHistoryService insertVoidingHistoryService,
+        NotificationSignalRService signalRService) =>
+        new(repositoryService, validationTicketsService, insertVoidingHistoryService, signalRService);
 
-    public InsertQueueServiceTests()
-    {
-        repository = Substitute.For<IDynamicRepository>();
-        sessionService = Substitute.For<SessionService>();
-        insertVoidingHistoryService = Substitute.For<InsertVoidingHistoryService>();
-        mapTicketsService = Substitute.For<MapTicketsService>();
-        validationTicketsService = Substitute.For<ValidationTicketsService>();
-        onlineServerRepository = Substitute.For<OnlineServerRepository>();
-        service = new InsertQueueServiceImp(repository, sessionService, mapTicketsService, validationTicketsService,
-            insertVoidingHistoryService, onlineServerRepository);
-    }
-
-    [Theory]
-    [InlineData(IssueTypeConstant.DangerAccepted)]
-    [InlineData(IssueTypeConstant.RedCard)]
-    [InlineData(IssueTypeConstant.WrongScore)]
-    [InlineData(IssueTypeConstant.AbnormalAccount)]
-    [InlineData(0)]
-    public async Task InsertTicketVoidingQueue_ValidRequest_HasCreateInsertTicketVoidingQueueCriteria(int issueTypeId)
+    [Fact]
+    public async Task InsertTicketVoidingQueue_NoServerFound_StatusFailed()
     {
         // Arrange
-        var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1, MatchId = 1 };
-        var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
-        var query = new InsertQueueQuery
+        var repository = Substitute.For<RepositoryService>();
+        var validation = Substitute.For<ValidationTicketsService>();
+        var history = Substitute.For<InsertVoidingHistoryService>();
+        var signalR = Substitute.For<NotificationSignalRService>();
+
+        var tickets = new List<RequestDetailTicketModel>();
+        validation.RecheckTicketsStatus(Arg.Any<InsertQueueQuery>()).Returns(tickets);
+        repository.GetServerInsertQueue(tickets).Returns([]);
+
+        var service = CreateService(repository, validation, history, signalR);
+        var query = new InsertQueueQuery { RequestId = 123, IssueTypeId = IssueTypeConstant.DangerAccepted };
+
+        // Act
+        await service.InsertTicketVoidingQueue(query);
+
+        // Assert
+        await validation.Received(1).RecheckTicketsStatus(query);
+        await repository.Received(1).GetServerInsertQueue(tickets);
+        await signalR.Received(1).UpdateRequestStatusToAllUser(Arg.Is<IEnumerable<RequestStatus>>(s =>
+            s.Single().RequestId == 123 && s.Single().Status == "Failed"));
+        await history.DidNotReceiveWithAnyArgs().InsertVoidingHistory(default!, default, default!, default!);
+        await repository.DidNotReceiveWithAnyArgs().InsertQueueBySiteDb(default, default, default, default!);
+    }
+
+    [Fact]
+    public async Task InsertTicketVoidingQueue_WrongMarketOffered_BuildsTransIdsJson()
+    {
+        // Arrange
+        var repository = Substitute.For<RepositoryService>();
+        var validation = Substitute.For<ValidationTicketsService>();
+        var history = Substitute.For<InsertVoidingHistoryService>();
+        var signalR = Substitute.For<NotificationSignalRService>();
+
+        var tickets = new List<RequestDetailTicketModel>
         {
-            SingleTickets = new List<BetId> { betId1, betId2 },
-            ParlayTickets = new List<BetId> { betId1, betId1 },
-            CancelCashOutTickets = new List<BetId> { betId1, betId2, betId2 },
-            CricketTickets = new List<BetId> { betId1 },
-            IssueTypeId = issueTypeId
+            // Parlay first
+            new() { SiteDbGroupId = 10, VoidingTypeId = VoidingTypeConstant.Parlay, TransId = 111 },
+            // Single (any non-parlay value)
+            new() { SiteDbGroupId = 10, VoidingTypeId = VoidingTypeConstant.Parlay + 999, TransId = 222 }
         };
-        var ticketsInsertQueue = new List<RequestDetailTicketModel> { new() };
-        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>())
+        validation.RecheckTicketsStatus(Arg.Any<InsertQueueQuery>()).Returns(tickets);
+        repository.GetServerInsertQueue(tickets).Returns([10]);
+        history.InsertVoidingHistory(default!, default, default!, default!)
+            .ReturnsForAnyArgs(999); // dummy id
+
+        var service = CreateService(repository, validation, history, signalR);
+        var query = new InsertQueueQuery { RequestId = 55, IssueTypeId = IssueTypeConstant.WrongMarketOffered };
+
+        // Act
+        await service.InsertTicketVoidingQueue(query);
+
+        // Assert
+        await history.Received(1).InsertVoidingHistory(
+            query,
+            10,
+            Arg.Any<string>(),
+            Arg.Is<string>(json => ValidateTransIds(json, "222", "111")));
+        await repository.Received(1).InsertQueueBySiteDb(10, 999, 55, Arg.Is<IEnumerable<RequestDetailTicketModel>>(t => t.Count() == 2));
+        await signalR.Received(1).UpdateRequestStatusToAllUser(Arg.Is<IEnumerable<RequestStatus>>(s => s.Single().Status == "Running"));
+    }
+
+    [Fact]
+    public async Task InsertTicketVoidingQueue_NotWrongMarketOffered_TransIdsNull()
+    {
+        // Arrange
+        var repository = Substitute.For<RepositoryService>();
+        var validation = Substitute.For<ValidationTicketsService>();
+        var history = Substitute.For<InsertVoidingHistoryService>();
+        var signalR = Substitute.For<NotificationSignalRService>();
+
+        var tickets = new List<RequestDetailTicketModel>
+        {
+            new() { SiteDbGroupId = 1, VoidingTypeId = VoidingTypeConstant.Parlay, TransId = 1 },
+            new() { SiteDbGroupId = 1, VoidingTypeId = VoidingTypeConstant.Parlay + 1, TransId = 2 }
+        };
+        validation.RecheckTicketsStatus(Arg.Any<InsertQueueQuery>()).Returns(tickets);
+        repository.GetServerInsertQueue(tickets).Returns([1]);
+        history.InsertVoidingHistory(default!, default, default!, default!)
             .ReturnsForAnyArgs(1);
-        sessionService.GetClientIp().ReturnsForAnyArgs("123");
-        repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
-        repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
-        onlineServerRepository.GetOnlineServerIdsModel().ReturnsForAnyArgs([new SiteDbGroupModel()]);
+
+        var service = CreateService(repository, validation, history, signalR);
+        var query = new InsertQueueQuery { RequestId = 1, IssueTypeId = IssueTypeConstant.DangerAccepted };
 
         // Act
         await service.InsertTicketVoidingQueue(query);
 
         // Assert
-        await repository.Received().ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>());
+        await history.Received(1).InsertVoidingHistory(
+            query,
+            1,
+            Arg.Any<string>(),
+            Arg.Is<string>(s => s == null));
     }
 
     [Fact]
-    public async Task InsertTicketVoidingQueue_HasOnlySingleTickets_CalledExpected()
+    public async Task InsertTicketVoidingQueue_MultipleServers_ProcessEachServer()
     {
         // Arrange
-        var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1, MatchId = 1 };
-        var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2, MatchId = null };
+        var repository = Substitute.For<RepositoryService>();
+        var validation = Substitute.For<ValidationTicketsService>();
+        var history = Substitute.For<InsertVoidingHistoryService>();
+        var signalR = Substitute.For<NotificationSignalRService>();
 
-        var query = new InsertQueueQuery
+        var tickets = new List<RequestDetailTicketModel>
         {
-            SingleTickets = new List<BetId> { betId1, betId2 },
-            ParlayTickets = new List<BetId>(),
-            CancelCashOutTickets = new List<BetId>(),
-            CricketTickets = new List<BetId>(),
-            IssueTypeId = IssueTypeConstant.Wrong1stHDP,
-            RequestId = 1
+            new() { SiteDbGroupId = 1, VoidingTypeId = VoidingTypeConstant.Parlay + 5, TransId = 10 },
+            new() { SiteDbGroupId = 2, VoidingTypeId = VoidingTypeConstant.Parlay, TransId = 20 },
+            new() { SiteDbGroupId = 1, VoidingTypeId = VoidingTypeConstant.Parlay, TransId = 30 },
+            new() { SiteDbGroupId = 2, VoidingTypeId = VoidingTypeConstant.Parlay + 5, TransId = 40 },
         };
-        var ticketsInsertQueue = new List<RequestDetailTicketModel> { new() };
-        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
-        sessionService.GetClientIp().ReturnsForAnyArgs("123");
-        repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
-        repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
-        onlineServerRepository.GetOnlineServerIdsModel().ReturnsForAnyArgs([new SiteDbGroupModel()]);
+        validation.RecheckTicketsStatus(Arg.Any<InsertQueueQuery>()).Returns(tickets);
+        repository.GetServerInsertQueue(tickets).Returns([1, 2]);
+        history.InsertVoidingHistory(default!, default, default!, default!).ReturnsForAnyArgs(ci => ci.ArgAt<int>(1) * 100); // return based on siteDbGroupId
+
+        var service = CreateService(repository, validation, history, signalR);
+        var query = new InsertQueueQuery { RequestId = 77, IssueTypeId = IssueTypeConstant.WrongMarketOffered };
 
         // Act
         await service.InsertTicketVoidingQueue(query);
 
         // Assert
-        await repository.Received().ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>());
+        await history.Received(1).InsertVoidingHistory(query, 1, Arg.Any<string>(), Arg.Any<string>());
+        await history.Received(1).InsertVoidingHistory(query, 2, Arg.Any<string>(), Arg.Any<string>());
+        await repository.Received(1).InsertQueueBySiteDb(1, 100, 77, Arg.Is<IEnumerable<RequestDetailTicketModel>>(t => t.All(x => x.SiteDbGroupId == 1)));
+        await repository.Received(1).InsertQueueBySiteDb(2, 200, 77, Arg.Is<IEnumerable<RequestDetailTicketModel>>(t => t.All(x => x.SiteDbGroupId == 2)));
+        await signalR.Received(1).UpdateRequestStatusToAllUser(Arg.Is<IEnumerable<RequestStatus>>(s => s.Single().Status == "Running"));
     }
 
-    [Fact]
-    public async Task InsertTicketVoidingQueue_HasOnlyParlayTicketsTickets_CalledExpected()
+    private static bool ValidateTransIds(string json, string single, string parlay)
     {
-        // Arrange
-        var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1 };
-        var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
-        var query = new InsertQueueQuery
+        if (json == null) return false;
+        try
         {
-            SingleTickets = new List<BetId>(),
-            ParlayTickets = new List<BetId> { betId1, betId2 },
-            CancelCashOutTickets = new List<BetId>(),
-            CricketTickets = new List<BetId>(),
-            IssueTypeId = IssueTypeConstant.Wrong1stHDP,
-            RequestId = 1
-        };
-        var ticketsInsertQueue = new List<RequestDetailTicketModel> { new() };
-        validationTicketsService.RecheckTicketsStatus(default).ReturnsForAnyArgs(ticketsInsertQueue);
-        insertVoidingHistoryService.InsertVoidingHistory(Arg.Any<InsertQueueQuery>(), default, Arg.Any<string>(), Arg.Any<string>()).ReturnsForAnyArgs(1);
-        sessionService.GetClientIp().ReturnsForAnyArgs("123");
-        repository.ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>()).Returns(1);
-        repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
-        onlineServerRepository.GetOnlineServerIdsModel().ReturnsForAnyArgs([new SiteDbGroupModel()]);
-
-        // Act
-        await service.InsertTicketVoidingQueue(query);
-
-        // Assert
-        await repository.Received().ExecuteAsync(Arg.Any<InsertTicketVoidingQueueCriteria>());
-    }
-
-    [Fact]
-    public async Task UpdateIsProcessed_HasCreateUpdateIsProcessedForRequestTicketsCriteria()
-    {
-        // Arrange
-        var betId1 = new BetId { TransId = "123", SiteDbGroupId = 1 };
-        var betId2 = new BetId { TransId = "123", SiteDbGroupId = 2 };
-
-        var query = new InsertQueueQuery
+            using var doc = JsonDocument.Parse(json);
+            var root = doc.RootElement;
+            return root.GetProperty("SingleTransIds").GetString() == single &&
+                   root.GetProperty("ParlayTransIds").GetString() == parlay;
+        }
+        catch
         {
-            SingleTickets = new List<BetId> { betId1, betId2 },
-            ParlayTickets = new List<BetId> { betId1, betId1 },
-            CancelCashOutTickets = new List<BetId> { betId1, betId2, betId2 },
-            CricketTickets = new List<BetId> { betId1 },
-            IssueTypeId = 1,
-            RequestId = 123
-        };
-        var requestDetailTicketModel = new List<RequestDetailTicketModel>();
-        mapTicketsService.MapBetIdToRequestDetailTicket(Arg.Any<IEnumerable<BetId>>(), query.RequestId, query.IssueTypeId).ReturnsForAnyArgs(requestDetailTicketModel);
-        repository.ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>()).Returns(1);
-
-        // Act
-        await service.UpdateIsProcessed(query);
-
-        // Assert
-        await repository.Received().ExecuteAsync(Arg.Any<UpdateIsProcessedForRequestTicketsCriteria>());
+            return false;
+        }
     }
 }
