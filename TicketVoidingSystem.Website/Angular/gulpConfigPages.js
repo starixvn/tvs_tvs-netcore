@@ -401,11 +401,11 @@ const configPages = [
   // addRequest,
   // editRequest,
   //voidByBetId
-  //archivedTicket,
-  //dangerAccepted,
-  //redCard,
-  //wrongScore,
-  //technicalError,
+  archivedTicket,
+  dangerAccepted,
+  redCard,
+  wrongScore,
+  technicalError,
   // wrongHdp,
   // wrongOu,
   // wrongOdds,
@@ -414,10 +414,10 @@ const configPages = [
   wrongMarketOffered,
   wrongOfferedName,
   abnormalAccounts,
+  otherIssues,
+  notParticipate,
   abnormalBet,
   duplicateTickets,
-  //otherIssues,
-  //notParticipate,
   reducedOver
   recoverTicket
 ];
