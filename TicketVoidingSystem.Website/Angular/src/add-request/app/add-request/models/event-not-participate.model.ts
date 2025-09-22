@@ -1,4 +1,5 @@
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
+import { BetTypeCountModel } from "./get-log-info.model";
 
 export class NotParticipateModel {
   matchId: number;
@@ -8,4 +9,5 @@ export class NotParticipateModel {
   betTypeIds: string;
   playerId: number;
   playerNames: string;
+  betTypeCount: BetTypeCountModel[];
 }
