@@ -71,7 +71,6 @@ describe('EventWrongScoreComponent', () => {
   let wrongScoreService: WrongScoreService;
   let editRequestService: EditRequestService;
   let addRequestStore: AddRequestStore;
-  let saveRequestService: SaveRequestService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -95,7 +94,6 @@ describe('EventWrongScoreComponent', () => {
     wrongScoreService = fixture.debugElement.injector.get(WrongScoreService);
     editRequestService = fixture.debugElement.injector.get(EditRequestService);
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
-    saveRequestService = fixture.debugElement.injector.get(SaveRequestService);
     component = fixture.componentInstance;
 
     const mockRelatedEventsComponent = {
@@ -188,6 +186,8 @@ describe('EventWrongScoreComponent', () => {
     component.filter.subIssueTypeId = '1';
     component.eventLeagueComponent.selectedMatch = {matchId: 123, parentId: 123} as MatchModel;
     jest.spyOn(SubIssueTypeRelatedEvent, 'isHasRelatedEvent').mockReturnValue(true);
+    // Mock validateVarCheck to return true to avoid early return
+    component.validateVarCheck = jest.fn().mockReturnValue(true);
 
     // Act
     await component.handleSearchEvent();
@@ -346,8 +346,8 @@ describe('EventWrongScoreComponent', () => {
   it('should show log info selected scores when multiple scores are selected', () => {
     // Arrange
     component.wrongScoreModels = [
-      { isChecked: true },
-      { isChecked: true }
+      { isChecked: true, logInfoDetail: { matchId: 123 } as LogInfoDetail },
+      { isChecked: true, logInfoDetail: { matchId: 124 } as LogInfoDetail }
     ] as WrongScoreModel[];
     component.primitiveProps.filterBy = TVSRequestFilterBy.TRANS_TIME;
 

@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
-import { FilterWrongOddsSportsBookComponent } from '../filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
 import { AdvancedModeAddRequestComponent } from '../../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { TVSRequestActionType } from '../../../../../../utility/constants/config';
-import { FilterWrongOddsSportsBookModel, FilterOddsTypeConstant } from '../models/filter-wrong-odds-sports-book.model';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
+import { FilterWrongOddsSportsBookComponent } from '../filter-wrong-odds-sports-book/filter-wrong-odds-sports-book.component';
+import { FilterOddsTypeConstant, FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 import { LogInfoWrongOddsSportsBook } from '../models/log-info-wrong-odds-sports-book.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
-import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;

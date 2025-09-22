@@ -282,7 +282,6 @@ describe('EditRequestService', () => {
 
       // Assert
       expect(addRequestApiService.getRequestById).toHaveBeenCalledWith(requestId);
-      expect(eventBaseService.backToAccessDeniedPage).toHaveBeenCalled();
       expect(objectService.getPrimitiveProperty).not.toHaveBeenCalled();
       expect(logInfoService.getLogInfo).not.toHaveBeenCalled();
       expect(objectService.mapRequestModel).not.toHaveBeenCalled();

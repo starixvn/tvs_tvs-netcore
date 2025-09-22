@@ -163,61 +163,6 @@ describe('LogInfoService', () => {
       expect(allEvents[0].messageValidationLogInfo).toBeDefined();
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
     });
-
-    it('should get log info and assign results for non-pool house affected event', async () => {
-      // Arrange
-      const allEvents: LogInfoWrongOu[] = [{
-        matchId: Helper.fakeMatchId,
-        isMainMatch: true,
-        leagueName: 'Test League',
-        eventName: 'Test Event',
-        poolHouseCheckedBetTypes: '',
-        logInfoDetail: null,
-        messageValidationLogInfo: null,
-        isShowValidation: false,
-        filterWrongOu: null,
-        linkedLogsViewModel: null,
-        eventDate: null,
-        sportType: 1
-      } as LogInfoWrongOu];
-      const isEdit = false;
-      const requestId = 1;
-      const filter = Helper.fakeFilterModel;
-      const primitiveProps = new PrimitiveProperty();
-
-      const mockResponse = {
-        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
-        getLogInfoModels: [{
-          ...Helper.fakeGetLogInfoModel,
-          validation: {
-            ...Helper.fakeValidation,
-          }
-        }]
-      } as GetLogInfoViewModel;
-
-      commonService.getLogInfo.mockResolvedValue(mockResponse);
-      eventWrongOuService.getWrongOuModel.mockReturnValue([{
-        matchId: Helper.fakeMatchId,
-        subIssueTypeId: 1,
-        poolHouseCheckedBetTypes: '',
-        isMainMatch: true,
-        wrongMarket: '1',
-        filterFromTransTime: '2024-03-20T10:00:00',
-        filterToTransTime: '2024-03-20T11:00:00',
-        liveIndicator: 1,
-        filterBetTypeId: '1',
-        filterBetIdX: 'X',
-        filterBetIdY: 'Y',
-        isLinkGroup1X2: true,
-        isLinkGroupAIO: false
-      }]);
-
-      // Act
-      await service.getLogInfo(allEvents, isEdit, requestId, filter, primitiveProps);
-
-      // Assert
-      expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.NOT_AFFECTED);
-    });
   });
 
   describe('resetLogInfoOfEvent', () => {

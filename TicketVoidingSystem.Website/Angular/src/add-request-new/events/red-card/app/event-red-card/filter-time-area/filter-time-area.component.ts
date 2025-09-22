@@ -7,7 +7,6 @@ import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.mo
 import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowanceComponent } from '../filter-time-with-allowance/filter-time-with-allowance.component';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-
 @Component({
   selector: 'filter-time-area',
   templateUrl: './filter-time-area.component.html',

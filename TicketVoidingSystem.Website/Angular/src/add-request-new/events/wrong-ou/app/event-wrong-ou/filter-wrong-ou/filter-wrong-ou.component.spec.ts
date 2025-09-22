@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { FilterWrongOuComponent } from './filter-wrong-ou.component';
-import { ValidationService } from '../services/validation.service';
-import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import moment from 'moment-timezone';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { StaticService } from '../../../../../../utility/services/static.service';
-import { TEXT } from '../../../../../../utility/constants/text';
+import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
+import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { TEXT } from '../../../../../../utility/constants/text';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
 import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
 import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
+import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
+import { ValidationService } from '../services/validation.service';
+import { FilterWrongOuComponent } from './filter-wrong-ou.component';
 
 class Helper {
   static getFakeFilterWrongOuModel(): FilterWrongOuModel {

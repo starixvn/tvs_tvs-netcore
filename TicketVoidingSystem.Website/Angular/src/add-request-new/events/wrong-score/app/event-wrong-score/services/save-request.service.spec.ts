@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TVSRequestFilterBy } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { WrongScoreModel } from '../../../../../models/event-wrong-score.model';
 import { AddRequestService } from '../../../../../services/add-request.service';

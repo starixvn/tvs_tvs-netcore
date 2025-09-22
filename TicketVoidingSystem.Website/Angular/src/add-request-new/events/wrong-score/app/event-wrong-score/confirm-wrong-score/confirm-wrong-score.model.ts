@@ -11,5 +11,5 @@ export class ConfirmWrongScoreModel {
   warningRelatedEvents: string[] = [];
   warningExcludedScores: string[];
   isHasAffectedTicketSiteDBDown: boolean;
-  isMarkTicketSiteDbDown = true;
+  isMarkTicketSiteDbDown: boolean;
 }

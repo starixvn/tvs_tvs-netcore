@@ -24,7 +24,7 @@ describe('ConfirmWrongScoreComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
+  
   it('should emit close event when closeClick is called', () => {
     // Arrange
     jest.spyOn(component.close, 'emit');

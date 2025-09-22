@@ -3,7 +3,7 @@ import { TransInfoAddRequestModel } from '../../../../models/trans-info-add-requ
 
 export class PrimitiveProperty {
   filterBy: number;
-  isBlock = false;
+  isBlock = false;  
   actualScore: string;
   isShowActualScore: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;

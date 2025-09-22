@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { MatchType, SubIssueTypeGroup } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';

@@ -6,6 +6,7 @@ import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.mod
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { FilterModel } from '../../../../component/filter/filter.model';
+import { InfoSiteDBDownModel } from '../../../../component/info-site-db-down/info-site-db-down.model';
 import { OthersModel } from '../../../../component/others/others.model';
 import { LinkedLogsViewModel } from '../../../../component/pool-house-ticket/linked-log/linked-log.model';
 import { WrongHdpModel } from '../../../../models/event-wrong-hdp.model';
@@ -15,6 +16,7 @@ import { EventWrongHdpComponent } from './event-wrong-hdp.component';
 import { LogInfoWrongHdpComponent } from './log-info-wrong-hdp/log-info-wrong-hdp.component';
 import { FilterWithHdpModel } from './models/filter-with-hdp.model';
 import { LogInfoWrongHdp } from './models/log-info-wrong-hdp.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
 import { EventWrongHdpService } from './services/event-wrong-hdp.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
@@ -115,8 +117,10 @@ describe('EventWrongHdpComponent', () => {
         isShowRelatedEvents: false,
         isBlock: false,
         inputRelatedMatchId: '',
-        transInfoAddRequestModel: null
-    };
+        transInfoAddRequestModel: null,
+        infoSiteDBDownModel: new InfoSiteDBDownModel(),
+        isShowInfoSiteDBDown: false
+    } as PrimitiveProperty;
     eventWrongHdpService.assignModelsToEvents = jest.fn();
     relatedEventService.getChildMatches = jest.fn().mockResolvedValue([
         {

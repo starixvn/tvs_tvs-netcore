@@ -14,6 +14,7 @@ import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventWrongOuComponent } from './event-wrong-ou.component';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou/log-info-wrong-ou.component';
 import { LogInfoWrongOu } from './models/log-info-wrong-ou.model';
+import { PrimitiveProperty } from './models/primitive-property.model';
 import { EventWrongOuService } from './services/event-wrong-ou.service';
 import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
@@ -141,8 +142,10 @@ describe('EventWrongOuComponent', () => {
         isShowRelatedEvents: false,
         isBlock: false,
         inputRelatedMatchId: '',
-        transInfoAddRequestModel: null
-    };
+        transInfoAddRequestModel: null,
+        infoSiteDBDownModel: null,
+        isShowInfoSiteDBDown: false
+    } as unknown as PrimitiveProperty;
     eventWrongOuService.assignModelsToEvents = jest.fn();
     relatedEventService.getChildMatches = jest.fn().mockResolvedValue([
         {

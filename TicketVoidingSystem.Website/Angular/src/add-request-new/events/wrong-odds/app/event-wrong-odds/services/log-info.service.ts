@@ -17,6 +17,7 @@ export class LogInfoService {
     const getLogInfoQuery = this.initGetLogInfoWrongOddsQuery(isEdit, requestId, filter, logInfoEvent);
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
+    primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
     this.assignResultLogInfoToEvents(logInfoEvent, viewModel.getLogInfoModels);
   }
 

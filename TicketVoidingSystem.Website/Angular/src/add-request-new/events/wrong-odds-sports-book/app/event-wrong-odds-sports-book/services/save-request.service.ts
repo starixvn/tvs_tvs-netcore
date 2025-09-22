@@ -1,9 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import clone from 'lodash/clone';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { AddRequestService } from '../../../../../services/add-request.service';
 import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { AddRequestService } from '../../../../../services/add-request.service';
 import { PopupService } from '../../../../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
@@ -32,6 +31,7 @@ export class SaveRequestService {
   async recheckLogInfoBeforeSaveRequest(argWrongOddsSportsBook: SaveRequestArg): Promise<boolean> {
     argWrongOddsSportsBook.addRequestStore.changeSavingRequestStatus(true);
     this.logInfoWrongOddsSportsBookService.resetLogInfoOfEvent(argWrongOddsSportsBook.logInfoEvent);
+    argWrongOddsSportsBook.primitiveProps.infoSiteDBDownModel = null;
 
     if (!this.validationService.validateCommonData(argWrongOddsSportsBook.eventLeagueComponent, argWrongOddsSportsBook.filterWrongOddsSportsBookComponent, argWrongOddsSportsBook.advancedModeComponent)) {
       return false;
@@ -65,7 +65,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.isHasSettledTicket = arg.logInfoEvent.logInfoDetail?.settleCount > 0;
     arg.confirmAddRequest.isHasWarningTicket = arg.logInfoEvent.messageValidationLogInfo?.length > 0;
     arg.confirmAddRequest.isOpen = true;
-    arg.confirmAddRequest = clone(arg.confirmAddRequest);
   }
 
   private async executeSaveRequestApi(argWrongOddsSportsBook: SaveRequestArg): Promise<void> {
@@ -100,6 +99,8 @@ export class SaveRequestService {
     if (!argWrongOddsSportsBook.filter.isVoided) {
       query.wrongOddsSportsBookInfo = this.eventWrongOddsSportsBookService.getWrongOddsSportsBookModel(
         argWrongOddsSportsBook.logInfoEvent, argWrongOddsSportsBook.filter.subIssueTypeId);
+      query.siteDBDownInfoJson = argWrongOddsSportsBook.confirmAddRequest.isMarkTicketSiteDbDown
+        ? argWrongOddsSportsBook.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;

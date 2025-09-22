@@ -10,11 +10,11 @@ import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.mo
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
-import { ValidationService } from '../services/validation.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { HdpFilterBetTypeComponent } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.component';
 import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
+import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
+import { ValidationService } from '../services/validation.service';
 
 @Component({
   selector: 'filter-wrong-ou',

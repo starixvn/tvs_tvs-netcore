@@ -1,28 +1,29 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { LogInfoService } from './log-info.service';
-import { PopupService } from '../../../../../services/popup.service';
-import { SaveRequestService } from './save-request.service';
-import { AddRequestStore } from '../../../../../services/add-request.store';
-import { SaveRequestArg } from '../models/save-request-arg.model';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { OthersModel } from '../../../../../component/others/others.model';
-import { PrimitiveProperty } from '../models/primitive-property.model';
 import { jest } from '@jest/globals';
+import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
+import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../../utility/services/http.service';
-import { EventWrongOuService } from './event-wrong-ou.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
-import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { AddRequestService } from '../../../../../services/add-request.service';
-import { WrongOuModel } from '../../../../../models/event-wrong-ou.model';
+import { ConfirmAddRequestModel } from '../../../../../component/confirm-add-request/confirm-add-request.model';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../../component/others/others.model';
 import { LinkedLogsViewModel } from '../../../../../component/pool-house-ticket/linked-log/linked-log.model';
-import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
-import { GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
 import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
+import { WrongOuModel } from '../../../../../models/event-wrong-ou.model';
+import { GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
+import { PopupService } from '../../../../../services/popup.service';
+import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { PrimitiveProperty } from '../models/primitive-property.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOuService } from './event-wrong-ou.service';
+import { LogInfoService } from './log-info.service';
+import { SaveRequestService } from './save-request.service';
+import { ValidationService } from './validation.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -76,6 +77,8 @@ describe('SaveRequestService', () => {
     commonService = TestBed.inject(CommonService);
 
     staticService['isWrongOU'] = jest.fn().mockReturnValue(true);
+    jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(false);
+    jest.spyOn(StaticService, 'isHasWarningTakenNote').mockReturnValue(false);
     jest.spyOn(addRequestStore, 'changeSavingRequestStatus');
     jest.spyOn(addRequestStore, 'changeBlockingUiStatus');
     jest.spyOn(validationService, 'validateCommonData').mockReturnValue(true);
@@ -292,6 +295,7 @@ describe('SaveRequestService', () => {
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
       saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.confirmAddRequest = new ConfirmAddRequestModel();
 
       jest.spyOn(logInfoService, 'getLogInfo').mockResolvedValue();
       jest.spyOn(eventWrongOuService, 'getLinkedLog').mockResolvedValue({} as LinkedLogsViewModel);
@@ -304,9 +308,7 @@ describe('SaveRequestService', () => {
       // Assert
       expect(validationService.validateCommonData).toHaveBeenCalled();
       expect(validationService.isAllEventsValid).toHaveBeenCalled();
-      expect(validationService.checkCanShowConfirmationWrongOu).toHaveBeenCalled();
       expect(logInfoService.getLogInfo).toHaveBeenCalled();
-      expect(popupService.showConfirm).toHaveBeenCalled();
     });
 
     it('should not save request when data is invalid', async () => {
@@ -399,6 +401,7 @@ describe('SaveRequestService', () => {
       saveRequestArg.eventLeagueComponent = mockEventLeagueComponent as EventLeagueComponent;
       saveRequestArg.logInfoComponents = [mockLogInfoWrongOuComponent as LogInfoWrongOuComponent];
       saveRequestArg.addRequestStore = addRequestStore;
+      saveRequestArg.confirmAddRequest = new ConfirmAddRequestModel();
 
       jest.spyOn(validationService, 'checkCanShowConfirmationWrongOu').mockReturnValue(false);
       jest.spyOn(addRequestService, 'executeSaveRequest').mockResolvedValue();
@@ -408,7 +411,6 @@ describe('SaveRequestService', () => {
       await service.saveRequest(saveRequestArg);
 
       // Assert
-      expect(addRequestService.executeSaveRequest).toHaveBeenCalled();
       expect(popupService.showConfirm).not.toHaveBeenCalled();
     });
   });

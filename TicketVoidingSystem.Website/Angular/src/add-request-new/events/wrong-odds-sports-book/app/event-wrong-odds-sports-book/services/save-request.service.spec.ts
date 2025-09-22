@@ -1,17 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { SaveRequestService } from './save-request.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { ValidationService } from './validation.service';
-import { LogInfoService } from './log-info.service';
-import { PopupService } from '../../../../../services/popup.service';
-import { AddRequestService } from '../../../../../services/add-request.service';
-import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
-import { SaveRequestArg } from '../models/save-request-arg.model';
 import { TEXT } from '../../../../../../utility/constants/text';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
 import { AddRequestQuery } from '../../../../../models/add-request.query';
 import { WrongOddsSportsBookModel } from '../../../../../models/event-wrong-odds-sports-book.model';
+import { AddRequestService } from '../../../../../services/add-request.service';
 import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
+import { PopupService } from '../../../../../services/popup.service';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { EventWrongOddsSportsBookService } from './event-wrong-odds-sports-book.service';
+import { LogInfoService } from './log-info.service';
+import { SaveRequestService } from './save-request.service';
+import { ValidationService } from './validation.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -67,7 +67,7 @@ describe('SaveRequestService', () => {
       } as unknown as SaveRequestArg;
       service.recheckLogInfoBeforeSaveRequest = jest.fn().mockResolvedValue(true);
       service['showPopupConfirmSave'] = jest.fn();
-      
+
       // Act
       await service.saveRequest(mockArg);
 
@@ -181,7 +181,8 @@ describe('SaveRequestService', () => {
           logInfoDetail: { settleCount: 1 },
           messageValidationLogInfo: ['warning1']
         },
-        confirmAddRequest: {}
+        confirmAddRequest: {},
+        primitiveProps: {}
       } as unknown as SaveRequestArg;
 
       jest.spyOn(StaticService, 'isEditingByAnotherUser').mockReturnValue(true);
@@ -281,7 +282,10 @@ describe('SaveRequestService', () => {
           decidedBy: 'user2',
           remark: 'remark'
         },
-        logInfoEvent: {}
+        logInfoEvent: {},
+        confirmAddRequest: {
+          isOpen: false
+        }
       } as unknown as SaveRequestArg;
 
       jest.spyOn(eventWrongOddsSportsBookService, 'getWrongOddsSportsBookModel').mockReturnValue({} as unknown as WrongOddsSportsBookModel);

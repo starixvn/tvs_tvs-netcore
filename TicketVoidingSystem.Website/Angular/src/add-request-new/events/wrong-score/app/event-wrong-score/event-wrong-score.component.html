@@ -77,6 +77,7 @@
     [mainEvent]="mainEvent" (clearInfoSiteDBDownModel)="clearInfoSiteDBDownModel()"></related-events>
 </div>
 
-<confirm-wrong-score [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()"
-  (save)="onYesConfirmAddRequest()"></confirm-wrong-score>
+<confirm-wrong-score [isOpen]="confirmWrongScoreModel.isOpenDialog" [model]="confirmWrongScoreModel" (close)="triggerCloseEvent()" (save)="onYesConfirmAddRequest()"
+  [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson" [action]="filter.action">
+</confirm-wrong-score>
 <tooltip [tooltip]="tooltip"></tooltip>

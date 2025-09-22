@@ -11,7 +11,6 @@ import { ChildMatchModel } from '../../../../../models/related-event.model';
 import { SubIssueTypeLinkMatch } from '../../../../../models/sub-type-link-match.model';
 import { AddRequestStore } from '../../../../../services/add-request.store';
 import { FilterTimeWithAllowance } from '../filter-time-with-allowance/filter-time-with-allowance.model';
-
 @Injectable()
 export class EventRedCardService {
 

@@ -1,9 +1,10 @@
 
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import clone from 'lodash/clone';
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
-import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../../utility/components/add-child-match/add-child-match.model';
@@ -12,12 +13,17 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, MatchType } from '../../../../../utility/constants/config';
-import { AddRequestStore } from '../../../../services/add-request.store';
+import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
+import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
 import { FilterModel } from '../../../../component/filter/filter.model';
+import { IssueTypes } from '../../../../component/filter/issue-types.model';
+import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down/info-site-db-down.component';
+import { OthersModel } from '../../../../component/others/others.model';
 import { WrongOuModel } from '../../../../models/event-wrong-ou.model';
 import { GetChildMatchQuery } from '../../../../models/get-child-match.query';
 import { ChildMatchModel } from '../../../../models/related-event.model';
-import { OthersModel } from '../../../../component/others/others.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou/log-info-wrong-ou.component';
 import { AddRelatedEventArg } from './models/add-related-event-arg.model';
 import { LogInfoWrongOu } from './models/log-info-wrong-ou.model';
@@ -28,16 +34,15 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
-import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 
 @Component({
   selector: 'event-wrong-ou',
   templateUrl: './event-wrong-ou.component.html',
   styleUrls: ['./event-wrong-ou.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent, 
-    LogInfoWrongOuComponent, OnlyNumberDirective],
-  providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService ]
+  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent,
+    LogInfoWrongOuComponent, OnlyNumberDirective, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
+  providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService]
 })
 export class EventWrongOuComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -49,6 +54,8 @@ export class EventWrongOuComponent implements OnInit {
   @Input() others = new OthersModel();
   @Input() actionIdOfFirstTimeAccess: string;
   @Input() wrongOuModels: WrongOuModel[] = [];
+  @Input() issueTypes = new IssueTypes();
+
   @Output() updateMatchId = new EventEmitter<number>();
   @ViewChild('leagueEvent') eventLeagueComponent: EventLeagueComponent;
   @ViewChildren('logInfo') logInfoComponents: QueryList<LogInfoWrongOuComponent>;
@@ -59,6 +66,7 @@ export class EventWrongOuComponent implements OnInit {
   addChildMatchModel = new AddChildMatchModel();
   primitiveProps = new PrimitiveProperty();
   tooltip = new Tooltip();
+  confirmAddRequest = new ConfirmAddRequestModel();
   private readonly INPUT_MATCH_ID_CLASS = 'input-related-match-id';
   private readonly element = inject(ElementRef);
   private readonly logInfoWrongOuService = inject(LogInfoService);
@@ -80,6 +88,7 @@ export class EventWrongOuComponent implements OnInit {
     }
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
       this.resetLogInfoAndHideEvents();
+      this.eventWrongOuService.resetPoolHouseCheckedBetTypes(this.mainEvent);
       this.filter.isChangeSubTypeManual = false;
     }
   }
@@ -109,6 +118,7 @@ export class EventWrongOuComponent implements OnInit {
 
   public async handleSearchEvent(): Promise<void> {
     this.logInfoWrongOuService.resetLogInfoOfEvent([this.mainEvent]);
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     const mainLogInfo = this.logInfoComponents.find(x => x.isMainMatch);
 
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, [mainLogInfo])) {
@@ -128,6 +138,7 @@ export class EventWrongOuComponent implements OnInit {
 
   public changeMatchEvent(): void {
     this.primitiveProps.isShowRelatedEvents = false;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.isMainMatch);
     this.logInfoWrongOuService.resetLogInfoOfEvent(this.allSelectedEvents);
     this.mainEvent.leagueName = this.eventLeagueComponent?.selectedMatch.leagueName;
@@ -161,6 +172,7 @@ export class EventWrongOuComponent implements OnInit {
   }
 
   public handleDeleteEvent(matchId: number): void {
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.allSelectedEvents = this.allSelectedEvents.filter(x => x.matchId !== matchId || x.isMainMatch);
   }
 
@@ -177,6 +189,7 @@ export class EventWrongOuComponent implements OnInit {
 
   private resetLogInfoAndHideEvents() {
     this.primitiveProps.isShowRelatedEvents = false;
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.logInfoWrongOuService.resetLogInfoOfEvent(this.allSelectedEvents);
   }
 
@@ -195,6 +208,7 @@ export class EventWrongOuComponent implements OnInit {
     arg.allEvents = this.allSelectedEvents;
     arg.mainEvent = this.mainEvent;
     arg.addRequestStore = this.addRequestStore;
+    arg.confirmAddRequest = this.confirmAddRequest;
 
     return arg;
   }
@@ -221,6 +235,7 @@ export class EventWrongOuComponent implements OnInit {
   }
 
   public resetAllData(): void {
+    this.primitiveProps.isShowInfoSiteDBDown = false;
     this.primitiveProps.isShowRelatedEvents = false;
     this.allSelectedEvents = [];
   }
@@ -235,5 +250,13 @@ export class EventWrongOuComponent implements OnInit {
 
   public isDisabledLinkMatches(): boolean {
     return this.filter.isVoided || this.relatedEvents.filter(x => x.matchType === MatchType.LINK).length === 0;
+  }
+
+  async onClickConfirmSaveRequest() {
+    await this.saveRequestService.onClickConfirmSave(this.initSaveRequestInput());
+  }
+
+  onClickCancelSaveRequest() {
+    this.addRequestStore.changeSavingRequestStatus(false);
   }
 }

@@ -1,11 +1,12 @@
 
-import { FilterWrongOddsComponent } from "../filter-wrong-odds/filter-wrong-odds.component";
-import { LogInfoWrongOdds } from "./log-info-wrong-odds.model";
-import { PrimitiveProperty } from "./primitive-property.model";
 import { EventLeagueComponent } from "../../../../../../utility/components/event-league/event-league.component";
+import { ConfirmAddRequestModel } from "../../../../../component/confirm-add-request/confirm-add-request.model";
 import { FilterModel } from "../../../../../component/filter/filter.model";
 import { OthersModel } from "../../../../../component/others/others.model";
 import { AddRequestStore } from "../../../../../services/add-request.store";
+import { FilterWrongOddsComponent } from "../filter-wrong-odds/filter-wrong-odds.component";
+import { LogInfoWrongOdds } from "./log-info-wrong-odds.model";
+import { PrimitiveProperty } from "./primitive-property.model";
 
 export class SaveRequestArg {
   requestId: number;
@@ -20,4 +21,5 @@ export class SaveRequestArg {
   eventLeagueComponent: EventLeagueComponent;
   filterWrongOddsComponent: FilterWrongOddsComponent;
   addRequestStore: AddRequestStore;
+  confirmAddRequest: ConfirmAddRequestModel;
 }

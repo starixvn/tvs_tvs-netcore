@@ -1,7 +1,7 @@
 import { Tooltip } from "../../../../../../utility/components/tooltip/tooltip.model";
-import { AddRequestStore } from "../../../../../services/add-request.store";
 import { FilterModel } from "../../../../../component/filter/filter.model";
 import { ChildMatchModel } from "../../../../../models/related-event.model";
+import { AddRequestStore } from "../../../../../services/add-request.store";
 import { FilterWrongOuModel } from "./filter-wrong-ou.model";
 import { LogInfoWrongOu } from "./log-info-wrong-ou.model";
 import { PrimitiveProperty } from "./primitive-property.model";

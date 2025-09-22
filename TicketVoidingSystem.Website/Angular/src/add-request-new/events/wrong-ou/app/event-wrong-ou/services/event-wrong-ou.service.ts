@@ -106,4 +106,8 @@ export class EventWrongOuService {
       return logInfoQuery;
     });
   }
+
+  public resetPoolHouseCheckedBetTypes(logInfo: LogInfoWrongOu): void {
+    logInfo.poolHouseCheckedBetTypes = logInfo.isMainMatch ? PoolHouseTicketValue.SELECT_ALL_BETTYPE : null;
+  }
 }

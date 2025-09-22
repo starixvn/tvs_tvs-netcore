@@ -76,10 +76,10 @@ describe('AllowanceTimeComponent', () => {
       component.aaTime = 1;
       component.paTime = undefined;
       component.saTime = undefined;
-
+      
       const displaySpy = jest.spyOn(component.tooltip, 'display');
       const result = component.isValidAllowanceTime();
-
+      
       expect(result).toBeFalsy();
       expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
@@ -88,10 +88,10 @@ describe('AllowanceTimeComponent', () => {
       component.aaTime = 1;
       component.paTime = undefined;
       component.saTime = undefined;
-
+      
       const displaySpy = jest.spyOn(component.tooltip, 'display');
       const result = component.isValidAllowanceTime();
-
+      
       expect(result).toBeFalsy();
       expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
@@ -100,10 +100,10 @@ describe('AllowanceTimeComponent', () => {
       component.aaTime = undefined;
       component.paTime = 1;
       component.saTime = undefined;
-
+      
       const displaySpy = jest.spyOn(component.tooltip, 'display');
       const result = component.isValidAllowanceTime();
-
+      
       expect(result).toBeFalsy();
       expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });
@@ -112,10 +112,10 @@ describe('AllowanceTimeComponent', () => {
       component.aaTime = undefined;
       component.paTime = undefined;
       component.saTime = 1;
-
+      
       const displaySpy = jest.spyOn(component.tooltip, 'display');
       const result = component.isValidAllowanceTime();
-
+      
       expect(result).toBeFalsy();
       expect(displaySpy).toHaveBeenCalledWith('allowance-time', TEXT.INVALID_SETTING_TIME);
     });

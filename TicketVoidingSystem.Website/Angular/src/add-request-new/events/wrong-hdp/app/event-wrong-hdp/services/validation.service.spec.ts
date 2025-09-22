@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
-import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';
-import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
-import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
 import { TeamFavorite, TVSRequestActionType } from '../../../../../../utility/constants/config';
-import { TEXT } from '../../../../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../../../../utility/constants/sub-issue-type.constant';
+import { TEXT } from '../../../../../../utility/constants/text';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { FilterModel } from '../../../../../component/filter/filter.model';
+import { LogInfoWrongHdpComponent } from '../log-info-wrong-hdp/log-info-wrong-hdp.component';
+import { FilterWithHdpModel } from '../models/filter-with-hdp.model';
+import { LogInfoWrongHdp } from '../models/log-info-wrong-hdp.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;

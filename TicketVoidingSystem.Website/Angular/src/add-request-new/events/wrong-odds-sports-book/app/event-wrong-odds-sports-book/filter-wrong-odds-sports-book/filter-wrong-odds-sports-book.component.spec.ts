@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
-import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book.component';
-import { ValidationService } from '../services/validation.service';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
 import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
+import { FilterWrongOddsSportsBookModel } from '../models/filter-wrong-odds-sports-book.model';
+import { ValidationService } from '../services/validation.service';
+import { FilterWrongOddsSportsBookComponent } from './filter-wrong-odds-sports-book.component';
 
 class Helper {
   static readonly fakeFilterModel: FilterWrongOddsSportsBookModel = {

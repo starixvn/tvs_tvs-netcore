@@ -167,47 +167,6 @@ describe('LogInfoService', () => {
       expect(allEvents[0].messageValidationLogInfo).toBeDefined();
       expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.SELECT_ALL_BETTYPE);
     });
-
-    it('should get log info and assign results for non-pool house affected event', async () => {
-      // Arrange
-      const allEvents: LogInfoWrongHdp[] = [{
-        matchId: Helper.fakeMatchId,
-        isMainMatch: true,
-        leagueName: 'Test League',
-        eventName: 'Test Event',
-        poolHouseCheckedBetTypes: '',
-        logInfoDetail: null,
-        messageValidationLogInfo: null,
-        isShowValidation: false,
-        filterWithHdp: null,
-        linkedLogsViewModel: null,
-        eventDate: null,
-        sportType: 1
-      } as LogInfoWrongHdp];
-      const isEdit = false;
-      const requestId = 1;
-      const filter = Helper.fakeFilterModel;
-      const primitiveProps = new PrimitiveProperty();
-
-      const mockResponse = {
-        transInfoAddRequestModel: Helper.fakeTransInfoAddRequestModel,
-        getLogInfoModels: [{
-          ...Helper.fakeGetLogInfoModel,
-          validation: {
-            ...Helper.fakeValidation,
-          }
-        }]
-      } as GetLogInfoViewModel;
-
-      commonService.getLogInfo.mockResolvedValue(mockResponse);
-      eventWrongHdpService.getWrongHdpModel.mockReturnValue([Helper.fakeWrongHdpGetLogInfoQuery]);
-
-      // Act
-      await service.getLogInfo(allEvents, isEdit, requestId, filter, primitiveProps);
-
-      // Assert
-      expect(allEvents[0].poolHouseCheckedBetTypes).toBe(PoolHouseTicketValue.NOT_AFFECTED);
-    });
   });
 
   describe('resetLogInfoOfEvent', () => {

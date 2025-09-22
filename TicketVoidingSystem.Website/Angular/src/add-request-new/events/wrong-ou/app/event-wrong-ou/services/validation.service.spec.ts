@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
-import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
-import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
-import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
-import { SaveRequestArg } from '../models/save-request-arg.model';
 import { TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { TEXT } from '../../../../../../utility/constants/text';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { FilterModel } from '../../../../../component/filter/filter.model';
+import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.component';
+import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
+import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;

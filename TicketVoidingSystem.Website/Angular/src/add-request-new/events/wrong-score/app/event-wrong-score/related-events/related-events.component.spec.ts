@@ -1,6 +1,5 @@
 import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterTimeWithAllowance } from '../../../../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { AddChildMatchModel } from '../../../../../../utility/components/add-child-match/add-child-match.model';
 import { MatchType } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
@@ -8,6 +7,7 @@ import { FilterModel } from '../../../../../component/filter/filter.model';
 import { IssueTypes } from '../../../../../component/filter/issue-types.model';
 import { LogInfoRelatedEventComponent } from '../../../../../component/log-info-related-event/log-info-related-event.component';
 import { LogInfoRelatedEvent } from '../../../../../component/log-info-related-event/log-info-related-event.model';
+import { FilterTimeWithAllowance } from '../../../../../events/red-card/app/event-red-card/filter-time-with-allowance/filter-time-with-allowance.model';
 import { ChildMatchModel } from '../../../../../models/related-event.model';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { PrimitiveProperty } from '../event-wrong-score.model';

@@ -54,7 +54,7 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
   selector: 'event-wrong-score',
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
-  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent,
+  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent, 
     CommonModule, FormsModule, TooltipComponent, BlockUiDirective, MainLogInfoComponent, RelatedEventsComponent, InfoSiteDBDownComponent],
   providers: [CreateMapService,  EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]
@@ -101,7 +101,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   private readonly editRequestService = inject(EditRequestService);
   private readonly eventWrongScoreService = inject(EventWrongScoreService);
   private readonly createMapService = inject(CreateMapService);
-
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -150,7 +150,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   public async handleSearchEvent(): Promise<void> {
-    if (!this.validationService.isValidAllSubIssueType(this.relatedEventsComponent.logInfoComponents)) {
+    if (!this.validationService.isValidAllSubIssueType(this.relatedEventsComponent.logInfoComponents) || !this.validateVarCheck()) {
       return;
     }
 
@@ -249,7 +249,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
       wrongScoreModels: this.wrongScoreModels,
       infoSiteDBDownModel: this.primitiveProps.infoSiteDBDownModel
     };
-
+    
     this.eventWrongScoreService.updateInfoConfirm(this.confirmWrongScoreModel, updateInfoArgs);
     this.confirmWrongScoreModel = clone(this.confirmWrongScoreModel);
   }
@@ -275,8 +275,8 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     args.issueTypes = this.issueTypes;
     args.tvDetectionModel = this.tvDetectionModel;
     args.isVoided = this.isVoided;
-    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown && this.confirmWrongScoreModel.isHasAffectedTicketSiteDBDown;
-
+    args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown;
+    
     return args;
   }
 
@@ -329,7 +329,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   isShowLogInfoSelectedScores(wrongScoreModels: WrongScoreModel[]): boolean {
-    const checkedScoresCount = wrongScoreModels.filter(x => x.isChecked).length;
+    const checkedScoresCount = wrongScoreModels.filter(x => x.isChecked && x.logInfoDetail).length;
     const isNotCheckTimeFilter = this.primitiveProps.filterBy !== TVSRequestFilterBy.CHECK_TIME;
 
     return checkedScoresCount > 1 && isNotCheckTimeFilter;

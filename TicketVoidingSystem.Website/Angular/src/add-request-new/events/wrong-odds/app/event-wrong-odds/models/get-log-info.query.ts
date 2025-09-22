@@ -7,9 +7,11 @@ export class WrongOddsGetLogInfoQuery {
   isLinkGroup1X2: boolean;
   isLinkGroupAIO: boolean;
   liveIndicator: number;
+
   filterFavoriteType?: string;  
   favoriteValue?: string;
   wrongOU?: string;
+
   spread?: string;
   allowanceRate?: string;
   correctOddsHomeOver?: string;

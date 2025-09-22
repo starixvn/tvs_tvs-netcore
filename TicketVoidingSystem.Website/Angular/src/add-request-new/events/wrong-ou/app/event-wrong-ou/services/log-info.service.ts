@@ -18,6 +18,7 @@ export class LogInfoService {
     const viewModel = await this.commonService.getLogInfo(getLogInfoQuery);
 
     primitiveProps.transInfoAddRequestModel = viewModel.transInfoAddRequestModel;
+    primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
     this.assignResultLogInfoToEvents(allEvents, viewModel.getLogInfoModels);
   }
 

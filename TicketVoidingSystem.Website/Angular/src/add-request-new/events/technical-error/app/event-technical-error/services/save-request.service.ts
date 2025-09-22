@@ -1,8 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import clone from 'lodash/clone';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { StaticService } from '../../../../../../utility/services/static.service';
-import { ConfirmAddRequestModel } from '../../../../../component/confirm-add-request/confirm-add-request.model';
 import { AddRequestQuery } from '../../../../../models/add-request.query';
 import { AddRequestService } from '../../../../../services/add-request.service';
 import { PopupService } from '../../../../../services/popup.service';
@@ -58,10 +56,6 @@ export class SaveRequestService {
     arg.confirmAddRequest.requestId = arg.requestId;
     arg.confirmAddRequest.requestedBy = arg.requestedBy;
     arg.confirmAddRequest.isEditingByAnotherUser = StaticService.isEditingByAnotherUser(arg.isEdit, arg.userId);
-    arg.confirmAddRequest.isHasAffectedTicketSiteDBDown = arg.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson.length > 0;
-
-    arg.confirmAddRequest = clone(arg.confirmAddRequest);
-    arg.confirmAddRequest =  new ConfirmAddRequestModel();
   }
 
   private async executeSaveRequestApi(argTechnicalError: SaveRequestArg): Promise<void> {
@@ -93,10 +87,10 @@ export class SaveRequestService {
     query.mistakenBy = argTechnicalError.others.mistakenBy;
     query.decidedBy = argTechnicalError.others.decidedBy;
     query.remark = argTechnicalError.others.remark;
-    
+
     if (!argTechnicalError.filter.isVoided) {
       query.technicalErrorInfo = this.eventTechnicalErrorService.getTechnicalErrorModel(Number(argTechnicalError.filter.subIssueTypeId), argTechnicalError.logInfoEvent);
-      query.siteDBDownInfoJson = argTechnicalError.confirmAddRequest.isMarkTicketSiteDbDown && argTechnicalError.confirmAddRequest.isHasAffectedTicketSiteDBDown
+      query.siteDBDownInfoJson = argTechnicalError.confirmAddRequest.isMarkTicketSiteDbDown
         ? argTechnicalError.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
