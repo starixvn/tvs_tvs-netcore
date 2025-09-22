@@ -22,7 +22,7 @@ export class ConfirmDangerAcceptedComponent implements OnChanges {
     if (changes['isOpen'] && this.isOpen) {
       const isShowCheckbox = this.siteDBDownInfoJson?.length > 0 && this.action !== TVSRequestActionType.TAKE_NOTE_ID.toString();
       this.model.isHasAffectedTicketSiteDBDown = isShowCheckbox;
-      this.model.isMarkTicketSiteDbDown = isShowCheckbox;    
+      this.model.isMarkTicketSiteDbDown = isShowCheckbox;
     }
   }
   

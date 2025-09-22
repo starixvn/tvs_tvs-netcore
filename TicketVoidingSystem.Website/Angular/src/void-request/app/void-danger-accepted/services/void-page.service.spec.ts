@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';

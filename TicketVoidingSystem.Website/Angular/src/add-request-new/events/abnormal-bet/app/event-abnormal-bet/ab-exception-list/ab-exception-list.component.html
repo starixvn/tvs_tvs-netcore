@@ -1,0 +1,16 @@
+@if (groupNumber.items.length > 0) {
+  <div class="ab-exception-list">
+    <div class="ab-exception-list-header d-flex justify-content-between">
+      AB Exception List
+      <button type="submit" class="btn btn-danger btn-sm" (click)="removeAllItems()" [disabled]="isVoided">Remove All</button>
+    </div>
+    <div class="ab-exception-list-items" [ngClass]="{'point-event-none disabled-input': isVoided}">
+      @for (item of groupNumber.items; track item) {
+        <div class="item-number">
+          <span>{{item.value}}</span>
+          <span class="icon-delete" (click)="removeItem(item)">&nbsp;</span>
+        </div>
+      }
+    </div>
+  </div>
+}

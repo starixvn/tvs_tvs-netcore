@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';

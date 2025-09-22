@@ -6,7 +6,6 @@ import {
   QueryList, SimpleChanges, ViewChild, ViewChildren
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
@@ -49,7 +48,7 @@ import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down
   templateUrl: './event-early-kick-off.component.html',
   styleUrls: ['./event-early-kick-off.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, DateFullTimeNewComponent,
+  imports: [FormsModule, TooltipComponent, EventLeagueComponent, DateFullTimeNewComponent,
     LogInfoEkoComponent, AddChildMatchComponent, ConfirmEkoComponent, OnlyNumberDirective, InfoSiteDBDownComponent],
   providers: [EventEarlyKickOffService, LogInfoService, SaveRequestService,
     ValidationService, RelatedEventService, SearchEventService, CheckAddPermissionService]

@@ -1,7 +1,7 @@
 
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
 import { AdvancedModeAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
 import { GroupBetTypesAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';

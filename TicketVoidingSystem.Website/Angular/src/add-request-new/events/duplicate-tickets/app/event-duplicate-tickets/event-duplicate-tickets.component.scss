@@ -1,0 +1,47 @@
+::ng-deep bet-ids label {
+  margin-bottom: 0;
+}
+
+:host::ng-deep league-event .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: #e9ecef !important;
+}
+
+.header-bet-id {
+  height: 31px;
+  display: flex;
+  align-items: center;
+}
+
+textarea {
+  padding: 5px;
+  resize: none;
+}
+
+.match {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+
+  input {
+    text-overflow: ellipsis;
+  }
+}
+
+@media only screen and (max-width: 1134px) {
+  .main-container {
+    width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1134px) {
+  .main-container {
+    width: 1065px;
+  }
+}
+
+@media only screen and (min-width: 540px) {
+  .event,
+  .league {
+    flex: 1;
+  }
+}

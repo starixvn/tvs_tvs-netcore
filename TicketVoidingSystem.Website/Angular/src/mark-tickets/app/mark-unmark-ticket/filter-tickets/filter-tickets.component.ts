@@ -4,7 +4,7 @@ import {
   ViewChild, inject
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { BetIdsComponent } from '../../../../utility/components/bet-ids/bet-ids.component';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
@@ -21,7 +21,7 @@ import { MatchIdComponent } from './match-id/match-id.component';
   selector: 'filter-tickets',
   templateUrl: './filter-tickets.component.html',
   styleUrls: ['./filter-tickets.component.scss'],
-  imports: [CommonModule, FormsModule, NgbModule, MatchIdComponent, NgSelectModule, BlockUiDirective, BetIdsComponent],
+  imports: [CommonModule, FormsModule, MatchIdComponent, NgSelectModule, BlockUiDirective, BetIdsComponent],
 })
 export class FilterTicketsComponent implements OnInit, OnChanges {
   @ViewChild('matchId') matchIdComponent: MatchIdComponent;

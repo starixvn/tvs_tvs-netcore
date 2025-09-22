@@ -1,0 +1,31 @@
+<event-base-layout #eventBaseLayout
+  [issueTypeId]="issueTypeId"
+  (saveRequest)="saveRequest()"
+  [model]="model"
+  [eventHeight]="'708px'"
+  [eventContent]="eventContent"
+  [othersContent]="othersContent">
+</event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-issueTypes="issueTypes" let-primitiveProperty="primitiveProperty"
+  let-filterModel="filterModel" let-otherModel="otherModel">
+  <abnormal-accounts #abnormalAccount
+    [issueTypes]="issueTypes"
+    [userId]="primitiveProperty.userId"
+    [requestedBy]="primitiveProperty.requestedBy"
+    [filter]="model.filter"
+    [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess"
+    [others]="model.others"
+    [abnormalAccountModel]="model.abnormalAccountModel"
+    [isVoided]="model.filter.isVoided"
+    [isEdit]="primitiveProperty.isEdit"
+    [requestId]="primitiveProperty.requestId">
+  </abnormal-accounts>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+  <abnormal-accounts-other
+    [isEdit]="primitiveProperty.isEdit"
+    [model]="model.others">
+  </abnormal-accounts-other>
+</ng-template>

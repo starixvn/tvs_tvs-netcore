@@ -1,0 +1,26 @@
+<event-base-layout #eventBaseLayout
+  [issueTypeId]="issueTypeId"
+  (saveRequest)="saveRequest()"
+  [model]="model"
+  [eventHeight]="'581px'"
+  [eventContent]="eventContent"
+  [othersContent]="othersContent">
+</event-base-layout>
+
+<ng-template #eventContent let-eventModel="eventModel" let-issueTypes="issueTypes" let-primitiveProperty="primitiveProperty"
+  let-filterModel="filterModel" let-otherModel="otherModel">
+  <event-recover-ticket #eventRecoverTicket
+    [isEdit]="primitiveProperty.isEdit"
+    [requestId]="primitiveProperty.requestId"
+    [filter]="model.filter"
+    [recoverTicketModel]="model.recoverTicketModel"
+    [others]="model.others">
+  </event-recover-ticket>
+</ng-template>
+
+<ng-template #othersContent let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+  <others-abnormal-bet
+    [isEdit]="primitiveProperty.isEdit"
+    [model]="otherModel">
+  </others-abnormal-bet>
+</ng-template>

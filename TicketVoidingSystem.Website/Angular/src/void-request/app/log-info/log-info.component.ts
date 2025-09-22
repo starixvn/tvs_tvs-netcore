@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment-timezone';
 import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';

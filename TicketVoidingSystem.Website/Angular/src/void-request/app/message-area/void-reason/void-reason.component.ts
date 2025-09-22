@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { FormsModule } from '@angular/forms';
 

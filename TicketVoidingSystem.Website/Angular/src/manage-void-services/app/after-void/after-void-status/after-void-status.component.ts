@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { AppApiService } from '../../app-api.service';

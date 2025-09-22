@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';

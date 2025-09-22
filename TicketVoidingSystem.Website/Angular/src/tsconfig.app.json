@@ -4,6 +4,6 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
-  "files": ["add-request-new/events/wrong-offered-name/main.ts", "polyfills.ts"],
+  "files": ["add-request-new/events/recover-ticket/main.ts", "polyfills.ts"],
   "exclude": ["test.ts", "**/*.spec.ts"]
 }

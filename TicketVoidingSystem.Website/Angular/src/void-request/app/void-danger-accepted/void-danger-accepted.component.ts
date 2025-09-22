@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';

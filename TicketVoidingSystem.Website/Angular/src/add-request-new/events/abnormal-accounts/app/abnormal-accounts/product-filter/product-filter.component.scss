@@ -1,0 +1,42 @@
+.product-filter {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: flex;
+
+  .multi-select {
+    width: 333px;
+  }
+}
+
+.product-filter {
+  .multi-select {
+    ::ng-deep ng-select {
+
+      .ng-option-selected,
+      .ng-value {
+        background-color: #d2e8ff !important;
+      }
+
+      .ng-value-icon {
+        padding: 1px 3px !important;
+      }
+
+      .ng-value-icon:hover {
+        background-color: #9fcdff !important;
+      }
+
+      .ng-value-icon.right {
+        border-left: 1px solid #9fcdff !important;
+      }
+
+      .displayed-name {
+        padding-left: 3px;
+      }
+
+      .number-of-more {
+        background-color: transparent !important;
+        margin-bottom: 5px;
+      }
+    }
+  }
+}

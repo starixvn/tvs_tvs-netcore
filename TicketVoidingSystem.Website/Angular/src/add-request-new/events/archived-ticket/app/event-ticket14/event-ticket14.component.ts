@@ -14,15 +14,12 @@ import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 
 @Component({
-    selector: 'event-ticket14',
-    templateUrl: './event-ticket14.component.html',
-    standalone: true,
-    imports: [BetIdsComponent, FormsModule, BlockUiDirective],
-    providers: [
-      SaveRequestService,
-      ValidationService
-    ]
-  })
+  standalone: true,
+  selector: 'event-ticket14',
+  templateUrl: './event-ticket14.component.html',
+  imports: [BetIdsComponent, FormsModule, BlockUiDirective],
+  providers: [SaveRequestService, ValidationService]
+})
 export class EventTicket14Component {
   @Input() isEdit: boolean;
   @Input() requestId?: number;

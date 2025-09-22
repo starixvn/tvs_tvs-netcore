@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../../../../utility/components/block-ui/block-ui.directive';
 import { DateFullTimeNewComponent } from '../../../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
@@ -24,7 +24,7 @@ import { WrongScoreService } from '../services/wrong-score.service';
   selector: 'wrong-score-info',
   templateUrl: './wrong-score-info.component.html',
   styleUrls: ['./wrong-score-info.component.scss'],
-  imports: [DateFullTimeNewComponent, NgbModule, FormsModule, CommonModule, TooltipComponent, SanitizeHtmlPipe, BlockUiDirective]
+  imports: [DateFullTimeNewComponent, NgbTooltip, FormsModule, CommonModule, TooltipComponent, SanitizeHtmlPipe, BlockUiDirective]
 })
 export class WrongScoreInfoComponent implements OnInit {
   @Input() index: number;

@@ -1,0 +1,29 @@
+<div>
+  <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+  <div role="dialog" class="fade modal show d-block wrapper-tooltip">
+    <div role="document" class="modal-dialog-custom modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class="modal-title">
+            <strong>Affected Ticket</strong>
+          </div>
+          <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeClick()"></button>
+        </div>
+        <div class="modal-body">
+          <account-table class="mb-2" #accountTable
+            [viewOnly]="true"
+            [accountWinlostModels]="tempAdjustedAccounts.accountWinlostTables">
+          </account-table>
+          <ticket-table [model]="tempAdjustedAccounts.ticketTableViewModel"
+            [isBlock]="isBlock"
+            (changeWinlost)="reCalculateAccount($event)">
+          </ticket-table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" (click)="saveClick()">Save</button>
+          <button type="button" class="btn btn-danger btn-sm" (click)="closeClick()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

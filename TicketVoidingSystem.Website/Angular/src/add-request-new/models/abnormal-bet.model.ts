@@ -1,5 +1,5 @@
-import { SendLetstalkModel } from "../../add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model";
 import { MatchInfo } from "../../utility/models/event.model";
+import { SendLetstalkModel } from "../events/abnormal-bet/app/event-abnormal-bet/event-abnormal-bet.model";
 
 export class AbnormalBetModel {
   matches?: MatchInfo[];

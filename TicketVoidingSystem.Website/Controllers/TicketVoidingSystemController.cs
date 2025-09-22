@@ -259,4 +259,44 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     {
         return View("~/wwwroot/dist/ticket-voiding-system/wrong-odds-sports-book/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.AbnormalAccount, Constant.Policy.Read)]
+    public ActionResult AbnormalAccount(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/abnormal-accounts/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.AbnormalBet, Constant.Policy.Read)]
+    public ActionResult AbnormalBet(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/abnormal-bet/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.DuplicateTickets, Constant.Policy.Read)]
+    public ActionResult DuplicateTickets(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/duplicate-tickets/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.RecoverTicket, Constant.Policy.Read)]
+    public ActionResult RecoverTicket(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/recover-ticket/index.cshtml");
+    }
 }

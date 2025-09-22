@@ -1,5 +1,5 @@
 import { Component, inject, Input } from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../../../../utility/components/block-ui/block-ui.directive';
 import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';

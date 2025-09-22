@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PagingConstant } from '../../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../../utility/components/tooltip/tooltip.model';
@@ -11,7 +11,6 @@ import { GetLogsQuery } from '../../models/query.model';
 import { CheckValidateService } from '../../services/check-validate.service';
 import { FilterAction, FilterDate } from './filter-logs.model';
 import { NumbersOnlyDirective } from '../../../../utility/directives/numbers-only.directive';
-import { DateFullTimeNewComponent } from '../../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { DatePickerComponent } from '../../../../utility/components/date-time/date-picker/date-picker.component';
 
 @Component({
@@ -19,7 +18,7 @@ import { DatePickerComponent } from '../../../../utility/components/date-time/da
   selector: 'filter-logs',
   templateUrl: './filter-logs.component.html',
   styleUrls: ['./filter-logs.component.scss'],
-  imports: [CommonModule, FormsModule, NgbModule, NgSelectModule, TooltipComponent, DatePickerComponent],
+  imports: [CommonModule, FormsModule, NgSelectModule, TooltipComponent, DatePickerComponent],
   providers: [CheckValidateService, NumbersOnlyDirective]
 })
 export class FilterLogsComponent implements OnInit {
