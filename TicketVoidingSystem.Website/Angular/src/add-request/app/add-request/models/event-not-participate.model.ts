@@ -9,5 +9,5 @@ export class NotParticipateModel {
   betTypeIds: string;
   playerId: number;
   playerNames: string;
-  betTypeCount: BetTypeCountModel[];
+  betTypeCount?: BetTypeCountModel[];
 }

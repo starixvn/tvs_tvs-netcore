@@ -1,11 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { EventReducedOverService } from './event-reduced-over.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../utility/services/static.service';
 import { ReducedOverModel } from '../../models/event-reduced-over.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
+import { EventReducedOverService } from './event-reduced-over.service';
 
 describe('EventReducedOverService', () => {
   let service: EventReducedOverService;
@@ -105,7 +105,8 @@ describe('EventReducedOverService', () => {
         runs: '10',
         nonLive: true,
         live: false,
-        logInfoDetail: logInfoDetail
+        logInfoDetail: logInfoDetail,
+        betTypeCount: []
       }];
 
       // Act

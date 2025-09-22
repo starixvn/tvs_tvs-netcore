@@ -16,7 +16,7 @@
 <info-site-db-down [infoSiteDBDownModel]="primitivePropertyEvent.infoSiteDBDownModel">
 </info-site-db-down>
 
-<log-info-reduced-over #logInfo [primitiveProps]="primitivePropertyEvent" [logInfo]="logInfoEvent">
+<log-info-reduced-over #logInfo [primitiveProps]="primitivePropertyEvent" [logInfo]="logInfoEvent" [issueTypeId]="filter.issueTypeId">
 </log-info-reduced-over>
 
 <confirm-add-request [isOpen]="confirmAddRequest.isOpen" [model]="confirmAddRequest" [issueTypes]="issueTypes" [voidActions]="filter.actions"

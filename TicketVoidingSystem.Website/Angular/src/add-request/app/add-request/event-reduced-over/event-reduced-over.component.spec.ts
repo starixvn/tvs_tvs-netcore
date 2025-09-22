@@ -4,6 +4,7 @@ import { EventLeagueComponent } from '../../../../utility/components/event-leagu
 import { MatchModel } from '../../../../utility/models/match.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { AddRequestStore } from '../add-request.store';
+import { AffectedTicketService } from '../affected-ticket/affected-ticket.service';
 import { FilterModel } from '../filter/filter.model';
 import { ReducedOverModel } from '../models/event-reduced-over.model';
 import { OthersModel } from '../others/others.model';
@@ -70,7 +71,8 @@ describe('EventReducedOverComponent', () => {
         LogInfoService,
         SaveRequestService,
         FilterReducedOverService,
-        AddRequestStore
+        AddRequestStore,
+        AffectedTicketService
       ]
     }).compileComponents();
 

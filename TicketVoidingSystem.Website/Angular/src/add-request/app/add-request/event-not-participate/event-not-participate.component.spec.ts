@@ -4,6 +4,7 @@ import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model'
 import { MatchModel } from '../../../../utility/models/match.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { AddRequestStore } from '../add-request.store';
+import { AffectedTicketService } from '../affected-ticket/affected-ticket.service';
 import { FilterModel } from '../filter/filter.model';
 import { NotParticipateModel } from '../models/event-not-participate.model';
 import { OthersModel } from '../others/others.model';
@@ -71,7 +72,8 @@ describe('EventNotParticipateComponent', () => {
         LogInfoService,
         SaveRequestService,
         FilterNotParticipateService,
-        AddRequestStore
+        AddRequestStore,
+        AffectedTicketService
       ]
     }).compileComponents();
 

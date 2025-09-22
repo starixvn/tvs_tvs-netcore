@@ -168,6 +168,7 @@ export class LogInfoService {
       model.logInfoDetail = x.logInfoDetail;
     });
   }
+
   private async getLogInfoNotParticipate(args: LogInfoArg): Promise<void> {
     const models = MappingModelStaticService.buildNotParticipateGetLogInfoModel(args.detailViewModel.notParticipateModels);
     const query = new GetLogInfoQuery();
