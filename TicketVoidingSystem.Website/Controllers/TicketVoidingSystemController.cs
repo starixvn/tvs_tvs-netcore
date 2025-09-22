@@ -299,4 +299,58 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     {
         return View("~/wwwroot/dist/ticket-voiding-system/recover-ticket/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.OtherIssues, Constant.Policy.Read)]
+    public ActionResult OtherIssues(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.OtherIssues;
+        return View("~/wwwroot/dist/ticket-voiding-system/other-issues/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.MatchEarlyCompleted, Constant.Policy.Read)]
+    public ActionResult MatchEarlyCompleted(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.MatchEarlyCompleted;
+        return View("~/wwwroot/dist/ticket-voiding-system/other-issues/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.NotParticipate, Constant.Policy.Read)]
+    public ActionResult NotParticipate(int id)
+    {
+        return View("~/wwwroot/dist/ticket-voiding-system/not-participate/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.ReducedOver, Constant.Policy.Read)]
+    public ActionResult ReducedOver(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.ReducedOver;
+        return View("~/wwwroot/dist/ticket-voiding-system/reduced-over/index.cshtml");
+    }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [IssueTypeAuth(SpecialDeleteFunctionKeys.Abandoned, Constant.Policy.Read)]
+    public ActionResult Abandoned(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.Abandoned;
+        return View("~/wwwroot/dist/ticket-voiding-system/reduced-over/index.cshtml");
+    }
 }

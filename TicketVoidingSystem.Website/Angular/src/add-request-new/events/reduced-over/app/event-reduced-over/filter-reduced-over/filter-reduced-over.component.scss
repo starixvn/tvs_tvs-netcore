@@ -1,0 +1,44 @@
+.filter {
+  padding: 12px;
+  background: #daecff;
+  border: 1px solid #b3c8df;
+  box-sizing: border-box;
+  border-radius: 3px;
+}
+
+@media only screen and (max-width: 1134px) {
+  .filter {
+      width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1134px) {
+  .filter {
+      width: 1065px;
+  }
+}
+
+.live-indicator {
+  padding: 0 5px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  align-items: center;
+  display: flex;
+  white-space: nowrap;
+}
+
+.bet-type {
+  width: 300px;
+}
+
+.wicket-over {
+  width: 100px;
+}
+
+.runs {
+  width: 100px;
+}
+
+.player {
+  width: 200px;
+}

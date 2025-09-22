@@ -72,7 +72,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
       this.primitiveProps.infoSiteDBDownModel = null;
       if (this.isShowFilterTime()) {
         this.addRequestStore.changeSavingRequestStatus(true);
-        this.advancedModeAddRequestModel.checkedBetTypes = [];
+        this.resetCheckedBetTypes();
         this.resetBetTypeAndAdvancedMode();
         this.logInfoEvent.filterOtherIssues = this.eventOtherIssuesService.initDefaultFilter();
       } else {
@@ -219,6 +219,12 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
     this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+  }
+
+  private resetCheckedBetTypes() {
+    if (this.advancedModeAddRequestModel) {
+      this.advancedModeAddRequestModel.checkedBetTypes = [];
+    }
   }
 
   private initSaveRequestInput() {

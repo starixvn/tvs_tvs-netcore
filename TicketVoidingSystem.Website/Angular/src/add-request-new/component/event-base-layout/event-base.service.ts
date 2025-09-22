@@ -1,4 +1,7 @@
 import { inject, Injectable } from '@angular/core';
+import { NotParticipateModel } from 'src/add-request-new/models/event-not-participate.model';
+import { OtherIssuesModel } from 'src/add-request-new/models/event-other-issues.model';
+import { ReducedOverModel } from 'src/add-request-new/models/event-reduced-over.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { CommonService } from '../../../utility/services/common.service';
 import { IssueTypes } from '../../component/filter/issue-types.model';
@@ -42,6 +45,9 @@ export class EventBaseService {
     [IssueTypeConstant.EARLY_KICK_OFF]: (model: RequestModel): EarlyKickOffModel[] => model.earlyKickOffModels,
     [IssueTypeConstant.WRONG_KICK_OFF]: (model: RequestModel): EarlyKickOffModel[] => model.earlyKickOffModels,
     [IssueTypeConstant.WRONG_OFFERED_NAME]: (model: RequestModel): WrongOfferedNameModel => model.wrongOfferedNameModel,
+    [IssueTypeConstant.OTHER_ISSUES]: (model: RequestModel): OtherIssuesModel => model.otherIssuesModel,
+    [IssueTypeConstant.NOT_PARTICIPATE]: (model: RequestModel): NotParticipateModel[] => model.notParticipateModels,
+    [IssueTypeConstant.REDUCED_OVER]: (model: RequestModel): ReducedOverModel[] => model.reducedOverModels,
     [IssueTypeConstant.WRONG_MARKET_OFFERED]: (model: RequestModel): WrongMarketOfferedModel[] => model.wrongMarketOfferedModels,
     [IssueTypeConstant.ABNORMAL_ACCOUNT]: (model: RequestModel): AbnormalAccountModel => model.abnormalAccountModel,
     [IssueTypeConstant.ABNORMAL_BET]: (model: RequestModel): AbnormalBetModel => model.abnormalBetModel,
