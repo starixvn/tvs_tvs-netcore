@@ -1,21 +1,21 @@
 
 import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import assignIn from 'lodash/assignIn';
-import { ConfirmAddRequestComponent } from 'src/add-request-new/component/confirm-add-request/confirm-add-request.component';
-import { ConfirmAddRequestModel } from 'src/add-request-new/component/confirm-add-request/confirm-add-request.model';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { IssueTypes } from 'src/add-request-new/component/filter/issue-types.model';
-import { InfoSiteDBDownComponent } from 'src/add-request-new/component/info-site-db-down/info-site-db-down.component';
-import { OthersModel } from 'src/add-request-new/component/others/others.model';
-import { OtherIssuesModel } from 'src/add-request-new/models/event-other-issues.model';
-import { PermissionAddRequest } from 'src/add-request-new/models/permission-add-request.model';
-import { AddRequestApiService } from 'src/add-request-new/services/add-request-api.service';
-import { AddRequestStore } from 'src/add-request-new/services/add-request.store';
-import { CheckAddPermissionService } from 'src/add-request-new/services/check-permission.service';
-import { AdvancedModeAddRequestComponent } from 'src/utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
-import { AdvancedModeAddRequestModel } from 'src/utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
-import { GroupBetTypesAddRequestModel } from 'src/utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
+import { AdvancedModeAddRequestComponent } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.component';
+import { AdvancedModeAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/advanced-mode-add-request.model';
+import { GroupBetTypesAddRequestModel } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { IssueTypes } from '../../../../component/filter/issue-types.model';
+import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down/info-site-db-down.component';
+import { OthersModel } from '../../../../component/others/others.model';
+import { OtherIssuesModel } from '../../../../models/event-other-issues.model';
+import { PermissionAddRequest } from '../../../../models/permission-add-request.model';
+import { AddRequestApiService } from '../../../../services/add-request-api.service';
+import { AddRequestStore } from '../../../../services/add-request.store';
+import { CheckAddPermissionService } from '../../../../services/check-permission.service';
 import { FilterOtherIssuesComponent } from './filter-other-issues/filter-other-issues.component';
 import { LogInfoOtherIssuesComponent } from './log-info-other-issues/log-info-other-issues.component';
 import { LogInfoOtherIssues } from './models/log-info-other-issues.model';
@@ -186,7 +186,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   isShowFilterTime(){
     return this.validationService.isShowFilterTime(this.filter.issueTypeId, this.filter.subIssueTypeId);
   }
-  
+
   resetLogInfo(): void {
     this.primitiveProps.infoSiteDBDownModel = null;
     this.primitiveProps.isShowErrorNoBetType = false;

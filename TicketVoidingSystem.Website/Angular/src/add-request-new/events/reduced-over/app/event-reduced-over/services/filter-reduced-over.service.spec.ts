@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { AddRequestApiService } from 'src/add-request-new/services/add-request-api.service';
 import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { GroupReducedOverConstant } from '../constants/bet-type-reduced-over.constant';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverService } from './filter-reduced-over.service';

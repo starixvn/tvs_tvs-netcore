@@ -1,15 +1,15 @@
 
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ConfirmAddRequestComponent } from 'src/add-request-new/component/confirm-add-request/confirm-add-request.component';
-import { ConfirmAddRequestModel } from 'src/add-request-new/component/confirm-add-request/confirm-add-request.model';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { IssueTypes } from 'src/add-request-new/component/filter/issue-types.model';
-import { InfoSiteDBDownComponent } from 'src/add-request-new/component/info-site-db-down/info-site-db-down.component';
-import { OthersModel } from 'src/add-request-new/component/others/others.model';
-import { NotParticipateModel } from 'src/add-request-new/models/event-not-participate.model';
-import { AddRequestStore } from 'src/add-request-new/services/add-request.store';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { ConfirmAddRequestComponent } from '../../../../component/confirm-add-request/confirm-add-request.component';
+import { ConfirmAddRequestModel } from '../../../../component/confirm-add-request/confirm-add-request.model';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { IssueTypes } from '../../../../component/filter/issue-types.model';
+import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down/info-site-db-down.component';
+import { OthersModel } from '../../../../component/others/others.model';
+import { NotParticipateModel } from '../../../../models/event-not-participate.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
 import { LogInfoNotParticipateComponent } from './log-info-not-participate/log-info-not-participate.component';
 import { LogInfoNotParticipate } from './models/log-info-not-participate.model';

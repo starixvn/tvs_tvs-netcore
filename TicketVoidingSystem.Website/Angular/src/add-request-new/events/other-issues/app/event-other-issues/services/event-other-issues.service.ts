@@ -1,11 +1,11 @@
 import { inject, Injectable } from "@angular/core";
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { OtherIssuesModel } from 'src/add-request-new/models/event-other-issues.model';
-import { GroupBetTypesAddRequestModel } from 'src/utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { GetBetTypesQuery, TimeRangeModel } from 'src/utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { DateTimeFormat, ModeType } from 'src/utility/constants/config';
-import { CommonService } from 'src/utility/services/common.service';
+import { GroupBetTypesAddRequestModel } from '../../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import { GetBetTypesQuery, TimeRangeModel } from '../../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { DateTimeFormat, ModeType } from '../../../../../../utility/constants/config';
+import { CommonService } from '../../../../../../utility/services/common.service';
+import { OtherIssuesModel } from '../../../../../models/event-other-issues.model';
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { OtherIssuesGetLogInfoQuery } from '../models/get-log-info.query';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';

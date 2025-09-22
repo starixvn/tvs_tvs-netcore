@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { GetLogInfoModel, GetLogInfoViewModel } from 'src/add-request-new/models/get-log-info.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { GetLogInfoModel, GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventReducedOverService } from './event-reduced-over.service';

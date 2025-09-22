@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
-import { OtherIssuesModel } from 'src/add-request-new/models/event-other-issues.model';
-import { CheckAddPermissionService } from 'src/add-request-new/services/check-permission.service';
-import { GroupBetTypesAddRequestModel } from 'src/utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
-import { GroupBetTypesModel } from 'src/utility/components/advanced-mode/group-bettypes/group-bettypes.model';
-import { DateTimeFormat } from 'src/utility/constants/config';
-import { TestingModule } from 'src/utility/modules/testing.module';
-import { CommonService } from 'src/utility/services/common.service';
+import { GroupBetTypesAddRequestModel } from '../../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
+import { GroupBetTypesModel } from '../../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../../../utility/services/common.service';
+import { OtherIssuesModel } from '../../../../../models/event-other-issues.model';
+import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { EventOtherIssuesService } from './event-other-issues.service';
@@ -41,7 +41,7 @@ describe('EventOtherIssuesService', () => {
         toDateTime: '2024-03-20T11:00:00'
       };
       const subIssueTypeId = '1';
-      const mockResponse = { 
+      const mockResponse = {
         groupBetTypes: [],
         timeRanges: [{
           fromDate: '2024-03-20T10:00:00',
@@ -57,10 +57,10 @@ describe('EventOtherIssuesService', () => {
         isShow: true,
         isShowBetTypes: true
       } as unknown as GroupBetTypesModel;
-      
+
       commonService.getGroupBetTypesTvs = jest.fn().mockResolvedValue(mockResponse);
       validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
-      
+
       // Act
       const result = await service.getGroupBetTypes(matchId, filterModel, subIssueTypeId, "1");
 
@@ -219,4 +219,4 @@ describe('EventOtherIssuesService', () => {
       });
     });
   });
-}); 
+});

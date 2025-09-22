@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { GetLogInfoQuery } from 'src/add-request-new/models/add-request.query';
-import { GetLogInfoModel } from 'src/add-request-new/models/get-log-info.model';
-import { CommonService } from 'src/utility/services/common.service';
-import { StaticService } from 'src/utility/services/static.service';
+import { CommonService } from '../../../../../../utility/services/common.service';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { GetLogInfoQuery } from '../../../../../models/add-request.query';
+import { GetLogInfoModel } from '../../../../../models/get-log-info.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { EventOtherIssuesService } from './event-other-issues.service';

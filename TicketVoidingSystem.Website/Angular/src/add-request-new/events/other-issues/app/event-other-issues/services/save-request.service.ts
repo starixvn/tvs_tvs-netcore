@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
-import { AddRequestQuery } from 'src/add-request-new/models/add-request.query';
-import { AddRequestService } from 'src/add-request-new/services/add-request.service';
-import { PopupService } from 'src/add-request-new/services/popup.service';
-import { TEXT } from 'src/utility/constants/text';
-import { StaticService } from 'src/utility/services/static.service';
+import { TEXT } from '../../../../../../utility/constants/text';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { PopupService } from '../../../../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventOtherIssuesService } from './event-other-issues.service';
 import { LogInfoService } from './log-info.service';

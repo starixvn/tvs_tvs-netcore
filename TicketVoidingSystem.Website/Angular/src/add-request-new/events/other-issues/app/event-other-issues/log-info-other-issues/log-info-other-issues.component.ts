@@ -1,15 +1,15 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
 import moment from 'moment-timezone';
-import { AffectedTicketComponent } from 'src/add-request-new/component/affected-ticket/affected-ticket.component';
-import { AffectedTicketService } from 'src/add-request-new/component/affected-ticket/affected-ticket.service';
-import { GroupBetTypeCountModel } from 'src/add-request-new/models/get-log-info.model';
-import { AffectedTicketsModel } from 'src/add-request-new/models/live-game-early-ticket.model';
-import { LogInfoMessageComponent } from 'src/utility/components/log-info-detail/log-info-message/log-info-message.component';
-import { ModalService } from 'src/utility/components/modal/modal.service';
-import { DateTimeFormat } from 'src/utility/constants/config';
-import { SanitizeHtmlPipe } from 'src/utility/modules/sanitize-html.pipe';
-import { StaticService } from 'src/utility/services/static.service';
+import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
+import { ModalService } from '../../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../../../../component/affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
+import { GroupBetTypeCountModel } from '../../../../../models/get-log-info.model';
+import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 @Component({

@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, ViewChild } from '@angular/core';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { OthersWrongHdpComponent } from '../../../component/others-wrong-hdp/others-wrong-hdp.component';
 import { RequestModel } from '../../../models/request.model';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { EventWrongOddsSportsBookComponent } from './event-wrong-odds-sports-book/event-wrong-odds-sports-book.component';
 
 @Component({

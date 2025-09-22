@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { AddRequestApiService } from 'src/add-request-new/services/add-request-api.service';
 import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, NotParticipateBetTypeViewModel } from '../models/not-participate-bet-type.model';
 import { FilterNotParticipateService } from './filter-not-participate.service';

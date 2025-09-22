@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { NotParticipateModel } from "src/add-request-new/models/event-not-participate.model";
 import { LogInfoDetail } from "../../../../../../utility/models/log-info-detail.model";
+import { NotParticipateModel } from "../../../../../models/event-not-participate.model";
 import { FilterNotParticipateModel } from "../models/filter-not-participate.model";
 import { NotParticipateGetLogInfoQuery } from "../models/get-log-info.query";
 import { LogInfoNotParticipate } from "../models/log-info-not-participate.model";

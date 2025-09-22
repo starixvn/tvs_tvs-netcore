@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { ReducedOverModel } from 'src/add-request-new/models/event-reduced-over.model';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { ReducedOverModel } from '../../../../../models/event-reduced-over.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { ReducedOverGetLogInfoQuery } from '../models/get-log-info.query';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';

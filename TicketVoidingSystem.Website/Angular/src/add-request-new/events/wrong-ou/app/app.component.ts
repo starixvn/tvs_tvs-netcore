@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { EventBaseLayoutComponent } from '../../../component/event-base-layout/event-base-layout.component';
 import { OthersWrongHdpComponent } from '../../../component/others-wrong-hdp/others-wrong-hdp.component';
 import { RequestModel } from '../../../models/request.model';
-import { IssueTypeConstant } from 'src/utility/constants/issue-type.constant';
 import { EventWrongOuComponent } from './event-wrong-ou/event-wrong-ou.component';
 
 @Component({
@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.issueTypeId = window.issueTypeId || IssueTypeConstant.WRONG_OU;
   }
-  
+
   public async saveRequest(): Promise<void> {
     this.eventWrongOUComponent.saveRequest();
   }

@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { GetLogInfoViewModel, ValidationMessage } from 'src/add-request-new/models/get-log-info.model';
-import { TransInfoAddRequestModel } from 'src/add-request-new/models/trans-info-add-request.model';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../../../utility/services/common.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { GetLogInfoViewModel, ValidationMessage } from '../../../../../models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { EventNotParticipateService } from './event-not-participate.service';

@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import moment from 'moment-timezone';
-import { AffectedTicketService } from 'src/add-request-new/component/affected-ticket/affected-ticket.service';
-import { AffectedTicketsModel } from 'src/add-request-new/models/live-game-early-ticket.model';
-import { ModalService } from 'src/utility/components/modal/modal.service';
-import { DateTimeFormat } from 'src/utility/constants/config';
-import { TestingModule } from 'src/utility/modules/testing.module';
-import { StaticService } from 'src/utility/services/static.service';
+import { ModalService } from '../../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
+import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { LogInfoOtherIssuesComponent } from './log-info-other-issues.component';

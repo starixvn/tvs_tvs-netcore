@@ -1,7 +1,7 @@
-import { BetTypeCountModel, ValidationMessage } from "src/add-request-new/models/get-log-info.model";
-import { BetTeamAddRequestResult } from "src/utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model";
-import { LogInfoDetail } from "src/utility/models/log-info-detail.model";
-import { Selection } from "src/utility/models/selection.model";
+import { BetTeamAddRequestResult } from "../../../../../../utility/components/advanced-mode-add-request/advanced-mode/advanced-mode.model";
+import { LogInfoDetail } from "../../../../../../utility/models/log-info-detail.model";
+import { Selection } from "../../../../../../utility/models/selection.model";
+import { BetTypeCountModel, ValidationMessage } from "../../../../../models/get-log-info.model";
 import { FilterOtherIssuesModel } from "./filter-other-isssues.model";
 
 export class LogInfoOtherIssues {

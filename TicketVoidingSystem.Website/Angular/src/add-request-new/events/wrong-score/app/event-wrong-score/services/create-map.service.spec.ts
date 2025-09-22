@@ -13,7 +13,7 @@ import { CreateMapService } from './create-map.service';
 import { ValidationService } from './validation.service';
 
 // Mock the JSON config
-jest.mock('../../../../../../filter/sub-issue-type-dialog/sub-type-wrong-score.json', () => ([
+jest.mock('../../../../../component/filter/sub-issue-type-dialog/sub-type-wrong-score.json', () => ([
   {
     groups: [
       {

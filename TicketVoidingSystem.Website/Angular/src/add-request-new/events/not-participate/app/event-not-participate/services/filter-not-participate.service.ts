@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import * as _ from 'lodash';
-import { AddRequestApiService } from 'src/add-request-new/services/add-request-api.service';
 import { ItemsSelect } from '../../../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, NotParticipateBetTypeViewModel } from '../models/not-participate-bet-type.model';
 

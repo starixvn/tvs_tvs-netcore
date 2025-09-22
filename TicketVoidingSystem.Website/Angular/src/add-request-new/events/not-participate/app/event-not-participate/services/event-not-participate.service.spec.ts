@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { NotParticipateModel } from 'src/add-request-new/models/event-not-participate.model';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { NotParticipateModel } from '../../../../../models/event-not-participate.model';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { EventNotParticipateService } from './event-not-participate.service';

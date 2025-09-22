@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { AddRequestService } from 'src/add-request-new/services/add-request.service';
-import { PopupService } from 'src/add-request-new/services/popup.service';
-import { TEXT } from 'src/utility/constants/text';
+import { TEXT } from '../../../../../../utility/constants/text';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { PopupService } from '../../../../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventOtherIssuesService } from './event-other-issues.service';
 import { LogInfoService } from './log-info.service';
@@ -69,9 +69,9 @@ describe('SaveRequestService', () => {
       // Arrange
       const mockArg: SaveRequestArg = {
         filter: { isVoided: false },
-        addRequestStore: { 
-          changeBlockingUiStatus: jest.fn(), 
-          changeSavingRequestStatus: jest.fn() 
+        addRequestStore: {
+          changeBlockingUiStatus: jest.fn(),
+          changeSavingRequestStatus: jest.fn()
         },
         logInfoEvent: {},
         eventLeagueComponent: {},
@@ -104,9 +104,9 @@ describe('SaveRequestService', () => {
       // Arrange
       const mockArg: SaveRequestArg = {
         filter: { isVoided: false },
-        addRequestStore: { 
-          changeBlockingUiStatus: jest.fn(), 
-          changeSavingRequestStatus: jest.fn() 
+        addRequestStore: {
+          changeBlockingUiStatus: jest.fn(),
+          changeSavingRequestStatus: jest.fn()
         },
         logInfoEvent: {},
         eventLeagueComponent: {},
@@ -138,9 +138,9 @@ describe('SaveRequestService', () => {
       // Arrange
       const mockArg: SaveRequestArg = {
         filter: { isVoided: false },
-        addRequestStore: { 
-          changeBlockingUiStatus: jest.fn(), 
-          changeSavingRequestStatus: jest.fn() 
+        addRequestStore: {
+          changeBlockingUiStatus: jest.fn(),
+          changeSavingRequestStatus: jest.fn()
         },
         logInfoEvent: {},
         eventLeagueComponent: {},
@@ -174,9 +174,9 @@ describe('SaveRequestService', () => {
       // Arrange
       const mockArg: SaveRequestArg = {
         filter: { isVoided: false },
-        addRequestStore: { 
-          changeBlockingUiStatus: jest.fn(), 
-          changeSavingRequestStatus: jest.fn() 
+        addRequestStore: {
+          changeBlockingUiStatus: jest.fn(),
+          changeSavingRequestStatus: jest.fn()
         },
         logInfoEvent: {},
         eventLeagueComponent: {},
@@ -208,7 +208,7 @@ describe('SaveRequestService', () => {
       // Arrange
       const mockArg: SaveRequestArg = {
         filter: { isVoided: false },
-        addRequestStore: { 
+        addRequestStore: {
           changeBlockingUiStatus: jest.fn(),
           changeSavingRequestStatus: jest.fn()
         },
@@ -242,7 +242,7 @@ describe('SaveRequestService', () => {
       // Arrange
       const mockArg: SaveRequestArg = {
         filter: { isVoided: false },
-        addRequestStore: { 
+        addRequestStore: {
           changeBlockingUiStatus: jest.fn(),
           changeSavingRequestStatus: jest.fn()
         },

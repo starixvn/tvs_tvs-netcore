@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { AddRequestQuery } from 'src/add-request-new/models/add-request.query';
-import { AddRequestService } from 'src/add-request-new/services/add-request.service';
-import { PopupService } from 'src/add-request-new/services/popup.service';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { PopupService } from '../../../../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventNotParticipateService } from './event-not-participate.service';
 import { LogInfoService } from './log-info.service';

@@ -1,5 +1,5 @@
-import { ValidationMessage } from 'src/add-request-new/models/get-log-info.model';
 import { LogInfoDetail } from '../../../../../../utility/models/log-info-detail.model';
+import { ValidationMessage } from '../../../../../models/get-log-info.model';
 import { FilterReducedOverModel } from './filter-reduced-over.model';
 
 export class LogInfoReducedOver {

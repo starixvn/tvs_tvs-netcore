@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-
-import { OthersModel } from 'src/add-request-new/component/others/others.model';
-import { NotParticipateModel } from 'src/add-request-new/models/event-not-participate.model';
-import { AddRequestStore } from 'src/add-request-new/services/add-request.store';
-import { EventLeagueComponent } from 'src/utility/components/event-league/event-league.component';
-import { LogInfoDetail } from 'src/utility/models/log-info-detail.model';
-import { MatchModel } from 'src/utility/models/match.model';
-import { TestingModule } from 'src/utility/modules/testing.module';
+import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
+import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
+import { MatchModel } from '../../../../../utility/models/match.model';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { FilterModel } from '../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../component/others/others.model';
+import { NotParticipateModel } from '../../../../models/event-not-participate.model';
+import { AddRequestStore } from '../../../../services/add-request.store';
 import { EventNotParticipateComponent } from './event-not-participate.component';
 import { FilterNotParticipateComponent } from './filter-not-participate/filter-not-participate.component';
 import { FilterNotParticipateModel } from './models/filter-not-participate.model';

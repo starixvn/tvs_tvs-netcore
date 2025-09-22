@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { AddRequestService } from 'src/add-request-new/services/add-request.service';
-import { PopupService } from 'src/add-request-new/services/popup.service';
 import { TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { PopupService } from '../../../../../services/popup.service';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { EventReducedOverService } from './event-reduced-over.service';
 import { LogInfoService } from './log-info.service';

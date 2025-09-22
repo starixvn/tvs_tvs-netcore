@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { CheckAddPermissionService } from 'src/add-request-new/services/check-permission.service';
-import { TestingModule } from 'src/utility/modules/testing.module';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
 import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { ValidationService } from '../services/validation.service';
 import { FilterOtherIssuesComponent } from './filter-other-issues.component';

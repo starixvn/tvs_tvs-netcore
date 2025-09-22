@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { FilterModel } from 'src/add-request-new/component/filter/filter.model';
-import { GetLogInfoModel, GetLogInfoViewModel } from 'src/add-request-new/models/get-log-info.model';
-import { CheckAddPermissionService } from 'src/add-request-new/services/check-permission.service';
-import { TestingModule } from 'src/utility/modules/testing.module';
-import { CommonService } from 'src/utility/services/common.service';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../../../utility/services/common.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { GetLogInfoModel, GetLogInfoViewModel } from '../../../../../models/get-log-info.model';
+import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
 import { OtherIssuesGetLogInfoQuery } from '../models/get-log-info.query';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
