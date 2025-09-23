@@ -1,0 +1,17 @@
+@if (primitiveProps.isShowValidation) {
+<div class="log-info">
+  <strong>Main Event - Log Info</strong>
+  @for (logInfo of logInfo.logInfoItems; track logInfo) {
+  <div class="log-info-item mb-1">
+    <div class="log-info-id">{{logInfo.id}}</div>
+    <div class="log-info-detail ">
+      <log-info-ticket-count [isShowDetailsButton]="!isVoided" [isShowCancelCashOut]="true"
+        [model]="logInfo.logInfoDetail" (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
+      </log-info-ticket-count>
+      <log-info-message [messages]="logInfo.messageValidationLogInfo"></log-info-message>
+    </div>
+  </div>
+  }
+</div>
+}
+<affected-ticket [blockUi]="isBlock" [model]="affectedTicketsModel"></affected-ticket>

@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { TVSRequestActionType } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
+import { TVSRequestActionType } from '../../../utility/constants/config';
 
 @Component({
     selector: 'confirm-add-request',
@@ -40,7 +40,7 @@ export class ConfirmAddRequestComponent implements OnChanges {
       this.model.isHasAffectedTicketSiteDBDown = isShowCheckbox;
       this.model.isMarkTicketSiteDbDown = isShowCheckbox;    }
   }
-
+  
   onClickCancel() {
     this.model.isOpen = false;
     this.clickCancel.emit();
