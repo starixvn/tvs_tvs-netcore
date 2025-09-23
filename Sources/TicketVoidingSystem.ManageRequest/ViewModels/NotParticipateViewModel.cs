@@ -9,4 +9,5 @@ public class NotParticipateViewModel
     public int PlayerId { get; set; }
     public string BetTypeIds { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
+    public IEnumerable<BetTypeTicketsInfo>? BetTypeCount { get; set; }
 }
