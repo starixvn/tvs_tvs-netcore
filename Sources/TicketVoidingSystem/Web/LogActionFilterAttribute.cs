@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Fanex.Logging;
@@ -33,7 +32,7 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         var requestMethod = httpContext.Request.Method;
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - " +
-                                 $"{DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss} - {JsonSerializer.Serialize(context.ActionArguments, JsonSerializerHelper.UnsafeRelaxedJsonEscaping)}");
+                                 $"{DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss} - {Helper.JsonSerializerUnsafeRelaxed(context.ActionArguments)}");
         stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
         httpContext.Items["request-log"] = stringBuilder.ToString();
         httpContext.Items["timer"] = Stopwatch.StartNew();
@@ -64,10 +63,10 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
 
         var sw = httpContext.Items["timer"] as Stopwatch;
         var requestLog = httpContext.Items["request-log"] as string;
-        var responseData = context.Result switch
+        var responseBody = context.Result switch
         {
-            OkObjectResult okObjectResult => JsonSerializer.Serialize(okObjectResult.Value, JsonSerializerHelper.UnsafeRelaxedJsonEscaping),
-            JsonResult jsonResult => JsonSerializer.Serialize(jsonResult.Value, JsonSerializerHelper.UnsafeRelaxedJsonEscaping),
+            OkObjectResult okObjectResult => Helper.JsonSerializerUnsafeRelaxed(okObjectResult.Value),
+            JsonResult jsonResult => Helper.JsonSerializerUnsafeRelaxed(jsonResult.Value),
             _ => string.Empty
         };
         var stringBuilder = new StringBuilder();
@@ -75,9 +74,9 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         stringBuilder.AppendLine("=============================================");
         stringBuilder.AppendLine($"End Time: {DateTimeOffset.Now:MM/dd/yyyy HH:mm:ss}");
         stringBuilder.AppendLine($"Execution Time: {sw?.ElapsedMilliseconds} ms");
-        stringBuilder.AppendLine($"Response: {responseData}");
         stringBuilder.AppendLine($"ExTraInfo: {HttpContextHelper.GetExtraLog()}");
         stringBuilder.AppendLine($"GUID: {Guid.NewGuid()}");
+        stringBuilder.AppendLine($"Response: {responseBody}");
         await logger.InfoAsync(stringBuilder.ToString());
 
         base.OnActionExecuted(context);
