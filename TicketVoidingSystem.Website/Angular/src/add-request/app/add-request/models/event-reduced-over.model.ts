@@ -1,5 +1,4 @@
 import { LogInfoDetail } from "../../../../utility/models/log-info-detail.model";
-import { BetTypeCountModel } from "./get-log-info.model";
 
 export class ReducedOverModel {
   matchId: number;
@@ -13,5 +12,4 @@ export class ReducedOverModel {
   runs: string;
   live: boolean;
   nonLive: boolean;
-  betTypeCount?: BetTypeCountModel[];
 }

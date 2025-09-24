@@ -273,7 +273,6 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var betTypeCountJson = GetBetTypeCountJsonModel(model.BetTypeCount);
             var line = $"<r MatchId='{model.MatchId}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"BetTypeIds='{model.BetTypeIds}' "
@@ -285,7 +284,6 @@ public static class ObjectToXMLExtension
                        + $"NonLive='{model.NonLive}' "
                        + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
                        + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
-                       + $"BetTypeCount='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(betTypeCountJson))}' "
                        + $"VoidToTime='{model.LogInfoDetail.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' />";
 
@@ -305,14 +303,12 @@ public static class ObjectToXMLExtension
         var stringBuilder = new StringBuilder();
         foreach (var model in models)
         {
-            var betTypeCountJson = GetBetTypeCountJsonModel(model.BetTypeCount);
             var line = $"<r MatchId='{model.MatchId}' "
                        + $"SubIssueTypeId='{model.SubIssueTypeId}' "
                        + $"PlayerId='{model.PlayerId}' "
                        + $"BetTypeIds='{model.BetTypeIds}' "
                        + $"SingleCount ='{model.LogInfoDetail.SingleCount}' "
                        + $"MainParlayCount='{model.LogInfoDetail.MainParlayCount}' "
-                       + $"BetTypeCount='{SecurityElement.Escape(Helper.JsonSerializerIgnoreNullValue(betTypeCountJson))}' "
                        + $"VoidToTime='{model.LogInfoDetail.VoidToTime?.ToString(FormatKey.DateTimeWithMillisecond)}' "
                        + $"VoidFromTime='{model.LogInfoDetail.VoidFromTime?.ToString(FormatKey.DateTimeWithMillisecond)}' />";
 

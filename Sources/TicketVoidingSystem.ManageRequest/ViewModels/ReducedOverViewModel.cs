@@ -14,5 +14,4 @@ public class ReducedOverViewModel
     public bool NonLive { get; set; }
     public bool Live { get; set; }
     public LogInfoDetail? LogInfoDetail { get; set; }
-    public IEnumerable<BetTypeTicketsInfo>? BetTypeCount { get; set; }
 }

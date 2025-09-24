@@ -105,8 +105,7 @@ describe('EventReducedOverService', () => {
         runs: '10',
         nonLive: true,
         live: false,
-        logInfoDetail: logInfoDetail,
-        betTypeCount: []
+        logInfoDetail: logInfoDetail
       }];
 
       // Act

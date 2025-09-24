@@ -64,7 +64,6 @@ export class EventReducedOverService {
     model.matchId = matchId;
     model.subIssueTypeId = subIssueTypeId;
     model.logInfoDetail = logInfoEvent.logInfoDetail;
-    model.betTypeCount = logInfoEvent.betTypeCount;
 
     return model;
   }

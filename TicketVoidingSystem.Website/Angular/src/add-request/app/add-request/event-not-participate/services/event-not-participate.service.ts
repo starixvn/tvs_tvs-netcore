@@ -48,7 +48,6 @@ export class EventNotParticipateService {
     model.matchId = logInfoEvent.matchId;
     model.subIssueTypeId = subIssueTypeId;
     model.logInfoDetail = logInfoEvent.logInfoDetail;
-    model.betTypeCount = logInfoEvent.betTypeCount;
 
     return model;
   }
