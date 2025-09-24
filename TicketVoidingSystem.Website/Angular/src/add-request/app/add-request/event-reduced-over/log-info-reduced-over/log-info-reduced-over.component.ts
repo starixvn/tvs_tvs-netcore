@@ -2,13 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { SanitizeHtmlPipe } from '../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
@@ -18,10 +19,12 @@ import { PrimitivePropertyEvent } from '../models/primitive-property-event.model
   selector: 'log-info-reduced-over',
   templateUrl: './log-info-reduced-over.component.html',
   styleUrls: ['./log-info-reduced-over.component.scss'],
-  imports: [FormsModule, CommonModule, NgbModule, SanitizeHtmlPipe]
+  imports: [FormsModule, CommonModule, NgbModule, SanitizeHtmlPipe, AffectedTicketComponent],
+  providers: [AffectedTicketService]
 })
 export class LogInfoReducedOverComponent {
   @Input() issueTypeId: string;
+  @Input() filter: FilterModel;
   @Input() logInfo: LogInfoReducedOver;
   @Input() primitiveProps = new PrimitivePropertyEvent();
 
@@ -51,15 +54,7 @@ export class LogInfoReducedOverComponent {
   }
 
   showAffectedTicketsDetails(logInfo: LogInfoReducedOver) {
-    this.updateBetTypeCountModel(logInfo);
-    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
-    this.affectedTicketsModel.logInfoTicketsJson = logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.isOpen = true;
-    this.affectedTicketsModel = clone(this.affectedTicketsModel);
-  }
-
-  private updateBetTypeCountModel(logInfo: LogInfoReducedOver) {
-    this.affectedTicketsModel.groupBetTypesCount = this.affectedTicketService.updateBetTypeCountModel(logInfo.betTypeCount);
-    this.affectedTicketsModel.isShowDetailBetTypeCount = true;
+    this.affectedTicketsModel = this.affectedTicketService.getAffectedTicketsDetails(Number(this.issueTypeId),
+    logInfo.betTypeCount, logInfo.logInfoDetail.logInfoTicketsJson);
   }
 }

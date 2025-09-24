@@ -97,6 +97,7 @@ export class FilterNotParticipateItemComponent {
 
   public addBetTypeItem(): void {
     if (!this.isVoided) {
+      this.changeFilter();
       this.addItemEvent.emit();
     }
   }
@@ -107,6 +108,7 @@ export class FilterNotParticipateItemComponent {
 
   public removeBetTypeItem(index: number): void {
     if (!this.isVoided) {
+      this.changeFilter();
       this.removeItemEvent.emit(index);
     }
   }

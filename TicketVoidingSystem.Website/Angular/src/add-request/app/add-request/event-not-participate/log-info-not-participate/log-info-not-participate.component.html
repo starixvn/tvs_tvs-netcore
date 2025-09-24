@@ -3,7 +3,9 @@
   <label class="col-form-label-sm"><strong>Main Event - Log Info</strong></label>
   <div class="log-info">
     <div class="list-group-item flex-column align-items-start wrapper-tooltip body-log-info-main">
-      <log-info-ticket-count [model]="logInfo.logInfoDetail"></log-info-ticket-count>
+      <log-info-ticket-count [model]="logInfo.logInfoDetail" [isShowDetailsButton]="!filter.isVoided"
+      (openAffectedDetails)="showAffectedTicketsDetails(logInfo)">
+      </log-info-ticket-count>
       @if (logInfo.messageValidationLogInfo?.length > 0) {
       <div class="message">
         @for (msg of logInfo.messageValidationLogInfo; track msg) {
@@ -26,4 +28,5 @@
     </div>
   </div>
 </div>
+<affected-ticket [model]="affectedTicketsModel"></affected-ticket>
 }

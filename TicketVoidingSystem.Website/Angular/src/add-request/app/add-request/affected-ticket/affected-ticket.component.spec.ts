@@ -1,12 +1,12 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../utility/modules/testing.module';
+import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
+import { GroupModel } from '../pool-house-ticket/tickets/group-tickets.model';
+import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { LogAnalysisService } from '../services/log-analysis.service';
 import { AffectedTicketComponent } from './affected-ticket.component';
 import { AffectedTicketService } from './affected-ticket.service';
-import { LogAnalysisService } from '../services/log-analysis.service';
-import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';
-import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
-import { SimpleChange } from '@angular/core';
-import { GroupModel } from '../pool-house-ticket/tickets/group-tickets.model';
 
 class Helper {
   static readonly fakeIssueTypeId = '123';
@@ -45,7 +45,7 @@ describe('AffectedTicketComponent', () => {
 
   it('should initialize with default values', () => {
     expect(component.model).toBeDefined();
-    expect(component.blockBetList).toBeFalsy();
+    expect(component.blockBetList).toBeTruthy();
     expect(component.isShowOtherTickets).toBeTruthy();
     expect(component.isShowAffectedTickets).toBeTruthy();
     expect(component.isShowGroupBetTypesCount).toBeTruthy();

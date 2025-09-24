@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { LogInfoTicketCountComponent } from '../../../../../utility/components/log-info-detail/log-info-ticket-count/log-info-ticket-count.component';
 import { ModalService } from '../../../../../utility/components/modal/modal.service';
 import { DateTimeFormat } from '../../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../../utility/constants/issue-type.constant';
 import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../affected-ticket/affected-ticket.component';
 import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { FilterModel } from '../../filter/filter.model';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
@@ -17,11 +18,13 @@ import { PrimitivePropertyEvent } from '../models/primitive-property-event.model
   templateUrl: './log-info-not-participate.component.html',
   styleUrls: ['./log-info-not-participate.component.scss'],
   standalone: true,
-  imports: [LogInfoTicketCountComponent, CommonModule]
+  imports: [LogInfoTicketCountComponent, CommonModule, AffectedTicketComponent],
+  providers: [AffectedTicketService]
 })
 export class LogInfoNotParticipateComponent {
   @Input() logInfo: LogInfoNotParticipate;
   @Input() primitiveProps = new PrimitivePropertyEvent();
+  @Input() filter: FilterModel;
   affectedTicketsModel = new AffectedTicketsModel();
   private readonly modalService = inject(ModalService);
   private readonly affectedTicketService = inject(AffectedTicketService);
@@ -47,15 +50,7 @@ export class LogInfoNotParticipateComponent {
   }
 
   showAffectedTicketsDetails(logInfo: LogInfoNotParticipate) {
-    this.updateBetTypeCountModel(logInfo);
-    this.affectedTicketsModel.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
-    this.affectedTicketsModel.logInfoTicketsJson = logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.isOpen = true;
-    this.affectedTicketsModel = clone(this.affectedTicketsModel);
-  }
-
-  private updateBetTypeCountModel(logInfo: LogInfoNotParticipate) {
-    this.affectedTicketsModel.groupBetTypesCount = this.affectedTicketService.updateBetTypeCountModel(logInfo.betTypeCount);
-    this.affectedTicketsModel.isShowDetailBetTypeCount = true;
+    this.affectedTicketsModel = this.affectedTicketService.getAffectedTicketsDetails(Number(IssueTypeConstant.NOT_PARTICIPATE),
+    logInfo.betTypeCount, logInfo.logInfoDetail.logInfoTicketsJson);
   }
 }
