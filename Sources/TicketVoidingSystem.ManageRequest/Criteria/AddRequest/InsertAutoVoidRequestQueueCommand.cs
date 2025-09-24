@@ -1,10 +1,9 @@
-﻿using Fanex.Data;
-using Fanex.Data.Repository;
+﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 
-public class InsertAutoVoidRequestQueueCommand : NonQueryCommand
+public class InsertAutoVoidRequestQueueCommand : OnlineServerNonQueryCommand
 {
     public string RequestIds { get; set; }
 
@@ -15,9 +14,6 @@ public class InsertAutoVoidRequestQueueCommand : NonQueryCommand
     public string BroadcastSessionId { get; set; }
 
     public int? MatchId { get; set; }
-
-    [SpParam(Ignored = true)]
-    public int SiteDbGroupId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "TicketVoiding_AutoVoidRequest_Queue_Insert");
 

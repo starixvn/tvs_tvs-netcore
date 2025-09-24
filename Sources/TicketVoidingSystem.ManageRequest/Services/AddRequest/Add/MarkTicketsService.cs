@@ -1,9 +1,9 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.MarkTickets.Criteria.MarkUnmarkTickets;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -13,56 +13,35 @@ public interface MarkTicketsService
 }
 
 public class MarkTicketsServiceImp(
-    IDynamicRepository repository,
+    OnlineServerRepository onlineServerRepository,
     SessionService sessionService,
     LoggingService loggingService)
     : MarkTicketsService
 {
     public async Task<MarkTicketsResult> MarkTicketsInTVS(string markTransIds, int issueTypeId, byte markTypeId)
     {
-        var tasks = SiteDbGroupConstant.ServerList.Select(x => MarkTicketsSiteDb(x.Id, markTransIds, issueTypeId, markTypeId));
-        var tasksResults = await Task.WhenAll(tasks);
+        var criteria = CreateCriteria(markTransIds, issueTypeId, markTypeId);
+        var results = await onlineServerRepository.FetchMultipleAsync<Result, long>(criteria, ExecutionMode.ContinueOnError);
 
         return new MarkTicketsResult
         {
-            MarkedResults = tasksResults.SelectMany(x => x.MarkedResults),
-            MarkedTickets = tasksResults.SelectMany(x => x.MarkedTickets)
+            MarkedResults = results.Item1,
+            MarkedTickets = results.Item2
         };
     }
 
-    private async Task<MarkTicketsResult> MarkTicketsSiteDb(int siteDbGroupId, string markTransIds, int issueTypeId, byte markTypeId)
+    private MarkTicketsCommand CreateCriteria(string markTransIds, int issueTypeId, byte markTypeId)
     {
-        try
+        return new MarkTicketsCommand
         {
-            var markTicketsCommand = new MarkTicketsCommand
-            {
-                SiteDbGroupId = siteDbGroupId,
-                TransIds = markTransIds,
-                Status = markTypeId,
-                IssueTypeId = issueTypeId,
-                UserId = sessionService.UserId,
-                Ip = sessionService.GetClientIp(),
-                LogActionId = markTypeId is MarkTypeConstant.ExecuteMarkTickets
-                    ? LogActionIdConstant.MarkTicketAddRequestTvs
-                    : LogActionIdConstant.UnMarkTicketAddRequestTvs
-            };
-
-            var (results, transIds) = await repository.FetchMultipleAsync<Result, long>(markTicketsCommand);
-
-            return new MarkTicketsResult
-            {
-                MarkedResults = results,
-                MarkedTickets = transIds
-            };
-        }
-        catch (Exception e)
-        {
-            await loggingService.ErrorAsync(e);
-            return new MarkTicketsResult
-            {
-                MarkedResults = [new() { ErrorCode = 1, ErrorMsg = e.Message }],
-                MarkedTickets = []
-            };
-        }
+            TransIds = markTransIds,
+            Status = markTypeId,
+            IssueTypeId = issueTypeId,
+            UserId = sessionService.UserId,
+            Ip = sessionService.GetClientIp(),
+            LogActionId = markTypeId is MarkTypeConstant.ExecuteMarkTickets
+                ? LogActionIdConstant.MarkTicketAddRequestTvs
+                : LogActionIdConstant.UnMarkTicketAddRequestTvs
+        };
     }
 }

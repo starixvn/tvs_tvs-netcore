@@ -9,23 +9,22 @@ using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.ManageRequest;
 using TicketVoidingSystem.Services.BetList;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest;
 
 public class GetRequestsInActiveTableServiceTests : IClassFixture<AppSettingFixture>, IClassFixture<RemotingRefFixture>
 {
-    private readonly BetListService betListService;
-    private readonly IMapper mapper;
-    private readonly IDynamicRepository repository;
+    private readonly BetListService betListService = Substitute.For<BetListService>();
+    private readonly IMapper mapper = Substitute.For<IMapper>();
+    private readonly IDynamicRepository repository = Substitute.For<IDynamicRepository>();
+    private readonly OnlineServerRepository onlineServerRepository = Substitute.For<OnlineServerRepository>();
     private readonly GetRequestsInActiveTableServiceImp service;
 
     public GetRequestsInActiveTableServiceTests()
     {
-        betListService = Substitute.For<BetListService>();
-        repository = Substitute.For<IDynamicRepository>();
-        mapper = Substitute.For<IMapper>();
-        service = new GetRequestsInActiveTableServiceImp(repository, mapper, betListService);
+        service = new GetRequestsInActiveTableServiceImp(repository, onlineServerRepository, mapper, betListService);
     }
 
     [Theory]

@@ -8,7 +8,6 @@ using TicketVoidingSystem.ManageRequest.Handlers.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.SignalR;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.VoidRequest;
@@ -20,13 +19,13 @@ public class InsertQueueHandlerTests
     {
         // Arrange
         var insertQueueService = Substitute.For<InsertQueueService>();
+        var repositoryService = Substitute.For<RepositoryService>();
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        var signalRService = Substitute.For<NotificationSignalRService>();
 
         var insertQueueRequest = new InsertQueueRequest();
         sessionService.CheckPassword(insertQueueRequest.UserPassword).ReturnsForAnyArgs(true);
-        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, signalRService);
+        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, repositoryService);
 
         // Act
         _ = await handler.Handle(insertQueueRequest, CancellationToken.None);
@@ -35,8 +34,7 @@ public class InsertQueueHandlerTests
         await insertQueueService.Received(1).InsertTicketVoidingQueue(insertQueueRequest);
         sessionService.Received(1).CheckPassword(insertQueueRequest.UserPassword);
         await insertQueueService.Received(1).InsertTicketVoidingQueue(insertQueueRequest);
-        await insertQueueService.Received(1).UpdateIsProcessed(insertQueueRequest);
-        await signalRService.Received(1).UpdateRequestStatusToAllUser(Arg.Any<List<RequestStatus>>());
+        await repositoryService.Received(1).UpdateIsProcessed(insertQueueRequest);
     }
 
     [Fact]
@@ -44,12 +42,12 @@ public class InsertQueueHandlerTests
     {
         // Arrange
         var insertQueueService = Substitute.For<InsertQueueService>();
+        var repositoryService = Substitute.For<RepositoryService>();
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        var signalRService = Substitute.For<NotificationSignalRService>();
         var insertQueueRequest = new InsertQueueRequest();
         sessionService.CheckPassword(insertQueueRequest.UserPassword).ReturnsForAnyArgs(false);
-        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, signalRService);
+        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, repositoryService);
 
         // Act
         var result = await handler.Handle(insertQueueRequest, CancellationToken.None);
@@ -68,7 +66,7 @@ public class InsertQueueHandlerTests
         var insertQueueService = Substitute.For<InsertQueueService>();
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        var signalRService = Substitute.For<NotificationSignalRService>();
+        var repositoryService = Substitute.For<RepositoryService>();
         var tickets = new List<BetId>
         {
             new() { TransId = "123" },
@@ -84,7 +82,7 @@ public class InsertQueueHandlerTests
         };
 
         sessionService.CheckPassword(insertQueueRequest.UserPassword).ReturnsForAnyArgs(true);
-        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, signalRService);
+        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, repositoryService);
 
         // Act
         _ = await handler.Handle(insertQueueRequest, CancellationToken.None);
@@ -100,12 +98,12 @@ public class InsertQueueHandlerTests
         var insertQueueService = Substitute.For<InsertQueueService>();
         var sessionService = Substitute.For<SessionService>();
         var loggingService = Substitute.For<LoggingService>();
-        var signalRService = Substitute.For<NotificationSignalRService>();
+        var repositoryService = Substitute.For<RepositoryService>();
         var insertQueueRequest = new InsertQueueRequest();
 
         var exception = new Exception("The request cannot void. Please contact IT team.");
         sessionService.CheckPassword(insertQueueRequest.UserPassword).ReturnsForAnyArgs(_ => throw exception);
-        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, signalRService);
+        var handler = new InsertQueueHandler(insertQueueService, sessionService, loggingService, repositoryService);
 
         // Act
         var result = await handler.Handle(insertQueueRequest, CancellationToken.None);

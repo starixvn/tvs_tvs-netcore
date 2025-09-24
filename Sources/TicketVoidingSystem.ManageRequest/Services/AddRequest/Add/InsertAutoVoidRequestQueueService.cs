@@ -1,7 +1,7 @@
-﻿using Fanex.Data.Repository;
-using TicketVoidingSystem.Constants;
+﻿using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 
@@ -13,7 +13,7 @@ public interface InsertAutoVoidRequestQueueService
         IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo, WrongOfferedNameViewModel? wrongOfferedNameInfo);
 }
 
-public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository) : InsertAutoVoidRequestQueueService
+public class InsertAutoVoidRequestQueueServiceImp(OnlineServerRepository onlineServerRepository) : InsertAutoVoidRequestQueueService
 {
     public async Task Execute(int requestId, int? actionId, IEnumerable<int> matchIds)
     {
@@ -49,14 +49,7 @@ public class InsertAutoVoidRequestQueueServiceImp(IDynamicRepository repository)
             Action = ActionVoidRequestConstant.QueueAutoVoidList.First(x => x.Id == actionId).Name,
             BroadcastSessionId = broadcastSessionId
         };
-
-        var tasks = SiteDbGroupConstant.ServerList.Select(item =>
-        {
-            command.SiteDbGroupId = item.Id;
-            return repository.ExecuteAsync(command);
-        });
-
-        await Task.WhenAll(tasks);
+        await onlineServerRepository.ExecuteAsync(command);
     }
 
     public IEnumerable<int> GetMatchIdsInRequest(AbnormalBetViewModel? abnormalBetInfo, IEnumerable<EarlyKickOffViewModel>? earlyKickOffInfo, WrongOfferedNameViewModel? wrongOfferedNameInfo)

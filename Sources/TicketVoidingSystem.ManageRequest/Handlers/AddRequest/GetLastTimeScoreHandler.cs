@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.Services.OnlineServerRepository;
 
@@ -12,23 +11,19 @@ public class GetLastTimeScoreHandler(OnlineServerRepository onlineServerReposito
 {
     public async Task<GetLastTimeScoreViewModel> Handle(GetLastTimeScoreRequest request, CancellationToken cancellationToken)
     {
-        var tasks = SiteDbGroupConstant.ServerList.Select(x => GetTimeByServer(x.Id, request));
-        var times = await Task.WhenAll(tasks);
-        var maxLastTime = times.Max(x => x.LastTime);
-
+        var result = await GetLastTime(request);
         return new GetLastTimeScoreViewModel
         {
             ScoreId = request.ScoreId,
-            LastTime = maxLastTime
+            LastTime = result.LastTime
         };
     }
 
-    private async Task<GetLastTimeScoreViewModel> GetTimeByServer(int siteDbGroupId, GetLastTimeScoreRequest request)
+    private async Task<GetLastTimeScoreViewModel> GetLastTime(GetLastTimeScoreRequest request)
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = new GetLastTimeScoreCriteria
         {
-            SiteDbGroupId = siteDbGroupId,
             MatchId = request.MatchId,
             ActionId = request.ActionId,
             FilterBy = request.FilterBy,

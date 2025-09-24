@@ -4,10 +4,7 @@ using Fanex.Data.Repository;
 
 namespace TicketVoidingSystem.Criteria.OnlineServer;
 
-public interface IOnlineServerNonQueryCommand : INonQueryCommand, ICloneable
-{
-    public int SiteDbGroupId { get; set; }
-}
+public interface IOnlineServerNonQueryCommand : INonQueryCommand, ISiteDbGroupAssignable, ICloneable;
 
 public abstract class OnlineServerNonQueryCommand : CriteriaBase, IOnlineServerNonQueryCommand
 {

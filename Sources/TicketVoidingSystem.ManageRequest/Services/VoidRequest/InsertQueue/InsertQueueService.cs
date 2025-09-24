@@ -1,66 +1,36 @@
 ﻿using System.Text.Json;
-using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Constants;
-using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
-using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Models;
+using TicketVoidingSystem.SignalR;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 
 public interface InsertQueueService
 {
     Task InsertTicketVoidingQueue(InsertQueueQuery query);
-
-    Task UpdateIsProcessed(InsertQueueQuery query);
 }
 
 public class InsertQueueServiceImp(
-    IDynamicRepository repository,
-    SessionService sessionService,
-    MapTicketsService mapTicketsService,
+    RepositoryService repositoryService,
     ValidationTicketsService validationTicketsService,
-    InsertVoidingHistoryService insertVoidingHistoryService)
+    InsertVoidingHistoryService insertVoidingHistoryService,
+    NotificationSignalRService signalRService)
     : InsertQueueService
 {
     public async Task InsertTicketVoidingQueue(InsertQueueQuery query)
     {
-        var ticketsInsertQueue = await validationTicketsService.RecheckTicketsStatus(query);
-        var siteGroupInCurrentSessionVoid = ticketsInsertQueue.Select(x => x.SiteDbGroupId).Distinct();
         var broadcastSessionId = Guid.NewGuid().ToString();
-        foreach (var siteDbGroupId in siteGroupInCurrentSessionVoid)
+        var ticketsInsertQueue = await validationTicketsService.RecheckTicketsStatus(query);
+        var serverInsertQueue = await repositoryService.GetServerInsertQueue(ticketsInsertQueue);
+        foreach (var siteDbGroupId in serverInsertQueue)
         {
             var ticketsInsertQueueInCurrentServer = ticketsInsertQueue.Where(x => x.SiteDbGroupId == siteDbGroupId);
             var transIds = GetTransIdsInsertVoidingHistory(query.IssueTypeId, ticketsInsertQueueInCurrentServer);
             var voidingHistoryId = await insertVoidingHistoryService.InsertVoidingHistory(query, siteDbGroupId, broadcastSessionId, transIds);
-            await InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, ticketsInsertQueueInCurrentServer);
+            await repositoryService.InsertQueueBySiteDb(siteDbGroupId, voidingHistoryId, query.RequestId, ticketsInsertQueueInCurrentServer);
         }
-    }
-
-    private async Task InsertQueueBySiteDb(int siteDbGroupId, int voidingHistoryId, int requestId, IEnumerable<RequestDetailTicketModel> tickets)
-    {
-        var criteria = new InsertTicketVoidingQueueCriteria
-        {
-            SiteDbGroupId = siteDbGroupId,
-            RequestId = requestId,
-            VoidingHistoryId = voidingHistoryId,
-            TicketsJson = JsonSerializer.Serialize(tickets),
-            UserId = sessionService.UserId,
-            IP = sessionService.GetClientIp()
-        };
-        await repository.ExecuteAsync(criteria);
-    }
-
-    public async Task UpdateIsProcessed(InsertQueueQuery query)
-    {
-        var criteria = new UpdateIsProcessedForRequestTicketsCriteria
-        {
-            SingleTicketsJson = JsonSerializer.Serialize(mapTicketsService.MapBetIdToRequestDetailTicket(query.SingleTickets, query.RequestId, query.IssueTypeId)),
-            ParlayTicketsJson = JsonSerializer.Serialize(mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets, query.RequestId, query.IssueTypeId)),
-            CricketTicketsJson = JsonSerializer.Serialize(mapTicketsService.MapBetIdToRequestDetailTicket(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId)),
-            CancelCashOutTicketsJson = JsonSerializer.Serialize(mapTicketsService.MapBetIdToRequestDetailTicket(query.CricketTickets, query.RequestId, query.IssueTypeId))
-        };
-
-        await repository.ExecuteAsync(criteria);
+        await UpdateStatusRequest(query.RequestId, serverInsertQueue);
     }
 
     private static string GetTransIdsInsertVoidingHistory(int issueTypeId, IEnumerable<RequestDetailTicketModel> mergeTicketsForInsertQueue)
@@ -78,5 +48,18 @@ public class InsertQueueServiceImp(
             SingleTransIds = firstSingleTableTickets is not null ? firstSingleTableTickets.ToString() : "",
             ParlayTransIds = firstParlayTickets is not null ? firstParlayTickets.ToString() : ""
         });
+    }
+
+    private async Task UpdateStatusRequest(int requestId, IEnumerable<int> serverInsertQueue)
+    {
+        var requestStatus = new List<RequestStatus>
+        {
+            new()
+            {
+                RequestId = requestId,
+                Status = serverInsertQueue.Any() ? "Running" : "Failed"
+            }
+        };
+        await signalRService.UpdateRequestStatusToAllUser(requestStatus);
     }
 }

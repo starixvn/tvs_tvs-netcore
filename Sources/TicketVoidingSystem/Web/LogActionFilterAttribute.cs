@@ -33,7 +33,7 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         var requestMethod = httpContext.Request.Method;
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine($"{requestMethod}-{httpContext.Request.GetDisplayUrl()} - {httpContext.User.Identity?.Name} - " +
-                                 $"{DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss} - {JsonSerializer.Serialize(context.ActionArguments)}");
+                                 $"{DateTimeOffset.Now:MM/dd/yyyy-HH/mm/ss} - {JsonSerializer.Serialize(context.ActionArguments, JsonSerializerHelper.UnsafeRelaxedJsonEscaping)}");
         stringBuilder.AppendLine($"UserAgent: {httpContext.Request.Headers["User-Agent"]}");
         httpContext.Items["request-log"] = stringBuilder.ToString();
         httpContext.Items["timer"] = Stopwatch.StartNew();
@@ -66,8 +66,8 @@ public class LogActionFilterAttribute(ILogger logger) : ActionFilterAttribute
         var requestLog = httpContext.Items["request-log"] as string;
         var responseData = context.Result switch
         {
-            OkObjectResult okObjectResult => JsonSerializer.Serialize(okObjectResult.Value),
-            JsonResult jsonResult => JsonSerializer.Serialize(jsonResult.Value),
+            OkObjectResult okObjectResult => JsonSerializer.Serialize(okObjectResult.Value, JsonSerializerHelper.UnsafeRelaxedJsonEscaping),
+            JsonResult jsonResult => JsonSerializer.Serialize(jsonResult.Value, JsonSerializerHelper.UnsafeRelaxedJsonEscaping),
             _ => string.Empty
         };
         var stringBuilder = new StringBuilder();

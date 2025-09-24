@@ -4,10 +4,7 @@ using Fanex.Data.Repository;
 
 namespace TicketVoidingSystem.Criteria.OnlineServer;
 
-public interface IOnlineServerCriteria : ICriteria, ICloneable
-{
-    public int SiteDbGroupId { get; set; }
-}
+public interface IOnlineServerCriteria : ICriteria, ISiteDbGroupAssignable, ICloneable;
 
 public abstract class OnlineServerCriteriaBase : CriteriaBase, IOnlineServerCriteria
 {

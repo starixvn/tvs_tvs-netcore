@@ -27,8 +27,7 @@ public class CheckValidTransIdsServiceTests
         matchInfoAddRequestService = Substitute.For<MatchInfoAddRequestService>();
         mapTicketsExcelService = Substitute.For<MapAbnormalBetTicketsExcelService>();
 
-        service = new CheckValidTransIdsServiceImp(onlineServerRepository, matchInfoAddRequestService,
-            mapTicketsExcelService);
+        service = new CheckValidTransIdsServiceImp(onlineServerRepository, matchInfoAddRequestService, mapTicketsExcelService);
     }
 
     [Fact]
