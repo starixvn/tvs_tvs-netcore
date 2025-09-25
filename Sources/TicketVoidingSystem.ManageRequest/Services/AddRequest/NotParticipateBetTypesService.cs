@@ -24,7 +24,7 @@ public class NotParticipateBetTypesServiceImp(
 
         return new NotParticipateBetTypesViewModel
         {
-            NotParticipateBetTypes = await GetNotParticipateBetTypesHavesTickets(notParticipateBetTypesJson.NotParticipateBetTypes, matchId),
+            NotParticipateBetTypes = notParticipateBetTypesHaveTicket,
             NotParticipatePlayers = await GetPlayerHaveTickets(notParticipateBetTypesHaveTicket, matchId)
         };
     }

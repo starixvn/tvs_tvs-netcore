@@ -166,6 +166,7 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.reducedOverModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
+      model.betTypeCount = x.betTypeCount;
     });
   }
 
@@ -182,6 +183,7 @@ export class LogInfoService {
     data.getLogInfoModels.forEach(x => {
       const model = args.detailViewModel.notParticipateModels.find(y => y.matchId === x.matchId);
       model.logInfoDetail = x.logInfoDetail;
+      model.betTypeCount = x.betTypeCount;
     });
   }
 

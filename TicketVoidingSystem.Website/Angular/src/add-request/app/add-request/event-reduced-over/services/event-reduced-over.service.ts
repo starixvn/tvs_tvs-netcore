@@ -21,6 +21,7 @@ export class EventReducedOverService {
     logInfo.matchId = inputModels[0].matchId;
     logInfo.logInfoDetail = inputModels[0].logInfoDetail;
     logInfo.filterReducedOvers = inputModels.map(x => this.createFilterReducedOverModel(x));
+    logInfo.betTypeCount = inputModels[0].betTypeCount;
 
     return logInfo;
   }

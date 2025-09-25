@@ -19,6 +19,7 @@ export class EventNotParticipateService {
     logInfo.matchId = inputModels[0].matchId;
     logInfo.logInfoDetail = inputModels[0].logInfoDetail;
     logInfo.filterNotParticipates = inputModels.map(x => this.createFilterNotParticipateModel(x));
+    logInfo.betTypeCount = inputModels[0].betTypeCount;
 
     return logInfo;
   }

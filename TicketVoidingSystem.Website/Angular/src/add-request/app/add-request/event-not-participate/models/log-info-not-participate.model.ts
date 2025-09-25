@@ -7,5 +7,5 @@ export class LogInfoNotParticipate {
   filterNotParticipates: FilterNotParticipateModel[] = [];
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
-  betTypeCount: BetTypeCountModel[];
+  betTypeCount?: BetTypeCountModel[];
 }
