@@ -2,7 +2,7 @@ import { _isNumberValue } from '@angular/cdk/coercion';
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
@@ -28,7 +28,7 @@ import { FilterService } from './filter.service';
   selector: 'filter',
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.scss'],
-  imports: [TooltipComponent, FormsModule, AutoRefreshComponent, CommonModule, NgbModule, NgSelectModule, MultipleSelectionComponent, OnlyNumberDirective]
+  imports: [TooltipComponent, FormsModule, AutoRefreshComponent, CommonModule, NgbInputDatepicker, NgSelectModule, MultipleSelectionComponent, OnlyNumberDirective]
 })
 export class FilterComponent implements OnInit {
   @Input() model = new FilterModel();

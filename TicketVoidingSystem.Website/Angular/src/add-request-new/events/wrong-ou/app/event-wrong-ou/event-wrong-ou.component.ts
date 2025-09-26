@@ -1,7 +1,6 @@
 
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, SimpleChanges, ViewChild, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import clone from 'lodash/clone';
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
@@ -40,7 +39,7 @@ import { ValidationService } from './services/validation.service';
   templateUrl: './event-wrong-ou.component.html',
   styleUrls: ['./event-wrong-ou.component.scss'],
   standalone: true,
-  imports: [FormsModule, TooltipComponent, NgbModule, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent,
+  imports: [FormsModule, TooltipComponent, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent,
     LogInfoWrongOuComponent, OnlyNumberDirective, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
   providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService]
 })

@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, ViewChild, forwardRef } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgbDate, NgbInputDatepicker, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'date-picker',
   standalone: true,
-  imports: [FormsModule, CommonModule, NgbModule],
+  imports: [FormsModule, CommonModule, NgbInputDatepicker],
   templateUrl: './date-picker.component.html',
   styleUrl: './date-picker.component.scss',
   providers: [

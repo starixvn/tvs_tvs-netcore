@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { DateTimeFormat } from '../../../../utility/constants/config';
 import { CommonStaticService } from '../../../../utility/services/common.service';
@@ -15,7 +15,7 @@ import { DatePickerComponent } from '../date-picker/date-picker.component';
   selector: 'date-full-time-new',
   templateUrl: './date-full-time-new.component.html',
   styleUrls: ['./date-full-time-new.component.scss'],
-  imports: [DatePickerComponent, FormsModule, CommonModule, TooltipComponent, NgbModule],
+  imports: [DatePickerComponent, FormsModule, CommonModule, TooltipComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

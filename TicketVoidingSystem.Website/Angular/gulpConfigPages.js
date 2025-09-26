@@ -141,19 +141,6 @@ const voidByBetId = {
   indexEJSPath: './src/void-by-bet-id/index.ejs'
 };
 
-const addRequestNavigation = {
-  pageName: 'AddRequestNavigation',
-  tsconfigFiles: [
-    'add-request-new/navigation/main.ts',
-    'polyfills.ts'
-  ],
-  deployUrl: 'dist/add-request-new/navigation/',
-  index: 'src/add-request-new/navigation/index.cshtml',
-  main: 'src/add-request-new/navigation/main.ts',
-  transformFolder: '../wwwroot/dist/add-request-new/navigation',
-  indexEJSPath: './src/add-request-new/navigation/index.ejs'
-};
-
 const archivedTicket = {
   pageName: 'ArchivedTicket',
   tsconfigFiles: [
@@ -310,6 +297,58 @@ const wrongOfferedName = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/wrong-offered-name'
 };
 
+const abnormalAccounts = {
+  pageName: 'AbnormalAccounts',
+  tsconfigFiles: [
+    'add-request-new/events/abnormal-accounts/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/abnormal-accounts/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/abnormal-accounts/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/abnormal-accounts'
+};
+
+const abnormalBet = {
+  pageName: 'AbnormalBet',
+  tsconfigFiles: [
+    'add-request-new/events/abnormal-bet/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/abnormal-bet/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/abnormal-bet/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/abnormal-bet'
+};
+
+const duplicateTickets = {
+  pageName: 'DuplicateTickets',
+  tsconfigFiles: [
+    'add-request-new/events/duplicate-tickets/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/duplicate-tickets/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/duplicate-tickets/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/duplicate-tickets'
+};
+
+const recoverTicket = {
+  pageName: 'RecoverTicket',
+  tsconfigFiles: [
+    'add-request-new/events/recover-ticket/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/recover-ticket/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/recover-ticket/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/recover-ticket'
+};
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -322,18 +361,22 @@ const configPages = [
   // addRequest,
   // editRequest,
   //voidByBetId
-  archivedTicket,
+  // archivedTicket,
   //dangerAccepted,
   //redCard,
   //wrongScore,
   //technicalError,
-  //wrongHdp,
-  //wrongOu,
-  //wrongOdds,
-  //wrongOddsSportsBook,
-  // earlyKickOff,
+  // wrongHdp,
+  // wrongOu,
+  // wrongOdds,
+  wrongOddsSportsBook,
+  earlyKickOff,
   wrongMarketOffered,
-  wrongOfferedName
+  wrongOfferedName,
+  abnormalAccounts,
+  abnormalBet,
+  duplicateTickets,
+  recoverTicket
 ];
 
 module.exports = configPages;

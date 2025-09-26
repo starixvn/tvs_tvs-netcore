@@ -12,6 +12,13 @@ import { WrongOuModel } from '../../models/event-wrong-ou.model';
 import { WrongScoreModel } from '../../models/event-wrong-score.model';
 import { RequestModel } from '../../models/request.model';
 import { ModelType } from '../../types/model-type.model';
+import { AbnormalAccountModel } from '../../models/abnormal-account.model';
+import { AbnormalBetModel } from '../../models/abnormal-bet.model';
+import { DuplicateTicketsModel } from '../../models/event-duplicate-tickets.model';
+import { RecoverTicketModel } from '../../models/recover-ticket.model';
+import { EarlyKickOffModel } from '../../models/event-eko.model';
+import { WrongOfferedNameModel } from '../../models/event-wrong-offered-name.model';
+import { WrongMarketOfferedModel } from '../../models/event-wrong-market-offered.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +38,15 @@ export class EventBaseService {
     [IssueTypeConstant.WRONG_ODDS]: (model: RequestModel): WrongOddsModel[] => model.wrongOddsModels,
     [IssueTypeConstant.WRONG_OU]: (model: RequestModel): WrongOuModel[] => model.wrongOuModels,
     [IssueTypeConstant.WRONG_1ST_OU]: (model: RequestModel): WrongOuModel[] => model.wrongOuModels,
-    [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: (model: RequestModel): WrongOddsSportsBookModel => model.wrongOddsSportsBookModel
+    [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: (model: RequestModel): WrongOddsSportsBookModel => model.wrongOddsSportsBookModel,
+    [IssueTypeConstant.EARLY_KICK_OFF]: (model: RequestModel): EarlyKickOffModel[] => model.earlyKickOffModels,
+    [IssueTypeConstant.WRONG_KICK_OFF]: (model: RequestModel): EarlyKickOffModel[] => model.earlyKickOffModels,
+    [IssueTypeConstant.WRONG_OFFERED_NAME]: (model: RequestModel): WrongOfferedNameModel => model.wrongOfferedNameModel,
+    [IssueTypeConstant.WRONG_MARKET_OFFERED]: (model: RequestModel): WrongMarketOfferedModel[] => model.wrongMarketOfferedModels,
+    [IssueTypeConstant.ABNORMAL_ACCOUNT]: (model: RequestModel): AbnormalAccountModel => model.abnormalAccountModel,
+    [IssueTypeConstant.ABNORMAL_BET]: (model: RequestModel): AbnormalBetModel => model.abnormalBetModel,
+    [IssueTypeConstant.DUPLICATE_TICKETS]: (model: RequestModel): DuplicateTicketsModel => model.duplicateTicketsModel,
+    [IssueTypeConstant.RECOVER_TICKET]: (model: RequestModel): RecoverTicketModel => model.recoverTicketModel,
   };
 
   backToAccessDeniedPage() {

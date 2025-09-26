@@ -1,6 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { AddRequestStore } from '../../../../services/add-request.store';
 import { AffectedTicketService } from '../../../../component/affected-ticket/affected-ticket.service';
@@ -28,7 +27,7 @@ import { ConfirmAddRequestModel } from '../../../../component/confirm-add-reques
   templateUrl: './event-wrong-offered-name.component.html',
   styleUrls: ['./event-wrong-offered-name.component.scss'],
   standalone: true,
-  imports: [FormsModule, NgbModule, EventLeagueComponent, ConfirmAddRequestComponent,
+  imports: [FormsModule, EventLeagueComponent, ConfirmAddRequestComponent,
     FilterWrongOfferedNameComponent, LogInfoWrongOfferedNameComponent, InfoSiteDBDownComponent],
   providers: [EventWrongOfferedNameService, LogInfoService, SaveRequestService, ValidationService,
     CheckAddPermissionService, AffectedTicketService

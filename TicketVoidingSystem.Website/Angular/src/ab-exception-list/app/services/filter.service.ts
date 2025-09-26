@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import * as _ from 'lodash';
+import _ from 'lodash';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { ABExceptionListLevel } from '../../../utility/constants/config';

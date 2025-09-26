@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { CheckTransIdsQuery, CheckTransIdsViewModel } from 'src/add-request/app/add-request/event-abnormal-bet/event-abnormal-bet.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
@@ -17,6 +16,13 @@ import { AddRequestResultModel } from '../models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../models/sub-type-link-match.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from '../models/sub-type-note.model';
 import { MaxBetAndSpreadInfo, MaxBetAndSpreadQuery } from '../events/wrong-odds/app/event-wrong-odds/models/filter-wrong-odds.model';
+import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../events/abnormal-accounts/app/abnormal-accounts/models/check-username.model';
+import { AccountWinlostModel } from '../events/abnormal-accounts/app/abnormal-accounts/models/account-winlost.model';
+import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from '../events/duplicate-tickets/app/event-duplicate-tickets/models/check-duplicate-tickets.model';
+import { CheckRecoverTicketQuery } from '../events/recover-ticket/app/event-recover-ticket/models/check-recover-ticket.query';
+import { CheckRecoverTicketResult } from '../events/recover-ticket/app/event-recover-ticket/models/check-recover-ticket-result.model';
+import { TicketTableViewModel } from '../events/abnormal-accounts/app/abnormal-accounts/ticket-table/ticket-table.model';
+import { CheckTransIdsQuery, CheckTransIdsViewModel } from '../events/abnormal-bet/app/event-abnormal-bet/event-abnormal-bet.model';
 
 @Injectable({
   providedIn: 'root'
@@ -110,15 +116,20 @@ export class AddRequestApiService {
   }
 
   /* istanbul ignore next */
-  // async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
-  //   return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
-  // }
+  async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckUsernamesViewModel> {
+    return this.httpService.postJson<CheckValidUsernamesQuery, CheckUsernamesViewModel>(query, 'api/AddRequest/CheckValidUsernames');
+  }
+
+  // /* istanbul ignore next */
+  async exportAccount(models: AccountWinlostModel[]): Promise<void> {
+    return this.httpService.downloadFile({ accounts: models }, 'api/AddRequest/ExportExcelAccount');
+  }
+
 
   /* istanbul ignore next */
-  // async checkValidUsernames(query: CheckValidUsernamesQuery): Promise<CheckUsernamesViewModel> {
-  //   return this.httpService.postJson<CheckValidUsernamesQuery, CheckUsernamesViewModel>(query, 'api/AddRequest/CheckValidUsernames');
-  // }
-
+  async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
+    return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
+  }
 
   /* istanbul ignore next */
   // async getReducedOverBetTypes(matchId: number): Promise<ReducedOverBetType[]> {
@@ -126,19 +137,15 @@ export class AddRequestApiService {
   // }
 
   // /* istanbul ignore next */
-  // async getAccountWinLost(requestId: number): Promise<AccountWinlostModel[]> {
-  //   return this.httpService.postJson<{ requestId: number }, AccountWinlostModel[]>({ requestId: requestId }, 'api/AddRequest/GetAccountWinLost');
-  // }
+  async getAccountWinLost(requestId: number): Promise<AccountWinlostModel[]> {
+    return this.httpService.postJson<{ requestId: number }, AccountWinlostModel[]>({ requestId: requestId }, 'api/AddRequest/GetAccountWinLost');
+  }
+
 
   // /* istanbul ignore next */
-  // async exportAccount(models: AccountWinlostModel[]): Promise<void> {
-  //   return this.httpService.downloadFile({ accounts: models }, 'api/AddRequest/ExportExcelAccount');
-  // }
-
-  // /* istanbul ignore next */
-  // async exportExcelAbnormalBetTickets(query: CheckTransIdsQuery) {
-  //   return this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
-  // }
+  async exportExcelAbnormalBetTickets(query: CheckTransIdsQuery) {
+    return this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
+  }
 
   // /* istanbul ignore next */
   // async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
@@ -146,12 +153,12 @@ export class AddRequestApiService {
   // }
 
   // /* istanbul ignore next */
-  // async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
-  //   return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
-  // }
+  async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {
+    return this.httpService.postJson<CheckRecoverTicketQuery, CheckRecoverTicketResult>(query, 'api/AddRequest/CheckRecoverTicket');
+  }
 
   /* istanbul ignore next */
-  // async GetTicketsAbnormalAccount(custId: number, transInfoJson: string): Promise<TicketTableViewModel> {
-  //   return this.httpService.postJson({ custId, transInfoJson }, 'api/AddRequest/GetTicketsAbnormalAccount');
-  // }
+  async GetTicketsAbnormalAccount(custId: number, transInfoJson: string): Promise<TicketTableViewModel> {
+    return this.httpService.postJson({ custId, transInfoJson }, 'api/AddRequest/GetTicketsAbnormalAccount');
+  }
 }

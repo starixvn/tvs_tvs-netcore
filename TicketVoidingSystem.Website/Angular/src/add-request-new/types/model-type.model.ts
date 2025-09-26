@@ -6,6 +6,13 @@ import { WrongOddsSportsBookModel } from "../models/event-wrong-odds-sports-book
 import { WrongOddsModel } from "../models/event-wrong-odds.model";
 import { WrongOuModel } from "../models/event-wrong-ou.model";
 import { WrongScoreModel } from "../models/event-wrong-score.model";
+import { EarlyKickOffModel } from "../models/event-eko.model";
+import { WrongOfferedNameModel } from "../models/event-wrong-offered-name.model";
+import { WrongMarketOfferedModel } from "../models/event-wrong-market-offered.model";
+import { AbnormalAccountModel } from "../models/abnormal-account.model";
+import { AbnormalBetModel } from "../models/abnormal-bet.model";
+import { DuplicateTicketsModel } from "../models/event-duplicate-tickets.model";
+import { RecoverTicketModel } from "../models/recover-ticket.model";
 
 export type ModelType =
   | WrongHdpModel[]
@@ -15,4 +22,11 @@ export type ModelType =
   | WrongOddsModel[]
   | WrongOuModel[]
   | WrongOddsSportsBookModel
-  | EventTicket14Model;
+  | EventTicket14Model
+  | EarlyKickOffModel[]
+  | WrongOfferedNameModel
+  | WrongMarketOfferedModel[]
+  | AbnormalAccountModel
+  | AbnormalBetModel
+  | DuplicateTicketsModel
+  | RecoverTicketModel;

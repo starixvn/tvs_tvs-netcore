@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ModalComponent } from './modal.component';
 import { Modal } from './modal.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
@@ -27,8 +26,7 @@ describe('ModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         TestingModule,
-        FormsModule,
-        NgbModule
+        FormsModule
       ]
     }).compileComponents();
 

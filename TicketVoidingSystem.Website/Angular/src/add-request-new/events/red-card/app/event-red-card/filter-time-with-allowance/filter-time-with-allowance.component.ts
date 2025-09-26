@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDate, NgbInputDatepicker } from '@ng-bootstrap/ng-bootstrap';
 import moment from 'moment-timezone';
 import { TvDetectionService } from '../../../../../../manage-request/app/request-list/services/tv-detection.service';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
@@ -19,7 +19,7 @@ import { FilterTimeWithAllowance } from './filter-time-with-allowance.model';
   selector: 'filter-time-with-allowance',
   templateUrl: './filter-time-with-allowance.component.html',
   styleUrls: ['./filter-time-with-allowance.component.scss'],
-  imports: [FormsModule, CommonModule, TooltipComponent, NgbModule, OnlyNumberDirective]
+  imports: [FormsModule, CommonModule, TooltipComponent, NgbInputDatepicker, OnlyNumberDirective]
 })
 export class FilterTimeWithAllowanceComponent implements OnInit {
   @Input() isDisabled: boolean;

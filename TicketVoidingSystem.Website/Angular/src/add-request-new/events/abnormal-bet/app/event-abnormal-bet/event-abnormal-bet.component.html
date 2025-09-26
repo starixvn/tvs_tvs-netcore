@@ -1,0 +1,73 @@
+<div class="main-container col-12 col-sm-8">
+  <div [blockUi]="primitiveProps.isBlockBetIds">
+    <div class="d-flex header-bet-id" [ngStyle]="{'max-width.px': 1065}">
+      @if (isAbnormalBet()) {
+      <div>
+        @for (item of abnormalFilterBy.items; track item) {
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="inlineRadioOptions" [attr.value]="item.value"
+            [checked]="item.value === abnormalBetModel.filterBy" id="inlineRadio-{{item.value}}"
+            (change)="changeFilterBy(item.value)" [disabled]="filter.isVoided || isEdit" />
+          @if (!item.hidden) {
+          <label class="form-check-label" for="inlineRadio-{{item.value}}">{{item.name}}</label>
+          }
+        </div>
+        }
+      </div>
+      }
+      <div class="flex-grow-1"></div>
+      <div class="d-flex">
+        @if (primitiveProps.isShowButtonRemoveInvalid) {
+        <button type="submit" class="btn btn-danger btn-sm" (click)="removeInvalidTransIds()">Remove Invalid</button>
+        }
+        @if (isShowButtonExportTicket()) {
+        <button type="submit" class="btn btn-success btn-sm mg-left-10" (click)="exportExcel()">Export Ticket</button>
+        }
+      </div>
+    </div>
+
+    <bet-ids #betIds [betIdInputCss]="{'max-width.px': 1065}" [hideInvalid]="false" [hideWarningMove]="false"
+      [hideDifferentMatch]="true" [disabled]="filter.isVoided" [initBetIds]="abnormalBetModel.transIds"
+      (afterFocusOutBetIds)="afterFocusOutBetIds()" [isShowLabel]="false"
+      [warningMoveText]="'(*) Moved or Duplicated tickets are highlighted in ORANGE.'">
+    </bet-ids>
+  </div>
+
+  @if (isFilterBySingle()) {
+  <div>
+    @for (match of abnormalBetModel.matches; track match; let first = $first) {
+    <div class="mb-2 match">
+      <div class="event col-md-6 col-sm-6 col-12">
+        @if (first) {
+        <label class="col-form-label-sm">Event</label>
+        }
+        <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="match.name">
+      </div>
+      <div class="league col-md-6 col-sm-6 col-12">
+        @if (first) {
+        <label class="col-form-label-sm">League</label>
+        }
+        <input type="text" class="form-control form-control-sm" disabled [(ngModel)]="match.leagueName">
+      </div>
+    </div>
+    }
+  </div>
+  }
+  <ab-exception-list #abExceptionList [isVoided]="filter.isVoided" [betIds]="abnormalBetModel.abWhiteListTransIds"
+    (changeAbExceptionList)="changeAbExceptionList($event)"></ab-exception-list>
+  <info-site-db-down [infoSiteDBDownModel]="infoSiteDBDownModel"></info-site-db-down>
+</div>
+
+<confirm-abnormal-bet #confirmAbnormalBetComponent [isOpen]="confirmAbnormalBetModel.isOpenDialog" [model]="confirmAbnormalBetModel" (close)="triggerCloseEvent()"
+  (save)="onYesConfirmWarningModal()" [isEdit]="isEdit" [siteDBDownInfoJson]="infoSiteDBDownModel?.siteDBDownInfoJson" [action]="filter.action">
+</confirm-abnormal-bet>
+@if (primitiveProps.isBlockUI) {
+<div>
+  <div class="in modal-backdrop spinner-overlay"></div>
+  <div class="spinner-message-container" aria-live="assertive" aria-atomic="true">
+    <div class="loading-message">
+      <div class="loading"></div>
+    </div>
+  </div>
+</div>
+}

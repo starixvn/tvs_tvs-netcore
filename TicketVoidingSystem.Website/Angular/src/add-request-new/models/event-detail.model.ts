@@ -4,7 +4,6 @@ export class EventDetailModel {
   sportType?: number;
   kickOffTime: Date;
   transIds: string;
-
   usernames?: string;
   productIds?: string;
   statusIds?: string;
