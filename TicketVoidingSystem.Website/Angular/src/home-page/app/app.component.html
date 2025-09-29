@@ -1,3 +1,27 @@
 <menu-bar></menu-bar>
-<h2 class="title">Ticket Control System</h2>
-<!-- need to revert deleted code, checkout commit feature #227835-->
+<div class="issue-type-hub">
+  <h2 class="title">Ticket Voiding System</h2>
+  <div class="subtitle">
+    <i class="fas fa-fire"></i>
+    Most Used Issue Types ({{ currentMonth }})
+  </div>
+  <hr class="blue-line" />
+  <div class="issue-type-grid" [blockUi]="isLoading">
+    @for (issueType of issueTypes; track issueType) {
+    <div class="issue-type-card" (click)="openIssueType(issueType)" title="{{ issueType.issueTypeName }}">
+      <div class="card-icon">
+        <i [class]="issueType.icon"></i>
+      </div>
+      <div class="card-content">
+        <h3>{{ issueType.issueTypeName }}</h3>
+        <span class="badge rounded-pill">
+          @if (issueType.totalRequest === null) {
+            <i class="fas fa-spinner fa-spin"></i>
+          }
+          {{ issueType.totalRequest !== null ? issueType.totalRequest : '' }} requests
+        </span>
+      </div>
+    </div>
+    }
+  </div>
+</div>
