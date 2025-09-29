@@ -4,13 +4,14 @@ import { BetTypesModel, BetTypeModel } from './bettypes.model';
 import { Product } from '../../constants/config';
 import { TestingModule } from '../../modules/testing.module';
 import { SimpleChange } from '@angular/core';
+import { BetTypesService } from './bettypes.service';
 
 describe('BetTypesComponent', () => {
   let component: BetTypesComponent;
   let fixture: ComponentFixture<BetTypesComponent>;
-
-  const mockBetType = new BetTypeModel('2702', '1H 1X2', false, Product.NUMBER_GAME, true);
-  const mockBetTypesModel = new BetTypesModel([mockBetType], true);
+  let betTypesService: BetTypesService;
+  let mockBetTypesModel: BetTypesModel;
+  let mockBetType: BetTypeModel;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -21,6 +22,9 @@ describe('BetTypesComponent', () => {
 
     fixture = TestBed.createComponent(BetTypesComponent);
     component = fixture.componentInstance;
+    betTypesService = TestBed.inject(BetTypesService);
+    mockBetType = betTypesService.initBetTypeModel('2702', '1H 1X2', false, Product.NUMBER_GAME, true);
+    mockBetTypesModel = betTypesService.initBetTypesModel([mockBetType], true);
   });
 
   it('should create', () => {

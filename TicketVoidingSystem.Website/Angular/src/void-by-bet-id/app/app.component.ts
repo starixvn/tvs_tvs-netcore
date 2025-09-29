@@ -1,12 +1,12 @@
 import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { MessagesResult } from '../../utility/components/messages-result/messages-result';
+import { MessagesResult } from '../../utility/components/messages-result/messages-result.model';
 import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
@@ -32,6 +32,8 @@ import { PrimitiveProperty } from './model/void-by-bet-id.model';
 import { TemplateMessageService } from './services/template-message.service';
 import { ValidationService } from './services/validation.service';
 import { VoidTicketsService } from './services/void-tickets.service';
+import { TicketsService } from '../../utility/components/tickets/tickets.service';
+import { GetTicketsService } from './services/get-tickets.service';
 
 @Component({
   standalone: true,
@@ -41,7 +43,7 @@ import { VoidTicketsService } from './services/void-tickets.service';
   imports: [MenuBarComponent, FilterComponent, TicketsComponent, BlockUiDirective, NgSelectModule,
     TooltipComponent, MatchDetailComponent, TemplateMessageComponent, ConfirmationComponent,
     FormsModule, MessagesResultComponent, NotificationComponent, ModalComponent],
-  providers: [TemplateMessageService, ValidationService, VoidTicketsService]
+  providers: [TemplateMessageService, ValidationService, VoidTicketsService, GetTicketsService]
 })
 
 export class AppComponent implements OnInit {
@@ -49,14 +51,16 @@ export class AppComponent implements OnInit {
   @ViewChild('confirmation') confirmationComponent: ConfirmationComponent;
   @ViewChild('messages') messagesComponent: TemplateMessageComponent;
 
-  appService = inject(AppService);
-  element = inject(ElementRef);
-  templateMessageService = inject(TemplateMessageService);
-  modalService = inject(ModalService);
-  validationService = inject(ValidationService);
-  commonService = inject(CommonService);
-  voidTicketsService = inject(VoidTicketsService);
-
+  private readonly appService = inject(AppService);
+  private readonly element = inject(ElementRef);
+  private readonly templateMessageService = inject(TemplateMessageService);
+  private readonly modalService = inject(ModalService);
+  private readonly validationService = inject(ValidationService);
+  private readonly commonService = inject(CommonService);
+  private readonly voidTicketsService = inject(VoidTicketsService);
+  private readonly ticketsService = inject(TicketsService);
+  private readonly getTicketsService = inject(GetTicketsService);
+  
   ticketsViewModel = new TicketsViewModel();
   primitiveProps = new PrimitiveProperty();
   matchViewModel: MatchModel;
@@ -78,7 +82,7 @@ export class AppComponent implements OnInit {
   async getInfoEventSearch(getTicketsQuery: GetTicketsQuery) {
     this.resetData();
     const response = await this.appService.getTickets(getTicketsQuery);
-    this.ticketsViewModel.initData(response);
+    this.getTicketsService.initData(this.ticketsViewModel, response);
     await this.getMatchInfo();
 
     if (this.filterComponent.isAbnormalBet && this.ticketsViewModel?.totalItems > 0) {
@@ -145,7 +149,7 @@ export class AppComponent implements OnInit {
   }
 
   async checkNegativeBetCredit(): Promise<string> {
-    const request = await this.appService.checkNegativeBalance(this.ticketsViewModel.getCheckedBetIds());
+    const request = await this.appService.checkNegativeBalance(this.ticketsService.getCheckedBetIds(this.ticketsViewModel.groups));
 
     return request?.map(item => item.userName).join(', ');
   }
@@ -212,8 +216,8 @@ export class AppComponent implements OnInit {
   }
 
   ticketsChange(numberOfTickets: number) {
-    this.templateValue = _.clone(this.templateValue);
+    this.templateValue = clone(this.templateValue);
     this.templateValue.totalTickets = numberOfTickets;
-    this.templateValue.checkSettled = this.ticketsViewModel.checkSettledTickets();
+    this.templateValue.checkSettled = this.ticketsService.checkSettledTickets(this.ticketsViewModel.groups);
   }
 }

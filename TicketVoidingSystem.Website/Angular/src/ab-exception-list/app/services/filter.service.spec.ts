@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import * as _ from 'lodash';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import clone from 'lodash/clone';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppService } from '../app.service';
@@ -93,7 +93,7 @@ describe('FilterService', () => {
   });
 
   it('#initMultiSelectSites should not update correct model when groupName is All', async () => {
-    const fakeGroupSiteModel = _.clone(Helper.fakeGroupSiteModel);
+    const fakeGroupSiteModel = clone(Helper.fakeGroupSiteModel);
     fakeGroupSiteModel.groupName = 'All';
     fakeGroupSiteModel.groupId = 'All';
     const result = filterService.initMultiSelectSites([fakeGroupSiteModel]);

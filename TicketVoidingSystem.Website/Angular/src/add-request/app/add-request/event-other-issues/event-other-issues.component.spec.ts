@@ -130,7 +130,7 @@ describe('EventOtherIssuesComponent', () => {
     } as AdvancedModeAddRequestModel;
     eventOtherIssuesService.initDefaultFilter = jest.fn().mockReturnValue({});
     addRequestStore.changeSavingRequestStatus = jest.fn();
-    eventOtherIssuesService.getGroupBetTypes = jest.fn().mockResolvedValue(new GroupBetTypesAddRequestModel([], false, '', false));
+    eventOtherIssuesService.getGroupBetTypes = jest.fn().mockResolvedValue({groupBetTypes: [], isChecked: false, isDisable: false, isCollapsed: false} as GroupBetTypesAddRequestModel);
     validationService.isShowFilterTime = jest.fn().mockReturnValue(true);
 
     // Act
@@ -175,7 +175,7 @@ describe('EventOtherIssuesComponent', () => {
     } as EventLeagueComponent;
     component.filter = Helper.fakeFilterModel;
     component.filter.subIssueTypeId = '1';
-    eventOtherIssuesService.getGroupBetTypes = jest.fn().mockResolvedValue(new GroupBetTypesAddRequestModel([], false, '', false));
+    eventOtherIssuesService.getGroupBetTypes = jest.fn().mockResolvedValue({groupBetTypes: [], isChecked: false, isDisable: false, isCollapsed: false} as GroupBetTypesAddRequestModel);
     validationService.isShowFilterTime = jest.fn().mockReturnValue(false);
 
     // Act

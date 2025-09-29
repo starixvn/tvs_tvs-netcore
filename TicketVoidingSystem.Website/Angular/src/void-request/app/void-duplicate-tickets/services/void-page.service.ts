@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -43,7 +43,7 @@ export class VoidPageService {
     voidPageItem.templateValue = this.getTemplateValue(voidPageItem, requestDetail);
     voidPageItem.voidReason = await this.getVoidedReason(voidPageItem);
     voidPageItem.licenseeAffectedList = voidPageItem.voidTicketsMini.licenseeAffectedList;
-    voidPageItem.licenseeAffectedList = _.clone(voidPageItem.licenseeAffectedList);
+    voidPageItem.licenseeAffectedList = clone(voidPageItem.licenseeAffectedList);
   }
 
   private getTemplateValue(voidPageItem: VoidPageDuplicateTicketsModel, requestDetail: RequestDetailViewModel): TemplateValue {

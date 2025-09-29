@@ -8,6 +8,7 @@ import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.co
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { ValidationService } from '../services/validation.service';
 import { ClipboardService } from 'ngx-clipboard';
+import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
 
 @Component({
   standalone: true,
@@ -29,7 +30,8 @@ export class FilterComponent implements OnInit, OnChanges {
   validationService = inject(ValidationService);
   element = inject(ElementRef);
   clipboardService = inject(ClipboardService);
-
+  numberItemService = inject(NumberItemService);
+  
   tooltip = new Tooltip();
   remark: string[];
   isAbnormalBet = false;
@@ -89,7 +91,7 @@ export class FilterComponent implements OnInit, OnChanges {
   }
 
   resetAllItemsToValid(){
-    this.betIdsComponent.groupNumber.resetAllItemsToValid();  
+    this.numberItemService.resetAllItemsToValid(this.betIdsComponent.groupNumber);  
   }
 
   changeAbnormalBetType(){

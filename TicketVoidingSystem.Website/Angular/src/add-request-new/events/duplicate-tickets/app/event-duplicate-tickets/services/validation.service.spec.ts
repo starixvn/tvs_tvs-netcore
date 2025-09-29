@@ -104,6 +104,7 @@ describe('ValidationService', () => {
       const mockBetIdsComponent = {
         isHasBetId: () => true,
         groupNumber: {
+          items: [],
           resetAllItemsToValid: () => {},
           checkDuplicatedItems: () => {},
           updateMoved: () => {},

@@ -25,7 +25,7 @@ class Helper {
   ];
 
   static getFakeErrorGroupBetTypesModel(): GroupBetTypesModel {
-    const model = new GroupBetTypesModel([], null);
+    const model = {groupBetTypes: [], isChecked: false, result: {errorCode: 1, errorMsg: 'errorABC'}} as GroupBetTypesModel;
     model.result = { errorCode: 1, errorMsg: 'errorABC' };
     return model;
   }

@@ -9,11 +9,13 @@ import { CheckRecoverTicketResult } from "../models/check-recover-ticket-result.
 import { CheckRecoverTicketQuery } from "../models/check-recover-ticket.query";
 import { PrimitiveProperty } from "../models/primitive-property.model";
 import { ValidationBusinessRuleOutput } from "../models/validation.model";
+import { NumberItemService } from "../../../../../utility/components/bet-ids/number-item.service";
 
 @Injectable()
 export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
-
+  private readonly numberItemService = inject(NumberItemService);
+  
   public async checkBusinessRule(betIdsComponent: BetIdsComponent, recoverTicketModel: RecoverTicketModel,
     requestId: number, primitiveProps: PrimitiveProperty, tooltip: Tooltip): Promise<ValidationBusinessRuleOutput> {
 
@@ -26,8 +28,8 @@ export class ValidationService {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
-    betIdsComponent.groupNumber.resetAllItemsToValid();
-    betIdsComponent.groupNumber.checkDuplicatedItems();
+    this.numberItemService.resetAllItemsToValid(betIdsComponent.groupNumber);
+    this.numberItemService.checkDuplicatedItems(betIdsComponent.groupNumber.items);
     const validationResult = await this.checkRecoverTicket(betIdsComponent, recoverTicketModel, requestId, primitiveProps.permission);
     if (validationResult === null) {
       return { isValid: false } as ValidationBusinessRuleOutput;
@@ -56,8 +58,8 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(validationResult: CheckRecoverTicketResult, betIdsComponent: BetIdsComponent): void {
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
-    betIdsComponent.groupNumber.updateMoved(validationResult.unsupportedDateRangeTransIds);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.unsupportedDateRangeTransIds);
   }
 }

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ItemsSelect } from './items-select';
-import { MultipleSelection } from './multiple-selection';
+import { MultipleSelection } from './multiple-selection.model';
 import { TreeViewComponent } from './tree-view/tree-view.component';
+import { MultipleSelectionService } from './multiple-selection.service';
 
 @Component({
   standalone: true,
@@ -20,6 +21,8 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
   @Output() loseFocus = new EventEmitter();
   @Output() checkedItems = new EventEmitter<string[]>();
 
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
+  
   isCollapse: boolean;
   isExpanded: boolean;
   elementDocument: Element;
@@ -57,7 +60,7 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
   }
 
   getTitle() {
-    this.multipleSelect.selectionTitle = this.multipleSelect.getDisplayedItems();
+    this.multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.multipleSelect);
     this.multipleSelect.isCheckAll = this.multipleSelect.selectionTitle === this.multipleSelect.allItemsCheckedText;
   }
 
@@ -69,14 +72,14 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
       }
       if (this.elementDocument !== e.target && !this.elementDocument.contains((e.target as Node))) {
         this.isCollapse = false;
-        this.loseFocus.emit(this.multipleSelect.getValueItems());
+        this.loseFocus.emit(this.multipleSelectionService.getValueItems(this.multipleSelect));
       }
     }, false);
   }
 
   changeItems() {
     this.updateMultipleSelect();
-    this.checkedItems.emit(this.multipleSelect.getValueItems().split(',').filter(x => x !== ''));
+    this.checkedItems.emit(this.multipleSelectionService.getValueItems(this.multipleSelect).split(',').filter(x => x !== ''));
   }
 
   updateMultipleSelect() {
@@ -89,7 +92,7 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
       count += item.countChilds;
     });
 
-    this.multipleSelect.selectionTitle = this.multipleSelect.getDisplayedItems();
+    this.multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.multipleSelect);
     this.multipleSelect.isCheckAll = count === countChecked;
   }
 
@@ -101,5 +104,9 @@ export class MultipleSelectionComponent implements OnInit, OnChanges {
         item.expandedAllItems();
       }
     });
+  }
+
+  checkAllItems(){
+    this.multipleSelectionService.checkAllItems(this.multipleSelect, this.multipleSelect.isCheckAll);
   }
 }

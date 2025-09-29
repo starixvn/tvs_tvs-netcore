@@ -11,15 +11,18 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
 import { OddsInfo } from '../../advanced-mode/advanced-mode/advanced-mode.model';
-import { AdvancedModeService } from '../../advanced-mode/advanced-mode/advanced-mode.service';
+import { AdvancedModeApiService } from '../../advanced-mode/advanced-mode/advanced-mode-api.service';
 import { MultipleSelectComponent } from '../../advanced-mode/multiple-selection/multiple-select.component';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model';
 import { ControlsAllBetTypesComponent } from '../controls-all-bet-types/controls-all-bet-types.component';
-import { ControlsAllBetTypesLists } from '../controls-all-bet-types/controls-all-bet-types.model';
+import { ControlsAllBetTypes } from '../controls-all-bet-types/controls-all-bet-types.model';
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advanced-mode.model';
+import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
+import { BetTeamAddRequestService } from './bet-team-add-request.service';
+import { ControlsAllBetTypesService } from '../controls-all-bet-types/controls-all-bet-types.service';
 
 @Component({
   standalone: true,
@@ -27,7 +30,7 @@ import { BetTeamAddRequest, BetTeamAddRequestResult, Selection } from './advance
   templateUrl: './advanced-mode.component.html',
   styleUrls: ['./advanced-mode.component.scss'],
   imports: [TooltipComponent, FormsModule, CommonModule, MultipleSelectComponent, ControlsAllBetTypesComponent],
-  providers: [AdvancedModeService]
+  providers: [AdvancedModeApiService]
 })
 export class AdvancedModeComponent {
   @Input() matchId: number;
@@ -43,15 +46,19 @@ export class AdvancedModeComponent {
   baseSpecialBetTypeCricket: Selection[] = [];
   baseBetTeams: BetTeamAddRequest[] = [];
   isShowAdvancedModeFilter: boolean;
-  controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
+  controlsAllBetTypesLists: ControlsAllBetTypes[] = [];
   private delayForSearchSubscription: Subscription;
+
   private readonly observableTimer = timer(500);
   private readonly element = inject(ElementRef);
   private readonly commonService = inject(CommonService);
-  private readonly service = inject(AdvancedModeService);
-
+  private readonly service = inject(AdvancedModeApiService);
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
+  private readonly betTeamService = inject(BetTeamAddRequestService);
+  private readonly controlsBetTypesService = inject(ControlsAllBetTypesService);
   constructor() {
     this.tooltip.element = this.element;
+    this.controlsAllBetTypesLists = this.controlsBetTypesService.initControlsAllBetTypesLists();
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -129,8 +136,8 @@ export class AdvancedModeComponent {
       y.isDisabled = checkedBetType.isDisabled;
       if (y.isMultiple) {
         const value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType)
-        y.multiSelection.updateItemChecked(value.split(','));
-        y.multiSelection.updateDisabledStatus(checkedBetType.isDisabled);
+        this.betTeamService.updateItemChecked(y.multiSelection.multipleSelect, value.split(','));
+        this.betTeamService.updateDisabledStatus(y.multiSelection.multipleSelect, checkedBetType.isDisabled);
       } else {
         y.value = this.getValueUpdateControlFilterByAttribute(y.xmlAttribute, checkedBetType);
       }
@@ -210,9 +217,9 @@ export class AdvancedModeComponent {
   renderBetTeams(data: BetTeamAddRequest[]) {
     this.betTeams = [];
     for (const [index, item] of data.entries()) {
-      const betteam = new BetTeamAddRequest([index, item.name, item.value, item.type, item.betTypes],
+      const betTeam = this.betTeamService.initBetTeamAddRequest([index, item.name, item.value, item.type, item.betTypes],
         item.selections, item.inputs, item.isShow);
-      this.betTeams.push(betteam);
+      this.betTeams.push(betTeam);
     }
   }
 
@@ -227,14 +234,14 @@ export class AdvancedModeComponent {
   getCheckedBetTypeModels(): BetTeamAddRequestResult[] {
     return this.betTeams
       .filter(x => x.isShow)
-      .map(y => y.getResult(y.betTypes));
+      .map(y => this.betTeamService.getResult(y, y.betTypes));
   }
 
   private updatePlayerCricket(oddsInfo: OddsInfo[]): void {
     const groupBetTypes = groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
       const items = this.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
-      this.baseSpecialBetTypeCricket.push(new Selection(0, '', `${betTypeId}`, items, true, null));
+      this.baseSpecialBetTypeCricket.push(this.betTeamService.initSelectionAdvancedMode(0, '', `${betTypeId}`, items, true, null));
     }
   }
 
@@ -244,11 +251,11 @@ export class AdvancedModeComponent {
       return odds.reduce((acc, current, index) => {
         const group = odds.filter(x => x.oddsId === current.oddsId);
         const oddsName = group.map(x => x.playerName).join(' & ');
-        return acc.concat(group.map((x, i) => new Selection(i, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)));
+        return acc.concat(group.map((x, i) => this.betTeamService.initSelectionAdvancedMode(i, `${x.playerName} - ${oddsName}`, `${x.betChoice}$${x.oddsId}`, null, true, null)));
       }, []);
     }
 
-    return odds.map((x, index) => new Selection(index, x.playerName, x.playerId.toString(), null, true, null));
+    return odds.map((x, index) => this.betTeamService.initSelectionAdvancedMode(index, x.playerName, x.playerId.toString(), null, true, null));
   }
 
   private renderSelectionCricketWithPlayer(betTeam: BetTeamAddRequest, baseBetType: Selection[]): void {
@@ -262,7 +269,7 @@ export class AdvancedModeComponent {
 
       betTeam.selections
         .filter(x => x.name === 'Player')
-        .forEach(x => x.multiSelection = betTeam.renderMultipleSelection(x));
+        .forEach(x => x.multiSelection = this.betTeamService.renderMultipleSelection(x));
     }
   }
 
@@ -335,7 +342,7 @@ export class AdvancedModeComponent {
 
   private isValidSelectionValue(selection: Selection): boolean {
     return selection.isMultiple
-      ? selection.multiSelection.multipleSelect.getValueItems() !== ''
+      ? this.multipleSelectionService.getValueItems(selection.multiSelection.multipleSelect) !== ''
       : selection.value !== '';
   }
 
@@ -344,7 +351,7 @@ export class AdvancedModeComponent {
       this.advancedModeAddRequestModel.selectedAllBetTypes.forEach(x => {
         const selectedAllBetTypes = this.controlsAllBetTypesLists.find(item => item.type === x.name);
         if (selectedAllBetTypes) {
-          selectedAllBetTypes.items.updateItemChecked(x.value.split(','));
+          this.multipleSelectionService.updateChildItemsChecked(selectedAllBetTypes.items, x.value.split(','));
           selectedAllBetTypes.isShow = true;
         }
       })
@@ -372,7 +379,7 @@ export class AdvancedModeComponent {
   }
 
   private updateBetTeam(betTeam: BetTeamAddRequest, type: string, itemList: string[]) {
-    betTeam.selections.find(x => x.name === type).multiSelection.updateItemChecked(itemList);
+    this.betTeamService.updateItemChecked(betTeam.selections.find(x => x.name === type).multiSelection.multipleSelect, itemList);
   }
 
   private checkShowAllBetType(type: string): boolean {
@@ -380,10 +387,10 @@ export class AdvancedModeComponent {
   }
 
   public getAllBetTypesSelection(): AllBetTypesSelection[] {
-    return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return { name: y.type, value: y.items.getValueItems() } as AllBetTypesSelection });;
+    return this.controlsAllBetTypesLists.filter(x => x.isShow).map(y => { return { name: y.type, value: this.multipleSelectionService.getValueItems(y.items) } as AllBetTypesSelection });;
   }
 
   public resetControlsAllBetTypes() {
-    this.controlsAllBetTypesLists.forEach(x => x.resetAllChecked())
+    this.controlsAllBetTypesLists.forEach(x => this.controlsBetTypesService.resetAllChecked(x.items))
   }
 }

@@ -2,7 +2,7 @@ import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/cor
 import * as _ from 'lodash';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../../utility/services/static.service';
 import { AffectedTicketsModel } from '../models/live-game-early-ticket.model';

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppService } from '../app.service';
@@ -49,7 +49,7 @@ export class FilterService {
   async initSubType(): Promise<Selection[]> {
     const selections = [];
     const subIssueTypes = await this.appService.getSubTypes();
-    _.forEach(subIssueTypes, function(item) {
+    forEach(subIssueTypes, function(item) {
       selections.push(
         {
           name: item.subIssueTypeName,

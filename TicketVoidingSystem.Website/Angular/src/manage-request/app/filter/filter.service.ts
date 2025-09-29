@@ -1,5 +1,5 @@
 import { ManageProductConstant } from './manage-product.constant';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 
 export class FilterService {

@@ -27,6 +27,7 @@ import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
 import { InfoSiteDBDownComponent } from '../components/info-site-db-down/info-site-db-down.component';
+import { BetTypeService } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/bet-type.service';
 
 @Component({
   selector: 'event-wrong-market-offered',
@@ -53,7 +54,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   @ViewChild('filterTime') filterTimeComponent: FilterTimeComponent;
 
   logInfoEvent = new LogInfoWrongMarketOffered();
-  groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
+  groupBetTypesModel = new GroupBetTypesAddRequestModel();
   primitivePropertyEvent = new PrimitivePropertyEvent();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   confirmAddRequest = new ConfirmAddRequestModel();
@@ -63,7 +64,8 @@ export class EventWrongMarketOfferedComponent implements OnInit {
   private readonly validationService = inject(ValidationService);
   private readonly saveRequestService = inject(SaveRequestService);
   private readonly eventWrongMarketOfferedService = inject(EventWrongMarketOfferedService);
-
+  private readonly betTypeService = inject(BetTypeService);
+  
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {
       this.updateDataWhenEditRequest();
@@ -81,7 +83,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);;
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -92,7 +94,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
     this.resetLogInfo();
     await this.getGroupBetTypes();
-    const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
+    const allBetTypes = this.betTypeService.getAllBetTypes(this.groupBetTypesModel.groupBetTypes);
     this.advancedMode?.changeBetTypes(allBetTypes);
     this.advancedMode?.resetAllBetTeams();
     if (allBetTypes.length === 0) {
@@ -160,7 +162,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventWrongMarketOfferedService.assignModelsToEvents(this.wrongMarketOfferedModels);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
     const betTeamsResult = this.wrongMarketOfferedModels[0].betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
@@ -181,7 +183,7 @@ export class EventWrongMarketOfferedComponent implements OnInit {
 
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel([], true, '', false);
   }
 
   private createTimeRangeModel(filterWrongMarketOfferedModel: FilterWrongMarketOfferedModel): TimeRangeModel {

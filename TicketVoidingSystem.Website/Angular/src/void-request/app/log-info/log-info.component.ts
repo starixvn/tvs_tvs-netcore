@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import _ from 'lodash';
+import isNull from 'lodash/isNull';
 import moment from 'moment-timezone';
 import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
@@ -79,7 +79,7 @@ export class LogInfoComponent {
   }
 
   displayMinTime(minTime?: Date): string {
-    if (_.isNull(minTime)) {
+    if (isNull(minTime)) {
       return '-';
     }
     return (this.acceptTypeName) ? `${moment(minTime).format(DateTimeFormat.TIME_FORMAT)} - ${this.acceptTypeName}` :

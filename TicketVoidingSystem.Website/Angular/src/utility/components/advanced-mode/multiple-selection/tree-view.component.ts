@@ -32,13 +32,13 @@ export class TreeViewComponent {
     this.lastItem = item;
   }
 
-  handleWithShiftCheckbox(item: ItemsSelect) {
+  private handleWithShiftCheckbox(item: ItemsSelect) {
     if (this.lastItem !== undefined) {
       this.checkListItem(item);
     }
   }
 
-  checkListItem(item: ItemsSelect) {
+  private checkListItem(item: ItemsSelect) {
     const last = this.items.indexOf(this.lastItem);
     const current = this.items.indexOf(item);
     const start = Math.min(last, current);

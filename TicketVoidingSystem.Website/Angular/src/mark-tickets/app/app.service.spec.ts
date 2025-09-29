@@ -12,7 +12,6 @@ import { AllMarkedTicketsModel } from './mark-unmark-ticket/all-marked-ticket-li
 import { AllMarkedTicketQuery, GetLogsQuery, GetTicketsQuery, MarkedTicketQuery, TicketDetailQuery } from './models/query.model';
 import { DataPermission, ResultMarkTicketModel } from './models/result.model';
 import { GroupModel } from './tickets-list/group-tickets.model';
-import { TicketModel } from './tickets-list/ticket.model';
 import { TicketsModel } from './tickets-list/tickets.model';
 import { LogsModel } from './user-log/logs-list/logs-list.model';
 
@@ -22,13 +21,13 @@ class Helper {
         moveBetsDay: new Date()
     };
 
-    static readonly fakeGroupBettypes: GroupBetType[] = [
-        new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
-        new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
-    ];
+    static readonly fakeGroupBettypes = [
+        {groupName: '1H', betTypes: [new BetType(15, '1H 1X2', false, 0, true)], isChecked: true},
+        {groupName: 'FT', betTypes: [new BetType(4, 'Correct Score', false, 0, true)], isChecked: true},
+    ] as GroupBetType[];
 
     static readonly fakeTicketsModel = {
-        groups: [new GroupModel('MBC Group', [{ mainTransId: '123123123' } as TicketModel], ['12'])],
+        groups: [new GroupModel()],
         totalItems: 1,
         licenseesName: 'MBC Group',
         invalidTransIds: '105662749481',
@@ -124,7 +123,7 @@ describe('AppService', () => {
 
         it('#getGroupBetTypes should return expected data', async () => {
             // Arrange
-            const expectedGroupBettypesModel = new GroupBetTypesModel(Helper.fakeGroupBettypes, true);
+            const expectedGroupBettypesModel = {groupBetTypes: Helper.fakeGroupBettypes, isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
             httpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
 
             // Act

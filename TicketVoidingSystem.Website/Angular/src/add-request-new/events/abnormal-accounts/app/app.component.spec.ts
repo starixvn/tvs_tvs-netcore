@@ -57,15 +57,15 @@ describe('AppComponent', () => {
       expect(component.model).toBeInstanceOf(RequestModel);
     });
 
-    it('should set issueTypeId to WRONG_SCORE constant', () => {
-      expect(component.issueTypeId).toBe(IssueTypeConstant.WRONG_SCORE);
-      expect(component.issueTypeId).toBe('3');
+    it('should set issueTypeId to ABNORMAL_ACCOUNT constant', () => {
+      expect(component.issueTypeId).toBe(IssueTypeConstant.ABNORMAL_ACCOUNT);
+      expect(component.issueTypeId).toBe('13');
     });
   });
 
   describe('saveRequest Method', () => {
     it('should call abnormalAccountComponent.saveRequest when saveRequest is called', async () => {
-      // Arrange - mock đã được khởi tạo ở beforeEach
+      // Arrange
       component.abnormalAccountComponent = {} as AbnormalAccountsComponent;
       component.abnormalAccountComponent.saveRequest = jest.fn();
 

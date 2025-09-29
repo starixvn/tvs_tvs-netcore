@@ -6,18 +6,20 @@ import { PermissionAddRequest } from "../../models/permission-add-request.model"
 import { CheckTicket14Query } from "../models/check-ticket14.query";
 import { CheckTickets14Result } from "../models/check-tickets14-result.model";
 import { ValidationBusinessRuleOutput } from "../models/validation.model";
+import { NumberItemService } from "../../../../../utility/components/bet-ids/number-item.service";
 
 @Injectable()
 export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
-
-  public async checkBusinessRule(betIdsComponent: BetIdsComponent, issueTypeId: string, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
+  private readonly numberItemService = inject(NumberItemService);
+  
+  public async checkBusinessRule(betIdsComponent: BetIdsComponent, permission: PermissionAddRequest): Promise<ValidationBusinessRuleOutput> {
     if (!betIdsComponent.isHasBetId()) {
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
 
-    betIdsComponent.groupNumber.resetAllItemsToValid();
-    betIdsComponent.groupNumber.checkDuplicatedItems();
+    this.numberItemService.resetAllItemsToValid(betIdsComponent.groupNumber);
+    this.numberItemService.checkDuplicatedItems(betIdsComponent.groupNumber.items);
     const validationResult = await this.checkTickets14(betIdsComponent, permission);
     if (validationResult === null) {
       return { isValid: false } as ValidationBusinessRuleOutput;
@@ -40,7 +42,7 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(validationResult: CheckTickets14Result, betIdsComponent: BetIdsComponent): void {
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
-    betIdsComponent.groupNumber.updateInvalidItems(validationResult.unsupportedDateRangeTransIds, TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.unsupportedDateRangeTransIds, TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
   }
 }

@@ -14,7 +14,7 @@ import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnorma
 import { SaveRequestArg } from './save-request.model';
 import { SaveRequestService } from './save-request.service';
 
-jest.mock('../../../../../utility/services/static.service', () => ({
+jest.mock('../../../../../../utility/services/static.service', () => ({
   StaticService: {
     isAbnormalBet: jest.fn(),
     isFilterByMixOrSystemParlay: jest.fn()

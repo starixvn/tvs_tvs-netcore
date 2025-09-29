@@ -7,6 +7,7 @@ import { GroupModel } from '../pool-house-ticket/tickets/group-tickets.model';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 import { AffectedTicketComponent } from './affected-ticket.component';
 import { AffectedTicketService } from './affected-ticket.service';
+import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 
 class Helper {
   static readonly fakeIssueTypeId = '123';
@@ -23,6 +24,7 @@ describe('AffectedTicketComponent', () => {
   let fixture: ComponentFixture<AffectedTicketComponent>;
   let affectedTicketService: AffectedTicketService;
   let logAnalysisService: LogAnalysisService;
+  let ticketsService: TicketsService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -36,6 +38,7 @@ describe('AffectedTicketComponent', () => {
     fixture = TestBed.createComponent(AffectedTicketComponent);
     affectedTicketService = fixture.debugElement.injector.get(AffectedTicketService);
     logAnalysisService = fixture.debugElement.injector.get(LogAnalysisService);
+    ticketsService = fixture.debugElement.injector.get(TicketsService);
     component = fixture.componentInstance;
   });
 
@@ -115,13 +118,13 @@ describe('AffectedTicketComponent', () => {
     // Arrange
     const betTypes = ['type1', 'type2'];
     component.tickets = new TicketsModel();
-    component.tickets.checkTicketByBetTypesForLGEarlyPopup = jest.fn();
+    ticketsService.checkTicketByBetTypesForLGEarlyPopup = jest.fn();
 
     // Act
     component.updateSelectedBetTypes(betTypes);
 
     // Assert
-    expect(component.tickets.checkTicketByBetTypesForLGEarlyPopup).toHaveBeenCalledWith(betTypes);
+    expect(ticketsService.checkTicketByBetTypesForLGEarlyPopup).toHaveBeenCalledWith(component.tickets.groups, betTypes);
   });
 
   it('should initialize filter bet types when tickets groups exist', () => {

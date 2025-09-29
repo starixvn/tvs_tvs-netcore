@@ -4,7 +4,7 @@ import { RequestDetailViewModel } from '../../add-request-new/models/request-det
 import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
-import { MultipleSelection } from '../components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../components/multiple-selection/multiple-selection.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';

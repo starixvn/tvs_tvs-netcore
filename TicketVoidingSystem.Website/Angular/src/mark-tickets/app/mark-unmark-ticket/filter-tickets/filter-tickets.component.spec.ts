@@ -259,6 +259,7 @@ describe('FilterTicketsComponent', () => {
     component.betIdsComponent = {
       isHasBetId: jest.fn().mockImplementation(() => true),
       groupNumber: {
+        items: [],
         resetAllItemsToValid: jest.fn()
       }
     } as unknown as BetIdsComponent;

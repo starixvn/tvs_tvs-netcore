@@ -36,8 +36,15 @@ describe('VoidTicketsService', () => {
         ticketsViewModel: {
           groups: [
             {
-              getEnableTickets: () => [{ ticketId: '1' }],
-              getTicketCricket: () => ['cricket1']
+              tickets: [
+                { 
+                  value: '1', 
+                  siteDbGroupId: 'site1', 
+                  isChecked: true, 
+                  isDisable: false,
+                  isCricket: false
+                }
+              ]
             }
           ] as unknown as GroupModel[],
           getAllTicket: () => [{ ticketId: '1' }]
@@ -70,8 +77,8 @@ describe('VoidTicketsService', () => {
 
       // Assert
       expect(result).toBeInstanceOf(VoidTicketsRequest);
-      expect(result.tickets).toEqual([{ ticketId: '1' }]);
-      expect(result.transIdCrickets).toEqual(['cricket1']);
+      expect(result.tickets).toEqual([{ transId: '1', siteDbGroupId: 'site1' }]);
+      expect(result.transIdCrickets).toEqual([]);
       expect(result.password).toBe('hashedPassword');
       expect(result.username).toBe('testUser');
       expect(result.reason).toBe('test reason');
@@ -92,8 +99,15 @@ describe('VoidTicketsService', () => {
         ticketsViewModel: {
           groups: [
             {
-              getEnableTickets: () => [{ ticketId: '1' }],
-              getTicketCricket: () => ['cricket1']
+              tickets: [
+                { 
+                  value: '1', 
+                  siteDbGroupId: 'site1', 
+                  isChecked: true, 
+                  isDisable: false,
+                  isCricket: false
+                }
+              ]
             }
           ],
           getAllTicket: () => [{ ticketId: '1' }]
@@ -130,7 +144,18 @@ describe('VoidTicketsService', () => {
     it('should create checking permission model with correct parameters', () => {
       // Arrange
       const mockTicketsViewModel = {
-        getAllTicket: () => [{ ticketId: '1' }]
+        groups: [
+          {
+            tickets: [
+              { 
+                value: '1', 
+                siteDbGroupId: 'site1', 
+                isChecked: true, 
+                isDisable: false
+              }
+            ]
+          }
+        ]
       } as unknown as TicketsViewModel;
       const mockMatchViewModel = { matchId: '123' } as unknown as MatchModel;
 
@@ -139,7 +164,7 @@ describe('VoidTicketsService', () => {
 
       // Assert
       expect(result).toBeDefined();
-      expect(result.tickets).toEqual([{ ticketId: '1' }]);
+      expect(result.tickets).toEqual([{ transId: '1', siteDbGroupId: 'site1' }]);
       expect(result.matchId).toBe('123');
     });
   });

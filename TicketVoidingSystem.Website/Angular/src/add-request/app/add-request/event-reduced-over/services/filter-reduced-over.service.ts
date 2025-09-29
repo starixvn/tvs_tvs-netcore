@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { ItemsSelect } from '../../../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { NgSelectMixtureItem } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture-item.model';
 import { NgSelectMixtureModel } from '../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
 import { CommonService } from '../../../../../utility/services/common.service';

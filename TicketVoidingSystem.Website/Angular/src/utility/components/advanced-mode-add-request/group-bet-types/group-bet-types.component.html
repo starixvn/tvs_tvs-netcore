@@ -7,7 +7,7 @@
           <div>
             <label>
               <input type="checkbox" class="group-bettypes-all-checkbox me-1" [(ngModel)]="model.isChecked"
-                [disabled]="model.isDisable" (ngModelChange)="model.changeCheckedModelToGroup(); changeAllBetTypes()" />
+                [disabled]="model.isDisable" (ngModelChange)="changeCheckedModelToGroup(); changeAllBetTypes()" />
               All Bet types
             </label>
           </div>
@@ -21,7 +21,7 @@
         <td>
           <label>
             <input class="me-1" type="checkbox" [(ngModel)]="group.isChecked"
-              (ngModelChange)="group.changeCheckedGroupToBetType(); model.changeCheckedGroupToModel();changeGroupBetTypes(group)"
+              (ngModelChange)="changeCheckedGroupToBetType(group); changeCheckedGroupToModel();changeGroupBetTypes(group)"
               [disabled]="group.isDisable" />
             {{group.groupName}}
           </label>
@@ -34,7 +34,7 @@
             <div class="bet-type">
               <label>
                 <input class="me-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="betType.isDisable"
-                  (ngModelChange)="group.changeCheckedBetTypeToGroup(); model.changeCheckedGroupToModel(); changeBetTypeItem(betType)" />
+                  (ngModelChange)="changeCheckedBetTypeToGroup(group); changeCheckedGroupToModel(); changeBetTypeItem(betType)" />
                 {{betType.name}}
               </label>
             </div>

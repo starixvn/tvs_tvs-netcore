@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -44,7 +44,7 @@ export class VoidPageService {
       element.templateValue = this.getTemplateValue(element, requestDetail);
       element.voidReason = await this.commonService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel ? element.matchModel.sportType : 0);
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
-      element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
+      element.licenseeAffectedList = clone(element.licenseeAffectedList);
     }
   }
 

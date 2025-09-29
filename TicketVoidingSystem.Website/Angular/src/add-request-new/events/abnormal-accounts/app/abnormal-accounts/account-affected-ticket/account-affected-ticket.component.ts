@@ -1,11 +1,11 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import bigDecimal from 'js-big-decimal';
-import * as _ from 'lodash';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { TicketTableComponent } from '../ticket-table/ticket-table.component';
 import { TicketTableViewModel } from '../ticket-table/ticket-table.model';
 import { AccountTableComponent } from '../account-table/account-table.component';
 import { AccountAffectedTicketModel, AdjustedAccountModel, TicketAdjustedAccountModel } from './account-affected-ticket.model';
+import cloneDeep from 'lodash/cloneDeep';
 
 @Component({
   selector: 'account-affected-ticket',
@@ -29,7 +29,7 @@ export class AccountAffectedTicketComponent implements OnInit {
   }
 
   async updateTable() {
-    this.tempAdjustedAccounts.accountWinlostTables = [_.cloneDeep(this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId)))];
+    this.tempAdjustedAccounts.accountWinlostTables = [cloneDeep(this.model.accountWinlostModels.find(x => x.custId === Number(this.model.selectedCustId)))];
     if (this.model.adjustedAccounts.some(x => x.custId === Number(this.model.selectedCustId))) {
       const result = this.model.adjustedAccounts.find(x => x.custId === Number(this.model.selectedCustId)).ticketTableViewModel;
       this.tempAdjustedAccounts.ticketTableViewModel = new TicketTableViewModel(result);

@@ -4,7 +4,7 @@ import { FilterNotParticipateComponent } from './filter-not-participate.componen
 import { FilterNotParticipateService } from '../services/filter-not-participate.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, Player } from '../models/not-participate-bet-type.model';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection.model';
 
 class Helper {
   static readonly fakeFilterModel: FilterNotParticipateModel[] = [{

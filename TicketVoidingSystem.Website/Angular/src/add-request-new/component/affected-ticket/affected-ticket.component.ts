@@ -3,7 +3,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import uniqBy from 'lodash/uniqBy';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../utility/services/static.service';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
@@ -11,6 +11,7 @@ import { LogAnalysisService } from '../../services/log-analysis.service';
 import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 import { AffectedTicketService } from './affected-ticket.service';
+import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 
 @Component({
   selector: 'affected-ticket',
@@ -30,13 +31,14 @@ export class AffectedTicketComponent implements OnChanges {
   isShowGroupBetTypesCount = true;
   private readonly logAnalysisService = inject(LogAnalysisService);
   private readonly affectedTicketService = inject(AffectedTicketService);
+  private readonly ticketsService = inject(TicketsService);
 
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;
       this.tickets = await this.affectedTicketService.getAffectedTickets(this.model.issueTypeId, this.model.logInfoTicketsJson);
       this.otherTickets.groups = cloneDeep(this.tickets.groupOtherTickets);
-      this.otherTickets.checkAllTickets();
+      this.ticketsService.checkAllTickets(this.otherTickets.groups);
 
       this.initFilterBetTypes();
       await this.logAnalysisService.writeLogClickLiveGameDetails(`${this.model.issueTypeId}`);
@@ -52,7 +54,7 @@ export class AffectedTicketComponent implements OnChanges {
   }
 
   updateSelectedBetTypes(betTypes: string[]) {
-    this.tickets.checkTicketByBetTypesForLGEarlyPopup(betTypes);
+    this.ticketsService.checkTicketByBetTypesForLGEarlyPopup(this.tickets.groups, betTypes);
   }
 
   private initFilterBetTypes() {

@@ -6,7 +6,6 @@ import {
   QueryList, SimpleChanges, ViewChild, ViewChildren
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { AddChildMatchComponent } from '../../../../../utility/components/add-child-match/add-child-match.component';
 import { AddChildMatchModel } from '../../../../../utility/components/add-child-match/add-child-match.model';
@@ -42,6 +41,9 @@ import { SearchEventService } from './services/search-event.service';
 import { ValidationService } from './services/validation.service';
 import { OnlyNumberDirective } from '../../../../../utility/directives/number.directive';
 import { InfoSiteDBDownComponent } from '../../../../component/info-site-db-down/info-site-db-down.component';
+import clone from 'lodash/clone';
+import lodashOrderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 
 @Component({
   selector: 'event-early-kick-off',
@@ -234,7 +236,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
     this.addChildMatchModel.selectedMatchIds = this.allSelectedEvents.map(x => x.matchId);
     this.addChildMatchModel.matchType = matchTypeId;
     this.addChildMatchModel.isOpen = true;
-    this.addChildMatchModel = _.clone(this.addChildMatchModel);
+    this.addChildMatchModel = clone(this.addChildMatchModel);
   }
 
   public async saveRelatedEvent(selectedEvents: ChildMatchModel[]): Promise<void> {
@@ -249,7 +251,7 @@ export class EventEarlyKickOffComponent implements OnInit, OnChanges {
       const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, this.isEdit, this.requestId, this.filter);
       this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       this.allSelectedEvents.push(...newEvents);
-      this.allSelectedEvents = _.orderBy(_.uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
+      this.allSelectedEvents = lodashOrderBy(uniqBy(this.allSelectedEvents, x => x.matchId), ['matchCode'], ['asc']);
     }
     this.primitiveProps.infoSiteDBDownModel = null;
     this.addRequestStore.changeBlockingUiStatus(false);

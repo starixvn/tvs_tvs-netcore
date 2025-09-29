@@ -44,6 +44,10 @@ public static class Helper
 
     public static string GetUnionTransIdString(IEnumerable<string> items, string separator = ",")
     {
+        if (items is null || !items.Any())
+        {
+            return string.Empty;
+        }
         var splitItems = items.Where(x => !string.IsNullOrWhiteSpace(x))
             .Select(x => x.Split(','));
 

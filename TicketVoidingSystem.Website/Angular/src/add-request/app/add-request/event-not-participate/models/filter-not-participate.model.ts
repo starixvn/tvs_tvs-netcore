@@ -1,4 +1,4 @@
-import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection";
+import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection.model";
 
 export class FilterNotParticipateModel {
   playerId: number;

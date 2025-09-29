@@ -1,4 +1,4 @@
-import { StaticService } from "../../services/static.service";
+import { NumberItemService } from "./number-item.service";
 
 export class CSSCLASS {
     static readonly ITEM_NUMBER_SELECTED = 'item-number-selected';
@@ -11,80 +11,8 @@ export class CSSCLASS {
 }
 
 export class GroupNumber {
-    items: Array<NumberItem>;
+    items: Array<NumberItem> = [];
     isSelectedAll = false;
-
-    constructor() {
-        this.items = [];
-    }
-
-    getAllNumberItems(): Array<NumberItem> {
-        return this.items.filter(item => item.isNumber());
-    }
-
-    getAllNotNumberItems(): Array<NumberItem> {
-        return this.items.filter(item => !item.isNumber());
-    }
-
-    getAllNotNumberItemsAsString(): string {
-        const values = this.getAllNotNumberItems().map(item => item.value);
-        return values.join(',');
-    }
-
-    getAllNumberItemsAsString(): string {
-        const values = this.getAllNumberItems().map(item => item.value);
-        return values.join(',');
-    }
-
-    getInvalidItemsAsString(): string {
-        const values = this.items.filter(item => item.isInvalidItem()).map(item => item.value);
-        return values.join(',');
-    }
-
-    checkValidItems(): number {
-        if (this.items.length === 0) {
-            return 0;
-        }
-
-        const allTicketValid = this.items.every(x => x.isValid);
-        const isHasValidTicketNotSiteDbDown = this.items.some(x => x.isValid && x.cssClass !== CSSCLASS.SITE_DB_DOWN);
-        return allTicketValid && isHasValidTicketNotSiteDbDown ? 2 : 1;
-    }
-
-    checkDuplicatedItems(): void {
-        const items = this.getAllNumberItems();
-        if (items.length !== 0) {
-            const valueList = items.map(x => x.value);
-            const duplicatedValueList = valueList.filter((item, index) => valueList.indexOf(item) !== index);
-            const distinctValueList = Array.from(new Set(duplicatedValueList));
-            this.items.forEach(item => {
-                this.setItemInvalid(distinctValueList, item, CSSCLASS.MOVED);
-            });
-        }
-    }
-
-    updateWarningSiteDBDown(text: string, tooltipText?: string) {
-        if (StaticService.isStringHasLength(text)) {
-            const siteDbDownItems = text.split(',');
-            this.items.forEach(item => {
-                this.setItemWarning(siteDbDownItems, item, CSSCLASS.SITE_DB_DOWN, tooltipText);
-            });
-        }
-    }
-    updateInvalidItems(text: string, tooltipText?: string) {
-        if (StaticService.isStringHasLength(text)) {
-            const invalidItems = text.split(',');
-            this.items.forEach(item => {
-                this.setItemInvalid(invalidItems, item, CSSCLASS.INVALID, tooltipText);
-            });
-        }
-    }
-
-    updateMoved(text: string) {
-        if (StaticService.isStringHasLength(text)) {
-            const movedItems = text.split(',');
-            this.items.forEach(item => {
-                this.setItemInvalid(movedItems, item, CSSCLASS.MOVED);
             });
         }
     }
@@ -94,87 +22,6 @@ export class GroupNumber {
             const transIds = text.split(',');
             this.items.forEach(item => {
                 this.setItemInvalid(transIds, item, CSSCLASS.MOVED, tooltipText);
-            });
-        }
-    }
-
-    updateDifferent(text: string) {
-        if (StaticService.isStringHasLength(text)) {
-            const differentItems = text.split(',');
-            this.items.forEach(item => {
-                this.setItemInvalid(differentItems, item, CSSCLASS.DIFFERENT);
-            });
-        }
-    }
-
-    remove(item: NumberItem) {
-        const index = this.items.indexOf(item);
-        if (index > -1) {
-            this.items.splice(index, 1);
-        }
-    }
-
-    removeLasted() {
-        this.items.pop();
-    }
-
-    selectAllItems() {
-        this.isSelectedAll = !this.isSelectedAll;
-        this.items.forEach(item => {
-            item.changeSelectStatus(this.isSelectedAll);
-        });
-    }
-
-    removeSelected() {
-        const removedItems = this.items.filter(function (item) {
-            return item.isSelected;
-        });
-        const newItems = this.items.filter(function (item) {
-            return removedItems.indexOf(item) === -1;
-        });
-        this.items = newItems;
-    }
-
-    removeByValue(value: string) {
-        this.items.filter(item => item.value === value)
-            .forEach(x => {
-                const index = this.items.indexOf(x);
-                if (index > -1) {
-                    this.items.splice(index, 1);
-                }
-            });
-    }
-
-    resetAllItemsToValid() {
-        this.isSelectedAll = false;
-        this.items.forEach(item => {
-            if (item.isNumber()) {
-                item.isValid = true;
-                item.cssClass = CSSCLASS.VALID;
-                item.defaultClass = CSSCLASS.VALID;
-                item.isShowTooltip = false;
-                item.tooltipText = '';
-            }
-        });
-    }
-    private setItemWarning(warningList: string[], item: NumberItem, css: string, toolTipText = '') {
-        if (warningList.some(warningItem => warningItem === item.value)) {
-
-            item.cssClass = css;
-            item.defaultClass = css;
-            item.isShowTooltip = toolTipText.length > 0;
-            item.tooltipText = toolTipText;
-        }
-    }
-    private setItemInvalid(invalidList: string[], item: NumberItem, css: string, toolTipText = '') {
-        if (invalidList.some(invalidItem => invalidItem === item.value)) {
-            item.cssClass = css;
-            item.defaultClass = css;
-            item.isValid = false;
-            item.isShowTooltip = toolTipText.length > 0;
-            item.tooltipText = toolTipText;
-        }
-    }
 }
 
 export class NumberItem {
@@ -188,24 +35,11 @@ export class NumberItem {
 
     constructor(value: string) {
         this.value = value;
-        this.defaultClass = this.isNumber() ? CSSCLASS.VALID : CSSCLASS.INVALID;
-        this.isValid = this.isNumber();
+        this.defaultClass = NumberItemService.isNumber(this) ? CSSCLASS.VALID : CSSCLASS.INVALID;
+        this.isValid = NumberItemService.isNumber(this);
         this.cssClass = this.defaultClass;
         this.isSelected = false;
         this.isShowTooltip = false;
         this.tooltipText = '';
-    }
-
-    isNumber(): boolean {
-        return /^\+?(0|[1-9]\d*)$/.test(this.value);
-    }
-
-    isInvalidItem(): boolean {
-        return this.cssClass === CSSCLASS.INVALID;
-    }
-
-    changeSelectStatus(isSelected: boolean) {
-        this.isSelected = isSelected;
-        this.cssClass = this.isSelected ? CSSCLASS.SELECTED : this.defaultClass;
     }
 }

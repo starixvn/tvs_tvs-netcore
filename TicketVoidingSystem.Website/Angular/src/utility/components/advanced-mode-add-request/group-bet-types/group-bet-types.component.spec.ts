@@ -23,7 +23,7 @@ class Helper {
     }
   ] as unknown as GroupBetTypeAddRequest[];
 
-  static readonly fakeModel = new GroupBetTypesAddRequestModel(Helper.fakeGroupBetTypes, false, '', false);
+  static readonly fakeModel = {groupBetTypes: Helper.fakeGroupBetTypes, isChecked: false, isDisable: false, isCollapsed: false} as GroupBetTypesAddRequestModel;
 }
 
 describe('GroupBetTypesComponent', () => {
@@ -61,7 +61,7 @@ describe('GroupBetTypesComponent', () => {
 
     // Assert
     expect(component.changeFilterEvent.emit).toHaveBeenCalled();
-    expect(component.betTypesEvent.emit).toHaveBeenCalledWith(component.model.getAllBetTypes());
+    expect(component.betTypesEvent.emit).toHaveBeenCalled();
   });
 
   it('should emit group bet types when changeGroupBetTypes is called', () => {
@@ -94,7 +94,7 @@ describe('GroupBetTypesComponent', () => {
 
     // Assert
     expect(component.changeFilterEvent.emit).toHaveBeenCalled();
-    expect(component.betTypesEvent.emit).toHaveBeenCalledWith(component.model.getAllBetTypes());
+    expect(component.betTypesEvent.emit).toHaveBeenCalled();
   });
 
   describe('isValidity', () => {

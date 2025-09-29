@@ -12,7 +12,7 @@ import { Confirmation } from '../../utility/components/confirmation/confirmation
 import { AffectedLicensee } from '../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { MessagesResult } from '../../utility/components/messages-result/messages-result';
+import { MessagesResult } from '../../utility/components/messages-result/messages-result.model';
 import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
@@ -41,6 +41,7 @@ import { FilterComponent } from './filter/filter.component';
 import { ModalComponent } from './modal/modal.component';
 import { Modal } from './modal/modal.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
+import { TicketsService } from '../../utility/components/tickets/tickets.service';
 
 @Component({
   standalone: true,
@@ -92,7 +93,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   modalService = inject(ModalService);
   signalRService = inject(SignalRService);
   passwordService = inject(PasswordService);
-
+  ticketsService = inject(TicketsService);
+  
   public async ngOnInit() {
     this.tooltip.element = this.element;
     await this.signalRService.initializeConnection();
@@ -247,7 +249,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.isShowConfirm = this.ticketsModel.groups.length > 0;
     this.isShowMessages = this.ticketsModel.groups.length > 0;
     this.updateTemplateValue();
-    this.ticketsChange(this.ticketsModel.getNumberOfCheckedTickets());
+    this.ticketsChange(this.ticketsService.getNumberOfCheckedTickets(this.ticketsModel.groups));
   }
 
   updateTemplateValue() {
@@ -266,7 +268,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         this.getTicketsQuery.liveAwayScore.length > 0
         ? `${this.getTicketsQuery.liveHomeScore}-${this.getTicketsQuery.liveAwayScore}`
         : '';
-    this.templateValue.totalTickets = this.ticketsModel.getNumberOfCheckedTickets();
+    this.templateValue.totalTickets = this.ticketsService.getNumberOfCheckedTickets(this.ticketsModel.groups);
     this.templateValue.betTypeNameReplaceMessage = this.ticketsModel.betTypeNameReplaceMessage;
     this.templateValue.playerName = this.filterComponent.playerNamesSelected;
     this.templateValue.smallestMapTicket = this.ticketsModel.smallestMapTicket;
@@ -310,7 +312,8 @@ export class AppComponent implements OnInit, AfterViewInit {
       const group = new GroupModel(item.name, item.tickets);
       this.ticketsModel.groups.push(group);
     });
-    this.ticketsModel.changeIconCheckBox();
+
+    this.ticketsModel.iconCheckBox = TicketsService.updateIconCheckBox(this.ticketsModel.groups);
   }
 
   voidBet() {
@@ -321,7 +324,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   checkValidation(): boolean {
-    if (this.ticketsModel.getTicketEnable().length === 0) {
+    if (this.ticketsService.getTicketEnable(this.ticketsModel.groups).length === 0) {
       this.tooltip.display('checkbox-dropdown-list', TEXT.EMPTY_TICKET);
       return false;
     }
@@ -359,7 +362,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async confirmEvent() {
     const checkingPermissionModel = new CheckingPermissionModel();
-    checkingPermissionModel.setParam(this.ticketsModel.getAllTicket(), this.matchViewModel.matchId,
+    checkingPermissionModel.setParam(this.ticketsService.getAllTicket(this.ticketsModel.groups), this.matchViewModel.matchId,
       'void-single-bet-check-void-bet-permission', true, StaticService.checkHandlingCashOutAsUnSettledTicketByFunction(FunctionConst.SINGLE), false);
     this.modalService.confirmPermission(checkingPermissionModel, {
       title: 'WARNING!',
@@ -374,9 +377,9 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async voidTickets() {
     const query: VoidTicketsQuery = assignIn(this.filterParamsBeforeVoid, {
-      tickets: this.ticketsModel.getTicketEnable(),
-      transIdSolds: this.ticketsModel.getTicketSold(),
-      transIdCrickets: this.ticketsModel.getTicketCricket(),
+      tickets: this.ticketsService.getTicketEnable(this.ticketsModel.groups),
+      transIdSolds: this.ticketsService.getTicketSold(this.ticketsModel.groups),
+      transIdCrickets:  this.ticketsService.getTicketCricket(this.ticketsModel.groups),
       message: this.messagesComponent.message,
       userName: this.confirmation.userName,
       userPassword: this.passwordService.hash(this.confirmation.userPassword),
@@ -434,7 +437,7 @@ export class AppComponent implements OnInit, AfterViewInit {
       this.hideContent();
       this.filterComponent.resetFilter();
     } else {
-      if (this.ticketsModel.isAllItemsChecked()) {
+      if (this.ticketsService.isAllItemsChecked(this.ticketsModel.groups)) {
         const lastPage = Math.ceil(this.ticketsModel.pagingModel.total / this.getTicketsQuery.pageSize) - 1;
         this.getTicketsQuery.pageIndex =
           this.getTicketsQuery.pageIndex === lastPage ? this.getTicketsQuery.pageIndex - 1 : this.getTicketsQuery.pageIndex;
@@ -446,7 +449,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ticketsChange(numberOfTickets: number) {
     this.templateValue = clone(this.templateValue);
     this.templateValue.totalTickets = numberOfTickets;
-    this.templateValue.checkSettled = this.ticketsModel.checkSettledTickets();
+    this.templateValue.checkSettled = this.ticketsService.checkSettledTickets(this.ticketsModel.groups);
   }
 
   private clearCacheTime() {

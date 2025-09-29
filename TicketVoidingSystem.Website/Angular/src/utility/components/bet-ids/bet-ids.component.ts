@@ -6,6 +6,7 @@ import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { GroupNumber, NumberItem } from './bet-ids.model';
+import { NumberItemService } from './number-item.service';
 
 @Component({
   standalone: true,
@@ -36,7 +37,8 @@ export class BetIdsComponent implements OnInit {
   shiftKey: boolean;
   tooltip = new Tooltip();
   private readonly element = inject(ElementRef);
-
+  private readonly numberItemService = inject(NumberItemService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -50,20 +52,24 @@ export class BetIdsComponent implements OnInit {
     }
   }
 
+  removeItem(item: NumberItem) {
+    this.numberItemService.remove(this.groupNumber.items, item);
+  }
+
   getInvalidItems(): string {
-    return this.groupNumber.getInvalidItemsAsString();
+    return this.numberItemService.getInvalidItemsAsString(this.groupNumber.items);
   }
 
   getAllBetIds(): string {
-    return this.groupNumber.getAllNumberItemsAsString();
+    return this.numberItemService.getAllNumberItemsAsString(this.groupNumber.items);
   }
 
   getAllBetIdsAreNotNumber(): string {
-    return this.groupNumber.getAllNotNumberItemsAsString();
+    return this.numberItemService.getAllNotNumberItemsAsString(this.groupNumber.items);
   }
 
   isHasBetId(): boolean {
-    if (this.groupNumber.getAllNumberItemsAsString() === '') {
+    if (this.numberItemService.getAllNumberItemsAsString(this.groupNumber.items) === '') {
       this.tooltip.display(this.errorTooltipClassName, TEXT.REQUIRED_BETIDS);
       return false;
     }
@@ -72,7 +78,7 @@ export class BetIdsComponent implements OnInit {
   }
 
   isAllBetIdsValid(): boolean {
-    const validIndex = this.groupNumber.checkValidItems();
+    const validIndex = this.numberItemService.checkValidItems(this.groupNumber.items);
     let result = true;
     switch (validIndex) {
       case 0:
@@ -178,13 +184,13 @@ export class BetIdsComponent implements OnInit {
     const code = event.key.charCodeAt(0);
 
     if (code === keyBackspace && value === '') {
-      this.groupNumber.removeLasted();
+      this.numberItemService.removeLasted(this.groupNumber.items);
     } else if (this.isShiftKeyAndNotDigitalKey(event, code)) {
       event.preventDefault();
     } else if (this.isCtrlKeyAndNumpad1Key(event, code)) {
-      this.groupNumber.selectAllItems();
+      this.numberItemService.selectAllItems(this.groupNumber);
     } else if (code === keyDelete) {
-      this.groupNumber.removeSelected();
+      this.groupNumber.items = this.numberItemService.removeSelected(this.groupNumber.items);
     } else if (keyAddItem.indexOf(code) > -1) {
       if (value === '') {
         event.preventDefault();
@@ -202,9 +208,7 @@ export class BetIdsComponent implements OnInit {
 
   removeTransId(transIds: string): void {
     transIds.split(',').forEach(x => {
-      this.groupNumber.removeByValue(x);
+      this.numberItemService.removeByValue(this.groupNumber.items, x);
     });
   }
-
-  //ENd Event function
 }

@@ -6,6 +6,7 @@ import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { BetTypesModel } from './bettypes.model';
+import { BetTypesService } from './bettypes.service';
 
 @Component({
     standalone: true,
@@ -16,7 +17,7 @@ import { BetTypesModel } from './bettypes.model';
 })
 
 export class BetTypesComponent implements OnChanges {
-    @Input() model = new BetTypesModel([], false);
+    @Input() model = new BetTypesModel();
     @Input() product: number;
     @Input() ballSequence: number[];
     @Input() sportType: number;
@@ -30,14 +31,23 @@ export class BetTypesComponent implements OnChanges {
     isDisabledAllBetTypes: boolean;
 
     element = inject(ElementRef);
+    betTypesService = inject(BetTypesService);
     constructor() {
         this.tooltip.element = this.element;
     }
 
-    ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+    ngOnChanges(_: { [propKey: string]: SimpleChange }) {
         this.changeIsShow();
         this.display = isUndefined(this.model) ? false :
-            this.model.checkDisplay() && this.productDisplay.indexOf(this.product) > -1;
+            this.betTypesService.checkDisplay(this.model.betTypes) && this.productDisplay.indexOf(this.product) > -1;
+    }
+
+    changeAll(){
+        this.betTypesService.changeAll(this.model.betTypes, this.model.isChecked);
+    }
+
+    changeItem(){
+        this.betTypesService.changeItem(this.model);
     }
 
     changeIsShow() {
@@ -45,14 +55,14 @@ export class BetTypesComponent implements OnChanges {
             this.model.isChecked = true;
             this.model.betTypes.forEach(item => {
                 item.isShow = item.type === this.product;
-                item.displayNumberGame(this.product, this.sportType, this.ballSequence);
+                this.betTypesService.displayNumberGame(item, this.product, this.sportType, this.ballSequence);
                 item.isChecked = item.isShow;
             });
         }
     }
 
     validate(): boolean {
-        const result = this.model.getCheckedBetTypes().length > 0;
+        const result = this.betTypesService.getCheckedBetTypes(this.model.betTypes).length > 0;
         if (!result) {
             this.tooltip.display('checkbox-all-bettypes', TEXT.NO_CHECKED_BETTYPE);
         }

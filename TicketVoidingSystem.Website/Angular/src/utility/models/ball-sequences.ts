@@ -26,23 +26,4 @@ export class BallSequences {
         this.isChecked = true;
         this.value = [1, 2, 3];
     }
-
-    changeAll() {
-        this.items.forEach(item => {
-            item.isChecked = this.isChecked;
-        });
-        this.value = this.isChecked ? [1, 2, 3] : [];
-    }
-
-    changeItem() {
-        this.isChecked = true;
-        this.value = [];
-        this.items.forEach(item => {
-            if (item.isChecked) {
-                this.value.push(item.value);
-            } else {
-                this.isChecked = false;
-            }
-        });
-    }
 }

@@ -57,14 +57,14 @@ describe('AppComponent', () => {
       expect(component.model).toBeInstanceOf(RequestModel);
     });
 
-    it('should set issueTypeId to WRONG_SCORE constant', () => {
-      expect(component.issueTypeId).toBe(IssueTypeConstant.WRONG_SCORE);
-      expect(component.issueTypeId).toBe('3');
+    it('should set issueTypeId to ABNORMAL_BET constant', () => {
+      expect(component.issueTypeId).toBe(IssueTypeConstant.ABNORMAL_BET);
+      expect(component.issueTypeId).toBe('11');
     });
   });
 
   describe('saveRequest Method', () => {
-    it('should call eventWrongScoreComponent.saveRequest when saveRequest is called', async () => {
+    it('should call eventAbnormalBetComponent.saveRequest when saveRequest is called', async () => {
       component.eventAbnormalBetComponent = {} as EventAbnormalBetComponent;
       component.eventAbnormalBetComponent.saveRequest = jest.fn();
 

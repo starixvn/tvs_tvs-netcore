@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { GroupBetType, GroupBetTypesModel, Result } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
+import { GroupBetTypesModel, Result } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { HttpService } from '../../../utility/services/http.service';
@@ -61,8 +61,8 @@ describe('CheckValidateService', () => {
       // Arrange
       const matchId = '1';
       const tooltip = new Tooltip();
-      const groups = [new GroupBetType('a', [], true)];
-      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      const groups = [{ groupName: 'a', betTypes: [], isChecked: true }];
+      const fakeGroupBetTypesModel = {groupBetTypes: groups, isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       fakeGroupBetTypesModel.result = new Result();
       fakeGroupBetTypesModel.result.errorCode = 0;
       mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
@@ -80,7 +80,7 @@ describe('CheckValidateService', () => {
       // Arrange
       const matchId = '1';
       const tooltip = new Tooltip();
-      const fakeGroupBetTypesModel = new GroupBetTypesModel([], true);
+      const fakeGroupBetTypesModel = {groupBetTypes: [], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       fakeGroupBetTypesModel.result = new Result();
       fakeGroupBetTypesModel.result.errorCode = 0;
       mockCommonService.getGroupBetTypes = jest.fn().mockReturnValue(Promise.resolve(fakeGroupBetTypesModel));
@@ -99,8 +99,8 @@ describe('CheckValidateService', () => {
       // Arrange
       const matchId = '1';
       const tooltip = new Tooltip();
-      const groups = [new GroupBetType('a', [], true)];
-      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      const groups = [{ groupName: 'a', betTypes: [], isChecked: true }];
+      const fakeGroupBetTypesModel = {groupBetTypes: groups, isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       fakeGroupBetTypesModel.result = new Result();
       fakeGroupBetTypesModel.result.errorCode = 1;
       fakeGroupBetTypesModel.result.errorMsg = 'errorMsg';
@@ -120,11 +120,10 @@ describe('CheckValidateService', () => {
       // Arrange
       const matchId = '1';
       const tooltip = new Tooltip();
-      const groups = [new GroupBetType('a', [], true)];
-      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
-      fakeGroupBetTypesModel.result = new Result();
+      const groups = [{ groupName: 'a', betTypes: [], isChecked: true }];
+      const fakeGroupBetTypesModel = {groupBetTypes: groups, isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
+      fakeGroupBetTypesModel.result = {errorCode: 1, errorMsg: 'Network error'};
       fakeGroupBetTypesModel.result.errorCode = 1;
-      fakeGroupBetTypesModel.result.errorMsg = 'Network error';
       mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));
       tooltip.display = jest.fn();
 
@@ -141,8 +140,8 @@ describe('CheckValidateService', () => {
       // Arrange
       const matchId = '1';
       const tooltip = null;
-      const groups = [new GroupBetType('a', [], true)];
-      const fakeGroupBetTypesModel = new GroupBetTypesModel(groups, true);
+      const groups = [{ groupName: 'a', betTypes: [], isChecked: true }];
+      const fakeGroupBetTypesModel = {groupBetTypes: groups, isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       fakeGroupBetTypesModel.result = new Result();
       fakeGroupBetTypesModel.result.errorCode = 0;
       mockCommonService.getGroupBetTypes = jest.fn().mockImplementation(() => Promise.resolve(fakeGroupBetTypesModel));

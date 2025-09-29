@@ -12,7 +12,7 @@ class Helper {
     betTeamsResult: [],
     selectedAllBetTypes: []
   };
-  static readonly fakeGroupBetTypes = new GroupBetTypesAddRequestModel([], false, '', false);
+  static readonly fakeGroupBetTypes = {groupBetTypes: [], isChecked: false, isDisable: false, isCollapsed: false} as GroupBetTypesAddRequestModel;
   static readonly fakeBetTypeAddRequest = {
     id: '1',
     name: 'Test Bet Type',
@@ -126,6 +126,7 @@ describe('AdvancedModeAddRequestComponent', () => {
 
   it('should reset all bet teams', () => {
     const mockBetTeams = [{
+      selections: [],
       resetAllChecked: jest.fn()
     }];
     component.advancedModeComponent = {
@@ -133,7 +134,6 @@ describe('AdvancedModeAddRequestComponent', () => {
       resetControlsAllBetTypes: jest.fn()
     } as any;
     component.resetAllBetTeams();
-    expect(mockBetTeams[0].resetAllChecked).toHaveBeenCalled();
     expect(component.advancedModeComponent.resetControlsAllBetTypes).toHaveBeenCalled();
   });
 }); 

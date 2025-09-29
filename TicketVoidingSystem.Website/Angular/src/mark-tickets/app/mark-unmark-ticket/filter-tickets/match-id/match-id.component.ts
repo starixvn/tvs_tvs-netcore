@@ -27,6 +27,8 @@ import { GetTicketsQuery, RangeTime } from '../../../models/query.model';
 import { EventType } from '../filter.model';
 import { Duration } from './../../../models/query.model';
 import { Currencies } from './../filter.model';
+import { LicenseesService } from '../../../../../utility/components/licensees/licensees.service';
+import { GroupBetTypesService } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.service';
 
 @Component({
   standalone: true,
@@ -50,7 +52,9 @@ export class MatchIdComponent implements OnInit {
 
   private readonly commonService = inject(CommonService);
   private readonly element = inject(ElementRef);
-
+  private readonly licenseesService = inject(LicenseesService);
+  private readonly groupBetTypesService = inject(GroupBetTypesService);
+  
   groupBetTypes: GroupBetTypesModel;
   allBetTypes: BetType[];
   getPlayerQuery: GetPlayersQuery;
@@ -90,7 +94,7 @@ export class MatchIdComponent implements OnInit {
 
   async blurMatchId() {
     if (this.model.matchId !== undefined && this.model.matchId !== '' && this.model.matchId !== this.preMatchId) {
-      this.groupBetTypes = new GroupBetTypesModel([], false);
+      this.groupBetTypes = new GroupBetTypesModel();
       this.advancedModelComponent.resetBetTeam();
       await this.getGroupBetTypes();
       this.preMatchId = this.model.matchId;
@@ -138,15 +142,15 @@ export class MatchIdComponent implements OnInit {
       this.tooltip.display('match-id', data.result.errorMsg);
       this.isSuccessMatch = false;
     }
-    this.groupBetTypes = new GroupBetTypesModel(data.groupBetTypes, false);
-    this.allBetTypes = this.groupBetTypes.getAllBetType();
+    this.groupBetTypes = this.groupBetTypesService.initGroupBetTypesModel(data.groupBetTypes, false);
+    this.allBetTypes = this.groupBetTypesService.getAllBetType(this.groupBetTypes.groupBetTypes);
     this.handleBetType216();
     this.changeMatch.emit();
   }
 
   handleBetType216() {
     const betType216Id = 216;
-    if (this.groupBetTypes.hasBetType(betType216Id)) {
+    if (this.groupBetTypesService.hasBetType(this.groupBetTypes.groupBetTypes, betType216Id)) {
       this.getPlayerQuery = new GetPlayersQuery(this.model.matchId, '216');
     }
   }
@@ -162,7 +166,7 @@ export class MatchIdComponent implements OnInit {
   }
 
   getCheckedLicensees() {
-    return this.groupLicenseeModel.getCheckedLicensees().map(license => license.name);
+    return this.licenseesService.getCheckedLicensees(this.groupLicenseeModel.groupLicensees).map(license => license.name);
   }
 
   checkValidationOfMatch(): boolean {
@@ -206,7 +210,7 @@ export class MatchIdComponent implements OnInit {
     this.model.liveAwayScore =  `${this.model.liveAwayScore}`.isNumber() ? Number(this.model.liveAwayScore) : null;
     this.model.liveHomeScore = `${this.model.liveHomeScore}`.isNumber() ? Number(this.model.liveHomeScore) : null;
 
-    const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
+    const checkedBetTypes = this.groupBetTypesService.getValueCheckedBetTypes(this.groupBetTypes.groupBetTypes);
     this.model.betTypes = this.advancedModelComponent.getBetTypeModels(checkedBetTypes);
     this.getDurationTime();
 

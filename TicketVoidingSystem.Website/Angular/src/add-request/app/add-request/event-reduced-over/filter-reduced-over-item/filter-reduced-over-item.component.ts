@@ -14,6 +14,7 @@ import { FilterReducedOverService } from '../services/filter-reduced-over.servic
 import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
 import { NumbersOnlyDirective } from '../../../../../utility/directives/numbers-only.directive';
+import { MultipleSelectionService } from '../../../../../utility/components/multiple-selection/multiple-selection.service';
 
 @Component({
   selector: 'filter-reduced-over-item',
@@ -40,6 +41,7 @@ export class FilterReducedOverItemComponent implements OnInit {
   private readonly element = inject(ElementRef);
   private readonly validationService = inject(ValidationService);
   private readonly filterService = inject(FilterReducedOverService);
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
 
   constructor() {
     this.tooltip.element = this.element;
@@ -89,7 +91,7 @@ export class FilterReducedOverItemComponent implements OnInit {
         this.model.playerMultipleSelection.items = this.filterService.renderPlayer(playersOfCheckedBetTypes);
         this.model.playerMultipleSelection.items.forEach(x => x.checkBySelectedItem(this.model.playerIds));
         this.model.playerMultipleSelection.isCheckAll = this.model.playerMultipleSelection.items.every(x => x.allChildIsChecked());
-        this.model.playerMultipleSelection.selectionTitle = this.model.playerMultipleSelection.getDisplayedItems();
+        this.model.playerMultipleSelection.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.model.playerMultipleSelection);
       } else {
         this.model.playerMultipleSelection.items = [];
       }

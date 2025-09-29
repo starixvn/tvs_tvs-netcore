@@ -53,9 +53,14 @@ describe('AddUserComponent', () => {
   });
 
   it('should call services correctly on clickSave', async () => {
-    // Tạo mock object thay vì UsernamesComponent trực tiếp
+    // Tạo mock object với cấu trúc GroupUsername hợp lệ
     const mockGroupUsername = {
-      getAllValue: jest.fn().mockReturnValue('testUser')
+      items: [
+        { value: 'testUser1', isValid: true },
+        { value: 'testUser2', isValid: true }
+      ],
+      isSelectedAll: false,
+      isExceededTotalUsernames: false
     };
     
     const mockUsernamesComponent = {
@@ -70,7 +75,7 @@ describe('AddUserComponent', () => {
 
     expect(appStore.changeBlockingUiStatus).toHaveBeenCalledTimes(2);
     expect(validationService.validateUsernames).toHaveBeenCalled();
-    expect(userService.addUsers).toHaveBeenCalledWith('testUser', undefined, undefined);
+    expect(userService.addUsers).toHaveBeenCalledWith('testUser1,testUser2', undefined, undefined);
   });
 
   it('should close modal on closeModal', () => {
@@ -80,9 +85,14 @@ describe('AddUserComponent', () => {
   });
 
   it('should validate usernames on afterFocusOutBetIds', async () => {
-    // Tạo mock object thay vì UsernamesComponent trực tiếp
+    // Tạo mock object với cấu trúc GroupUsername hợp lệ
     const mockGroupUsername = {
-      getAllValue: jest.fn().mockReturnValue('testUser')
+      items: [
+        { value: 'testUser1', isValid: true },
+        { value: 'testUser2', isValid: true }
+      ],
+      isSelectedAll: false,
+      isExceededTotalUsernames: false
     };
     
     const mockUsernamesComponent = {

@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { FormsModule } from '@angular/forms';
 
@@ -19,7 +19,7 @@ export class VoidReasonComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['voidReason']) {
-      this.initialReason = this.initialReason ?? _.cloneDeep(this.voidReason);
+      this.initialReason = this.initialReason ?? cloneDeep(this.voidReason);
     }
   }
 }

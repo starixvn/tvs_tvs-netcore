@@ -24,7 +24,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
             return item.mainTransId;
         });
         this.disabledTickets = list.filter(function (item, index) {
-            return list.indexOf(item) === index && BigInt(item)> 0;
+            return list.indexOf(item) === index && item && BigInt(item) > 0;
         });
     }
 
@@ -138,7 +138,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
         return result;
     }
 
-    getEnableSingleTickets(): string[] {
+     getEnableSingleTickets(): string[] {
         const result = [];
         this.tickets.forEach(item => {
             if (item.isChecked && !item.isDisable) {

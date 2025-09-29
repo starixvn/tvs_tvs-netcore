@@ -27,6 +27,7 @@ import { EventTechnicalErrorService } from './services/event-technical-error.ser
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { BetTypeService } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/bet-type.service';
 
 @Component({
   selector: 'event-technical-error',
@@ -53,7 +54,7 @@ export class EventTechnicalErrorComponent implements OnInit {
   @ViewChild('filterTime') filterTimeComponent: FilterTimeTechnicalErrorComponent;
 
   logInfoEvent = new LogInfoTechnicalError();
-  groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
+  groupBetTypesModel = new GroupBetTypesAddRequestModel();
   primitivePropertyEvent = new PrimitivePropertyEvent();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   confirmAddRequest = new ConfirmAddRequestModel();
@@ -63,6 +64,7 @@ export class EventTechnicalErrorComponent implements OnInit {
   private readonly validationService = inject(ValidationService);
   private readonly saveRequestService = inject(SaveRequestService);
   private readonly eventTechnicalErrorService = inject(EventTechnicalErrorService);
+private readonly betTypeService = inject(BetTypeService);
 
   async ngOnInit(): Promise<void> {
     if (this.isEdit) {
@@ -77,7 +79,7 @@ export class EventTechnicalErrorComponent implements OnInit {
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventTechnicalErrorService.assignModelsToEvents(this.technicalErrorModel);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(assignIn([], groupBetTypes), true, '', this.filter.isVoided);
     const betTeamsResult = this.technicalErrorModel.betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
@@ -97,7 +99,7 @@ export class EventTechnicalErrorComponent implements OnInit {
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);;
+    this.groupBetTypesModel =this.betTypeService.initGroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);;
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -126,7 +128,7 @@ export class EventTechnicalErrorComponent implements OnInit {
 
     this.resetLogInfo();
     await this.getGroupBetTypes();
-    const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
+    const allBetTypes = this.betTypeService.getAllBetTypes(this.groupBetTypesModel.groupBetTypes);
     this.advancedMode?.changeBetTypes(allBetTypes);
     this.advancedMode?.resetAllBetTeams();
     if (allBetTypes.length === 0) {
@@ -187,7 +189,7 @@ export class EventTechnicalErrorComponent implements OnInit {
 
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel([], true, '', false);
   }
 
   private initSaveRequestInput() {

@@ -14,6 +14,7 @@ exports[`TicketsListComponent should initialize with empty model groups 1`] = `
   pagingChange={[Function EventEmitter_]}
   showListCheckGroup={[Function Function]}
   ticketsChange={[Function EventEmitter_]}
+  ticketsListService={[Function Object]}
   tooltip={[Function Tooltip]}
   updateMarkedTickets={[Function EventEmitter_]}
 >
@@ -34,6 +35,7 @@ exports[`TicketsListComponent should initialize with expected model groups 1`] =
   pagingChange={[Function EventEmitter_]}
   showListCheckGroup={[Function Function]}
   ticketsChange={[Function EventEmitter_]}
+  ticketsListService={[Function Object]}
   tooltip={[Function Tooltip]}
   updateMarkedTickets={[Function EventEmitter_]}
 >

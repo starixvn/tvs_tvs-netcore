@@ -1,5 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import _ from 'lodash';
+import clone from 'lodash/clone';
+import cloneDeep from 'lodash/cloneDeep';
 import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
 import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
 import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
@@ -213,7 +214,7 @@ describe('VoidPageService', () => {
 
     // Action
     issueTypeIds.forEach(async issueTypeId => {
-      const fakeRequestDetailViewModel = _.cloneDeep(Helper.fakeRequestDetailViewModel);
+      const fakeRequestDetailViewModel = cloneDeep(Helper.fakeRequestDetailViewModel);
       fakeRequestDetailViewModel.request.issueTypeId = Number(issueTypeId);
       await voidPageService.loadUnderneathVoidMatchesData([Helper.fakeVoidMatch], fakeRequestDetailViewModel);
 
@@ -226,8 +227,8 @@ describe('VoidPageService', () => {
 
   it('#toggleTicketsArea should update model', async () => {
     // Arrange
-    const currentVoidMatch = _.clone(Helper.fakeVoidMatch);
-    const allVoidMatches = [_.clone(Helper.fakeVoidMatch)];
+    const currentVoidMatch = clone(Helper.fakeVoidMatch);
+    const allVoidMatches = [clone(Helper.fakeVoidMatch)];
 
     // Action
     voidPageService.toggleTicketsArea(currentVoidMatch, allVoidMatches);
@@ -239,8 +240,8 @@ describe('VoidPageService', () => {
 
   it('#toggleTemplateMessageArea should update model', async () => {
     // Arrange
-    const currentVoidMatch = _.clone(Helper.fakeVoidMatch);
-    const allVoidMatches = [_.clone(Helper.fakeVoidMatch)];
+    const currentVoidMatch = clone(Helper.fakeVoidMatch);
+    const allVoidMatches = [clone(Helper.fakeVoidMatch)];
 
     // Action
     voidPageService.toggleTemplateMessageArea(currentVoidMatch, allVoidMatches);

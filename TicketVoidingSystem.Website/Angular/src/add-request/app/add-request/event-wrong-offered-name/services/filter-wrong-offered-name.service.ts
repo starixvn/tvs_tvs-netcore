@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { GroupLicensee, GroupLicenseeModel } from "../../../../../utility/components/licensees/licensees.model";
 import { ItemsSelect } from "../../../../../utility/components/multiple-selection/items-select";
-import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection";
+import { MultipleSelection } from "../../../../../utility/components/multiple-selection/multiple-selection.model";
 import { Tooltip } from "../../../../../utility/components/tooltip/tooltip.model";
 import { TEXT } from "../../../../../utility/constants/text";
 import { Currency } from "../../../../../utility/models/currency.model";
@@ -9,6 +9,8 @@ import { StaticService } from "../../../../../utility/services/static.service";
 import { FilterModel } from "../../filter/filter.model";
 import { FilterWrongOfferedNameModel } from "../models/filter-wrong-offered-name.model";
 import { ValidationService } from "./validation.service";
+import { LicenseesService } from "../../../../../utility/components/licensees/licensees.service";
+import { MultipleSelectionService } from "../../../../../utility/components/multiple-selection/multiple-selection.service";
 
 @Injectable()
 export class FilterWrongOfferedNameService {
@@ -16,6 +18,8 @@ export class FilterWrongOfferedNameService {
   private readonly GROUP_LICENSEE = 'check-group-licensee';
   private readonly CURRENCY_RMB_ID = 13;
   private readonly validationService = inject(ValidationService);
+  private readonly licenseesService = inject(LicenseesService);
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
 
   renderGroupLicensees(isEdit: boolean, originalGroupLicensees: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
     return isEdit
@@ -31,7 +35,7 @@ export class FilterWrongOfferedNameService {
 
   renderGroupLicenseesWhenEditRequest(originalGroupLicensees: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel): GroupLicenseeModel {
     const groupLicenseeModel = new GroupLicenseeModel(originalGroupLicensees, false);
-    groupLicenseeModel.checkLicenseesByName(filterWrongOfferedName.licenseeNames);
+    this.licenseesService.checkLicenseesByName(groupLicenseeModel, filterWrongOfferedName.licenseeNames);
 
     return groupLicenseeModel;
   }
@@ -44,13 +48,13 @@ export class FilterWrongOfferedNameService {
       const groupChinaRules = groupLicenseesModel.groupLicensees.find(x => x.groupName === 'China rules');
       if (groupChinaRules) {
         groupChinaRules.isChecked = true;
-        groupChinaRules.checkedGroup();
+        this.licenseesService.checkedGroup(groupChinaRules);
       }
     } else {
       groupLicenseesModel = new GroupLicenseeModel(groups, true);
     }
 
-    filterWrongOfferedName.licenseeNames = groupLicenseesModel.getCheckedLicensees().map(x => x.name);
+    filterWrongOfferedName.licenseeNames = this.licenseesService.getCheckedLicensees(groupLicenseesModel.groupLicensees).map(x => x.name);
 
     return groupLicenseesModel;
   }
@@ -59,7 +63,7 @@ export class FilterWrongOfferedNameService {
     const items = currencies.map(x => new ItemsSelect(0, x.id.toString(), x.currencyCode,
       this.isAutoCheckedCurrency(x.id, filterRequest.subIssueTypeId), true, true, []));
     const multipleSelectCurrency = this.initMultiSelectCurrency(items);
-    filterWrongOfferedName.currencyIds = multipleSelectCurrency.getValueItems().split(',');
+    filterWrongOfferedName.currencyIds = this.multipleSelectionService.getValueItems(multipleSelectCurrency).split(',');
 
     return multipleSelectCurrency;
   }

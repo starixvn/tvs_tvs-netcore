@@ -6,7 +6,7 @@ import { FilterReducedOverService } from '../services/filter-reduced-over.servic
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection.model';
 
 class Helper {
   static readonly fakeFilterModel = {

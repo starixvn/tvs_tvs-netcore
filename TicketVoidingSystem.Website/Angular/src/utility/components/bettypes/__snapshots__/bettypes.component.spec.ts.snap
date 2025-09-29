@@ -3,6 +3,7 @@
 exports[`BetTypesComponent should match snapshot 1`] = `
 <bettypes
   ballSequence={[Function Array]}
+  betTypesService={[Function BetTypesService]}
   element={[Function _ElementRef]}
   model={[Function BetTypesModel]}
   product={[Function Number]}

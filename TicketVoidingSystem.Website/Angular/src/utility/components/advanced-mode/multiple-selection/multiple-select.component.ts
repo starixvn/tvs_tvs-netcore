@@ -1,9 +1,10 @@
 ﻿import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange, ViewContainerRef } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewContainerRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ItemsSelect } from '../../multiple-selection/items-select';
-import { MultipleSelection } from '../../multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { TreeViewComponent } from './tree-view.component';
+import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
 
 @Component({
   standalone: true,
@@ -20,6 +21,8 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
   @Output() loseFocus = new EventEmitter();
   @Output() checkedItems = new EventEmitter<string[]>();
 
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
+  
   dropdownToggle: boolean;
   expanded: boolean;
   element: Element;
@@ -42,12 +45,12 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
     this.clickBody();
   }
 
-  getSelectedTitle() {
-    this.multipleSelect.selectionTitle = this.multipleSelect.getDisplayedItems();
+  private getSelectedTitle() {
+    this.multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.multipleSelect);
     this.multipleSelect.isCheckAll = this.multipleSelect.selectionTitle === this.multipleSelect.allItemsCheckedText;
   }
 
-  clickBody() {
+  private clickBody() {
     const body = document.querySelector('body');
     body.addEventListener('click', e => {
       if (!this.dropdownToggle || !e.target) {
@@ -55,7 +58,7 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
       }
       if (this.element !== e.target && !this.element.contains((e.target as Node))) {
         this.dropdownToggle = false;
-        this.loseFocus.emit(this.multipleSelect.getValueItems());
+        this.loseFocus.emit(this.multipleSelectionService.getValueItems(this.multipleSelect));
       }
     }, false);
   }
@@ -71,8 +74,8 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
     });
 
     this.multipleSelect.isCheckAll = count === countChecked;
-    this.multipleSelect.selectionTitle = this.multipleSelect.getDisplayedItems();
-    this.checkedItems.emit(this.multipleSelect.getValueItems().split(','));
+    this.multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.multipleSelect);
+    this.checkedItems.emit(this.multipleSelectionService.getValueItems(this.multipleSelect).split(','));
   }
 
   toggle() {
@@ -83,5 +86,9 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
         item.expandedAllItems();
       }
     });
+  }
+
+  checkAllItems(){
+    this.multipleSelectionService.checkAllItems(this.multipleSelect, this.multipleSelect.isCheckAll);
   }
 }

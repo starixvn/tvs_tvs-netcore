@@ -25,6 +25,7 @@ import { EventOtherIssuesService } from './services/event-other-issues.service';
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { BetTypeService } from '../../../../utility/components/advanced-mode-add-request/group-bet-types/bet-type.service';
 
 @Component({
   selector: 'event-other-issues',
@@ -53,7 +54,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
   @ViewChild('filterOtherIssues') filterOtherIssuesComponent: FilterOtherIssuesComponent;
 
-  groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
+  groupBetTypesModel = new GroupBetTypesAddRequestModel();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   logInfoEvent = new LogInfoOtherIssues();
   confirmAddRequest = new ConfirmAddRequestModel();
@@ -65,6 +66,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
   private readonly addRequestStore = inject(AddRequestStore);
   private readonly saveRequestService = inject(SaveRequestService);
   private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly betTypeService = inject(BetTypeService);
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['filter'] && this.filter.isChangeSubTypeManual) {
@@ -104,7 +106,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
       this.primitiveProps.isShowAdvancedModeBetTypes = true;
       this.resetLogInfo();
       await this.getGroupBetTypes();
-      const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
+      const allBetTypes = this.betTypeService.getAllBetTypes(this.groupBetTypesModel.groupBetTypes);
       this.advancedMode?.changeBetTypes(allBetTypes);
       this.advancedMode?.resetAllBetTeams();
       this.primitiveProps.isShowErrorNoBetType = allBetTypes.length === 0;
@@ -171,7 +173,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventOtherIssuesService.assignModelsToEvents(this.otherIssuesModel);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(_.assignIn([], groupBetTypes), true, '', this.filter.isVoided);
     const betTeamsResult = this.otherIssuesModel.betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
@@ -218,7 +220,7 @@ export class EventOtherIssuesComponent implements OnInit, OnChanges {
 
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel([], true, '', false);
   }
 
   private resetCheckedBetTypes() {

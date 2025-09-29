@@ -14,7 +14,6 @@ import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidMatch } from '../../models/void-match.model';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
-import _ from 'lodash';
 
 class Helper {
   static readonly fakeRequestId = 50121;

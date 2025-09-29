@@ -4,20 +4,22 @@ import { MatchModel } from "../../../utility/models/match.model";
 import { AbnormalFilterBy } from "../../../utility/constants/config";
 import { TicketsViewModel } from "../model/get-tickets.query";
 import { TemplateService } from "../../../utility/components/template-message/template-message/services/template.service";
-import { MessagesResult } from "../../../utility/components/messages-result/messages-result";
-import _ from "lodash";
+import { MessagesResult } from "../../../utility/components/messages-result/messages-result.model";
+import { clone } from "lodash";
 import { Result } from "../../../utility/models/result";
+import { TicketsService } from "../../../utility/components/tickets/tickets.service";
 
 @Injectable()
 export class TemplateMessageService {
   templateService = inject(TemplateService);
-
+  ticketsService = inject(TicketsService);
+  
   generateTemplateValue(abnormalBetType: string, matchViewModel:
     MatchModel, ticketsViewModel: TicketsViewModel) {
     let templateValue = new TemplateValue();
     
     if (matchViewModel?.matchId) {
-      templateValue = this.templateService.initializeTemplateValue(matchViewModel);      
+      templateValue = this.templateService.initializeTemplateValue(matchViewModel);
       templateValue.filterBy = Number(abnormalBetType);
       templateValue.isVoidByBetId = true;
     }
@@ -27,7 +29,7 @@ export class TemplateMessageService {
     }
 
     templateValue.totalTickets = ticketsViewModel.totalItems;
-    templateValue.checkSettled = ticketsViewModel.checkSettledTickets();
+    templateValue.checkSettled = this.ticketsService.checkSettledTickets(ticketsViewModel.groups);
 
     return templateValue;
   }
@@ -37,6 +39,6 @@ export class TemplateMessageService {
     messagesResult.header = 'Void Bet Result';
     messagesResult.results = results;
 
-    return _.clone(messagesResult);
+    return clone(messagesResult);
   }
 }

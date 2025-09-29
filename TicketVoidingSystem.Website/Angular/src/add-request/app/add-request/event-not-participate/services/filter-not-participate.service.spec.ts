@@ -4,7 +4,7 @@ import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, NotParticipateBetTypeViewModel } from '../models/not-participate-bet-type.model';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection.model';
 
 describe('FilterNotParticipateService', () => {
   let service: FilterNotParticipateService;

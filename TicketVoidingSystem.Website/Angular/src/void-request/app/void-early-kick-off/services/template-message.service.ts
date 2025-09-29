@@ -7,7 +7,7 @@ import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.mo
 
 @Injectable()
 export class TemplateMessageService {
-  templateService = inject(TemplateService);
+  private readonly templateService = inject(TemplateService);
 
   public getTemplateValue(voidPageItem: VoidPageEarlyKickOffModel, requestDetail: RequestDetailViewModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();

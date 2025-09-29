@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit } from '@angular/core';
 import { BaseTicketsListComponent } from '../../../utility/components/base-tickets-list/base-tickets-list.component';
 import { StaticService } from '../../../utility/services/static.service';
 import { TicketsModel } from './tickets.model';
@@ -7,6 +7,7 @@ import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.
 import { FormsModule } from '@angular/forms';
 import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
+import { TicketListService } from './ticket-list.service';
 
 @Component({
   standalone: true,
@@ -19,7 +20,8 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   @Input() issueTypeId = 0;
   @Input() isDisableCheckbox = false;
   title = '';
-
+  ticketListService = inject(TicketListService);
+  
   ngOnChanges() {
     this.title = StaticService.getTitleVoidTicket(this.issueTypeId?.toString(), this.model.totalSingle, this.model.totalParlay,
       this.model.totalCancelCashOut, this.model.strFromTime, this.model.strToTime);
@@ -27,6 +29,10 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
 
   ngOnInit() {
     this.clickBody();
+  }
+
+  checkGroups(){
+    this.ticketListService.checkGroups(this.model);
   }
 
   changeTickets() {

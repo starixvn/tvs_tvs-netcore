@@ -2,14 +2,17 @@ import { inject, Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
 import { CheckboxType, TVSRequestActionType } from '../../../../../../utility/constants/config';
 import { TEXT } from '../../../../../../utility/constants/text';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { CheckTransIdsQuery, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
+import { NumberItemService } from '../../../../../../utility/components/bet-ids/number-item.service';
 
 @Injectable()
 export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly numberItemService = inject(NumberItemService);
 
   initCheckAbnormalBetTransIdsQuery(args: ValidationBusinessRuleArgs): CheckTransIdsQuery {
     const transIds = args.betIdsComponent.getAllBetIds();
@@ -40,10 +43,8 @@ export class ValidationService {
       args.primitiveProps.invalidTransIds = transIdAreNotNumber;
       return { isValid: false } as ValidationBusinessRuleOutput;
     }
-
-    args.betIdsComponent.groupNumber.resetAllItemsToValid();
-    args.betIdsComponent.groupNumber.checkDuplicatedItems();
-
+    this.numberItemService.resetAllItemsToValid(args.betIdsComponent.groupNumber);
+    this.numberItemService.checkDuplicatedItems(args.betIdsComponent.groupNumber.items);
     const query = this.initCheckAbnormalBetTransIdsQuery(args);
     const checkTransIdViewModel = await this.addRequestApiService.checkValidTransIdsForAbnormalBet(query);
 
@@ -79,18 +80,18 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(model: ValidationAbnormalBet, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean, actionId: string): void {
-    betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, TEXT.INVALID_TICKETS);  // RemarkId = 1
-    betIdsComponent.groupNumber.updateMoved(model.movedTransIds);  // RemarkId = 2
-    betIdsComponent.groupNumber.updateDifferent(model.differentMatchTransIds);  // RemarkId = 3
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.invalidTransIds, TEXT.INVALID_TICKETS);  // RemarkId = 1
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.movedTransIds);  // RemarkId = 2
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.differentMatchTransIds);  // RemarkId = 3
     if (!isHasPermissionAddSettledTicket || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID.toString()) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, TEXT.INVALID_SETTLED_TICKETS);  // RemarkId = 4
+      this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.settledTransIds, TEXT.INVALID_SETTLED_TICKETS);  // RemarkId = 4
     }
-    betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, TEXT.INVALID_UNSUPPORTED_TICKETS);  // RemarkId = 5
-    betIdsComponent.groupNumber.updateInvalidItems(model.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);  // RemarkId = 6
-    betIdsComponent.groupNumber.updateInvalidItems(model.nonLiveTransIds, TEXT.INVALID_NONLIVE_TICKETS);  // RemarkId = 7
-    betIdsComponent.groupNumber.updateInvalidItems(model.differentLiveScoreTransIds, TEXT.INVALID_DIFFERENT_LIVE_SCORE);  // RemarkId = 8
-    betIdsComponent.groupNumber.updateInvalidItems(model.abWhiteListTransIds, TEXT.INVALID_AB_WHITE_LIST_TICKETS);  // RemarkId = 9
-    betIdsComponent.groupNumber.updateWarningSiteDBDown(model.transIdsOfSiteDBDown, TEXT.INVALID_SITE_DB_DOWN); // RemarkId = 10
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.unsupportedTransIds, TEXT.INVALID_UNSUPPORTED_TICKETS);  // RemarkId = 5
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);  // RemarkId = 6
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.nonLiveTransIds, TEXT.INVALID_NONLIVE_TICKETS);  // RemarkId = 7
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.differentLiveScoreTransIds, TEXT.INVALID_DIFFERENT_LIVE_SCORE);  // RemarkId = 8
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.abWhiteListTransIds, TEXT.INVALID_AB_WHITE_LIST_TICKETS);  // RemarkId = 9
+    this.numberItemService.updateWarningSiteDBDown(betIdsComponent.groupNumber.items, model.transIdsOfSiteDBDown, TEXT.INVALID_SITE_DB_DOWN); // RemarkId = 10
   }
 
   private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {

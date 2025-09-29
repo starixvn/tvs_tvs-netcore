@@ -47,7 +47,7 @@ export class EventTicket14Component {
     this.addRequestStore.changeStartTimeFilterAnalysis(new Date());
     if (!this.isCancelAfterFocusOutBetIdsEvent) {
       this.primitiveProps.isBlockBetIds = true;
-      await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId, this.primitiveProps.permission);
+      await this.validationService.checkBusinessRule(this.betIdsComponent, this.primitiveProps.permission);
       this.primitiveProps.isBlockBetIds = false;
     }
   }
@@ -70,7 +70,7 @@ export class EventTicket14Component {
     this.betIdsComponent.triggerFocusOutBetIds();
     this.isCancelAfterFocusOutBetIdsEvent = false;
 
-    const result = await this.validationService.checkBusinessRule(this.betIdsComponent, this.filter.issueTypeId, this.primitiveProps.permission);
+    const result = await this.validationService.checkBusinessRule(this.betIdsComponent, this.primitiveProps.permission);
     this.primitiveProps.transInfoJson = result.transInfoJson;
     if (result.isValid) {
       await this.executeApiSaveRequest();

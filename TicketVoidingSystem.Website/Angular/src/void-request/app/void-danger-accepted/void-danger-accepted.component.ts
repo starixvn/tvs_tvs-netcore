@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { Subscription } from 'rxjs';
 import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
@@ -95,7 +95,7 @@ export class VoidDangerAcceptedComponent implements OnInit {
 
   public changeCheckBoxEarlyEvent(voidMatch: VoidMatch): void {
     voidMatch.templateValue.isCheckedEarlyEvent = voidMatch.isCheckedEarlyEvent;
-    voidMatch.templateValue = _.clone(voidMatch.templateValue);
+    voidMatch.templateValue = clone(voidMatch.templateValue);
   }
 
   public isWrongHdp(): boolean {

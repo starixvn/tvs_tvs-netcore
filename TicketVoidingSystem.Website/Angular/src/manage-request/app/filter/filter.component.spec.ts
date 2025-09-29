@@ -9,6 +9,7 @@ import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
+import { FilterService } from './filter.service';
 
 class Helper {
   static readonly fakeDate = '2020-11-09 12:08:49.737';
@@ -219,6 +220,7 @@ describe('FilterComponent', () => {
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
     component.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
     component.createdBySelectList = Helper.fakeCreatedBySelectList;
+    component.products = FilterService.initMultiSelectProduct();
 
     // Action
     component.initDefaultFilter();

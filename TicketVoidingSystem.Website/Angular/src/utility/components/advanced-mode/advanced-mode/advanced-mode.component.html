@@ -172,7 +172,7 @@
                       <div class="bet-team-2">
                         <div class="flex-start">
                           <label class="me-3 left">
-                            <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="betTeam.checkItems()"
+                            <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="checkBetTeamItems(betTeam)"
                               class="me-1 bet-team-{{index}}" />
                               {{betTeam.name}}
                             </label>
@@ -218,7 +218,7 @@
                                     <td [attr.rowspan]="item.flag?2:1">
                                       <label>
                                         <input class="me-1" type="checkbox" [(ngModel)]="item.isChecked"
-                                          (ngModelChange)="betTeam.controlIsChecked()" />
+                                          (ngModelChange)="controlIsCheckedBetTeam(betTeam)" />
                                           {{item.name}}
                                         </label>
                                       </td>
@@ -231,7 +231,7 @@
                                       <td>
                                         <label>
                                           <input class="me-1" type="checkbox" [(ngModel)]="item.isChecked"
-                                            (ngModelChange)="betTeam.controlIsChecked()" />
+                                            (ngModelChange)="controlIsCheckedBetTeam(betTeam)" />
                                             {{item.name}}
                                           </label>
                                         </td>
@@ -249,7 +249,7 @@
                               <div class="bet-team-checkbox">
                                 <div class="left">
                                   <label>
-                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="betTeam.checkItems()"
+                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="checkBetTeamItems(betTeam)"
                                       class="bet-team-{{index}}" />
                                       {{betTeam.name}}
                                     </label>
@@ -258,7 +258,7 @@
                                     @for (item of betTeam.items; track item) {
                                       <div class="bet-team-item">
                                         <label>
-                                          <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="betTeam.controlIsChecked()" />
+                                          <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="controlIsCheckedBetTeam(betTeam)" />
                                           {{item.name}}
                                         </label>
                                       </div>
@@ -332,7 +332,7 @@
                                           }
                                           <select [(ngModel)]="selection.value">
                                             @for (item of selection.items; track item) {
-                                              @if (betTeam.isValidOptionForType5(item, selection.name)) {
+                                              @if (isValidOptionForType5(betTeam, item, selection.name)) {
                                                 <option [ngValue]="item.value"
                                                   >
                                                   {{item.name}}
@@ -362,7 +362,7 @@
                               <div class="bet-team-checkbox">
                                 <div class="left">
                                   <label>
-                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="betTeam.checkItems()"
+                                    <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="checkBetTeamItems(betTeam)"
                                       class="bet-team-{{index}}" />
                                       {{betTeam.name}}
                                     </label>
@@ -372,7 +372,7 @@
                                       <div class="bet-team-item">
                                         <label>
                                           <input type="checkbox" [(ngModel)]="item.isChecked"
-                                            (ngModelChange)="betTeam.controlIsChecked()" />
+                                            (ngModelChange)="controlIsCheckedBetTeam(betTeam)" />
                                             {{item.name}}
                                           </label>
                                         </div>
@@ -396,7 +396,7 @@
                                   <div class="bet-team-checkbox">
                                     <div class="left">
                                       <label>
-                                        <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="betTeam.checkItems()"
+                                        <input type="checkbox" [(ngModel)]="betTeam.isChecked" (ngModelChange)="checkBetTeamItems(betTeam)"
                                           class="bet-team-{{index}}" />
                                           {{betTeam.name}}
                                         </label>
@@ -405,7 +405,7 @@
                                         @for (item of betTeam.items; track item) {
                                           <div class="bet-team-item">
                                             <label>
-                                              <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="betTeam.controlIsChecked()" />
+                                              <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="controlIsCheckedBetTeam(betTeam)" />
                                               {{item.name}}
                                             </label>
                                           </div>

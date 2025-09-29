@@ -12,6 +12,7 @@ import { Tooltip } from './tooltip.model';
 export class TooltipComponent {
   @Input() tooltip: Tooltip;
   @HostListener('document:mousedown')
+  
   onClick() {
     this.tooltip.show = false;
   }

@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { PagingConstant, PagingModel } from '../../../../../../utility/components/paging/paging.model';
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
@@ -13,6 +12,8 @@ import { LogInfoEarlyKickOff } from '../models/log-info-eko.model';
 import { TableTicketsModel } from '../tickets-list/table-tickets.model';
 import { LogInfoService } from './log-info.service';
 import { ValidationService } from './validation.service';
+import lodashOrderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 
 @Injectable()
 export class RelatedEventService {
@@ -104,7 +105,7 @@ export class RelatedEventService {
       const getLogInfoResult = await this.logInfoService.getLogInfo(newEvents, addRelatedEventArg.isEdit, addRelatedEventArg.requestId, addRelatedEventArg.filter);
       this.logInfoService.assignResultLogInfoToEvents(newEvents, getLogInfoResult.getLogInfoModels);
       addRelatedEventArg.allEvents.push(...newEvents);
-      addRelatedEventArg.allEvents = _.orderBy(_.uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
+      addRelatedEventArg.allEvents = lodashOrderBy(uniqBy(addRelatedEventArg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
       addRelatedEventArg.addRequestStore.changeBlockingUiStatus(false);
       addRelatedEventArg.primitiveProps.inputRelatedMatchId = null;
     }

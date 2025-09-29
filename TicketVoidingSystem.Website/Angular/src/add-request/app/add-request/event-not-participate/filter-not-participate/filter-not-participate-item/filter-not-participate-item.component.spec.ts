@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
-import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
 
 class Helper {
   static readonly fakePlayer: Player = {

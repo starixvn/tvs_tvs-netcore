@@ -7,7 +7,7 @@
             <div>
               <label>
                 <input type="checkbox" class="group-bettypes-all-checkbox me-1" [(ngModel)]="model.isChecked" [disabled]="isDisabledAllBetTypes"
-                  (ngModelChange)="model.changeCheckedModelToGroup(); changedBetTypes()" />
+                  (ngModelChange)="changeCheckedModelToGroup(); changedBetTypes()" />
                   All Bet types
                 </label>
                 @if (scroll) {
@@ -26,8 +26,8 @@
               @if (group.isShow && group.betTypes.length > 0) {
                 <td>
                   <label>
-            <input class="me-1" type="checkbox" [(ngModel)]="group.isChecked" (ngModelChange)="group.changeCheckedGroupToBetType();
-                                                model.changeCheckedGroupToModel();
+            <input class="me-1" type="checkbox" [(ngModel)]="group.isChecked" (ngModelChange)="changeCheckedGroupToBetType(group);
+                                                changeCheckedGroupToModel();
                                                 changedBetTypes()" [disabled]="isDisabledAllBetTypes" />
                       {{group.groupName}}
                     </label>
@@ -42,8 +42,8 @@
                 [ngClass]="{'red-highlight-bettype':betType.redHighlight,
                   'blue-highlight-bettype': betType.blueHighlight}">
                             <input class="me-1" type="checkbox" [(ngModel)]="betType.isChecked" [disabled]="isDisabledAllBetTypes"
-                (ngModelChange)="group.changeCheckedBetTypeToGroup(); 
-                                  model.changeCheckedGroupToModel(); changedBetTypes()" />
+                (ngModelChange)="changeCheckedBetTypeToGroup(group); 
+                                  changeCheckedGroupToModel(); changedBetTypes()" />
                               {{betType.name}}
                             </label>
                           </div>

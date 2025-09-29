@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
 import { Product } from '../../../../utility/constants/config';
 import { TEXT} from '../../../../utility/constants/text';
 import { Tooltip } from '../../tooltip/tooltip.model';
@@ -6,6 +6,7 @@ import { BetType, GroupBetType, GroupBetTypesModel } from './group-bettypes.mode
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
+import { GroupBetTypesService } from './group-bettypes.service';
 
 @Component({
   standalone: true,
@@ -26,14 +27,31 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
   collapse = true;
 
   element = inject(ElementRef);
-
+  groupBetTypesService = inject(GroupBetTypesService);
+  
   ngOnInit() {
     this.tooltip.element = this.element;
-    this.model = new GroupBetTypesModel(new Array<GroupBetType>(), false);
+    this.model = new GroupBetTypesModel();
   }
 
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  ngOnChanges(_: { [propKey: string]: SimpleChange }) {
     this.display = this.product === Product.SPORTS_BOOK;
+  }
+
+  changeCheckedGroupToBetType(group: GroupBetType){
+    this.groupBetTypesService.changeCheckedGroupToBetType(group);
+  }
+
+  changeCheckedBetTypeToGroup(group: GroupBetType){
+    this.groupBetTypesService.changeCheckedBetTypeToGroup(group);
+  }
+
+  changeCheckedModelToGroup(){
+    this.groupBetTypesService.changeCheckedModelToGroup(this.model);
+  }
+
+  changeCheckedGroupToModel(){
+    this.groupBetTypesService.changeCheckedGroupToModel(this.model);
   }
 
   displayGroup(groups: string[]) {
@@ -41,20 +59,20 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
       group.isShow = groups.indexOf(group.groupName) > -1;
       if (!group.isShow) {
         group.isChecked = false;
-        group.changeCheckedGroupToBetType();
+        this.groupBetTypesService.changeCheckedGroupToBetType(group);
       }
     });
     this.changedBetTypes();
-    this.model.changeCheckedGroupToModel();
+    this.groupBetTypesService.changeCheckedGroupToModel(this.model);
   }
 
   changedBetTypes() {
-    const betTypes = this.model.getAllBetType();
+    const betTypes = this.groupBetTypesService.getAllBetType(this.model.groupBetTypes);
     this.betTypesEvent.emit(betTypes);
   }
 
   validate(): boolean {
-    const result = this.model.getCheckedBetTypes().length > 0;
+    const result = this.groupBetTypesService.getCheckedBetTypes(this.model.groupBetTypes).length > 0;
     if (!result) {
       this.tooltip.display('group-bettypes-all-checkbox', TEXT.NO_CHECKED_BETTYPE);
     }

@@ -52,7 +52,6 @@ describe('MenuBarComponent', () => {
           provide: SignalRService,
           useValue: {
             notificationIconClass: new EventEmitter<string>(),
-            // Thêm các mock methods khác nếu cần
           }
         },
         NotificationPopupService,

@@ -12,7 +12,7 @@ import { DateFullTimeNewComponent } from '../../../utility/components/date-time/
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
 import { PagingConstant } from '../../../utility/components/paging/paging.model';
 import { TemplateContent } from '../../../utility/components/template-message/template-message/template.model';
@@ -34,6 +34,7 @@ import { StaticService } from '../../../utility/services/static.service';
 import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { Bet, Item, Type } from './filter.model';
+import { GroupBetTypesService } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.service';
 
 @Component({
   standalone: true,
@@ -97,7 +98,8 @@ export class FilterComponent implements OnInit {
   element = inject(ElementRef);
   appService = inject(AppService);
   commonService = inject(CommonService);
-
+  groupBetTypesService = inject(GroupBetTypesService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -258,7 +260,7 @@ export class FilterComponent implements OnInit {
 
   async blurMatchId() {
     if (this.matchId !== undefined && this.matchId !== this.preMatchId) {
-      this.groupBetTypes = new GroupBetTypesModel([], false);
+      this.groupBetTypes = new GroupBetTypesModel();
       this.advancedModeComponent.resetBetTeam();
       if (this.isNumber(this.matchId)) {
         await this.getMatchInfo();
@@ -301,13 +303,13 @@ export class FilterComponent implements OnInit {
       this.tooltip.display('match-id', data.result.errorMsg);
       this.isSuccessMatch = false;
     }
-    this.groupBetTypes = new GroupBetTypesModel(data.groupBetTypes, false);
+    this.groupBetTypes = this.groupBetTypesService.initGroupBetTypesModel(data.groupBetTypes, false);
     const temp = [];
     data.groupBetTypes.forEach(group => {
       temp.push(new ItemsSelect(0, group.groupName, group.groupName, true, true, true, []));
     });
     this.groupBetTypesHandler.items = temp;
-    this.allBetTypes = this.groupBetTypes.getAllBetType();
+    this.allBetTypes = this.groupBetTypesService.getAllBetType(this.groupBetTypes.groupBetTypes);
     this.handleBetType216();
     this.handleBetTypeOfBasketball();
   }
@@ -433,9 +435,9 @@ export class FilterComponent implements OnInit {
       this.unCheckBetTypeByCondition(BetTypeAutoUnCheckByIssue.WRONG_SCORE);
     }
 
-    this.groupBetTypes.changeCheckGroupByBetTypes();
-    this.groupBetTypes.changeCheckedGroupToModel();
-    this.changeBetTypes(this.groupBetTypes.getAllBetType());
+    this.groupBetTypesService.changeCheckGroupByBetTypes(this.groupBetTypes.groupBetTypes);
+    this.groupBetTypesService.changeCheckedGroupToModel(this.groupBetTypes);
+    this.changeBetTypes(this.groupBetTypesService.getAllBetType(this.groupBetTypes.groupBetTypes));
   }
 
   private checkAllBetType() {
@@ -467,7 +469,7 @@ export class FilterComponent implements OnInit {
   }
 
   handleBetType216() {
-    if (this.groupBetTypes.hasBetType(216)) {
+    if (this.groupBetTypesService.hasBetType(this.groupBetTypes.groupBetTypes, 216)) {
       this.getPlayerQuery = new GetPlayersQuery(this.matchId, '216');
     }
   }
@@ -594,7 +596,7 @@ export class FilterComponent implements OnInit {
   }
 
   getParams(): GetTicketsQuery {
-    const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
+    const checkedBetTypes = this.groupBetTypesService.getValueCheckedBetTypes(this.groupBetTypes.groupBetTypes);
     const betTypes = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
     const invalidTransDate = !this.isTransDateValidity();
 
@@ -631,7 +633,7 @@ export class FilterComponent implements OnInit {
     this.oddsType.value = 'DEC';
     this.oddsValue = '';
     this.setDateTime();
-    this.groupBetTypes = new GroupBetTypesModel([], false);
+    this.groupBetTypes = new GroupBetTypesModel();
     this.advancedModeComponent.resetBetTeam();
     this.licenseeAffectedList = [];
   }

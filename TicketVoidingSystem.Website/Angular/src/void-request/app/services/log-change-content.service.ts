@@ -8,7 +8,7 @@ import { MessageAreaComponent } from '../message-area/message-area.component';
   { providedIn: 'root' }
 )
 export class LogChangeContentService {
-  commonService = inject(CommonService);
+  private readonly commonService = inject(CommonService);
 
   async writeLog(requestId: number, messageAreaComponents: MessageAreaComponent[]): Promise<void> {
     messageAreaComponents.forEach(x => {

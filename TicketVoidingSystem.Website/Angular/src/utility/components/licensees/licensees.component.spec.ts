@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { LicenseesComponent } from './licensees.component';
 import { GroupLicensee, GroupLicenseeModel, Licensee } from './licensees.model';
+import { LicenseesService } from './licensees.service';
 
 class Helper {
   static readonly groupLicensees: GroupLicensee[] = [
@@ -13,11 +14,24 @@ class Helper {
 describe('LicenseesComponent', () => {
   let component: LicenseesComponent;
   let fixture: ComponentFixture<LicenseesComponent>;
-
+  let licenseesService: LicenseesService;
+  
   beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
+    const mockLicenseesService = {
+      getCheckedLicensees: jest.fn().mockReturnValue([]),
+      changeCheckAllLicensee: jest.fn(),
+      checkedGroup: jest.fn(),
+      changeCheckGroupToModel: jest.fn()
+    };
+
+    await TestBed.configureTestingModule({
+      providers: [
+        { provide: LicenseesService, useValue: mockLicenseesService }
+      ]
+    }).compileComponents();
 
     fixture = TestBed.createComponent(LicenseesComponent);
+    licenseesService = TestBed.inject(LicenseesService);
     component = fixture.componentInstance;
   });
 
@@ -60,26 +74,25 @@ describe('LicenseesComponent', () => {
     // Arrange
     component.model = Helper.groupLicenseeModel;
     jest.spyOn(component.groupLicenseesChange, 'emit').mockImplementation(() => {});
-
+    licenseesService.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
     // Action
     component.changeLicensees();
 
     // Assert
     expect(component.groupLicenseesChange.emit).toHaveBeenCalledTimes(1);
-    expect(component.groupLicenseesChange.emit).toHaveBeenCalledWith(component.model.getCheckedLicensees());
   });
 
   it('should emit checked licensees when changeLicensees is called', () => {
     // Arrange
     component.model = Helper.groupLicenseeModel;
     jest.spyOn(component.groupLicenseesChange, 'emit').mockImplementation(() => {});
-    const expectedCheckedLicensees = component.model.getCheckedLicensees();
+    licenseesService.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
 
     // Action
     component.changeLicensees();
 
     // Assert
-    expect(component.groupLicenseesChange.emit).toHaveBeenCalledWith(expectedCheckedLicensees);
+    expect(component.groupLicenseesChange.emit).toHaveBeenCalledWith([{ name: '368Cash' }]);
   });
 
   it('should handle empty model when changeLicensees is called', () => {

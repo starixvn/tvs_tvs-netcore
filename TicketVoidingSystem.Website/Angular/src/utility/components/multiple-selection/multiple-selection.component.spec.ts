@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { MultipleSelectionComponent } from './multiple-selection.component';
-import { MultipleSelection } from './multiple-selection';
+import { MultipleSelection } from './multiple-selection.model';
 import { ItemsSelect } from './items-select';
 import { SimpleChange } from '@angular/core';
 

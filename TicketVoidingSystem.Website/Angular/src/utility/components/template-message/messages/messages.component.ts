@@ -69,7 +69,6 @@ export class MessagesComponent {
   }
 
   checkValidationForOtherLanguage(): boolean {
-
     if (this.checkContentOfOtherLanguage(this.message.contentThai)) {
       this.tooltip.display('thai', TEXT.INVALID_THAI);
       return false;

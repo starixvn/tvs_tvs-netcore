@@ -1,5 +1,5 @@
 
-import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection.model';
 import { WrongOddsGetLogInfoQuery } from '../event-wrong-odds/models/get-log-info.query';
 import { GroupBetType, GroupBetTypesModel } from "./group-bettypes-pool-house/group-bettypes-pool-house.model";
 import { LinkedLogsViewModel } from "./linked-log/linked-log.model";

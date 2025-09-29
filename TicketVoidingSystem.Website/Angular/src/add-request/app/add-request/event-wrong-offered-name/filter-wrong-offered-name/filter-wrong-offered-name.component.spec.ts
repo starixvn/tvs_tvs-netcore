@@ -11,7 +11,7 @@ import { MatchModel } from '../../../../../utility/models/match.model';
 import { SimpleChange } from '@angular/core';
 import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
 import { Currency } from '../../../../../utility/models/currency.model';
-import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { CheckAddPermissionService } from '../../services/check-permission.service';
 import { EventWrongOfferedNameService } from '../services/event-wrong-offered-name.service';

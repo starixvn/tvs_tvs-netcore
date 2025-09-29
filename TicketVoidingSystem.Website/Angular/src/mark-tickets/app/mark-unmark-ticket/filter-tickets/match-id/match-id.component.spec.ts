@@ -6,7 +6,6 @@ import { BetType, GroupBetType, GroupBetTypesModel } from '../../../../../utilit
 import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../utility/components/licensees/licensees.model';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../../../../utility/constants/text';
-import { Currency } from '../../../../../utility/models/currency.model';
 import { FirstTicketTime } from '../../../../../utility/models/match.model';
 import { CommonService } from '../../../../../utility/services/common.service';
 import { HttpService } from '../../../../../utility/services/http.service';
@@ -16,6 +15,7 @@ import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import '../../../../../utility/extensions/string.extension';
+import { LicenseesService } from '../../../../../utility/components/licensees/licensees.service';
 
 class Helper {
   static readonly fakeFirstTicketTime: FirstTicketTime = {
@@ -31,12 +31,12 @@ class Helper {
 
   static getGroupBetType(): GroupBetType {
     const betType = new BetType(7, '1H Handicap', false, 0, true);
-    return new GroupBetType('1H', [betType], true);
+    return {groupName: '1H', betTypes: [betType], isChecked: true} as GroupBetType;
   }
 
   static getGroupBetType216(): GroupBetType {
     const betType = new BetType(216, 'Goal Scorer - Anytime', false, 0, true);
-    return new GroupBetType('1H', [betType], true);
+    return {groupName: '1H', betTypes: [betType], isChecked: true} as GroupBetType;
   }
 }
 
@@ -44,7 +44,7 @@ describe('MatchIdComponent', () => {
   let component: MatchIdComponent;
   let fixture: ComponentFixture<MatchIdComponent>;
   let commonService: CommonService;
-
+  let licenseesService: LicenseesService;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -58,21 +58,22 @@ describe('MatchIdComponent', () => {
 
     fixture = TestBed.createComponent(MatchIdComponent);
     commonService = fixture.debugElement.injector.get(CommonService);
+    licenseesService = fixture.debugElement.injector.get(LicenseesService);
     component = fixture.componentInstance;
-    
+
     component.advancedModelComponent = {
       resetBetTeam: jest.fn(),
       validate: jest.fn(),
       getBetTypeModels: jest.fn()
     } as unknown as AdvancedModeComponent;
-    
+
     component.groupBetTypesComponent = {
       validate: jest.fn()
     } as unknown as GroupBetTypesComponent;
-    
+
     component.changeMatch = new EventEmitter<number>();
     jest.spyOn(component.changeMatch, 'emit');
-    
+
     component.tooltip = {
       display: jest.fn()
     } as unknown as Tooltip;
@@ -237,7 +238,7 @@ describe('MatchIdComponent', () => {
   describe('getGroupBetTypes', () => {
     it('should call handleGroupBetTypes with expected param', async () => {
       // Arrange
-      const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      const groupBetTypesModel = {groupBetTypes: [Helper.getGroupBetType()], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       commonService.getGroupBetTypes = jest.fn().mockImplementation(() => groupBetTypesModel);
       component.model.matchId = '123456';
       component.handleGroupBetTypes = jest.fn();
@@ -254,7 +255,7 @@ describe('MatchIdComponent', () => {
     it('should display tooltip for invalid match when no groupBetTypes', () => {
       // Arrange
       component.handleBetType216 = jest.fn();
-      const groupBetTypesModel = new GroupBetTypesModel([], true);
+      const groupBetTypesModel = {groupBetTypes: [], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       groupBetTypesModel.result = {
         errorCode: 0,
         errorMsg: ''
@@ -274,7 +275,7 @@ describe('MatchIdComponent', () => {
     it('should display tooltip for invalid match when data has error', () => {
       // Arrange
       component.handleBetType216 = jest.fn();
-      const groupBetTypesModel = new GroupBetTypesModel([], true);
+      const groupBetTypesModel = {groupBetTypes: [], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       groupBetTypesModel.result = {
         errorCode: 1,
         errorMsg: 'Error!'
@@ -294,7 +295,7 @@ describe('MatchIdComponent', () => {
     it('should handle successful match', () => {
       // Arrange
       component.handleBetType216 = jest.fn();
-      const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      const groupBetTypesModel = {groupBetTypes: [Helper.getGroupBetType()], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       groupBetTypesModel.result = {
         errorCode: 0,
         errorMsg: ''
@@ -314,7 +315,7 @@ describe('MatchIdComponent', () => {
   describe('handleBetType216', () => {
     it('should set getPlayerQuery data when betType216 exists', () => {
       // Arrange
-      const groupBetTypesModel = new GroupBetTypesModel([Helper.getGroupBetType216()], true);
+      const groupBetTypesModel = {groupBetTypes: [Helper.getGroupBetType216()], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       component.groupBetTypes = groupBetTypesModel;
       component.model.matchId = '12345';
 
@@ -328,7 +329,7 @@ describe('MatchIdComponent', () => {
 
     it('should not set getPlayerQuery data when betType216 does not exist', () => {
       // Arrange
-      const groupBetTypesModel = new GroupBetTypesModel([], true);
+      const groupBetTypesModel = {groupBetTypes: [], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       component.groupBetTypes = groupBetTypesModel;
       component.model.matchId = '12345';
 
@@ -373,7 +374,7 @@ describe('MatchIdComponent', () => {
     it('should return expected licensees', () => {
       // Arrange
       component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
-      component.groupLicenseeModel.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
+      licenseesService.getCheckedLicensees = jest.fn().mockReturnValue([{ name: '368Cash' }]);
 
       // Act
       const actual = component.getCheckedLicensees();
@@ -534,7 +535,7 @@ describe('MatchIdComponent', () => {
       // Arrange
       component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
       component.eventType.value = '2';
-      component.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      component.groupBetTypes = {groupBetTypes: [Helper.getGroupBetType()], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       component.model.liveHomeScore = 2;
       component.model.liveAwayScore = 1;
       component.rangeTimes = [new RangeTime()];
@@ -555,7 +556,7 @@ describe('MatchIdComponent', () => {
       // Arrange
       component.groupLicenseeModel = new GroupLicenseeModel(Helper.getGroupLicensee(), true);
       component.eventType.value = 'a';
-      component.groupBetTypes = new GroupBetTypesModel([Helper.getGroupBetType()], true);
+      component.groupBetTypes = {groupBetTypes: [Helper.getGroupBetType()], isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
       component.rangeTimes = [new RangeTime()];
       component.model.liveHomeScore = null;
       component.model.liveAwayScore = null;
@@ -626,7 +627,7 @@ describe('MatchIdComponent', () => {
     it('should update currencyIds correctly', () => {
       // Arrange
       component.currencies = new Currencies();
-      component.currencies.selected = [1,2,3];
+      component.currencies.selected = [1, 2, 3];
 
       // Act
       component.updateSelectedCurrency();

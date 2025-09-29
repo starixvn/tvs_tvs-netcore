@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import filter from 'lodash/filter';
+import cloneDeep from 'lodash/cloneDeep';
 import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { ABExceptionListLevel, ABExceptionListVoidVIP } from '../../../utility/constants/config';
 import { AppStore } from '../app.store';
@@ -47,7 +48,7 @@ export class UserListComponent implements OnChanges {
   }
 
   async removeUsers() {
-    const checkedUsers = _.filter(this.displayedModels, { isChecked: true });
+    const checkedUsers = filter(this.displayedModels, { isChecked: true });
     await this.userService.removeUsers(checkedUsers, this.abExceptionListStore);
   }
 
@@ -74,6 +75,6 @@ export class UserListComponent implements OnChanges {
   }
 
   private filterDisplayRequests() {
-    this.displayedModels = _.cloneDeep(this.models.slice(this.paging.begin - 1, this.paging.end));
+    this.displayedModels = cloneDeep(this.models.slice(this.paging.begin - 1, this.paging.end));
   }
 }

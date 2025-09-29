@@ -18,6 +18,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { GroupModel } from '../../utility/components/tickets/group.model';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
+import { TicketsService } from '../../utility/components/tickets/tickets.service';
 
 class Helper {
   static readonly fakeTicketsViewModel = {
@@ -92,7 +93,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule, ToastrModule.forRoot()],
       providers: [
-        SignalRService, ToastrService, TemplateMessageService, ValidationService, VoidTicketsService
+        SignalRService, ToastrService, TemplateMessageService, ValidationService, VoidTicketsService, TicketsService
       ]
     }).compileComponents();
 
@@ -122,6 +123,8 @@ describe('AppComponent', () => {
     } as unknown as TemplateMessageComponent;
 
     component.primitiveProps = new PrimitiveProperty();
+    component.ticketsViewModel = new TicketsViewModel();
+    component.ticketsViewModel.groups = [];
   });
 
   it('should create', () => {
@@ -151,6 +154,8 @@ describe('AppComponent', () => {
       appService.getTickets = jest.fn().mockResolvedValue(Helper.fakeTicketsViewModel);
       commonService.getMatch = jest.fn().mockResolvedValue(Helper.fakeMatchViewModel);
       templateMessageService.generateTemplateValue = jest.fn().mockReturnValue(new TemplateValue());
+      component.ticketsViewModel = new TicketsViewModel();
+      component.ticketsViewModel.groups = [];
 
       // Act
       await component.getInfoEventSearch(query);
@@ -168,6 +173,8 @@ describe('AppComponent', () => {
       appService.getTickets = jest.fn().mockResolvedValue(Helper.fakeTicketsViewModel);
       commonService.getMatch = jest.fn().mockResolvedValue(Helper.fakeMatchViewModel);
       templateMessageService.generateTemplateValue = jest.fn().mockReturnValue(new TemplateValue());
+      component.ticketsViewModel = new TicketsViewModel();
+      component.ticketsViewModel.groups = [];
 
       // Act
       await component.getInfoEventSearch(query);
@@ -188,6 +195,8 @@ describe('AppComponent', () => {
       commonService.getMatch = jest.fn().mockResolvedValue(Helper.fakeMatchViewModel);
       component.primitiveProps = new PrimitiveProperty();
       component.primitiveProps.isBlockUI = false;
+      component.ticketsViewModel = new TicketsViewModel();
+      component.ticketsViewModel.groups = [];
 
       // Act
       await component.search(query);
@@ -233,6 +242,8 @@ describe('AppComponent', () => {
       appService.voidBet = jest.fn().mockResolvedValue(Helper.fakeResult);
       component.primitiveProps = new PrimitiveProperty();
       component.primitiveProps.isBlockUI = false;
+      component.ticketsViewModel = new TicketsViewModel();
+      component.ticketsViewModel.groups = [];
 
       // Act
       await component.voidTickets();
@@ -254,6 +265,8 @@ describe('AppComponent', () => {
         results: [],
         open: (header: string, results: Result<string>[]) => {}
       });
+      component.ticketsViewModel = new TicketsViewModel();
+      component.ticketsViewModel.groups = [];
 
       // Act
       await component.handleAfterVoid(results);

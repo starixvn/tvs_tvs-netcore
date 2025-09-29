@@ -6,6 +6,7 @@ import { Tooltip } from '../../components/tooltip/tooltip.model';
 import { TEXT } from '../../constants/text';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { CSSCLASS, GroupUsername, UsernameItem } from './user-names.model';
+import { UserNameService } from './user-name.service';
 
 @Component({
   standalone: true,
@@ -29,16 +30,14 @@ export class UsernamesComponent implements OnChanges {
   @Output() modelChange = new EventEmitter<string>();
   @Output() afterFocusOutBetIds = new EventEmitter<string>();
 
-  maxLengthOneUsername = 30;
   groupUsername = new GroupUsername();
   username: string;
   lastItem: UsernameItem;
   shiftKey: boolean;
   tooltip = new Tooltip();
-  isFocusingUsernames = false;
-  isSelectedAll = false;
 
   element = inject(ElementRef);
+  userNameService = inject(UserNameService);
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -57,7 +56,6 @@ export class UsernamesComponent implements OnChanges {
 
   focusUsername() {
     this.input.nativeElement.focus();
-    this.isFocusingUsernames = true;
   }
 
   onBlurBetIdInput(value: string) {
@@ -71,9 +69,9 @@ export class UsernamesComponent implements OnChanges {
       value = value.length > MAX_CHARS ? value.substring(0, MAX_CHARS) + '...' : value;
       const item = new UsernameItem(value);
       this.groupUsername.items.push(item);
-      this.model = this.groupUsername.getAllValue();
+      this.model = this.userNameService.getAllValue(this.groupUsername);
       if (!preventEmitChange) {
-        this.modelChange.emit(this.groupUsername.getAllValue());
+        this.modelChange.emit(this.userNameService.getAllValue(this.groupUsername));
         this.change.emit();
       }
     }
@@ -81,6 +79,7 @@ export class UsernamesComponent implements OnChanges {
   }
 
   pasteItem(event: ClipboardEvent) {
+    const maxLengthOneUsername = 30;
     if (!this.disabled) {
       const data = event.clipboardData.getData('text');
       const items = data
@@ -91,7 +90,7 @@ export class UsernamesComponent implements OnChanges {
         .replace(/\t/g, ',')
         .split(',');
       items.forEach(item => {
-        const trimText = item.slice(0, this.maxLengthOneUsername);
+        const trimText = item.slice(0, maxLengthOneUsername);
         this.addItem(trimText, false);
       });
 
@@ -109,27 +108,19 @@ export class UsernamesComponent implements OnChanges {
     this.lastItem = item;
   }
 
-  selectItems(item: UsernameItem) {
-    const isSelected = item.isSelected;
+  private selectItems(item: UsernameItem) {
     const current = this.groupUsername.items.indexOf(item);
     const last = this.groupUsername.items.indexOf(this.lastItem);
     const end = Math.max(last, current);
     const start = Math.min(last, current);
     for (let i = start; i < end; i++) {
-      this.groupUsername.items[i].changeSelectedAll(isSelected);
+      this.userNameService.changeSelectedAll(this.groupUsername.items[i], item.isSelected);
     }
   }
 
-  isCtrlKeyAndNumpad1Key(event: KeyboardEvent, code: number): boolean {
+  private isCtrlKeyAndNumpad1Key(event: KeyboardEvent, code: number): boolean {
     const KEY_NUMPAD_1 = 97;
     return event.ctrlKey && code === KEY_NUMPAD_1;
-  }
-
-  selectAllItems() {
-    this.isSelectedAll = !this.isSelectedAll;
-    this.groupUsername.items.forEach(item => {
-      item.changeSelectedAll(this.isSelectedAll);
-    });
   }
 
   onKey(event: KeyboardEvent): boolean | undefined {
@@ -143,11 +134,11 @@ export class UsernamesComponent implements OnChanges {
     const keyDelete = 68;
     const code = event.key.charCodeAt(0);
     if (this.isCtrlKeyAndNumpad1Key(event, code)) {
-      this.groupUsername.selectAllItems();
+      this.userNameService.selectAllItems(this.groupUsername);
     } else if (code === keyBackspace && value === '') {
-      this.groupUsername.removeLasted();
+      this.userNameService.removeLasted(this.groupUsername);
     } else if (code === keyDelete) {
-      this.groupUsername.removeSelected();
+      this.userNameService.removeSelected(this.groupUsername);
     } else if (keyAddItem.indexOf(code) > -1) {
       if (value === '') {
         event.preventDefault();
@@ -162,17 +153,8 @@ export class UsernamesComponent implements OnChanges {
     }
   }
 
-  checkValidation(): boolean {
-    if (this.groupUsername.getValue() === '') {
-      this.tooltip.display(this.errorTooltipClassName, TEXT.REQUIRED_USERNAME);
-      return false;
-    }
-
-    return true;
-  }
-
   checkValidItems(): boolean {
-    const validIndex = this.groupUsername.checkValidItems();
+    const validIndex = this.userNameService.checkValidItems(this.groupUsername);
     const tooltipMessages = {
       1: TEXT.REQUIRED_USERNAME,
       2: TEXT.INVALID_USERNAMES,
@@ -196,22 +178,22 @@ export class UsernamesComponent implements OnChanges {
   }
 
   deleteItem(item: UsernameItem): void {
-    this.groupUsername.remove(item);
-    this.model = this.groupUsername.getAllValue();
-    this.modelChange.emit(this.groupUsername.getAllValue());
+    this.userNameService.remove(this.groupUsername, item);
+    this.model = this.userNameService.getAllValue(this.groupUsername);
+    this.modelChange.emit(this.model);
     this.change.emit();
   }
 
   isShowButtonRemoveInvalid() {
-    const validIndex = this.groupUsername.checkValidItems();
+    const validIndex = this.userNameService.checkValidItems(this.groupUsername);
     return this.isAbException && validIndex === 2;
   }
 
   removeInvalidUserNames() {
-    this.groupUsername.removeExistedUsernames();
-    const usernames = this.groupUsername.getAllValue();
-    const duplicatedItems = this.groupUsername.getDuplicatedItems(usernames);
-    this.groupUsername.removeInvalidUsernames();
+    this.userNameService.removeExistedUsernames(this.groupUsername);
+    const usernames = this.userNameService.getAllValue(this.groupUsername);
+    const duplicatedItems = this.userNameService.getDuplicatedItems(usernames);
+    this.userNameService.removeInvalidUsernames(this.groupUsername);
     duplicatedItems.forEach(x => this.addItem(x, true))
   }
 

@@ -84,7 +84,6 @@ describe('EventTicket14Component', () => {
     expect(addRequestStore.changeStartTimeFilterAnalysis).toHaveBeenCalled();
     expect(validationService.checkBusinessRule).toHaveBeenCalledWith(
       component.betIdsComponent,
-      component.filter.issueTypeId,
       component.primitiveProps.permission
     );
   });

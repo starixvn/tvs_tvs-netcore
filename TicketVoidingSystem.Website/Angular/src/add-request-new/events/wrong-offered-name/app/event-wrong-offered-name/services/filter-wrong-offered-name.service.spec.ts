@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { FilterWrongOfferedNameService } from './filter-wrong-offered-name.service';
 import { GroupLicensee, GroupLicenseeModel } from '../../../../../../utility/components/licensees/licensees.model';
-import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { Currency } from '../../../../../../utility/models/currency.model';
 import { FilterModel } from '../../../../../component/filter/filter.model';
@@ -26,8 +26,6 @@ describe('FilterWrongOfferedNameService', () => {
       ],
       isChecked: false,
       isCollapse: false,
-      checkedGroup: () => {},
-      checkedLicensee: () => {}
     },
     {
       groupName: 'China rules',
@@ -37,8 +35,6 @@ describe('FilterWrongOfferedNameService', () => {
       ],
       isChecked: false,
       isCollapse: false,
-      checkedGroup: () => {},
-      checkedLicensee: () => {}
     }
   ] as GroupLicensee[];
 

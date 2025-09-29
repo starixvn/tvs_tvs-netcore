@@ -2,7 +2,6 @@ import { CommonGroupTicketsModel } from '../../../../utility/models/common.group
 import { TicketModel } from './ticket.model';
 
 export class GroupModel extends CommonGroupTicketsModel<TicketModel> {
-
   constructor(
     name: string,
     tickets: Array<TicketModel>,

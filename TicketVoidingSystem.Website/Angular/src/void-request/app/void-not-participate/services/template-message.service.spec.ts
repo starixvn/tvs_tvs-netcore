@@ -150,9 +150,6 @@ describe('TemplateMessageService', () => {
     voidPageItem.voidTicketsMini = {
       ...originalTicketsMini,
       inning: '5',
-      initData: originalTicketsMini.initData,
-      mapGroups: originalTicketsMini.mapGroups,
-      checkGroups: originalTicketsMini.checkGroups,
       getCheckedTickets: originalTicketsMini.getCheckedTickets
     } as TicketsModel;
 
@@ -169,9 +166,6 @@ describe('TemplateMessageService', () => {
     voidPageItem.voidTicketsMini = {
       ...originalTicketsMini,
       smallestMapTicket: '123',
-      initData: originalTicketsMini.initData,
-      mapGroups: originalTicketsMini.mapGroups,
-      checkGroups: originalTicketsMini.checkGroups,
       getCheckedTickets: originalTicketsMini.getCheckedTickets
     } as TicketsModel;
 

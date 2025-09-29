@@ -38,7 +38,7 @@
                                   'icon-checkbox-none':ticketsModel.iconCheckBox == 0,
                                   'icon-checkbox-any':ticketsModel.iconCheckBox == 1,
                                   'icon-checkbox-all':ticketsModel.iconCheckBox == 2}"
-                  (click)="ticketsModel.checkGroups();changeTickets()">
+                  (click)="checkGroups();changeTickets()">
                 </span>
                 <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
               </div>
@@ -71,8 +71,8 @@
                 <div>
                   <input type="checkbox"
                     [(ngModel)]="group.isCheckAll"
-                                   (ngModelChange)="group.checkAllTickets();
-                                                    ticketsModel.changeIconCheckBox();
+                                   (ngModelChange)="checkAllTickets(group);
+                                                    changeIconCheckBox();
                                                     changeTickets()"
                     [disabled]="group.isDisabled" />
                   </div>
@@ -88,9 +88,7 @@
                     <div>
                       <input type="checkbox"
                         [(ngModel)]="ticket.isChecked"
-                                   (change)="group.changeTicketChecked(ticket);
-                                             ticketsModel.changeIconCheckBox();
-                                             changeTickets()"
+                                   (change)="changeTicketChecked(group, ticket); changeIconCheckBox(); changeTickets()"
                         [disabled]="ticket.isDisable" />
                       </div>
                     </td>
@@ -130,14 +128,12 @@
           <div class="list-check-groups">
             <ul [style.top]="ticketsModel.iconCheckBoxTop">
               <li [ngClass]="{'li-checked':ticketsModel.iconCheckBox == 2}"
-              (click)="ticketsModel.checkAllGroupsDropDown()">All</li>
+              (click)="checkAllGroupsDropDown()">All</li>
               @for (group of ticketsModel.groups; track group) {
                 <li
                   [ngClass]="{'li-checked':group.isCheckAll}"
                 (click)="group.isCheckAll = group.isDisabled ? false : !group.isCheckAll;
-                group.checkAllTickets();
-                ticketsModel.changeIconCheckBox();
-                changeTickets()">
+                checkAllTickets(group); changeIconCheckBox(); changeTickets()">
                   {{group.name}}
                 </li>
               }

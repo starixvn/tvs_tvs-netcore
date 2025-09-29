@@ -5,7 +5,7 @@ import { TemplateValue } from '../../../utility/components/template-message/temp
 import { MatchModel } from '../../../utility/models/match.model';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { TicketsViewModel } from '../model/get-tickets.query';
-import { MessagesResult } from '../../../utility/components/messages-result/messages-result';
+import { MessagesResult } from '../../../utility/components/messages-result/messages-result.model';
 import { Result } from '../../../utility/models/result';
 import { TestingModule } from '../../../utility/modules/testing.module';
 
@@ -34,10 +34,10 @@ describe('TemplateMessageService', () => {
       const matchViewModel: MatchModel = {
         matchId: '123',
       } as unknown as MatchModel;
-      const ticketsViewModel: TicketsViewModel = {
+      const ticketsViewModel = {
         totalItems: 5,
-        checkSettledTickets: () => true
-      } as TicketsViewModel;
+        groups: []
+      } as unknown as TicketsViewModel;
 
       const mockTemplateValue = new TemplateValue();
       templateService.initializeTemplateValue = jest.fn().mockReturnValue(mockTemplateValue);
@@ -50,17 +50,17 @@ describe('TemplateMessageService', () => {
       expect(result.filterBy).toBe(Number(abnormalBetType));
       expect(result.isVoidByBetId).toBe(true);
       expect(result.totalTickets).toBe(5);
-      expect(result.checkSettled).toBe(true);
+      expect(result.checkSettled).toBe(false);
     });
 
     it('should generate template value with MIX_PARLAY filter when abnormalBetType is MIX_PARLAY', () => {
       // Arrange
       const abnormalBetType = AbnormalFilterBy.MIX_PARLAY.toString();
       const matchViewModel = {} as MatchModel;
-      const ticketsViewModel: TicketsViewModel = {
+      const ticketsViewModel = {
         totalItems: 3,
-        checkSettledTickets: () => false
-      } as TicketsViewModel;
+        groups: []
+      } as unknown as TicketsViewModel;
 
       // Act
       const result = service.generateTemplateValue(abnormalBetType, matchViewModel, ticketsViewModel);
@@ -75,10 +75,10 @@ describe('TemplateMessageService', () => {
       // Arrange
       const abnormalBetType = '2';
       const matchViewModel = {} as MatchModel;
-      const ticketsViewModel: TicketsViewModel = {
+      const ticketsViewModel = {
         totalItems: 2,
-        checkSettledTickets: () => true
-      } as TicketsViewModel;
+        groups: []
+      } as unknown as TicketsViewModel;
 
       // Act
       const result = service.generateTemplateValue(abnormalBetType, matchViewModel, ticketsViewModel);
@@ -86,7 +86,7 @@ describe('TemplateMessageService', () => {
       // Assert
       expect(result.filterBy).toBe(AbnormalFilterBy.MANY_MATCH);
       expect(result.totalTickets).toBe(2);
-      expect(result.checkSettled).toBe(true);
+      expect(result.checkSettled).toBe(false);
     });
   });
 

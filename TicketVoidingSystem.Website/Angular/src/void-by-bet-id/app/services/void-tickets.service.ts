@@ -9,6 +9,8 @@ import { VoidTicketsRequest } from "../model/void-by-bet-id.model";
 import { PasswordService } from '../../../utility/services/password.service';
 import { SubIssueType } from "../../../utility/models/issue-type.model";
 import { CheckingPermissionModel } from "../../../utility/models/checking-permission.model";
+import { TicketsService } from "../../../utility/components/tickets/tickets.service";
+import { GroupService } from "../../../utility/components/tickets/group.service";
 
 interface VoidBetRequestParams {
     ticketsViewModel: TicketsViewModel;
@@ -24,11 +26,13 @@ interface VoidBetRequestParams {
 export class VoidTicketsService {
     ISSUE_TYPE_ID_ABNORMAL_BET = 11;
     passwordService = inject(PasswordService);
-
+    ticketsService = inject(TicketsService);
+    groupService = inject(GroupService);
+    
     createVoidBetRequest(params: VoidBetRequestParams): VoidTicketsRequest {
         const request = new VoidTicketsRequest();
-        request.tickets = params.ticketsViewModel.groups.flatMap(group => group.getEnableTickets());
-        request.transIdCrickets = params.ticketsViewModel.groups.flatMap(group => group.getTicketCricket());
+        request.tickets = params.ticketsViewModel.groups.flatMap(group => this.groupService.getEnableTickets(group.tickets));
+        request.transIdCrickets = params.ticketsViewModel.groups.flatMap(group => this.groupService.getTicketCricket(group.tickets));
         request.password = this.passwordService.hash(params.confirmationComponent.confirmation.userPassword);
         request.username = params.confirmationComponent.confirmation.userName;
         request.reason = params.confirmationComponent.confirmation.reason;
@@ -53,7 +57,7 @@ export class VoidTicketsService {
 
     createCheckingPermissionModel(ticketsViewModel: TicketsViewModel, matchViewModel: MatchModel) {
         const checkingPermissionModel = new CheckingPermissionModel();
-        checkingPermissionModel.setParam(ticketsViewModel.getAllTicket(), matchViewModel?.matchId,
+        checkingPermissionModel.setParam(this.ticketsService.getAllTicket(ticketsViewModel.groups), matchViewModel?.matchId,
             'void-by-bet-id-check-void-bet-permission', true, false, false);
 
         return checkingPermissionModel;

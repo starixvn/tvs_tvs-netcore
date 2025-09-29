@@ -3,7 +3,6 @@ import { TestingModule } from '../../../../../../utility/modules/testing.module'
 import { LogInfoWrongMarketOfferedComponent } from './log-info-wrong-market-offered.component';
 import { LogInfoWrongMarketOffered, LogInfoItem } from '../models/log-info-wrong-market-offered.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
-import _ from 'lodash';
 import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 
 class Helper {

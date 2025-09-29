@@ -5,7 +5,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../../utility/services/static.service';
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house/group-bettypes-pool-house.component';

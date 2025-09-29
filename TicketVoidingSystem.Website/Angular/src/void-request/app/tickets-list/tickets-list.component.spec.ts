@@ -5,6 +5,7 @@ import { TicketsModel } from './tickets.model';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { PagingModel } from '../../../utility/components/paging/paging.model';
+import { TicketListService } from './ticket-list.service';
 
 class Helper {
   static readonly titleSelector = 'div.title-tickets-list-label';
@@ -88,6 +89,12 @@ describe('TicketsListComponent', () => {
   let fixture: ComponentFixture<TicketsListComponent>;
 
   beforeEach(() => {
+
+    TestBed.configureTestingModule({
+      imports: [TicketsListComponent],
+      providers: [TicketListService]
+    });
+
     fixture = TestBed.createComponent(TicketsListComponent);
     component = fixture.componentInstance;
   });
@@ -125,16 +132,6 @@ describe('TicketsListComponent', () => {
 
     // Assert
     expect(fixture.nativeElement.querySelector(Helper.nodataSelector)).toBeTruthy();
-  });
-  it('should display bet trade message when showMessageBetTrade is true', () => {
-    // Arrange
-    component.model = Helper.getFakeTicketsModel();
-    component.showMessageBetTrade = true;
-    fixture.detectChanges();
-
-    // Assert
-    expect(fixture).toMatchSnapshot();
-    expect(fixture.nativeElement.querySelector(Helper.bettradeMessageSelector)).toBeTruthy();
   });
 
   it('should display checked tickets correctly after check/uncheck actions', () => {

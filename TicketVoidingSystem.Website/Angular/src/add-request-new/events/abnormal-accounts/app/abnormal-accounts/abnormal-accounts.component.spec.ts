@@ -12,6 +12,8 @@ import { AbnormalAccountModel } from '../../../../models/abnormal-account.model'
 import { PrimitiveProperty } from './models/primitive-property.model';
 import { TVSRequestActionType } from '../../../../../utility/constants/config';
 import { AccountTableComponent } from './account-table/account-table.component';
+import { AccountWinlostModel } from './models/account-winlost.model';
+import { AdjustedAccountModel } from './account-affected-ticket/account-affected-ticket.model';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -22,13 +24,35 @@ class Helper {
     subIssueTypeId: '1',
     action: TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString(),
     isTest: true,
-    isVoided: false,
-    isChangeSubTypeManual: true,
-    isAbnormal: false
+    isChangeSubTypeManual: true
   } as FilterModel;
   static readonly fakeOthersModel = new OthersModel();
   static readonly fakeAbnormalAccountModel = new AbnormalAccountModel();
   static readonly fakePrimitiveProps = new PrimitiveProperty();
+
+  static createMockAccountWinlostModel(overrides: Partial<AccountWinlostModel> = {}): AccountWinlostModel {
+    return {
+      custId: 1,
+      username: 'testUser',
+      adjustVoidLimitString: '0',
+      isShowOnTable: true,
+      transInfoAccountJson: '',
+      isEditedTicket: false,
+      isCanEditTicket: true,
+      isHighlight: false,
+      isShowInput: true,
+      ...overrides
+    } as AccountWinlostModel;
+  }
+
+  static createMockAdjustedAccountModel(overrides: Partial<AdjustedAccountModel> = {}): AdjustedAccountModel {
+    return {
+      custId: 1,
+      accountWinlostTables: [],
+      ticketTableViewModel: {} as any,
+      ...overrides
+    };
+  }
 }
 
 describe('AbnormalAccountsComponent', () => {
@@ -144,85 +168,195 @@ describe('AbnormalAccountsComponent', () => {
     expect(saveRequestService.saveRequest).toHaveBeenCalled();
   });
 
-  it('should not proceed search if account table is invalid', async () => {
-    // Arrange
-    component.accountTableComponent = {
-      isValid: () => false,
-      isCancelRecalculateAmount: false
-    } as AccountTableComponent;
-    addRequestStore.changeBlockingUiStatus = jest.fn();
-    validationService.checkBusinessRule = jest.fn();
-
-    // Act
-    await component.handleSearchEvent();
-
-    // Assert
-    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
-    expect(validationService.checkBusinessRule).not.toHaveBeenCalled();
-  });
-
-  it('should process search event when account table is valid', async () => {
-    // Arrange
-    component.accountTableComponent = {
-      isValid: () => true,
-      isCancelRecalculateAmount: false
-    } as AccountTableComponent;
-    validationService.checkBusinessRule = jest.fn().mockResolvedValue({
-      accountWinlostModels: [],
-      transInfoAddRequestModel: {}
+  describe('handleSearchEvent', () => {
+    beforeEach(() => {
+      addRequestStore.changeBlockingUiStatus = jest.fn();
+      validationService.checkBusinessRule = jest.fn();
+      component.primitiveProps = {} as PrimitiveProperty;
+      validationService.checkBusinessRule = jest.fn();
     });
-    addRequestStore.changeBlockingUiStatus = jest.fn();
 
-    // Act
-    await component.handleSearchEvent();
+    it('should not proceed search if account table is invalid', async () => {
+      // Arrange
+      component.accountTableComponent = {
+        isValid: () => false,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
 
-    // Assert
-    expect(validationService.checkBusinessRule).toHaveBeenCalled();
-    expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+      expect(validationService.checkBusinessRule).not.toHaveBeenCalled();
+    });
+
+    it('should process search event when account table is valid', async () => {
+      // Arrange
+      component.accountTableComponent = {
+        isValid: () => true,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue({
+        accountWinlostModels: [],
+        transInfoAddRequestModel: {}
+      });
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(validationService.checkBusinessRule).toHaveBeenCalled();
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
+
+    it('should set isCancelRecalculateAmount to true when account table exists', async () => {
+      // Arrange
+      const mockAccountTable = {
+        isValid: () => true,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
+      component.accountTableComponent = mockAccountTable;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue({
+        accountWinlostModels: [],
+        transInfoAddRequestModel: {}
+      });
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(mockAccountTable.isCancelRecalculateAmount).toBe(true);
+    });
+
+    it('should set isCheckedShowAdjustAccount to false', async () => {
+      // Arrange
+      component.primitiveProps.isCheckedShowAdjustAccount = true;
+      component.accountTableComponent = {
+        isValid: () => true,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue({
+        accountWinlostModels: [],
+        transInfoAddRequestModel: {}
+      });
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(component.primitiveProps.isCheckedShowAdjustAccount).toBe(false);
+    });
+
+    it('should update validAccountWinlostModels and transInfoAddRequestModel from validation result', async () => {
+      // Arrange
+      const mockValidationResult = {
+        accountWinlostModels: [
+          { custId: 1, username: 'test1', isEditedTicket: false },
+          { custId: 2, username: 'test2', isEditedTicket: false }
+        ],
+        transInfoAddRequestModel: { transInfoJson: 'test' }
+      };
+      component.accountTableComponent = {
+        isValid: () => true,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue(mockValidationResult);
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(component.primitiveProps.validAccountWinlostModels).toEqual(mockValidationResult.accountWinlostModels);
+      expect(component.primitiveProps.transInfoAddRequestModel).toEqual(mockValidationResult.transInfoAddRequestModel);
+    });
+
+    it('should handle isShowUserInfo case when action is AUTO_VOID_INSTANT_WITH_POLICY_ID', async () => {
+      // Arrange
+      component.filter.action = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+      component.accountAffectedTicketModel.adjustedAccounts = [Helper.createMockAdjustedAccountModel({ custId: 1 })];
+      component.primitiveProps.validAccountWinlostModels = [
+        Helper.createMockAccountWinlostModel({ custId: 1, isEditedTicket: false }),
+        Helper.createMockAccountWinlostModel({ custId: 2, isEditedTicket: false })
+      ];
+      component.accountTableComponent = {
+        isValid: () => true,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue({
+        accountWinlostModels: [],
+        transInfoAddRequestModel: {}
+      });
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(component.accountAffectedTicketModel.adjustedAccounts).toEqual([]);
+    });
+
+    it('should not handle isShowUserInfo case when action is not AUTO_VOID_INSTANT_WITH_POLICY_ID', async () => {
+      // Arrange
+      component.filter.action = 'OTHER_ACTION';
+      component.accountAffectedTicketModel.adjustedAccounts = [Helper.createMockAdjustedAccountModel({ custId: 1 })];
+      component.primitiveProps.validAccountWinlostModels = [
+        Helper.createMockAccountWinlostModel({ custId: 1, isEditedTicket: true }),
+        Helper.createMockAccountWinlostModel({ custId: 2, isEditedTicket: true })
+      ];
+      component.accountTableComponent = {
+        isValid: () => true,
+        isCancelRecalculateAmount: false
+      } as AccountTableComponent;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue({
+        accountWinlostModels: [],
+        transInfoAddRequestModel: {}
+      });
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(component.accountAffectedTicketModel.adjustedAccounts).toEqual([Helper.createMockAdjustedAccountModel({ custId: 1 })]);
+    });
+
+    it('should handle case when accountTableComponent is null', async () => {
+      // Arrange
+      component.accountTableComponent = null;
+      validationService.checkBusinessRule = jest.fn().mockResolvedValue({
+        accountWinlostModels: [],
+        transInfoAddRequestModel: {}
+      });
+
+      // Act
+      await component.handleSearchEvent();
+
+      // Assert
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
+      expect(validationService.checkBusinessRule).toHaveBeenCalled();
+      expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
+    });
   });
 
   describe('changeShowAdjustAccount', () => {
     it('should show only editable accounts when isCheckedShowAdjustAccount is true', () => {
       // Arrange
       component.primitiveProps.validAccountWinlostModels = [
-        {
+        Helper.createMockAccountWinlostModel({
           custId: 1,
           username: 'test1',
-          givenCredit: 0,
-          adjustVoidLimit: 0,
-          oldAdjustVoidLimit: 0,
-          currentWinning: 0,
-          currentLosing: 0,
-          isEditedTicket: false,
           isCanEditTicket: false,
-          transInfoAccountJson: '',
-          isShowOnTable: false,
-          estimateVoidAmount: 0,
-          estimateVoidAmountUnEditableTickets: 0,
-          winLostAfterVoid: 0,
-          isHighlight: false,
-          adjustVoidLimitString: '0',
-          isShowInput: false
-        },
-        {
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
           custId: 2,
           username: 'test2',
-          givenCredit: 0,
-          adjustVoidLimit: 0,
-          oldAdjustVoidLimit: 0,
-          currentWinning: 0,
-          currentLosing: 0,
-          isEditedTicket: false,
           isCanEditTicket: true,
           transInfoAccountJson: '',
-          isShowOnTable: false,
           estimateVoidAmount: 0,
-          estimateVoidAmountUnEditableTickets: 0,
-          winLostAfterVoid: 0,
-          isHighlight: false,
-          adjustVoidLimitString: '0',
-          isShowInput: false
-        }
+          adjustVoidLimitString: '0'
+        })
       ];
       component.primitiveProps.isCheckedShowAdjustAccount = true;
 
@@ -237,44 +371,20 @@ describe('AbnormalAccountsComponent', () => {
     it('should show all accounts when isCheckedShowAdjustAccount is false', () => {
       // Arrange
       component.primitiveProps.validAccountWinlostModels = [
-        {
+        Helper.createMockAccountWinlostModel({
           custId: 1,
           username: 'test1',
-          givenCredit: 0,
-          adjustVoidLimit: 0,
-          oldAdjustVoidLimit: 0,
-          currentWinning: 0,
-          currentLosing: 0,
-          isEditedTicket: false,
           isCanEditTicket: false,
           transInfoAccountJson: '',
-          isShowOnTable: true,
-          estimateVoidAmount: 0,
-          estimateVoidAmountUnEditableTickets: 0,
-          winLostAfterVoid: 0,
-          isHighlight: false,
-          adjustVoidLimitString: '0',
-          isShowInput: false
-        },
-        {
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
           custId: 2,
           username: 'test2',
-          givenCredit: 0,
-          adjustVoidLimit: 0,
-          oldAdjustVoidLimit: 0,
-          currentWinning: 0,
-          currentLosing: 0,
-          isEditedTicket: false,
           isCanEditTicket: true,
           transInfoAccountJson: '',
-          isShowOnTable: true,
-          estimateVoidAmount: 0,
-          estimateVoidAmountUnEditableTickets: 0,
-          winLostAfterVoid: 0,
-          isHighlight: false,
-          adjustVoidLimitString: '0',
-          isShowInput: false
-        }
+          adjustVoidLimitString: '0'
+        })
       ];
       component.primitiveProps.isCheckedShowAdjustAccount = false;
 
@@ -285,9 +395,128 @@ describe('AbnormalAccountsComponent', () => {
       expect(component.primitiveProps.validAccountWinlostModels[0].isShowOnTable).toBeTruthy();
       expect(component.primitiveProps.validAccountWinlostModels[1].isShowOnTable).toBeTruthy();
     });
+
+    it('should handle empty validAccountWinlostModels array', () => {
+      // Arrange
+      component.primitiveProps.validAccountWinlostModels = [];
+      component.primitiveProps.isCheckedShowAdjustAccount = true;
+
+      // Act
+      component.changeShowAdjustAccount();
+
+      // Assert
+      expect(component.primitiveProps.validAccountWinlostModels).toEqual([]);
+    });
+
+    it('should handle null validAccountWinlostModels', () => {
+      // Arrange
+      component.primitiveProps.validAccountWinlostModels = null;
+      component.primitiveProps.isCheckedShowAdjustAccount = true;
+
+      // Act & Assert - should not throw error
+      expect(() => component.changeShowAdjustAccount()).not.toThrow();
+    });
+
+    it('should handle mixed account types with isCheckedShowAdjustAccount true', () => {
+      // Arrange
+      component.primitiveProps.validAccountWinlostModels = [
+        Helper.createMockAccountWinlostModel({
+          custId: 1,
+          username: 'test1',
+          isCanEditTicket: false,
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
+          custId: 2,
+          username: 'test2',
+          isCanEditTicket: true,
+          transInfoAccountJson: '',
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
+          custId: 3,
+          username: 'test3',
+          isCanEditTicket: false,
+          adjustVoidLimitString: '0'
+        })
+      ];
+      component.primitiveProps.isCheckedShowAdjustAccount = true;
+
+      // Act
+      component.changeShowAdjustAccount();
+
+      // Assert
+      expect(component.primitiveProps.validAccountWinlostModels[0].isShowOnTable).toBeFalsy();
+      expect(component.primitiveProps.validAccountWinlostModels[1].isShowOnTable).toBeTruthy();
+      expect(component.primitiveProps.validAccountWinlostModels[2].isShowOnTable).toBeFalsy();
+    });
+
+    it('should handle mixed account types with isCheckedShowAdjustAccount false', () => {
+      // Arrange
+      component.primitiveProps.validAccountWinlostModels = [
+        Helper.createMockAccountWinlostModel({
+          custId: 1,
+          username: 'test1',
+          isCanEditTicket: false,
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
+          custId: 2,
+          username: 'test2',
+          isCanEditTicket: true,
+          transInfoAccountJson: '',
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
+          custId: 3,
+          username: 'test3',
+          isCanEditTicket: false,
+          adjustVoidLimitString: '0'
+        })
+      ];
+      component.primitiveProps.isCheckedShowAdjustAccount = false;
+
+      // Act
+      component.changeShowAdjustAccount();
+
+      // Assert
+      expect(component.primitiveProps.validAccountWinlostModels[0].isShowOnTable).toBeTruthy();
+      expect(component.primitiveProps.validAccountWinlostModels[1].isShowOnTable).toBeTruthy();
+      expect(component.primitiveProps.validAccountWinlostModels[2].isShowOnTable).toBeTruthy();
+    });
+
+    it('should handle accounts with undefined isCanEditTicket property', () => {
+      // Arrange
+      component.primitiveProps.validAccountWinlostModels = [
+        Helper.createMockAccountWinlostModel({
+          custId: 1,
+          username: 'test1',
+          isCanEditTicket: undefined,
+          adjustVoidLimitString: '0'
+        }),
+        Helper.createMockAccountWinlostModel({
+          custId: 2,
+          username: 'test2',
+          isCanEditTicket: true,
+          transInfoAccountJson: '',
+          adjustVoidLimitString: '0'
+        })
+      ];
+      component.primitiveProps.isCheckedShowAdjustAccount = true;
+
+      // Act
+      component.changeShowAdjustAccount();
+
+      // Assert
+      expect(component.primitiveProps.validAccountWinlostModels[0].isShowOnTable).toBeFalsy();
+      expect(component.primitiveProps.validAccountWinlostModels[1].isShowOnTable).toBeTruthy();
+    });
   });
 
   it('should return true for AUTO_VOID_INSTANT_WITH_POLICY_ID action', () => {
+    // Arrange
+    component.filter.action = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
+
     // Act
     const result = component.isShowUserInfo();
 

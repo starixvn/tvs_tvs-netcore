@@ -7,11 +7,13 @@ import { PermissionAddRequest } from '../../models/permission-add-request.model'
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel, ValidationDuplicateTickets } from '../models/check-duplicate-tickets.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { NumberItemService } from '../../../../../utility/components/bet-ids/number-item.service';
 
 @Injectable()
 export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
-
+  private readonly numberItemService = inject(NumberItemService);
+  
   public isFilterMixParlay(filterBy: number): boolean {
     return filterBy === AbnormalFilterBy.MIX_PARLAY;
   }
@@ -55,8 +57,8 @@ export class ValidationService {
   }
 
   private updateBetIdsBeforeCallApi(betIdsComponent: BetIdsComponent): void {
-    betIdsComponent.groupNumber.resetAllItemsToValid();
-    betIdsComponent.groupNumber.checkDuplicatedItems();
+    this.numberItemService.resetAllItemsToValid(betIdsComponent.groupNumber);
+    this.numberItemService.checkDuplicatedItems(betIdsComponent.groupNumber.items);
   }
 
   private updateModelAfterCallApi(args: SaveRequestArg, validationViewModel: CheckDuplicateTicketsViewModel): void {
@@ -89,14 +91,14 @@ export class ValidationService {
   }
 
   private highlightInvalidTransIds(model: ValidationDuplicateTickets, betIdsComponent: BetIdsComponent, isHasPermissionAddSettledTicket: boolean): void {
-    betIdsComponent.groupNumber.updateMoved(model.movedTransIds);
-    betIdsComponent.groupNumber.updateDifferent(model.differentMatchTransIds);
-    betIdsComponent.groupNumber.updateInvalidItems(model.invalidTransIds, TEXT.INVALID_TICKETS);
-    betIdsComponent.groupNumber.updateInvalidItems(model.unsupportedTransIds, TEXT.INVALID_UNSUPPORTED_TICKETS);
-    betIdsComponent.groupNumber.updateInvalidItems(model.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.movedTransIds);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.differentMatchTransIds);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.invalidTransIds, TEXT.INVALID_TICKETS);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.unsupportedTransIds, TEXT.INVALID_UNSUPPORTED_TICKETS);
+    this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.existingReqTransIds, TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
 
     if (!isHasPermissionAddSettledTicket) {
-      betIdsComponent.groupNumber.updateInvalidItems(model.settledTransIds, TEXT.INVALID_SETTLED_TICKETS);
+      this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.settledTransIds, TEXT.INVALID_SETTLED_TICKETS);
     }
   }
 

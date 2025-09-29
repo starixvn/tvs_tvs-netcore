@@ -25,7 +25,7 @@ export class ModalService {
     const modalContent = this.openModalContent();
     modalContent.data = data;
     modalContent.close.subscribe(() => {
-      this.executeMethodUndefinedable(closeEvent);
+      this.executeMethodUndefinable(closeEvent);
     });
   }
 
@@ -38,11 +38,11 @@ export class ModalService {
     const modalContent = this.openModalContent();
     modalContent.data = data;
     modalContent.confirm.subscribe(() => {
-      this.executeMethodUndefinedable(onYes);
+      this.executeMethodUndefinable(onYes);
     });
 
     modalContent.close.subscribe(() => {
-      this.executeMethodUndefinedable(onNo);
+      this.executeMethodUndefinable(onNo);
     });
   }
 
@@ -55,23 +55,15 @@ export class ModalService {
     const modalContent = this.openModalContent();
     modalContent.data = data;
     modalContent.confirmYes.subscribe(() => {
-      this.executeMethodUndefinedable(onYes);
+      this.executeMethodUndefinable(onYes);
     });
 
     modalContent.confirmNo.subscribe(() => {
-      this.executeMethodUndefinedable(onNo);
+      this.executeMethodUndefinable(onNo);
     });
 
     modalContent.close.subscribe(() => {
-      this.executeMethodUndefinedable(onCancel);
-    });
-  }
-
-  warning(message: string) {
-    this.open({
-      title: 'Warning',
-      message,
-      type: ModalType.Alert
+      this.executeMethodUndefinable(onCancel);
     });
   }
 
@@ -82,14 +74,14 @@ export class ModalService {
       data.message = result.errMsg;
       modalContent.data = data;
       modalContent.confirm.subscribe(() => {
-        this.executeMethodUndefinedable(onNo);
+        this.executeMethodUndefinable(onNo);
       });
     } else {
-      this.executeMethodUndefinedable(onYes);
+      this.executeMethodUndefinable(onYes);
     }
   }
 
-  openModalContent() {
+  private openModalContent() {
     this.modalReference = this.ngbModal.open(ModalContentComponent, { centered: true });
     return this.modalReference.componentInstance;
   }
@@ -100,7 +92,7 @@ export class ModalService {
     }
   }
 
-  private executeMethodUndefinedable(method?: () => void): void {
+  private executeMethodUndefinable(method?: () => void): void {
     if (!isUndefined(method)) {
       method();
     }

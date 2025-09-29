@@ -1,13 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../../utility/modules/testing.module';
 import { AdvancedModeComponent } from './advanced-mode.component';
-import { AdvancedModeService } from './advanced-mode.service';
+import { AdvancedModeApiService } from './advanced-mode-api.service';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
-import { BetTeam, GetPlayersQuery, OddsInfo } from './advanced-mode.model';
+import { GetPlayersQuery, OddsInfo } from './advanced-mode.model';
 import { BetType } from '../group-bettypes/group-bettypes.model';
 import { SimpleChange } from '@angular/core';
-import { MultipleSelection } from '../../multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
+import { AdvancedModeService } from './advanced-mode.service';
 
 class Helper {
   static readonly fakeMatchId = '123';
@@ -43,22 +44,24 @@ class Helper {
 describe('AdvancedModeComponent', () => {
   let component: AdvancedModeComponent;
   let fixture: ComponentFixture<AdvancedModeComponent>;
-  let advancedModeService: AdvancedModeService;
+  let advancedModeApiService: AdvancedModeApiService;
   let commonService: CommonService;
-
+  let advancedModeService: AdvancedModeService;
+  
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [
-        AdvancedModeService,
+        AdvancedModeApiService,
         CommonService,
         StaticService
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AdvancedModeComponent);
-    advancedModeService = fixture.debugElement.injector.get(AdvancedModeService);
+    advancedModeApiService = fixture.debugElement.injector.get(AdvancedModeApiService);
     commonService = fixture.debugElement.injector.get(CommonService);
+    advancedModeService = fixture.debugElement.injector.get(AdvancedModeService);
     component = fixture.componentInstance;
   });
 
@@ -81,9 +84,9 @@ describe('AdvancedModeComponent', () => {
     component.matchId = Helper.fakeMatchId;
     component.allBetTypes = Helper.fakeBetTypes;
     const mockBetTeams = [
-      new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
+      advancedModeService.initBetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
     ];
-    advancedModeService.getBetTeams = jest.fn().mockResolvedValue(mockBetTeams);
+    advancedModeApiService.getBetTeams = jest.fn().mockResolvedValue(mockBetTeams);
     commonService.getOddsInfoSpecialBetTypes = jest.fn().mockResolvedValue([]);
 
     // Act
@@ -110,7 +113,7 @@ describe('AdvancedModeComponent', () => {
         oddsInfo: '1.5'
       }
     ];
-    const mockBetTeam = new BetTeam([0, 'Test', '216', 1, '216'], [], [], [], false);
+    const mockBetTeam = advancedModeService.initBetTeam([0, 'Test', '216', 1, '216'], [], [], [], false);
     const mockMultiSelection = {
       name: 'test',
       value: 'test',
@@ -120,7 +123,7 @@ describe('AdvancedModeComponent', () => {
     };
     mockBetTeam.multiSelection = mockMultiSelection;
     component.betTeams = [mockBetTeam];
-    advancedModeService.getPlayer = jest.fn().mockResolvedValue(mockPlayers);
+    advancedModeApiService.getPlayer = jest.fn().mockResolvedValue(mockPlayers);
 
     // Act
     await component.ngOnChanges({
@@ -133,13 +136,13 @@ describe('AdvancedModeComponent', () => {
     });
 
     // Assert
-    expect(advancedModeService.getPlayer).toHaveBeenCalledWith(Helper.fakeGetPlayerQuery);
+    expect(advancedModeApiService.getPlayer).toHaveBeenCalledWith(Helper.fakeGetPlayerQuery);
   });
 
   it('should render bet teams correctly', () => {
     // Arrange
     const mockBetTeams = [
-      new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
+      advancedModeService.initBetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
     ];
 
     // Act
@@ -161,32 +164,6 @@ describe('AdvancedModeComponent', () => {
     expect(component.setList).toBeDefined();
     expect(component.gameList).toBeDefined();
     expect(component.inningList).toBeDefined();
-  });
-
-  it('should validate input correctly', () => {
-    // Arrange
-    const betTypeId = '228';
-    const value = '1.5';
-    const className = 'test-class';
-
-    // Act
-    const result = component['validateInputMultipleDecimal'](betTypeId, value, className);
-
-    // Assert
-    expect(result).toBeTruthy();
-  });
-
-  it('should handle invalid input', () => {
-    // Arrange
-    const betTypeId = '228';
-    const value = 'invalid';
-    const className = 'test-class';
-
-    // Act
-    const result = component['validateInputMultipleDecimal'](betTypeId, value, className);
-
-    // Assert
-    expect(result).toBeFalsy();
   });
 
   it('should update player cricket correctly', () => {
@@ -229,7 +206,7 @@ describe('AdvancedModeComponent', () => {
   it('should validate bet types correctly', () => {
     // Arrange
     component.betTeams = [
-      new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
+      advancedModeService.initBetTeam([0, 'Test', '1', 1, '1'], [], [], [], false)
     ];
     component.allBetTypes = Helper.fakeBetTypes;
 
@@ -243,27 +220,12 @@ describe('AdvancedModeComponent', () => {
   it('should handle bet type changes correctly', () => {
     // Arrange
     const betType = Helper.fakeBetTypes[0];
-    const betTeam = new BetTeam([0, 'Test', '1', 1, '1'], [], [], [], false);
+    const betTeam = advancedModeService.initBetTeam([0, 'Test', '1', 1, '1'], [], [], [], false);
 
     // Act
     component['changeBetTeam'](betType, betTeam);
 
     // Assert
     expect(betTeam.checkedBetTypes).toContain(betType.value);
-  });
-
-  it('should handle multiple decimal input change', () => {
-    // Arrange
-    const testCase = [{valueInput:'1.5&2', expected:0}, {valueInput:'1', expected:0}, {valueInput:'a3', expected:1}];
-    const betTypeId = '228';
-    const className = 'test-class';
-    component.tooltip.display = jest.fn();
-    component.tooltip.hide = jest.fn();
-
-    // Act and Assert
-    testCase.forEach(testCase => {
-      component['validateInputMultipleDecimal'](betTypeId, testCase.valueInput, className);
-      expect(component.tooltip.display).toHaveBeenCalledTimes(testCase.expected);
-    });
   });
 }); 

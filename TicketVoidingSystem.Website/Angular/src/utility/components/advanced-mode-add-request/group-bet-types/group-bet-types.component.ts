@@ -6,6 +6,7 @@ import { TEXT } from '../../../../utility/constants/text';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
 import { Tooltip } from '../../tooltip/tooltip.model';
 import { BetTypeAddRequest, GroupBetTypeAddRequest, GroupBetTypesAddRequestModel } from './group-bet-types.model';
+import { BetTypeService } from './bet-type.service';
 
 @Component({
   standalone: true,
@@ -25,14 +26,15 @@ export class GroupBetTypesComponent {
   tooltip = new Tooltip();
 
   element = inject(ElementRef);
-
+  betTypeService = inject(BetTypeService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
 
   changeAllBetTypes() {
     this.changeFilterEvent.emit();
-    this.betTypesEvent.emit(this.model.getAllBetTypes());
+    this.betTypesEvent.emit(this.betTypeService.getAllBetTypes(this.model.groupBetTypes));
   }
 
   changeGroupBetTypes(group: GroupBetTypeAddRequest) {
@@ -47,7 +49,7 @@ export class GroupBetTypesComponent {
 
   changeBetTypes() {
     this.changeFilterEvent.emit();
-    this.betTypesEvent.emit(this.model.getAllBetTypes());
+    this.betTypesEvent.emit(this.betTypeService.getAllBetTypes(this.model.groupBetTypes));
   }
 
   isValidity() {
@@ -60,5 +62,21 @@ export class GroupBetTypesComponent {
     }
 
     return true;
+  }
+
+  changeCheckedBetTypeToGroup(group: GroupBetTypeAddRequest){
+    this.betTypeService.changeCheckedBetTypeToGroup(group);
+  }
+
+  changeCheckedGroupToBetType(group: GroupBetTypeAddRequest){
+    this.betTypeService.changeCheckedGroupToBetType(group);
+  }
+
+  changeCheckedModelToGroup() {
+    this.betTypeService.changeCheckedModelToGroup(this.model);
+  }
+
+  changeCheckedGroupToModel() {
+    this.betTypeService.changeCheckedGroupToModel(this.model);
   }
 }

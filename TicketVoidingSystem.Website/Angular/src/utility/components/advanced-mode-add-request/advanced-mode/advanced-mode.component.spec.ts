@@ -7,6 +7,8 @@ import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model'
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest } from './advanced-mode.model';
 import { SimpleChange } from '@angular/core';
+import { BetTeamAddRequestService } from './bet-team-add-request.service';
+import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
 
 class Helper {
   static readonly fakeMatchId = 123;
@@ -19,7 +21,7 @@ class Helper {
     selectedAllBetTypes: []
   } as unknown as AdvancedModeAddRequestModel;
   static readonly fakeBetTeams = [
-    new BetTeamAddRequest([0, 'Test Team', 'value', 1, '1'], [], [], true)
+    new BetTeamAddRequestService(new MultipleSelectionService()).initBetTeamAddRequest([0, 'Test Team', 'value', 1, '1'], [], [], true)
   ] as unknown as BetTeamAddRequest[];
   static readonly fakeOddsInfo = [
     {
@@ -152,10 +154,8 @@ describe('AdvancedModeComponent', () => {
       multiSelection: null,
       isMultiple: false,
       xmlAttribute: 'test',
-      isDisabled: false,
-      renderItems: function(items: any[]) {
-        this.items = items || [];
-      }
+      isDisabled: false
+      
     }];
 
     // Act

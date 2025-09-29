@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
 import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
@@ -43,7 +43,7 @@ export class VoidPageService {
     voidPageItem.templateValue = this.templateMessageService.getTemplateValue(voidPageItem, requestDetail);
     voidPageItem.voidReason = await this.getVoidedReason(voidPageItem);
     voidPageItem.licenseeAffectedList = voidPageItem.voidTicketsMini.licenseeAffectedList;
-    voidPageItem.licenseeAffectedList = _.clone(voidPageItem.licenseeAffectedList);
+    voidPageItem.licenseeAffectedList = clone(voidPageItem.licenseeAffectedList);
   }
 
   private initBasicRequestInfo(requestDetail: RequestDetailViewModel): BasicRequestInfo {

@@ -4,27 +4,29 @@ import { TEXT } from '../../../utility/constants/text';
 import { AppService } from '../app.service';
 import { FilterComponent } from '../filter/filter.component';
 import { FilterModel } from '../filter/filter.model';
+import { UserNameService } from '../../../utility/components/user-names/user-name.service';
 
 @Injectable()
 export class ValidationService {
   private readonly FILTER_SITE_CLASS = 'filter-site-dropdown';
   private readonly FILTER_SUB_TYPE_CLASS = 'sub-type-dropdown';
   private readonly FILTER_VOID_VIP_CLASS = 'void-vip-dropdown';
-  appService = inject(AppService);
+  private readonly appService = inject(AppService);
+  private readonly userNameService = inject(UserNameService);
 
   async validateUsernames(usernames: string, usernamesComponent: UsernamesComponent): Promise<boolean>{
     if (usernames === '') {
       return usernamesComponent.checkValidItems();
     }
-    usernamesComponent.groupUsername.resetAllValue();
-    usernamesComponent.groupUsername.updateDuplicatedItems(usernames);
+    this.userNameService.resetAllValue(usernamesComponent.groupUsername);
+    this.userNameService.updateDuplicatedItems(usernamesComponent.groupUsername, usernames);
 
     const result = await this.appService.checkUsernames(usernames);
     if (result.invalidUsernames) {
-      usernamesComponent.groupUsername.updateInvalid(result.invalidUsernames);
+      this.userNameService.updateInvalid(usernamesComponent.groupUsername, result.invalidUsernames);
     }
     if (result.existedUsernames) {
-      usernamesComponent.groupUsername.updateExisted(result.existedUsernames);
+      this.userNameService.updateExisted(usernamesComponent.groupUsername, result.existedUsernames);
     }
     
     return usernamesComponent.checkValidItems();
