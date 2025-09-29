@@ -1,7 +1,9 @@
 ﻿import { inject, Injectable } from '@angular/core';
 import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { SelectVoidBetAutomationInfoQuery, VoidBetAutomationModel } from './app.model';
+import { InsertBetTicket14ResultModel } from './correct-summary-ticket/correct-summary-ticket.model';
 import { GetLetsTalkModel, LetsTalkModel, UpdateLetsTalkModel } from './letstalk/letstalk.model';
 import { AutoVoidRequestQueueModel, GetAutoVoidRequestQueueModel, UpdateAutoVoidRequestQueueModel } from './scanning-auto-void/scanning-auto-void.model';
 import { TicketVoidingQueueModel, UpdateTicketVoidingQueueModel } from './void/void.model';
@@ -44,7 +46,7 @@ export class AppApiService {
   async updateVoidingHistory(model: UpdateVoidingHistory): Promise<boolean> {
     return this.httpService.postJson(model, `api/ManageVoidServices/UpdateVoidingHistory`);
   }
-  
+
   async getLetsTalk(model: GetLetsTalkModel): Promise<LetsTalkModel[]> {
     return this.httpService.postJson(model, `api/ManageVoidServices/GetLetstalk`);
   }
@@ -55,5 +57,13 @@ export class AppApiService {
 
   async getRequestNoAuth(id: number): Promise<RequestDetailViewModel> {
     return this.httpService.getJson(`api/ManageRequest/GetRequestNoAuth/${id}`);
+  }
+
+  async insertBetTicket14(transIds: string): Promise<InsertBetTicket14ResultModel> {
+    return this.httpService.postJson({ transIds }, `api/ManageVoidServices/InsertBetTicket14`);
+  }
+
+  async updateSummaryTicket19999(transIds: string): Promise<Result<null>> {
+    return this.httpService.postJson({ transIds }, `api/ManageVoidServices/UpdateSummaryTicket19999`);
   }
 }

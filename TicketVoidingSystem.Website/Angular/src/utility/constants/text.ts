@@ -101,6 +101,7 @@ export class TEXT {
     static readonly INVALID_MIX_PARLAY_TICKETS = 'Mix Parlay ticket';
     static readonly INVALID_EXISTING_ON_OTHER_REQUEST = 'Existing on other request';
     static readonly INVALID_TICKETS = 'Invalid ticket';
+    static readonly BEING_BALANCE_UP = 'Being Balance Up';
     static readonly INVALID_NONLIVE_TICKETS = 'Non-Live ticket';
     static readonly INVALID_DIFFERENT_LIVE_SCORE = 'Different live score';
     static readonly INVALID_AB_WHITE_LIST_TICKETS = 'AB Exception List ticket';

@@ -60,6 +60,16 @@
         <Setting Key="TicketVoiding_VoidBetAutomation_Service_Upd" SpName="TicketVoiding_VoidBetAutomation_Service_Upd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_ManageVoidServices_VoidingHistory_Select" SpName="TicketVoiding_ManageVoidServices_VoidingHistory_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_VoidingHistory_Update" SpName="TicketVoiding_VoidingHistory_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+
+        <Setting Key="DBCTG.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
+
+        <Setting Key="DBCTG.TicketVoiding_SummaryTicket19999_Update" SpName="TicketVoiding_SummaryTicket19999_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.TicketVoiding_SummaryTicket19999_Update" SpName="TicketVoiding_SummaryTicket19999_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.TicketVoiding_SummaryTicket19999_Update" SpName="TicketVoiding_SummaryTicket19999_Update" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.TicketVoiding_SummaryTicket19999_Update" SpName="TicketVoiding_SummaryTicket19999_Update" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="MarkTickets">
         <Setting Key="DBCTG.TicketVoiding_AutoUnmark_TransInfo_Select" SpName="TicketVoiding_AutoUnmark_TransInfo_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />

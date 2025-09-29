@@ -1,4 +1,4 @@
-import { StaticService } from "../../services/static.service"; 
+import { StaticService } from "../../services/static.service";
 
 export class CSSCLASS {
     static readonly ITEM_NUMBER_SELECTED = 'item-number-selected';
@@ -85,6 +85,15 @@ export class GroupNumber {
             const movedItems = text.split(',');
             this.items.forEach(item => {
                 this.setItemInvalid(movedItems, item, CSSCLASS.MOVED);
+            });
+        }
+    }
+
+    updateBeingBalanceUp(text: string, tooltipText: string) {
+        if (StaticService.isStringHasLength(text)) {
+            const transIds = text.split(',');
+            this.items.forEach(item => {
+                this.setItemInvalid(transIds, item, CSSCLASS.MOVED, tooltipText);
             });
         }
     }
