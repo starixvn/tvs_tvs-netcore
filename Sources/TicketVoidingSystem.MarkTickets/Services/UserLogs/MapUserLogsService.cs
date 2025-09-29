@@ -45,6 +45,7 @@ public class MapUserLogsServiceImp(RemotingRefWrapperService remotingRefService)
             UserLogConstant.AutoMark => UserLogConstant.AutoMarkText,
             UserLogConstant.AutoUnmark => UserLogConstant.AutoUnmarkText,
             UserLogConstant.UnmarkAll => UserLogConstant.UnmarkAllText,
+            UserLogConstant.AutoConfirmUnmark => UserLogConstant.AutoConfirmUnmarkText,
             _ => ""
         };
 
