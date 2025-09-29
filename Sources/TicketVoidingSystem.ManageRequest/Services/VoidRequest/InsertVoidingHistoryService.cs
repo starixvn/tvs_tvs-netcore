@@ -3,6 +3,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest;
 
@@ -29,7 +30,7 @@ public class InsertVoidingHistoryServiceImp(
             VoidData = CreateVoidDataXmlModel(query).ToXml()
         };
 
-        await loggingService.InfoAsync($"InsertVoidingHistory: {JsonSerializer.Serialize(command)}");
+        await loggingService.InfoAsync($"InsertVoidingHistory: {Helper.JsonSerializerUnsafeRelaxed(command)}");
         var model = await repository.GetAsync<VoidingHistoryModel>(command);
 
         return model.VoidingHistoryId;

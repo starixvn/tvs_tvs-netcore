@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Mime;
 using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -107,6 +108,16 @@ public static class Helper
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
             PropertyNameCaseInsensitive = true
+        };
+
+        return JsonSerializer.Serialize(model, options);
+    }
+
+    public static string JsonSerializerUnsafeRelaxed<T>(T model)
+    {
+        var options = new JsonSerializerOptions
+        {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
         };
 
         return JsonSerializer.Serialize(model, options);
