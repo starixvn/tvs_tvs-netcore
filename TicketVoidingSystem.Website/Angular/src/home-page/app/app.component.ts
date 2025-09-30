@@ -50,7 +50,7 @@ export class AppComponent{
   async updateRequestTotalByIssueType() {
     const result = await this.appService.getIssueTypeHomePage(this.issueTypes.map(issueType => issueType.issueTypeId).join(','));
     this.issueTypes.forEach(issueType => {
-      const issueTypeResult = result.find(result => result.issueTypeId === issueType.issueTypeId);
+      const issueTypeResult = result.find(x => x.issueTypeId === issueType.issueTypeId);
       if (issueTypeResult) {
         issueType.totalRequest = issueTypeResult.totalRequest;
       } else {
