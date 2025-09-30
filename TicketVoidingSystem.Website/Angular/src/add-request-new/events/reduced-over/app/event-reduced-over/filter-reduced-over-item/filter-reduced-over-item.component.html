@@ -1,0 +1,56 @@
+<div class="d-flex">
+  <ng-select-mixture class="multiple-selection bet-type-dropdown{{index}} me-2" [selectedItems]="model.betTypeIds"
+    [isDisabled]="isVoided" [model]="model.betTypeNgSelectMixtureModel"
+    (checkedItems)="changeFilter();updateCheckedBetTypes($event)">
+  </ng-select-mixture>
+  <input type="text" class="form-control form-control-sm wicket-over-input{{index}} me-2" numbersOnly [maxLength]="3"
+    [(ngModel)]="model.wicketOver"
+    (ngModelChange)="changeFilter();isValidOnlyNumberWicketOver($event, 'wicket-over-input')"
+    [disabled]="primitivePropertyItem.isDisabledWicketOver || isVoided">
+  <ng-container>
+    @if (!primitivePropertyItem.isDisabledPlayer) {
+    <multiple-selection class="multiple-selection player-dropdown{{index}} me-2" [selectedItems]="model.playerIds"
+      [isDisabled]="isVoided" [multipleSelect]="model.playerMultipleSelection"
+      (checkedItems)="changeFilter();updateCheckedPlayers($event)">
+    </multiple-selection>
+    }
+    @if (primitivePropertyItem.isDisabledPlayer) {
+    <div class="invalid-field me-2"></div>
+    }
+  </ng-container>
+
+  <input type="text" class="form-control form-control-sm runs-input{{index}} me-2" [(ngModel)]="model.runs"
+    (ngModelChange)="changeFilter();isValidSingleDecimalRuns($event, 'runs-input')"
+    [disabled]="primitivePropertyItem.isDisabledRuns || isVoided">
+  <div class="live-indicator{{index}} me-2">
+    <div class="form-check form-check-line">
+      <input class="form-check-input mt-0 me-1" type="checkbox" name="radio-bet-team" id="none-live{{index}}"
+        [disabled]="primitivePropertyItem.isDisabledNonLive || isVoided" [(ngModel)]="model.nonLive"
+        (ngModelChange)="changeFilter()">
+      <label class="form-check-label" for="none-live{{index}}">
+        Non-Live
+      </label>
+    </div>
+    <div class="form-check form-check-line">
+      <input class="form-check-input mt-0 me-1" type="checkbox" name="radio-bet-team" id="live{{index}}"
+        [disabled]="primitivePropertyItem.isDisabledLive || isVoided" [(ngModel)]="model.live"
+        (ngModelChange)="changeFilter()">
+      <label class="form-check-label" for="live{{index}}">
+        Live
+      </label>
+    </div>
+  </div>
+  @if (!(isFirst && isLast)) {
+  <div class="d-flex align-items-center me-2">
+    <em class="pointer fa fa-minus-circle fa-icon-remove" (click)="removeBetTypeItem(index)"
+      [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+  </div>
+  }
+  @if (isLast) {
+  <div class="d-flex align-items-center">
+    <em class="pointer fa fa-plus-circle fa-icon-add" (click)="addBetTypeItem()"
+      [ngClass]="{'cursor-not-allowed': isVoided}"></em>
+  </div>
+  }
+</div>
+<tooltip [tooltip]="tooltip"></tooltip>

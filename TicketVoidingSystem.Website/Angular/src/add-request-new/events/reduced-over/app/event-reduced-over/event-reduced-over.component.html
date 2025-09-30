@@ -1,0 +1,26 @@
+<event-league #leagueEvent [isEdit]="isEdit" [matchId]="logInfoEvent.matchId" (changeEvent)="changeMatchEvent()">
+</event-league>
+@if (primitivePropertyEvent.isShowFilterArea) {
+<filter-reduced-over #filterReducedOver [isEdit]="isEdit" [isVoided]="filter.isVoided"
+  [models]="logInfoEvent.filterReducedOvers" [groupReducedOverBetTypes]="groupReducedOverBetTypes"
+  [originalReducedOverBetTypes]="originalReducedOverBetTypes" [originalPlayers]="originalPlayers"
+  [matchId]="logInfoEvent.matchId" (changeFilterEvent)="resetLogInfoOfEvent()">
+</filter-reduced-over>
+}
+<div class="mb-3 mt-3 d-flex">
+  <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm" (click)="clickSearch()">
+    Search
+  </button>
+</div>
+
+<info-site-db-down [infoSiteDBDownModel]="primitivePropertyEvent.infoSiteDBDownModel">
+</info-site-db-down>
+
+<log-info-reduced-over #logInfo [primitiveProps]="primitivePropertyEvent" [logInfo]="logInfoEvent">
+</log-info-reduced-over>
+
+<confirm-add-request [isOpen]="confirmAddRequest.isOpen" [model]="confirmAddRequest" [issueTypes]="issueTypes" [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action" [selectedSubIssueType]="issueTypes.subIssueId"
+  [siteDBDownInfoJson]="primitivePropertyEvent.infoSiteDBDownModel?.siteDBDownInfoJson"
+  (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()">
+</confirm-add-request>

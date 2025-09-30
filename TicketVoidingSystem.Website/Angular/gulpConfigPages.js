@@ -349,6 +349,46 @@ const recoverTicket = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/recover-ticket'
 };
 
+const otherIssues = {
+  pageName: 'OtherIssues',
+  tsconfigFiles: [
+    'add-request-new/events/other-issues/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/other-issues/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/other-issues/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/other-issues'
+};
+
+const notParticipate = {
+  pageName: 'NotParticipate',
+  tsconfigFiles: [
+    'add-request-new/events/not-participate/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/not-participate/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/not-participate/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/not-participate'
+};
+
+const reducedOver = {
+  pageName: 'ReducedOver',
+  tsconfigFiles: [
+    'add-request-new/events/reduced-over/main.ts',
+    'polyfills.ts'
+  ],
+  index: 'src/add-request-new/shared/index.cshtml',
+  indexEJSPath: './src/add-request-new/shared/index.ejs',
+  main: 'src/add-request-new/events/reduced-over/main.ts',
+  deployUrl: 'dist/ticket-voiding-system/reduced-over/',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/reduced-over'
+};
+
+
 const configPages = [
   //homePage,
   //manageVoidServices,
@@ -361,11 +401,11 @@ const configPages = [
   // addRequest,
   // editRequest,
   //voidByBetId
-  // archivedTicket,
-  //dangerAccepted,
-  //redCard,
-  //wrongScore,
-  //technicalError,
+  archivedTicket,
+  dangerAccepted,
+  redCard,
+  wrongScore,
+  technicalError,
   // wrongHdp,
   // wrongOu,
   // wrongOdds,
@@ -374,8 +414,11 @@ const configPages = [
   wrongMarketOffered,
   wrongOfferedName,
   abnormalAccounts,
+  otherIssues,
+  notParticipate,
   abnormalBet,
   duplicateTickets,
+  reducedOver
   recoverTicket
 ];
 

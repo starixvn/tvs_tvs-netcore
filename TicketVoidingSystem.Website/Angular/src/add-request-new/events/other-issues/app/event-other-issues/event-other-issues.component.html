@@ -1,0 +1,69 @@
+<event-league #eventLeague
+  [isEdit]="isEdit"
+  [matchId]="logInfoEvent.matchId"
+  (changeEvent)="changeMatchEvent()">
+</event-league>
+@if (isShowFilterTime()) {
+  <filter-other-issues #filterOtherIssues
+    [isEdit]="isEdit"
+    [filterModel]="filter"
+    (changeFilterEvent)="resetLogInfoOfEvent()"
+    (refreshEvent)="refreshEvent()"
+    [model]="logInfoEvent.filterOtherIssues">
+  </filter-other-issues>
+}
+@if (!isShowFilterTime()) {
+  <div class="btn-reload pt-2">
+    <button [disabled]="filter.isVoided" type="button" class="btn btn-default btn-sm ms-0" (click)="refreshEvent()">
+      <span><i class="fa fa-refresh" aria-hidden="true"></i></span>
+    </button>
+  </div>
+}
+@if (primitiveProps.isShowAdvancedModeBetTypes) {
+  <advanced-mode-add-request #advancedMode
+    [matchId]="logInfoEvent.matchId"
+    [groupBetTypes]="groupBetTypesModel"
+    (changeFilterEvent)="resetLogInfo()"
+    (isLoadingData)="checkingLoadDataAdvancedMode($event)"
+    (checkExistBetTypeEvent)="checkExistBetTypeEvent($event)"
+    [model]="advancedModeAddRequestModel">
+  </advanced-mode-add-request>
+}
+@if (groupBetTypesModel.groupBetTypes.length > 0) {
+  <div class="mb-3 d-flex mt-1">
+    <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
+      (click)="handleSearchEvent()">
+      Search
+    </button>
+  </div>
+}
+
+<info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel">
+</info-site-db-down>
+
+<log-info-other-issues
+  [isEdit]="isEdit"
+  [logInfo]="logInfoEvent"
+  [requestId]="requestId"
+  [issueTypeId]="filter.issueTypeId"
+  (searchEvent)="handleSearchEvent()"
+  [primitiveProps]="primitiveProps">
+</log-info-other-issues>
+@if (primitiveProps.isShowErrorNoBetType) {
+  <div class="no-ticket mt-2">
+    <i class="fa fa-times-circle icon-error-message" aria-hidden="true"></i>
+    No valid tickets found in the current range
+  </div>
+}
+<confirm-add-request [isOpen]="confirmAddRequest.isOpen"
+  [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
+  [selectedVoidAction]="filter.action"
+  [selectedSubIssueType]="issueTypes.subIssueId"
+  [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson"
+  (clickOk)="onClickConfirmSaveRequest()"
+  (clickCancel)="onClickCancelSaveRequest()">
+</confirm-add-request>
+
+

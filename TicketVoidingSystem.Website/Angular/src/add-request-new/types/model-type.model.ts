@@ -1,4 +1,7 @@
+import { NotParticipateModel } from "../models/event-not-participate.model";
+import { OtherIssuesModel } from "../models/event-other-issues.model";
 import { RedCardModel } from "../models/event-red-card.model";
+import { ReducedOverModel } from "../models/event-reduced-over.model";
 import { TechnicalErrorModel } from "../models/event-technical-error.model";
 import { EventTicket14Model } from "../models/event-ticket-14.model";
 import { WrongHdpModel } from "../models/event-wrong-hdp.model";
@@ -26,6 +29,9 @@ export type ModelType =
   | EarlyKickOffModel[]
   | WrongOfferedNameModel
   | WrongMarketOfferedModel[]
+  | OtherIssuesModel
+  | NotParticipateModel[]
+  | ReducedOverModel[];
   | AbnormalAccountModel
   | AbnormalBetModel
   | DuplicateTicketsModel

@@ -4,6 +4,9 @@ import { HttpService } from '../../utility/services/http.service';
 import { GetLinkedLogQuery, LinkedLogsViewModel } from '../component/pool-house-ticket/linked-log/linked-log.model';
 import { GetPoolHouseTicketQuery, PoolHouseTicketViewModel } from '../component/pool-house-ticket/pool-house-ticket.model';
 import { TicketsModel } from '../component/pool-house-ticket/tickets/tickets.model';
+import { NotParticipateBetTypeViewModel } from '../events/not-participate/app/event-not-participate/models/not-participate-bet-type.model';
+import { ReducedOverBetType } from '../events/reduced-over/app/event-reduced-over/models/bet-type-reduced-over-json.model';
+import { MaxBetAndSpreadInfo, MaxBetAndSpreadQuery } from '../events/wrong-odds/app/event-wrong-odds/models/filter-wrong-odds.model';
 import { AddRequestQuery } from '../models/add-request.query';
 import { WrongScoreModel } from '../models/event-wrong-score.model';
 import { GetChildMatchQuery } from '../models/get-child-match.query';
@@ -15,7 +18,6 @@ import { RequestDetailViewModel } from '../models/request-detail.model';
 import { AddRequestResultModel } from '../models/request.model';
 import { SubIssueTypeLinkMatch, SubIssueTypeLinkMatchQuery } from '../models/sub-type-link-match.model';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery, SubIssueTypeNoteModel } from '../models/sub-type-note.model';
-import { MaxBetAndSpreadInfo, MaxBetAndSpreadQuery } from '../events/wrong-odds/app/event-wrong-odds/models/filter-wrong-odds.model';
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../events/abnormal-accounts/app/abnormal-accounts/models/check-username.model';
 import { AccountWinlostModel } from '../events/abnormal-accounts/app/abnormal-accounts/models/account-winlost.model';
 import { CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel } from '../events/duplicate-tickets/app/event-duplicate-tickets/models/check-duplicate-tickets.model';
@@ -92,24 +94,24 @@ export class AddRequestApiService {
     return this.httpService.postJson<CheckTransIdsQuery, CheckTransIdsViewModel>(query, 'api/AddRequest/CheckValidTransIdsRequest');
   }
 
-  
+
   /* istanbul ignore next */
   async getLinkedLogs(query: GetLinkedLogQuery): Promise<LinkedLogsViewModel> {
     return this.httpService.postJson<GetLinkedLogQuery, LinkedLogsViewModel>(query, 'api/AddRequest/GetLinkedLog');
   }
-  
+
   /* istanbul ignore next */
   async getPoolHouseTickets(query: GetPoolHouseTicketQuery): Promise<PoolHouseTicketViewModel> {
     return this.httpService.postJson<GetPoolHouseTicketQuery, PoolHouseTicketViewModel>(query, 'api/AddRequest/GetPoolHouseTickets');
   }
 
-  
+
   /* istanbul ignore next */
   async GetLogInfoTickets(query: LogInfoTicketsQuery): Promise<TicketsModel> {
     return this.httpService.postJson(query, 'api/AddRequest/GetLogInfoTickets');
   }
 
-  
+
   /* istanbul ignore next */
   async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
     return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');
@@ -130,11 +132,13 @@ export class AddRequestApiService {
   async checkDuplicateTickets(query: CheckDuplicateTicketsQuery): Promise<CheckDuplicateTicketsViewModel> {
     return this.httpService.postJson<CheckDuplicateTicketsQuery, CheckDuplicateTicketsViewModel>(query, 'api/AddRequest/CheckDuplicateTickets');
   }
-
+  
   /* istanbul ignore next */
-  // async getReducedOverBetTypes(matchId: number): Promise<ReducedOverBetType[]> {
-  //   return this.httpService.postJson<{ matchId: number }, ReducedOverBetType[]>({ matchId: matchId }, 'api/AddRequest/GetReducedOverBetTypes');
-  // }
+  async getReducedOverBetTypes(matchId: number): Promise<ReducedOverBetType[]> {
+    return this.httpService.postJson<{ matchId: number }, ReducedOverBetType[]>({ matchId: matchId }, 'api/AddRequest/GetReducedOverBetTypes');
+  }
+  
+  /* istanbul ignore next */
 
   // /* istanbul ignore next */
   async getAccountWinLost(requestId: number): Promise<AccountWinlostModel[]> {
@@ -147,10 +151,10 @@ export class AddRequestApiService {
     return this.httpService.downloadFile<CheckTransIdsQuery>(query, 'api/AddRequest/ExportExcelTicketAbnormalBet');
   }
 
-  // /* istanbul ignore next */
-  // async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
-  //   return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
-  // }
+  /* istanbul ignore next */
+  async getNotParticipateBetTypes(matchId: number): Promise<NotParticipateBetTypeViewModel> {
+    return this.httpService.postJson<{ matchId: number }, NotParticipateBetTypeViewModel>({ matchId: matchId }, 'api/AddRequest/GetNotParticipateBetTypes');
+  }
 
   // /* istanbul ignore next */
   async checkRecoverTicket(query: CheckRecoverTicketQuery): Promise<CheckRecoverTicketResult> {

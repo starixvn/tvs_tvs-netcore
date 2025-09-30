@@ -1,0 +1,55 @@
+import { Injectable } from '@angular/core';
+import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
+import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
+import { TVSRequestActionType } from '../../../../../../utility/constants/config';
+import { TEXT } from '../../../../../../utility/constants/text';
+import { FilterNotParticipateComponent } from '../filter-not-participate/filter-not-participate.component';
+import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
+import { LogInfoNotParticipate } from '../models/log-info-not-participate.model';
+import { SaveRequestArg } from '../models/save-request-arg.model';
+
+@Injectable()
+export class ValidationService {
+  private readonly PLAYER_CLASS = 'player-dropdown';
+  private readonly GROUP_BET_TYPE_CLASS = 'bet-type-dropdown';
+
+  public validateCommonData(eventLeagueComponent: EventLeagueComponent, filterNotParticipateComponent: FilterNotParticipateComponent): boolean {
+    if (!eventLeagueComponent.isMatchIdValid()) {
+      return false;
+    }
+
+    if (!filterNotParticipateComponent.isValid()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public isAllFieldsHaveValue(model: FilterNotParticipateModel, index: number, tooltip: Tooltip): boolean {
+    if (!model.playerId) {
+      tooltip.display(`${this.PLAYER_CLASS}${index}`, TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    if (model.betTypeIds.length === 0) {
+      tooltip.display(`${this.GROUP_BET_TYPE_CLASS}${index}`, TEXT.REQUIRED_FIELD);
+      return false;
+    }
+
+    return true;
+  }
+
+  public isValidLogInfoEvent(logInfoNotParticipate: LogInfoNotParticipate): boolean {
+    return !logInfoNotParticipate.messageValidationLogInfo.some(y => y.isError);
+  }
+
+  public checkCanShowConfirmationNotParticipate(argNotParticipate: SaveRequestArg): boolean {
+    const isHasSettledTicket = argNotParticipate.logInfoEvent.logInfoDetail.settleCount > 0;
+    const isHasWarningTicket = argNotParticipate.logInfoEvent.messageValidationLogInfo?.some(y => !y.isError);
+    const isEditingByAnotherUser = argNotParticipate.isEdit && argNotParticipate.userId !== Number(document.getElementById('body').getAttribute('user-id'));
+    const isHasWarningTakenNote = argNotParticipate.isEdit
+      && argNotParticipate.filter.action === TVSRequestActionType.TAKE_NOTE_ID.toString() && argNotParticipate.filter.action !== argNotParticipate.actionIdOfFirstTimeAccess;
+
+    return isHasSettledTicket || isHasWarningTicket || isHasWarningTakenNote || isEditingByAnotherUser;
+  }
+}

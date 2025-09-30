@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { StaticService } from 'src/utility/services/static.service';
 import { TEXT } from '../../../../../../utility/constants/text';
+import { StaticService } from '../../../../../../utility/services/static.service';
 import { AddRequestQuery } from '../../../../../models/add-request.query';
 import { WrongOddsModel } from '../../../../../models/event-wrong-odds.model';
 import { AddRequestService } from '../../../../../services/add-request.service';
