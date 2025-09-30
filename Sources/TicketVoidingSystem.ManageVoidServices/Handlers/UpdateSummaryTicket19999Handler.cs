@@ -10,7 +10,7 @@ using TicketVoidingSystem.Services.OnlineServerRepository;
 
 namespace TicketVoidingSystem.ManageVoidServices.Handlers;
 
-public class UpdateSummaryTicket19999Request : UpdateSummaryTicket19999Command, IRequest<Result>;
+public class UpdateSummaryTicket19999Request : IRequest<Result>;
 
 public class UpdateSummaryTicket19999Handler(OnlineServerRepository onlineServerRepository, LoggingService loggingService)
     : IRequestHandler<UpdateSummaryTicket19999Request, Result>
@@ -19,7 +19,7 @@ public class UpdateSummaryTicket19999Handler(OnlineServerRepository onlineServer
     {
         try
         {
-            await onlineServerRepository.ExecuteAsync(request);
+            await onlineServerRepository.ExecuteAsync(new UpdateSummaryTicket19999Command());
             return new Result();
         }
         catch (Exception e)

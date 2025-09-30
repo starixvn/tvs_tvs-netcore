@@ -82,16 +82,8 @@ public class ManageVoidServicesController(IMediator mediator) : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> InsertBetTicket14(InsertBetTicket14Request request)
-    {
-        var model = await mediator.Send(request);
-        return Ok(model);
-    }
+    public async Task<IActionResult> InsertBetTicket14(InsertBetTicket14Request request) => Ok(await mediator.Send(request));
 
-    [HttpPost]
-    public async Task<IActionResult> UpdateSummaryTicket19999(UpdateSummaryTicket19999Request request)
-    {
-        var model = await mediator.Send(request);
-        return Ok(model);
-    }
+    [HttpGet]
+    public async Task<IActionResult> UpdateSummaryTicket19999() => Ok(await mediator.Send(new UpdateSummaryTicket19999Request()));
 }

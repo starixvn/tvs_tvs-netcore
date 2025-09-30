@@ -63,7 +63,7 @@ export class AppApiService {
     return this.httpService.postJson({ transIds }, `api/ManageVoidServices/InsertBetTicket14`);
   }
 
-  async updateSummaryTicket19999(transIds: string): Promise<Result<null>> {
-    return this.httpService.postJson({ transIds }, `api/ManageVoidServices/UpdateSummaryTicket19999`);
+  async updateSummaryTicket19999(): Promise<Result<null>> {
+    return this.httpService.getJson(`api/ManageVoidServices/UpdateSummaryTicket19999`);
   }
 }

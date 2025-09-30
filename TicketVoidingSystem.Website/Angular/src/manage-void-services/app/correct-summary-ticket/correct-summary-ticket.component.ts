@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
-import { BetIdsComponent } from 'src/utility/components/bet-ids/bet-ids.component';
-import { BlockUiDirective } from 'src/utility/components/block-ui/block-ui.directive';
-import { TooltipComponent } from 'src/utility/components/tooltip/tooltip.component';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
-import { TEXT } from 'src/utility/constants/text';
+import { BetIdsComponent } from '../../../utility/components/bet-ids/bet-ids.component';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../utility/constants/text';
 import { AppApiService } from '../app-api.service';
 import { InsertBetTicket14ResultModel, UpdateSummaryStatusModel } from './correct-summary-ticket.model';
 
@@ -38,24 +38,20 @@ export class CorrectSummaryTicketComponent {
   }
 
   public async insertBetTicket14() {
-    this.betIdsComponent.groupNumber.resetAllItemsToValid();
-    this.betIdsComponent.groupNumber.checkDuplicatedItems();
+    if (!this.betIdsComponent.isHasBetId()) {
+      return;
+    }
+    this.beforeInsertBetTicket14();
     this.isBlock = true;
     const transIds = this.betIdsComponent.getAllBetIds();
     const result = await this.appApiService.insertBetTicket14(transIds);
-    const isPassedValidation = result.invalidTransIds.length === 0 && result.balanceUpTransIds.length === 0;
-    if (isPassedValidation) {
-      this.updateDateWhenSuccess(result)
-    } else {
-      this.updateTicketsValidaiton(result)
-    }
+    this.afterInsertBetTicket14(result);
     this.isBlock = false;
   }
 
   public async updateSummaryTicket19999() {
     this.isBlock = true;
-    const transIds = this.betIdsComponent.getAllBetIds();
-    const result = await this.appApiService.updateSummaryTicket19999(transIds);
+    const result = await this.appApiService.updateSummaryTicket19999();
     if (result.isSuccessful) {
       this.statusUpdateSummaryTicket19999.status = 'Successfully!';
       this.statusUpdateSummaryTicket19999.isDisableButton = true;
@@ -66,8 +62,23 @@ export class CorrectSummaryTicketComponent {
     this.isBlock = false;
   }
 
+  private beforeInsertBetTicket14() {
+    this.betIdsComponent.groupNumber.resetAllItemsToValid();
+    this.betIdsComponent.groupNumber.checkDuplicatedItems();
+  }
+
+  private afterInsertBetTicket14(result: InsertBetTicket14ResultModel) {
+    const isPassedValidation = result.invalidTransIds.length === 0 && result.balanceUpTransIds.length === 0;
+    if (isPassedValidation) {
+      this.updateDateWhenSuccess(result)
+    } else {
+      this.updateTicketsValidaiton(result)
+    }
+  }
+
   private updateDateWhenSuccess(result: InsertBetTicket14ResultModel) {
     if (result.isSuccessful) {
+      this.isDisabledBetIds = true;
       this.statusInsertBetTicket14.status = 'Successfully!';
       this.statusInsertBetTicket14.isDisableButton = true;
       this.statusUpdateSummaryTicket19999.isDisableButton = false;

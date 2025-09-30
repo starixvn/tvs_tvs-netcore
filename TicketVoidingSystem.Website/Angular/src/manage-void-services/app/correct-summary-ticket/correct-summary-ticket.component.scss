@@ -6,6 +6,10 @@
 .action-item {
   display: flex;
   align-items: center;
+
+  button {
+    width: 65px;
+  }
 }
 
 .label-action {
