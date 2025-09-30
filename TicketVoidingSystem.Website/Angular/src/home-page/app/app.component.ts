@@ -60,14 +60,14 @@ export class AppComponent{
   }
 
   openIssueType(issueType: IssueTypeHomePage) {
-    const controllerName = this.removeSpaces(issueType.issueTypeName);
+    const controllerName = this.cleanName(issueType.issueTypeName);
     if (controllerName) {
       const url = `TicketVoidingSystem/${controllerName}/Add/Index`
       window.open(`${document.body.getAttribute('root-url')}${url}`, '_blank');
     }
   }
 
-  private removeSpaces(str: string): string {
-    return str.replace(/\s+/g, "");
+  private cleanName(str: string): string {
+    return str.replace(/[\s()]/g, "");
   }
 }

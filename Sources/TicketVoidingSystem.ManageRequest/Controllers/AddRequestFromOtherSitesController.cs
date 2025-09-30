@@ -18,12 +18,12 @@ public class AddRequestFromOtherSitesController(IMediator mediator) : Controller
         var requestJson = TempData["AddRequestFromCTS"] as string;
         if (string.IsNullOrWhiteSpace(requestJson))
         {
-            return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
+            return View("~/wwwroot/dist/home-page/index.cshtml");
         }
 
         var request = JsonSerializer.Deserialize<AddRequestFromCTSRequest>(requestJson);
         ViewBag.AddRequestIndexViewModel = await mediator.Send(request);
 
-        return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
+        return View("~/wwwroot/dist/ticket-voiding-system/abnormal-bet/index.cshtml");
     }
 }

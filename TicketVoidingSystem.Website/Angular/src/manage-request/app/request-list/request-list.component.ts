@@ -260,7 +260,7 @@ export class RequestListComponent implements OnInit, OnChanges {
   }
 
   private getUrlEditRequest(issueTypeName: string, requestId: number): string {
-    const controllerName = issueTypeName.replace(/\s+/g, "");
+    const controllerName = issueTypeName.replace(/[\s()]/g, "");
     const url = `TicketVoidingSystem/${controllerName}/Edit/${requestId}`;
 
     return url;
