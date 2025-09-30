@@ -1,17 +1,17 @@
+import { ElementRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { TestingModule } from '../../../../utility/modules/testing.module';
 import { GroupBetTypesModel } from '../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { Selection } from '../../../../utility/models/selection.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../utility/services/common.service';
 import { GetLogsQuery } from '../../models/query.model';
 import { CheckValidateService } from '../../services/check-validate.service';
 import { FilterLogsComponent } from './filter-logs.component';
 import { FilterAction, FilterDate } from './filter-logs.model';
-import { By } from '@angular/platform-browser';
-import { ElementRef } from '@angular/core';
 
 class Helper {
   static readonly matchIdSelector = 'input.match-id';
@@ -70,7 +70,7 @@ describe('FilterLogsComponent', () => {
     expect(component.action).toStrictEqual(new FilterAction());
     expect(component.tooltip.element).toBeInstanceOf(ElementRef);
     expect(component.isSuccessMatch).toBe(true);
-    expect(component.selectedActions).toStrictEqual(['90500', '90508', '90501', '90511', '90502']);
+    expect(component.selectedActions).toStrictEqual(['90500', '90508', '90501', '90511', '90502', '90504']);
     
     const date = new Date();
     expect(component.date.ngbFromDate).toStrictEqual(new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate()));

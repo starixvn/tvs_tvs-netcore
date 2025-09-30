@@ -12,6 +12,8 @@ public static class UserLogConstant
 
     public const int UnmarkAll = 90502;
 
+    public const int AutoConfirmUnmark = 90504;
+
     public const string ManualMarkText = "Mark(Manual)";
 
     public const string ManualUnmarkText = "Unmark(Manual)";
@@ -21,4 +23,6 @@ public static class UserLogConstant
     public const string AutoUnmarkText = "Unmark(Auto)";
 
     public const string UnmarkAllText = "Unmark All";
+
+    public const string AutoConfirmUnmarkText = "Confirm Unmark(Auto)";
 }

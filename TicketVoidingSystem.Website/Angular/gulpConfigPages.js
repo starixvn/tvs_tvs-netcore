@@ -393,7 +393,7 @@ const configPages = [
   //homePage,
   //manageVoidServices,
   //abExceptionList,
-  //markTickets,
+  markTickets,
   //ticketListing,
   //voidSingleBet,
   //voidRequest,
@@ -409,17 +409,17 @@ const configPages = [
   // wrongHdp,
   // wrongOu,
   // wrongOdds,
-  wrongOddsSportsBook,
-  earlyKickOff,
-  wrongMarketOffered,
-  wrongOfferedName,
-  abnormalAccounts,
+  //wrongOddsSportsBook,
+  //earlyKickOff,
+  //wrongMarketOffered,
+  //wrongOfferedName,
+  //abnormalAccounts,
   otherIssues,
   notParticipate,
-  abnormalBet,
-  duplicateTickets,
+  //abnormalBet,
+  //duplicateTickets,
+  //recoverTicket
   reducedOver
-  recoverTicket
 ];
 
 module.exports = configPages;

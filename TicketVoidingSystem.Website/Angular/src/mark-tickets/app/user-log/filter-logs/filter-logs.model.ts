@@ -7,7 +7,8 @@ export class FilterAction {
     { name: 'Mark(Auto)', value: '90508', group: 'All' },
     { name: 'Unmark(Manual)', value: '90501', group: 'All' },
     { name: 'Unmark(Auto)', value: '90511', group: 'All' },
-    { name: 'Unmark All', value: '90502', group: 'All' }
+    { name: 'Unmark All', value: '90502', group: 'All' },
+    { name: 'Confirm Unmark(Auto)', value: '90504', group: 'All' }
   ];
 }
 
