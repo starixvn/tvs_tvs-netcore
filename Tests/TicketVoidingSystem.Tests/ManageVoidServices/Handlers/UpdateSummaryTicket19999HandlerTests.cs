@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using NSubstitute.ExceptionExtensions;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.ManageVoidServices.Criteria;
 using TicketVoidingSystem.ManageVoidServices.Handlers;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.OnlineServerRepository;
@@ -36,7 +37,7 @@ public class UpdateSummaryTicket19999HandlerTests
         // Assert
         Assert.NotNull(result);
         Assert.Equal(0, result.ErrorCode);
-        await onlineServerRepository.Received(1).ExecuteAsync(request);
+        await onlineServerRepository.Received(1).ExecuteAsync(Arg.Any<UpdateSummaryTicket19999Command>());
         await loggingService.DidNotReceive().ErrorAsync(Arg.Any<string>(), Arg.Any<Exception>());
     }
 
@@ -47,7 +48,7 @@ public class UpdateSummaryTicket19999HandlerTests
         var request = new UpdateSummaryTicket19999Request();
         var exception = new Exception("Test exception");
 
-        onlineServerRepository.ExecuteAsync(request).ThrowsAsync(exception);
+        onlineServerRepository.ExecuteAsync(Arg.Any<UpdateSummaryTicket19999Command>()).ThrowsAsync(exception);
 
         // Act
         var result = await handler.Handle(request, CancellationToken.None);
