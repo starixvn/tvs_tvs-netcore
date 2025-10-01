@@ -30,6 +30,7 @@
 .header-user-info {
     .clearfix();
     min-width: 1688px;
+    padding: 0 19px;
 }
 
 .align-center {
@@ -246,7 +247,7 @@ header {
     min-width: 1686px;
 
     nav {
-        padding-left: 16px;
+        padding-left: 12px;
         float: left;
         height: 43px;
 
@@ -423,30 +424,33 @@ header {
     background-color: #555555;
 
     .logo {
-        background: url('../../content/base/img/sprite.png') no-repeat;
-        border-right: 1px solid #404040;
+        border-right: 1px solid #797979;
+        box-shadow: 1px 0 #424242;
+        position: relative;
+        top: 0;
+        left: 0;
         float: left;
-        padding: 18px 75px 0;
-        margin-left: 7px;
-        color: @logoTextColor;
-        font-size: 1.6em;
-        .font_segoe_ui_light;
+        margin: 5px 10px 5px 0;
+        padding: 0 15px 0 0;
+        height: 29px;
+        color: #fff;
+        font-family: 'Segoe UI', Verdana, Tahoma, Arial;
+        font-size: 19px;
+        text-transform: uppercase;
+        text-decoration: none;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+        font-weight: bold;
+        display: flex;
+        align-items: center;
 
         span {
-            float: left;
-        }
-
-        .del {
-            background: @logoBackground url(img/icons/appbar.clear.reflect.horizontal.white.png) no-repeat;
-            padding-left: 32px;
+            color: #a8a8a8;
             margin-left: 5px;
-            height: 24px;
-            .transition(all .1s ease-in-out);
         }
+    }
 
-        &:hover {
-            text-decoration: none;
-        }
+    .logo:hover {
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 0 6px #8fb5c8, 0 0 30px rgba(143, 181, 200, 0.7);
     }
 }
 

@@ -8,6 +8,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 0 17px;
 }
 
 .notification-icon {
@@ -66,22 +67,40 @@
   background-color: #555555;
 }
 
-.user-info-background .logo {
-  background: url(../../../assets/images/sprite.png) no-repeat;
-  border-right: 1px solid #404040;
-  float: left;
-  padding: 18px 75px 0;
-  margin-left: 5px;
-  color: #fff;
-  font-size: 1.6em;
-  height: 38px;
-  font-family: 'Segoe UI Light', 'Segoe UI', Helvetica, Tahoma, Arial, sans-serif;
+.user-info-background {
+  .logo {
+    border-right: 1px solid #797979;
+    box-shadow: 1px 0 #424242;
+    position: relative;
+    top: 0;
+    left: 0;
+    float: left;
+    margin: 5px 10px 5px 0;
+    padding: 0 15px 0 0;
+    height: 29px;
+    color: #fff;
+    font-family: 'Segoe UI', Verdana, Tahoma, Arial;
+    font-size: 19px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6);
+    font-weight: bold;
+
+    span {
+      color: #a8a8a8;
+    }
+  }
+
+  .logo:hover {
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.6), 0 0 6px #8fb5c8, 0 0 30px rgba(143, 181, 200, 0.7);
+  }
 }
 
 .right-content {
   display: flex;
   justify-self: flex-end;
   align-items: center;
+  margin-right: 55px;
 }
 
 .user-info {
@@ -91,7 +110,6 @@
   display: flex;
   align-items: center;
   height: 100%;
-  margin-right: 55px;
 
   .dropdown-user-info {
     display: flex;
