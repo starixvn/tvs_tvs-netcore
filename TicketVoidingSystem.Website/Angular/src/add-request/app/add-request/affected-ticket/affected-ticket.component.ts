@@ -22,7 +22,7 @@ export class AffectedTicketComponent implements OnChanges {
   @Input() model = new AffectedTicketsModel();
   filterBetTypes: MultipleSelection;
   tickets = new TicketsModel();
-  blockBetList: boolean;
+  blockBetList = true;
   otherTickets = new TicketsModel();
   isShowOtherTickets = true;
   isShowAffectedTickets = true;

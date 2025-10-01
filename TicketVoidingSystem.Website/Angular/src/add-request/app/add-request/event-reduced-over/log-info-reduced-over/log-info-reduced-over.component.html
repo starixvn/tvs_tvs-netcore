@@ -13,7 +13,10 @@
         <span class="text-red"
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>
         },
-        Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong><br />
+        Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}}</strong>
+        @if (!filter.isVoided) {
+          &nbsp;<span class="ticket-details" (click)="showAffectedTicketsDetails(logInfo)">Details</span>
+        }<br />
       </div>
       }
       @if (logInfo.messageValidationLogInfo?.length > 0) {
@@ -39,3 +42,4 @@
   </div>
 </div>
 }
+<affected-ticket [model]="affectedTicketsModel"></affected-ticket>

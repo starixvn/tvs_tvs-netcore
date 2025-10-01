@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
 import { StaticService } from "../../../../../utility/services/static.service";
 import { ReducedOverModel } from "../../models/event-reduced-over.model";
 import { FilterReducedOverModel } from "../models/filter-reduced-over.model";
@@ -14,7 +13,7 @@ export class EventReducedOverService {
   }
 
   public getReducedOverModel(subIssueTypeId: number, logInfoEvent: LogInfoReducedOver): ReducedOverModel[] {
-    return logInfoEvent.filterReducedOvers.map(x => this.createReducedOverModel(x, logInfoEvent.matchId, Number(subIssueTypeId), logInfoEvent.logInfoDetail));
+    return logInfoEvent.filterReducedOvers.map(x => this.createReducedOverModel(x, logInfoEvent.matchId, Number(subIssueTypeId), logInfoEvent));
   }
 
   public assignModelsToEvents(inputModels: ReducedOverModel[]): LogInfoReducedOver {
@@ -22,6 +21,7 @@ export class EventReducedOverService {
     logInfo.matchId = inputModels[0].matchId;
     logInfo.logInfoDetail = inputModels[0].logInfoDetail;
     logInfo.filterReducedOvers = inputModels.map(x => this.createFilterReducedOverModel(x));
+    logInfo.betTypeCount = inputModels[0].betTypeCount;
 
     return logInfo;
   }
@@ -53,7 +53,7 @@ export class EventReducedOverService {
     return model;
   }
 
-  private createReducedOverModel(inputModel: FilterReducedOverModel, matchId: number, subIssueTypeId: number, logInfoDetail: LogInfoDetail): ReducedOverModel {
+  private createReducedOverModel(inputModel: FilterReducedOverModel, matchId: number, subIssueTypeId: number, logInfoEvent: LogInfoReducedOver): ReducedOverModel {
     const model = new ReducedOverModel();
     model.betTypeIds = inputModel.betTypeIds.join(',');
     model.wicketOver = inputModel.wicketOver;
@@ -64,7 +64,7 @@ export class EventReducedOverService {
     model.live = inputModel.live;
     model.matchId = matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.logInfoDetail = logInfoDetail;
+    model.logInfoDetail = logInfoEvent.logInfoDetail;
 
     return model;
   }

@@ -1,5 +1,5 @@
 import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
-import { ValidationMessage } from "../../models/get-log-info.model";
+import { BetTypeCountModel, ValidationMessage } from "../../models/get-log-info.model";
 import { FilterNotParticipateModel } from "./filter-not-participate.model";
 
 export class LogInfoNotParticipate {
@@ -7,4 +7,5 @@ export class LogInfoNotParticipate {
   filterNotParticipates: FilterNotParticipateModel[] = [];
   logInfoDetail = new LogInfoDetail();
   messageValidationLogInfo?: ValidationMessage[];
+  betTypeCount?: BetTypeCountModel[];
 }

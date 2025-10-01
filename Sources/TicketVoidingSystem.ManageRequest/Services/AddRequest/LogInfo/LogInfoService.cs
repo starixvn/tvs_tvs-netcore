@@ -73,9 +73,9 @@ public class LogInfoServiceImp(
             IssueTypeConstant.Wrong1stOU => GetLogInfoViewModelWrong1stOu(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.WrongOdds => GetLogInfoViewModelWrongOdds(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.WrongOddsSportsBook => GetLogInfoViewModelWrongOddsSportsBook(query, validations, ticketRequests, logInfoDetails),
-            IssueTypeConstant.ReducedOver => GetLogInfoViewModelReducedOver(query, validations, ticketRequests, logInfoDetails),
-            IssueTypeConstant.Abandoned => GetLogInfoViewModelReducedOver(query, validations, ticketRequests, logInfoDetails),
-            IssueTypeConstant.NotParticipate => GetLogInfoViewModelNotParticipate(query, validations, ticketRequests, logInfoDetails),
+            IssueTypeConstant.ReducedOver => await GetLogInfoViewModelReducedOver(query, validations, ticketRequests, logInfoDetails, betTypeCount),
+            IssueTypeConstant.Abandoned => await GetLogInfoViewModelReducedOver(query, validations, ticketRequests, logInfoDetails, betTypeCount),
+            IssueTypeConstant.NotParticipate => await GetLogInfoViewModelNotParticipate(query, validations, ticketRequests, logInfoDetails, betTypeCount),
             IssueTypeConstant.EarlyKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.WrongKickOffTime => GetLogInfoViewModelEarlyKickOff(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.WrongMarketOffered => await GetLogInfoViewModelWrongMarketOffered(query, validations, ticketRequests, logInfoDetails, betTypeCount),
@@ -184,27 +184,31 @@ public class LogInfoServiceImp(
         }).ToList();
     }
 
-    private static List<GetLogInfoModel> GetLogInfoViewModelReducedOver(GetLogInfoQuery query, IEnumerable<Validation> validations,
-        IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
+    private async Task<List<GetLogInfoModel>> GetLogInfoViewModelReducedOver(GetLogInfoQuery query, IEnumerable<Validation> validations,
+        IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
+        var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(query.ReducedOverModels.First().MatchId, betTypeCount);
         return query.ReducedOverModels.Select(item => new GetLogInfoModel
         {
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId),
+            BetTypeCount = preparedBetTypeCount
         }).ToList();
     }
 
-    private static List<GetLogInfoModel> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validations,
-        IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
+    private async Task<List<GetLogInfoModel>> GetLogInfoViewModelNotParticipate(GetLogInfoQuery query, IEnumerable<Validation> validations,
+        IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
+        var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(query.NotParticipateModels.First().MatchId, betTypeCount);
         return query.NotParticipateModels.Select(item => new GetLogInfoModel
         {
             MatchId = item.MatchId,
             Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId)
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId),
+            BetTypeCount = preparedBetTypeCount
         }).ToList();
     }
 
@@ -233,8 +237,6 @@ public class LogInfoServiceImp(
             TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.Id == item.Id),
             LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.Id == item.Id),
             BetTypeCount = preparedBetTypeCount.Where(x => x.Id == item.Id)
-                .OrderBy(x => x.OriginalBetTypeName)
-                .ThenBy(x => x.BetId)
         }).ToList();
     }
 
@@ -295,7 +297,7 @@ public class LogInfoServiceImp(
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
                 LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
-                BetTypeCount = preparedBetTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
+                BetTypeCount = preparedBetTypeCount
             }
         ];
     }
@@ -312,7 +314,7 @@ public class LogInfoServiceImp(
                 Validation = LogInfoHelper.CombineValidations(validations, x => true),
                 TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => true),
                 LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => true),
-                BetTypeCount = preparedBetTypeCount.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId)
+                BetTypeCount = preparedBetTypeCount
             }
         ];
     }
@@ -379,6 +381,6 @@ public class LogInfoServiceImp(
         var preparedBetTypeTickets = UpdateBetTypeName(betTypeTickets);
         await copyRequestInfoService.UpdatePlayerNameForBetTypeNextManOut(matchId, preparedBetTypeTickets);
 
-        return preparedBetTypeTickets;
+        return preparedBetTypeTickets.OrderBy(x => x.OriginalBetTypeName).ThenBy(x => x.BetId);
     }
 }

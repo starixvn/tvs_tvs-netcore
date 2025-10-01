@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { LogInfoDetail } from "../../../../../utility/models/log-info-detail.model";
 import { NotParticipateModel } from "../../models/event-not-participate.model";
 import { FilterNotParticipateModel } from "../models/filter-not-participate.model";
 import { NotParticipateGetLogInfoQuery } from "../models/get-log-info.query";
@@ -12,7 +11,7 @@ export class EventNotParticipateService {
   }
 
   public getNotParticipateModel(subIssueTypeId: number, logInfoEvent: LogInfoNotParticipate): NotParticipateModel[] {
-    return logInfoEvent.filterNotParticipates.map(x => this.createNotParticipateModel(x, logInfoEvent.matchId, Number(subIssueTypeId), logInfoEvent.logInfoDetail));
+    return logInfoEvent.filterNotParticipates.map(x => this.createNotParticipateModel(x, Number(subIssueTypeId), logInfoEvent));
   }
 
   public assignModelsToEvents(inputModels: NotParticipateModel[]): LogInfoNotParticipate {
@@ -20,6 +19,7 @@ export class EventNotParticipateService {
     logInfo.matchId = inputModels[0].matchId;
     logInfo.logInfoDetail = inputModels[0].logInfoDetail;
     logInfo.filterNotParticipates = inputModels.map(x => this.createFilterNotParticipateModel(x));
+    logInfo.betTypeCount = inputModels[0].betTypeCount;
 
     return logInfo;
   }
@@ -42,13 +42,13 @@ export class EventNotParticipateService {
     return model;
   }
 
-  private createNotParticipateModel(inputModel: FilterNotParticipateModel, matchId: number, subIssueTypeId: number, logInfoDetail: LogInfoDetail): NotParticipateModel {
+  private createNotParticipateModel(inputModel: FilterNotParticipateModel, subIssueTypeId: number, logInfoEvent: LogInfoNotParticipate): NotParticipateModel {
     const model = new NotParticipateModel();
     model.betTypeIds = inputModel.betTypeIds.join(',');
     model.playerId = inputModel.playerId
-    model.matchId = matchId;
+    model.matchId = logInfoEvent.matchId;
     model.subIssueTypeId = subIssueTypeId;
-    model.logInfoDetail = logInfoDetail;
+    model.logInfoDetail = logInfoEvent.logInfoDetail;
 
     return model;
   }

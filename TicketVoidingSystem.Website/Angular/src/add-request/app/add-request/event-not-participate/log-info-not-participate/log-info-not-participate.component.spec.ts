@@ -1,10 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
-import { LogInfoNotParticipateComponent } from './log-info-not-participate.component';
-import { ModalService } from '../../../../../utility/components/modal/modal.service';
-import { StaticService } from '../../../../../utility/services/static.service';
-import { DateTimeFormat } from '../../../../../utility/constants/config';
 import moment from 'moment-timezone';
+import { ModalService } from '../../../../../utility/components/modal/modal.service';
+import { DateTimeFormat } from '../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../affected-ticket/affected-ticket.service';
+import { LogInfoNotParticipateComponent } from './log-info-not-participate.component';
 
 describe('LogInfoNotParticipateComponent', () => {
   let component: LogInfoNotParticipateComponent;
@@ -17,7 +18,8 @@ describe('LogInfoNotParticipateComponent', () => {
       imports: [TestingModule],
       providers: [
         ModalService,
-        StaticService
+        StaticService,
+        AffectedTicketService
       ]
     }).compileComponents();
 
