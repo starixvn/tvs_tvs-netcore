@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import first from 'lodash/first';
+import isEqual from 'lodash/isEqual';
 import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
 import { NgSelectMixtureComponent } from '../../../../../../utility/components/ng-select-mixture/ng-select-mixture.component';
@@ -113,7 +114,7 @@ export class FilterReducedOverItemComponent implements OnInit {
   }
 
   public resetValue(newBetTypeIds: string[]): void {
-    if (!_.isEqual(this.model.betTypeIds, newBetTypeIds)) {
+    if (!isEqual(this.model.betTypeIds, newBetTypeIds)) {
       this.model.wicketOver = null;
       this.model.runs = null;
       this.model.playerIds = [];
@@ -131,7 +132,7 @@ export class FilterReducedOverItemComponent implements OnInit {
   }
 
   private updateStatusControlByCheckedBetTypes(checkedBetTypeIds: string[]): void {
-    const reducedOverModel = this.originalReducedOverBetTypes.find(x => x.betTypeId.toString() === _.first(checkedBetTypeIds));
+    const reducedOverModel = this.originalReducedOverBetTypes.find(x => x.betTypeId.toString() === first(checkedBetTypeIds));
     this.primitivePropertyItem.isDisabledWicketOver = !reducedOverModel?.isHasOverWicket;
     this.primitivePropertyItem.isDisabledRuns = !reducedOverModel?.isHasRuns;
     this.primitivePropertyItem.isDisabledPlayer = !reducedOverModel?.isHasPlayer;

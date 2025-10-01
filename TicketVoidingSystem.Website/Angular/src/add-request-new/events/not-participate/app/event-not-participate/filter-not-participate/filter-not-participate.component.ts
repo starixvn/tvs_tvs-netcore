@@ -1,6 +1,6 @@
 import { Component, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import * as _ from 'lodash';
+import cloneDeep from 'lodash/cloneDeep';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, Player } from '../models/not-participate-bet-type.model';
 import { FilterNotParticipateService } from '../services/filter-not-participate.service';
@@ -48,6 +48,6 @@ export class FilterNotParticipateComponent {
 
   private updateStatusItem(): void {
     this.originalPlayers.forEach(x => x.disabled = this.models.some(y => y.playerId === x.playerId));
-    this.originalPlayers = _.cloneDeep(this.originalPlayers);
+    this.originalPlayers = cloneDeep(this.originalPlayers);
   }
 }

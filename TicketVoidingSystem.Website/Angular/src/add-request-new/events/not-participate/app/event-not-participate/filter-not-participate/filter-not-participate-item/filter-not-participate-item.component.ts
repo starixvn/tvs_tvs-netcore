@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import uniqBy from 'lodash/uniqBy';
 import { MultipleSelectionComponent } from '../../../../../../../utility/components/multiple-selection/multiple-selection.component';
 import { TooltipComponent } from '../../../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../../../utility/components/tooltip/tooltip.model';
@@ -75,7 +75,7 @@ export class FilterNotParticipateItemComponent {
 
   private renderPlayer(): void {
     const playersHaveTicket = this.originalPlayers.filter(x => this.originalBetTypes.some(y => y.playerId === x.playerId));
-    this.distincedPlayers = _.uniqBy(playersHaveTicket, 'playerId');
+    this.distincedPlayers = uniqBy(playersHaveTicket, 'playerId');
   }
 
   private renderBetTypesByPlayer(playerId: number): void {

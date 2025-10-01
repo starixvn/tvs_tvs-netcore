@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import * as _ from 'lodash';
+import assignIn from 'lodash/assignIn';
 import moment from 'moment-timezone';
 import { GroupBetTypesAddRequestModel } from '../../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { GetBetTypesQuery, TimeRangeModel } from '../../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
@@ -25,7 +25,7 @@ export class EventOtherIssuesService {
       query.timeRanges = [this.createTimeRangeModel(filterOtherIssuesModel)];
     }
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    const groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
+    const groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);
 
     return groupBetTypesModel;
   }
