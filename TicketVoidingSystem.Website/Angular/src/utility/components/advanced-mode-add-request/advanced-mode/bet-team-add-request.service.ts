@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { BetTeamAddRequest, BetTeamAddRequestResult, Item, MultiSelection, Selection } from './advanced-mode.model';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
-import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 @Injectable({
   providedIn: 'root'
@@ -52,10 +52,10 @@ export class BetTeamAddRequestService {
       const temp = [];
       if (item.items !== null && item.items !== undefined) {
         item.items.forEach(itemSelect => {
-          temp.push(new ItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
+          temp.push(ItemsSelectService.initItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
         });
       }
-      model.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, temp));
+      model.multipleSelect.items.push(ItemsSelectService.initItemsSelect(0, item.value, item.name, true, true, true, temp));
     });
     model.multipleSelect.isCheckAll = model.multipleSelect.items.every(x => x.checked);
     model.multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(model.multipleSelect);

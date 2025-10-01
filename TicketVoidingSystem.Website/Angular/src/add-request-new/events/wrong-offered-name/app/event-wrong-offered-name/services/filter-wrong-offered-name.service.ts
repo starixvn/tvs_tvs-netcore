@@ -11,6 +11,7 @@ import { FilterWrongOfferedNameModel } from "../models/filter-wrong-offered-name
 import { ValidationService } from "./validation.service";
 import { LicenseesService } from "../../../../../../utility/components/licensees/licensees.service";
 import { MultipleSelectionService } from "../../../../../../utility/components/multiple-selection/multiple-selection.service";
+import { ItemsSelectService } from "../../../../../../utility/components/multiple-selection/items-select.service";
 
 @Injectable()
 export class FilterWrongOfferedNameService {
@@ -20,7 +21,7 @@ export class FilterWrongOfferedNameService {
   private readonly validationService = inject(ValidationService);
   private readonly licenseesService = inject(LicenseesService);
   private readonly multipleSelectionService = inject(MultipleSelectionService);
-  
+
   renderGroupLicensees(isEdit: boolean, originalGroupLicensees: GroupLicensee[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): GroupLicenseeModel {
     return isEdit
       ? this.renderGroupLicenseesWhenEditRequest(originalGroupLicensees, filterWrongOfferedName)
@@ -59,7 +60,7 @@ export class FilterWrongOfferedNameService {
   }
 
   autoCheckCurrency(currencies: Currency[], filterWrongOfferedName: FilterWrongOfferedNameModel, filterRequest: FilterModel): MultipleSelection {
-    const items = currencies.map(x => new ItemsSelect(0, x.id.toString(), x.currencyCode,
+    const items = currencies.map(x => ItemsSelectService.initItemsSelect(0, x.id.toString(), x.currencyCode,
       this.isAutoCheckedCurrency(x.id, filterRequest.subIssueTypeId), true, true, []));
     const multipleSelectCurrency = this.initMultiSelectCurrency(items);
     filterWrongOfferedName.currencyIds = this.multipleSelectionService.getValueItems(multipleSelectCurrency).split(',');
@@ -82,7 +83,7 @@ export class FilterWrongOfferedNameService {
   }
 
   private initMultiSelectCurrencyWhenEditRequest(originalCurrencies: Currency[], filterWrongOfferedName: FilterWrongOfferedNameModel): MultipleSelection {
-    const items = originalCurrencies.map(currency => new ItemsSelect(0, currency.id.toString(), currency.currencyCode,
+    const items = originalCurrencies.map(currency => ItemsSelectService.initItemsSelect(0, currency.id.toString(), currency.currencyCode,
       filterWrongOfferedName.currencyIds.includes(currency.id.toString()), true, true, []));
 
     return this.initMultiSelectCurrency(items);

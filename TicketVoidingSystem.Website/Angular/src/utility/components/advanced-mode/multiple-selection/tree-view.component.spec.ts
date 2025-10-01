@@ -1,14 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TreeViewComponent } from './tree-view.component';
 import { ItemsSelect } from '../../multiple-selection/items-select';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 class Helper {
   static readonly fakeItemsSelect: ItemsSelect[] = [
-    new ItemsSelect(1, 'item1', 'Item 1', true, true, true, []),
-    new ItemsSelect(2, 'item2', 'Item 2', false, true, true, []),
-    new ItemsSelect(3, 'item3', 'Item 3', true, true, true, []),
-    new ItemsSelect(4, 'item4', 'Item 4', false, true, true, []),
-    new ItemsSelect(5, 'item5', 'Item 5', true, true, true, [])
+    ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', true, true, true, []),
+    ItemsSelectService.initItemsSelect(2, 'item2', 'Item 2', false, true, true, []),
+    ItemsSelectService.initItemsSelect(3, 'item3', 'Item 3', true, true, true, []),
+    ItemsSelectService.initItemsSelect(4, 'item4', 'Item 4', false, true, true, []),
+    ItemsSelectService.initItemsSelect(5, 'item5', 'Item 5', true, true, true, [])
   ];
 }
 

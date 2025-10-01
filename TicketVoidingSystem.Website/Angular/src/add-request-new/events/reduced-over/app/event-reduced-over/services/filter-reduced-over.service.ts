@@ -9,12 +9,16 @@ import { AddRequestApiService } from '../../../../../services/add-request-api.se
 import { GroupReducedOverConstant } from '../constants/bet-type-reduced-over.constant';
 import { GroupReducedOverBetType, ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
+import { NgSelectMixtureService } from '../../../../../../utility/components/ng-select-mixture/ng-select-mixture.service';
+import { ItemsSelectService } from '../../../../../../utility/components/multiple-selection/items-select.service';
 
 @Injectable()
 export class FilterReducedOverService {
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly commonService = inject(CommonService);
-
+  private readonly ngSelectMixtureService = inject(NgSelectMixtureService);
+  private readonly itemsSelectService = inject(ItemsSelectService);
+  
   public initDefaultFilter(reducedOverBetTypes: ReducedOverBetType[]): FilterReducedOverModel {
     const model = new FilterReducedOverModel();
     model.betTypeNgSelectMixtureModel = this.initBetTypeNgSelectMixtureModel(reducedOverBetTypes);
@@ -96,8 +100,8 @@ export class FilterReducedOverService {
   }
 
   public renderPlayer(oddsInfoList: OddsInfo[]): ItemsSelect[] {
-    const model = oddsInfoList.map(x => new ItemsSelect(0, x.playerId.toString(), x.playerName, false, true, true, []));
-    model.forEach(x => x.checkFromChilds());
+    const model = oddsInfoList.map(x => ItemsSelectService.initItemsSelect(0, x.playerId.toString(), x.playerName, false, true, true, []));
+    model.forEach(x => this.itemsSelectService.checkFromChilds(x));
     return model;
   }
 
@@ -106,9 +110,9 @@ export class FilterReducedOverService {
     betTypes.forEach(group => {
       const temp = [];
       group.items?.forEach(itemSelect => {
-        temp.push(new NgSelectMixtureItem(itemSelect.betTypeId.toString(), itemSelect.betTypeName, itemSelect.parentId, false, true, true, []));
+        temp.push(this.ngSelectMixtureService.initNgSelectMixtureItem(itemSelect.betTypeId.toString(), itemSelect.betTypeName, itemSelect.parentId, false, true, true, []));
       });
-      items.push(new NgSelectMixtureItem(group.betTypeId.toString(), group.betTypeName, group.parentId, false, true, true, temp));
+      items.push(this.ngSelectMixtureService.initNgSelectMixtureItem(group.betTypeId.toString(), group.betTypeName, group.parentId, false, true, true, temp));
     });
 
     return items;

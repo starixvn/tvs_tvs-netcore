@@ -1,15 +1,16 @@
 import { inject, Injectable } from '@angular/core';
 import { BetTeam, BetTeamResult, Item, MultiSelection, Selection } from './advanced-mode.model';
-import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { AdvancedModeConstants } from '../advanced-mode.constants';
 import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdvancedModeService {
   private readonly multipleSelectionService = inject(MultipleSelectionService);
+  private readonly itemsSelectService = inject(ItemsSelectService);
   
   initBetTeam( commonInfo: [number, string, string, number, string], selections: Selection[], items: Item[], 
     inputs: Item[], isShowMultiSelectionList: boolean) {
@@ -136,10 +137,10 @@ export class AdvancedModeService {
       const temp = [];
       if (item.items !== null && item.items !== undefined) {
         item.items.forEach(itemSelect => {
-          temp.push(new ItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
+          temp.push(ItemsSelectService.initItemsSelect(0, itemSelect.value, itemSelect.name, true, true, true, []));
         });
       }
-      multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, temp));
+      multiSelection.multipleSelect.items.push(ItemsSelectService.initItemsSelect(0, item.value, item.name, true, true, true, temp));
     });
     multiSelection.multipleSelect.isCheckAll = multiSelection.multipleSelect.items.every(x => x.checked);
     multiSelection.multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(multiSelection.multipleSelect);
@@ -154,7 +155,7 @@ export class AdvancedModeService {
     multiSelection.multipleSelect.items = [];
     multi.items.forEach(item => {
       if (item.name !== 'All' || item.value !== 'All') {
-        multiSelection.multipleSelect.items.push(new ItemsSelect(0, item.value, item.name, true, true, true, []));
+        multiSelection.multipleSelect.items.push(ItemsSelectService.initItemsSelect(0, item.value, item.name, true, true, true, []));
       }
     });
     if (multi.isCanSelectMapFromOutside) {
@@ -347,9 +348,9 @@ export class AdvancedModeService {
     let count = 0;
     let countChecked = 0;
     rootItems.forEach(item => {
-      item.checkFromChilds();
+      this.itemsSelectService.checkFromChilds(item);
       count += item.countChilds;
-      countChecked += item.countChildsChecked();
+      countChecked += this.itemsSelectService.countChildsChecked(item);
     });
     multipleSelect.selectionTitle = this.multipleSelectionService.getDisplayedItems(multipleSelect);
     multipleSelect.isCheckAll = count === countChecked;

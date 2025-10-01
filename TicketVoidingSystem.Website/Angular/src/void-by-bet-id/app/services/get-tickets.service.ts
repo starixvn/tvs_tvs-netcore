@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { TicketsViewModel } from '../model/get-tickets.query';
 import moment from 'moment-timezone';
 import { TicketsService } from '../../../utility/components/tickets/tickets.service';
@@ -7,6 +7,8 @@ import { GroupService } from '../../../utility/components/tickets/group.service'
 
 @Injectable()
 export class GetTicketsService {
+  private readonly groupService = inject(GroupService);
+
   initData(baseModel: TicketsViewModel, data: TicketsViewModel) {
     if (!data) {
       return;
@@ -27,7 +29,7 @@ export class GetTicketsService {
     baseModel.groups = [];
     if (data.groups) {
       data.groups.forEach(item => {
-        const group = new GroupModel(item.name, item.tickets);
+        const group = this.groupService.initGroup(item.name, item.tickets);
         baseModel.groups.push(group);
       });
       baseModel.iconCheckBox = TicketsService.updateIconCheckBox(baseModel.groups);

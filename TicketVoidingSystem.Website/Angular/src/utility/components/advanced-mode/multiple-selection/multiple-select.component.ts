@@ -5,6 +5,7 @@ import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { TreeViewComponent } from './tree-view.component';
 import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 @Component({
   standalone: true,
@@ -22,6 +23,7 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
   @Output() checkedItems = new EventEmitter<string[]>();
 
   private readonly multipleSelectionService = inject(MultipleSelectionService);
+  private readonly itemsSelectService = inject(ItemsSelectService);
   
   dropdownToggle: boolean;
   expanded: boolean;
@@ -68,9 +70,9 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
     let count = 0;
     let countChecked = 0;
     rootItems.forEach(item => {
-      item.checkFromChilds();
+      this.itemsSelectService.checkFromChilds(item);
       count += item.countChilds;
-      countChecked += item.countChildsChecked();
+      countChecked += this.itemsSelectService.countChildsChecked(item);
     });
 
     this.multipleSelect.isCheckAll = count === countChecked;
@@ -83,7 +85,7 @@ export class MultipleSelectComponent implements OnInit, OnChanges {
     this.multipleSelect.items.forEach(item => {
       item.expanded = this.expanded;
       if (this.expanded) {
-        item.expandedAllItems();
+        this.itemsSelectService.expandedAllItems(item);
       }
     });
   }

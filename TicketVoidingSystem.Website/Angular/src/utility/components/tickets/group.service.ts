@@ -9,6 +9,13 @@ import { SPECIALGROUP } from '../../constants/tickets-list.constant';
   providedIn: 'root'
 })
 export class GroupService {
+  initGroup(name: string,  tickets: Array<TicketModel>): GroupModel {
+    const group = new GroupModel();
+    GroupService.mapTickets(group, tickets);
+    GroupService.setValue(group, name);
+    return group;
+  }
+
   getCheckedTickets(tickets: TicketModel[]): string[] {
     return tickets
       .filter(ticket => ticket.isChecked)

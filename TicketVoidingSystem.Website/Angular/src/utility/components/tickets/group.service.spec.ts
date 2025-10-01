@@ -12,7 +12,7 @@ class Helper {
     new TicketModel({ value: 'TXN004', mainTransId: '4', isChecked: false, status: 'Won', member: 'user4', soldId: 'SOLD004', siteDbGroupId: 2, isDisable: true, isCricket: false })
   ];
 
-  static readonly fakeGroup: GroupModel = new GroupModel('Test Group', Helper.fakeTickets);
+  static readonly fakeGroup: GroupModel = {name: 'Test Group', tickets: Helper.fakeTickets} as GroupModel;
 }
 
 describe('GroupService', () => {
@@ -290,7 +290,7 @@ describe('GroupService', () => {
   describe('changeTicketChecked', () => {
     it('should update isCheckAll and check disabled ticket', () => {
       // Arrange
-      const group = new GroupModel('Test Group', Helper.fakeTickets);
+      const group = {name: 'Test Group', tickets: Helper.fakeTickets, disabledTickets: []} as GroupModel;
       const ticket = group.tickets[0];
       ticket.isChecked = true;
 
@@ -305,7 +305,7 @@ describe('GroupService', () => {
   describe('setValue', () => {
     it('should set group properties correctly', () => {
       // Arrange
-      const group = new GroupModel('', Helper.fakeTickets);
+      const group = {name: '', tickets: Helper.fakeTickets} as GroupModel;
       const name = 'New Group Name';
 
       // Action
@@ -322,7 +322,7 @@ describe('GroupService', () => {
   describe('checkAllTickets', () => {
     it('should check all non-disabled tickets when isCheckAll is true', () => {
       // Arrange
-      const group = new GroupModel('Test Group', Helper.fakeTickets);
+      const group = {name: 'Test Group', tickets: Helper.fakeTickets, disabledTickets: []} as GroupModel;
       group.isCheckAll = true;
 
       // Action
@@ -338,7 +338,7 @@ describe('GroupService', () => {
 
     it('should uncheck all non-disabled tickets when isCheckAll is false', () => {
       // Arrange
-      const group = new GroupModel('Test Group', Helper.fakeTickets);
+      const group = {name: 'Test Group', tickets: Helper.fakeTickets, disabledTickets: []} as GroupModel;
       group.isCheckAll = false;
 
       // Action
@@ -356,7 +356,7 @@ describe('GroupService', () => {
   describe('checkDisableTickets', () => {
     it('should check disabled tickets', () => {
       // Arrange
-      const group = new GroupModel('Test Group', Helper.fakeTickets);
+      const group = {name: 'Test Group', tickets: Helper.fakeTickets} as GroupModel;
       group.disabledTickets = ['1', '2'];
 
       // Action
@@ -371,7 +371,7 @@ describe('GroupService', () => {
   describe('mapTickets', () => {
     it('should map tickets to group', () => {
       // Arrange
-      const group = new GroupModel('Test Group', []);
+      const group = {name: 'Test Group', tickets: []} as GroupModel;
       const tickets = Helper.fakeTickets;
 
       // Action
@@ -384,7 +384,7 @@ describe('GroupService', () => {
 
     it('should clear existing tickets before mapping', () => {
       // Arrange
-      const group = new GroupModel('Test Group', Helper.fakeTickets);
+      const group = {name: 'Test Group', tickets: Helper.fakeTickets} as GroupModel;
       const newTickets = [Helper.fakeTickets[0]];
 
       // Action

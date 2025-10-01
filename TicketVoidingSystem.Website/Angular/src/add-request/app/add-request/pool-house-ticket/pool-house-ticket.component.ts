@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import * as _ from 'lodash';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
-import { ItemsSelect } from '../../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -15,6 +14,7 @@ import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketsModel } from './tickets/tickets.model';
+import { ItemsSelectService } from '../../../../utility/components/multiple-selection/items-select.service';
 
 @Component({
     selector: 'pool-house-tickets',
@@ -31,7 +31,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   otherSection: PoolHouseTicketsSection;
   isBlock: boolean;
   blockBetList: boolean;
-
+  
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;
@@ -124,7 +124,7 @@ export class PoolHouseTicketComponent implements OnChanges {
     const multipleSelection = StaticService.initDefaultMultipleSelection('280px', 1);
     multipleSelection.items = groupBetTypes
       .flatMap(x => x.betTypes)
-      .map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
+      .map(x => ItemsSelectService.initItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
 
     return multipleSelection;
   }

@@ -106,7 +106,7 @@ describe('AppService', () => {
   it('#getTickets should return expected data', async() => {
     // Arrange
     const expectedTicketsModel = new TicketsModel();
-    expectedTicketsModel.groups = [new GroupModel('MBC Group', [{mainTransId: '12312'} as TicketModel])];
+    expectedTicketsModel.groups = [{name: 'MBC Group', tickets: [{mainTransId: '12312'} as TicketModel]}] as GroupModel[];
     expectedTicketsModel.totalItems = 1;
     httpService.postJson.mockResolvedValue(expectedTicketsModel);
     

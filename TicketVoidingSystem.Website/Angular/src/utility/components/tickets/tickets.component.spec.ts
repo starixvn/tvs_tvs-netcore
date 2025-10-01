@@ -13,7 +13,7 @@ class Helper {
     singleCount: 1,
     parlayCount: 1,
     groups: [
-      new GroupModel('Test Group', [
+      {name: 'Test Group', tickets: [
         {
           member: 'BetTrade',
           isChecked: true,
@@ -34,8 +34,8 @@ class Helper {
           status: 'active',
           isCricket: false
         } as any
-      ])
-    ],
+      ]} as GroupModel,
+    ] as GroupModel[],
     pagingModel: new PagingModel(),
     updatePositionListCheckGroup: jest.fn(),
     getNumberOfCheckedTickets: jest.fn().mockReturnValue(1)
@@ -154,7 +154,7 @@ describe('TicketsComponent', () => {
     // Arrange
     component.ticketsModel = {
       groups: [
-        new GroupModel('Test Group', [
+        {name: 'Test Group', tickets: [
           {
             member: 'Normal',
             isChecked: false,
@@ -175,7 +175,7 @@ describe('TicketsComponent', () => {
             status: 'active',
             isCricket: false
           } as any
-        ])
+        ]} as GroupModel,
       ]
     } as unknown as TicketsModel;
     component.showMessageBetTrade = false;
@@ -191,7 +191,7 @@ describe('TicketsComponent', () => {
     // Arrange
     component.ticketsModel = {
       groups: [
-        new GroupModel('Test Group', [
+        {name: 'Test Group', tickets: [
           {
             member: 'Normal',
             isChecked: true,
@@ -202,7 +202,7 @@ describe('TicketsComponent', () => {
             status: 'active',
             isCricket: false
           } as any
-        ])
+        ]} as GroupModel,
       ]
     } as TicketsModel;
     component.showMessageBetTrade = false;

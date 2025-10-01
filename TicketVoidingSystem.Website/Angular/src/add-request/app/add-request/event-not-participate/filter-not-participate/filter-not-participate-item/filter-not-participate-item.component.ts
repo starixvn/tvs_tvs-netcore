@@ -12,6 +12,7 @@ import { NotParticipateBetTypeModel, Player } from '../../models/not-participate
 import { FilterNotParticipateService } from '../../services/filter-not-participate.service';
 import { ValidationService } from '../../services/validation.service';
 import { MultipleSelectionService } from '../../../../../../utility/components/multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../../../../../utility/components/multiple-selection/items-select.service';
 
 @Component({
     selector: 'filter-not-participate-item',
@@ -57,6 +58,7 @@ export class FilterNotParticipateItemComponent {
   private readonly validationService = inject(ValidationService);
   private readonly filterService = inject(FilterNotParticipateService);
   private readonly multipleSelectionService = inject(MultipleSelectionService);
+  private readonly itemsSelectService = inject(ItemsSelectService);
 
   constructor() {
     this.tooltip.element = this.element;
@@ -83,8 +85,8 @@ export class FilterNotParticipateItemComponent {
   private renderBetTypesByPlayer(playerId: number): void {
     const betTypesModelSelectedPlayers = this.originalBetTypes.filter(x => x.playerId === playerId);
     this.model.betTypeMultipleSelection.items = this.filterService.renderBetTypes(betTypesModelSelectedPlayers);
-    this.model.betTypeMultipleSelection.items.forEach(x => x.checkBySelectedItem(this.model.betTypeIds));
-    this.model.betTypeMultipleSelection.isCheckAll = this.model.betTypeMultipleSelection.items.every(x => x.allChildIsChecked());
+    this.model.betTypeMultipleSelection.items.forEach(x => this.itemsSelectService.checkBySelectedItem(x, this.model.betTypeIds));
+    this.model.betTypeMultipleSelection.isCheckAll = this.model.betTypeMultipleSelection.items.every(x => this.itemsSelectService.allChildIsChecked(x));
     this.model.betTypeMultipleSelection.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.model.betTypeMultipleSelection);
   }
 

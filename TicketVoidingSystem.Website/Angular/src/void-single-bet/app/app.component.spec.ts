@@ -239,7 +239,7 @@ describe('AppComponent', () => {
       const query = Helper.fakeGetTicketsQuery;
       component.matchViewModel = Helper.fakeMatchModel;
       component.ticketsModel = Helper.fakeTicketsModel;
-      const groupModel = new GroupModel('Test Group', [{
+      const groupModel = {name: 'Test Group', tickets: [{
         no: 1,
         betId: '123',
         value: '123',
@@ -262,7 +262,7 @@ describe('AppComponent', () => {
         mainTransId: '123',
         isMarked: false,
         siteDbGroupId: 1
-      }]);
+      }]} as GroupModel;
       component.ticketsModel.groups = [groupModel];
       await component.searchTickets(query);
       expect(appService.getTickets).toHaveBeenCalledWith(query);

@@ -42,6 +42,7 @@ import { ModalComponent } from './modal/modal.component';
 import { Modal } from './modal/modal.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
 import { TicketsService } from '../../utility/components/tickets/tickets.service';
+import { GroupService } from '../../utility/components/tickets/group.service';
 
 @Component({
   standalone: true,
@@ -94,6 +95,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   signalRService = inject(SignalRService);
   passwordService = inject(PasswordService);
   ticketsService = inject(TicketsService);
+  groupService = inject(GroupService);
   
   public async ngOnInit() {
     this.tooltip.element = this.element;
@@ -309,7 +311,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.ticketsModel.strToTime = moment(new Date(this.ticketsModel.toTransTime)).format(this.TIME_FORMAT);
     this.ticketsModel.groups = [];
     data.groups.forEach(item => {
-      const group = new GroupModel(item.name, item.tickets);
+      const group = this.groupService.initGroup(item.name, item.tickets);
       this.ticketsModel.groups.push(group);
     });
 

@@ -11,7 +11,6 @@ import { BetType, GetBetTypesQuery, GroupBetTypesModel } from '../../../utility/
 import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
-import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
 import { PagingConstant } from '../../../utility/components/paging/paging.model';
@@ -35,6 +34,7 @@ import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/query.model';
 import { Bet, Item, Type } from './filter.model';
 import { GroupBetTypesService } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.service';
+import { ItemsSelectService } from '../../../utility/components/multiple-selection/items-select.service';
 
 @Component({
   standalone: true,
@@ -306,7 +306,7 @@ export class FilterComponent implements OnInit {
     this.groupBetTypes = this.groupBetTypesService.initGroupBetTypesModel(data.groupBetTypes, false);
     const temp = [];
     data.groupBetTypes.forEach(group => {
-      temp.push(new ItemsSelect(0, group.groupName, group.groupName, true, true, true, []));
+      temp.push(ItemsSelectService.initItemsSelect(0, group.groupName, group.groupName, true, true, true, []));
     });
     this.groupBetTypesHandler.items = temp;
     this.allBetTypes = this.groupBetTypesService.getAllBetType(this.groupBetTypes.groupBetTypes);

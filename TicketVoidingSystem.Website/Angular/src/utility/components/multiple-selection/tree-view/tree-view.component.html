@@ -9,7 +9,7 @@
       }
       <label [ngClass]="{'cursor-not-allowed': isDisabled}">
         <input type="checkbox" [(ngModel)]="item.checked" class="me-1" [ngClass]="{'cursor-not-allowed': isDisabled}"
-          (ngModelChange)="item.checkChilds();handleClick(item)" [disabled]="!item.enable || isDisabled"
+          (ngModelChange)="checkChilds(item);handleClick(item)" [disabled]="!item.enable || isDisabled"
           (keyup.shift)="keyUpEvent()" (keydown.shift)="keyDownEvent()" />
         {{ item.text }}
       </label>

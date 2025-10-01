@@ -4,6 +4,7 @@ import { BetTeam, Selection, Item, MultiSelection, BetTeamResult } from './advan
 import { AdvancedModeConstants } from '../advanced-mode.constants';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { ItemsSelect } from '../../multiple-selection/items-select';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 class Helper {
   static readonly fakeCommonInfo: [number, string, string, number, string] = [1, 'Team A', 'A', 1, '1,2,3'];
@@ -347,9 +348,9 @@ describe('AdvancedModeService', () => {
 
       // Mock the multipleSelect items
       multiSelectionList[0].multipleSelect.items = [
-        new ItemsSelect(0, 'item1', 'Item 1', true, true, true, []),
-        new ItemsSelect(1, 'item2', 'Item 2', true, true, true, []),
-        new ItemsSelect(2, 'item3', 'Item 3', true, true, true, [])
+        ItemsSelectService.initItemsSelect(0, 'item1', 'Item 1', true, true, true, []),
+        ItemsSelectService.initItemsSelect(1, 'item2', 'Item 2', true, true, true, []),
+        ItemsSelectService.initItemsSelect(2, 'item3', 'Item 3', true, true, true, [])
       ];
 
       // Act

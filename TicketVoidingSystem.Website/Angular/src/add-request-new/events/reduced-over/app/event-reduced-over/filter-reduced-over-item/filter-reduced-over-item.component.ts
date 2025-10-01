@@ -16,6 +16,7 @@ import { FilterReducedOverService } from '../services/filter-reduced-over.servic
 import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
 import { MultipleSelectionService } from '../../../../../../utility/components/multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../../../../../utility/components/multiple-selection/items-select.service';
 
 @Component({
   selector: 'filter-reduced-over-item',
@@ -43,7 +44,8 @@ export class FilterReducedOverItemComponent implements OnInit {
   private readonly validationService = inject(ValidationService);
   private readonly filterService = inject(FilterReducedOverService);
   private readonly multipleSelectionService = inject(MultipleSelectionService);
-
+  private readonly itemsSelectService = inject(ItemsSelectService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -90,8 +92,8 @@ export class FilterReducedOverItemComponent implements OnInit {
       if (firstReducedOverBetType.isHasPlayer) {
         const playersOfCheckedBetTypes = this.originalPlayers.filter(x => checkedBetTypeIds.includes(x.betTypeId.toString()));
         this.model.playerMultipleSelection.items = this.filterService.renderPlayer(playersOfCheckedBetTypes);
-        this.model.playerMultipleSelection.items.forEach(x => x.checkBySelectedItem(this.model.playerIds));
-        this.model.playerMultipleSelection.isCheckAll = this.model.playerMultipleSelection.items.every(x => x.allChildIsChecked());
+        this.model.playerMultipleSelection.items.forEach(x => this.itemsSelectService.checkBySelectedItem(x, this.model.playerIds));
+        this.model.playerMultipleSelection.isCheckAll = this.model.playerMultipleSelection.items.every(x => this.itemsSelectService.allChildIsChecked(x));
         this.model.playerMultipleSelection.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.model.playerMultipleSelection);
       } else {
         this.model.playerMultipleSelection.items = [];

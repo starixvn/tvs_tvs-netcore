@@ -4,11 +4,12 @@ import { MultipleSelectionComponent } from './multiple-selection.component';
 import { MultipleSelection } from './multiple-selection.model';
 import { ItemsSelect } from './items-select';
 import { SimpleChange } from '@angular/core';
+import { ItemsSelectService } from './items-select.service';
 
 class Helper {
   static readonly fakeMultipleSelect = new MultipleSelection();
   static readonly fakeSelectedItems = ['item1', 'item2'];
-  static readonly fakeItemsSelect: ItemsSelect[] = [
+  static readonly fakeItemsSelect = [
     {
       id: 1,
       value: 'item1',
@@ -17,24 +18,16 @@ class Helper {
       expanded: true,
       enable: true,
       items: [],
-      countChilds: 1,
-      checkBySelectedItem: jest.fn(),
-      checkFromChilds: jest.fn(),
-      countChildsChecked: jest.fn().mockReturnValue(1),
-      expandedAllItems: jest.fn(),
-      getCountChilds: jest.fn().mockReturnValue(1),
-      checkChilds: jest.fn(),
-      allChildIsChecked: jest.fn().mockReturnValue(true),
-      getValueChildsChecked: jest.fn().mockReturnValue('item1'),
-      getTextChildsChecked: jest.fn().mockReturnValue('Item 1')
+      countChilds: 1
     }
-  ];
+  ] as ItemsSelect[];
 }
 
 describe('MultipleSelectionComponent', () => {
   let component: MultipleSelectionComponent;
   let fixture: ComponentFixture<MultipleSelectionComponent>;
-
+  let itemsSelectService: ItemsSelectService;
+  
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
@@ -42,6 +35,7 @@ describe('MultipleSelectionComponent', () => {
 
     fixture = TestBed.createComponent(MultipleSelectionComponent);
     component = fixture.componentInstance;
+    itemsSelectService = fixture.debugElement.injector.get(ItemsSelectService);
     component.multipleSelect = Helper.fakeMultipleSelect;
     component.multipleSelect.items = Helper.fakeItemsSelect;
   });
@@ -103,29 +97,33 @@ describe('MultipleSelectionComponent', () => {
         firstChange: true
       } as SimpleChange
     };
+    itemsSelectService.checkBySelectedItem = jest.fn();
+    itemsSelectService.checkFromChilds = jest.fn();
 
     // Act
     component.ngOnChanges(changes);
 
     // Assert
-    expect(Helper.fakeItemsSelect[0].checkBySelectedItem).toHaveBeenCalled();
+    expect(itemsSelectService.checkBySelectedItem).toHaveBeenCalled();
   });
 
   it('should check items by selected items', () => {
     // Arrange
     const selectedItems = ['item1'];
+    itemsSelectService.checkBySelectedItem = jest.fn();
+    itemsSelectService.checkFromChilds = jest.fn();
 
     // Act
     component.checkBySelectedItem(selectedItems);
 
     // Assert
-    expect(Helper.fakeItemsSelect[0].checkBySelectedItem).toHaveBeenCalledWith(selectedItems);
-    expect(Helper.fakeItemsSelect[0].checkFromChilds).toHaveBeenCalled();
+    expect(itemsSelectService.checkBySelectedItem).toHaveBeenCalledWith(Helper.fakeItemsSelect[0], selectedItems);
+    expect(itemsSelectService.checkFromChilds).toHaveBeenCalledWith(Helper.fakeItemsSelect[0]);
   });
 
   it('should update multiple select when items change', () => {
     // Arrange
-    Helper.fakeItemsSelect[0].countChildsChecked = jest.fn().mockReturnValue(1);
+    itemsSelectService.countChildsChecked = jest.fn().mockReturnValue(1);
     Helper.fakeItemsSelect[0].countChilds = 1;
 
     // Act

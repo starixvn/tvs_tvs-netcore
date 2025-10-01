@@ -5,6 +5,7 @@ import { MultipleSelection } from '../../../../../../utility/components/multiple
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
 import { NotParticipateBetTypeModel, NotParticipateBetTypeViewModel } from '../models/not-participate-bet-type.model';
+import { ItemsSelectService } from '../../../../../../utility/components/multiple-selection/items-select.service';
 
 @Injectable()
 export class FilterNotParticipateService {
@@ -25,8 +26,8 @@ export class FilterNotParticipateService {
     let items = [];
     const groupBetTypes = groupBy(models, 'parentId');
     for (const parentId in groupBetTypes) {
-      const model = groupBetTypes[parentId].map(x => new ItemsSelect(0, x.betTypeId.toString(), x.betTypeName, false, true, true, []));
-      items = items.concat(new ItemsSelect(parseInt(parentId), parentId, groupBetTypes[parentId][0].parentName, false, true, true, model));
+      const model = groupBetTypes[parentId].map(x => ItemsSelectService.initItemsSelect(0, x.betTypeId.toString(), x.betTypeName, false, true, true, []));
+      items = items.concat(ItemsSelectService.initItemsSelect(parseInt(parentId), parentId, groupBetTypes[parentId][0].parentName, false, true, true, model));
     }
 
     return items;

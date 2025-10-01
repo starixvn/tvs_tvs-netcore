@@ -5,6 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { NgSelectMixtureItem } from './ng-select-mixture-item.model';
 import { NgSelectMixtureModel } from './ng-select-mixture.model';
 import { NgSelectTreeViewComponent } from './ng-select-tree-view/ng-select-tree-view.component';
+import { NgSelectMixtureService } from './ng-select-mixture.service';
 
 @Component({
   standalone: true,
@@ -23,7 +24,8 @@ export class NgSelectMixtureComponent implements OnInit {
   
   private readonly elementRef = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
-
+  private readonly ngSelectMixtureService = inject(NgSelectMixtureService);
+  
   ngOnInit(): void {
     this.checkBySelectedItem();
     this.getTitle();
@@ -34,7 +36,7 @@ export class NgSelectMixtureComponent implements OnInit {
   }
 
   private checkBySelectedItem(): void {
-    this.model.items.forEach(x => x.checkBySelectedItem(this.selectedItems));
+    this.model.items.forEach(x => this.ngSelectMixtureService.checkBySelectedItem(x, this.selectedItems));
   }
 
   public clickButton(): void {
@@ -42,14 +44,14 @@ export class NgSelectMixtureComponent implements OnInit {
   }
 
   private getTitle() {
-    this.model.title = this.model.getDisplayedText(this.selectedItems);
+    this.model.title = this.ngSelectMixtureService.getDisplayedText(this.model, this.selectedItems);
   }
 
   public emitSingleEvent(item: NgSelectMixtureItem): void {
     this.isCollapse = false;
     this.model.items.forEach(x => {
-      x.unCheckChild();
-      x.checkFromChild();
+      this.ngSelectMixtureService.unCheckChild(x.items);
+      this.ngSelectMixtureService.checkFromChild(x);
     });
     this.model.title = item.name;
     this.model.isShowPlaceHolder = false;
@@ -57,7 +59,7 @@ export class NgSelectMixtureComponent implements OnInit {
   }
 
   public emitChildEvent(): void {
-    this.model.title = this.model.getDisplayedAllChildItems();
+    this.model.title = this.ngSelectMixtureService.getDisplayedAllChildItems(this.model);
   }
 
   private readonly handleBodyClick = (event: MouseEvent): void => {
@@ -69,7 +71,7 @@ export class NgSelectMixtureComponent implements OnInit {
     if (!this.elementRef.nativeElement.contains(clickedElement)) {
       this.isCollapse = false;
       if (!this.isDisabled) {
-        this.checkedItems.emit(this.model.getValueItems());
+        this.checkedItems.emit(this.ngSelectMixtureService.getValueItems(this.model.items));
       }
     }
   };

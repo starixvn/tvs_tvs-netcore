@@ -5,6 +5,7 @@ import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { ControlsAllBetTypes } from './controls-all-bet-types.model';
 import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constants';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 describe('ControlsAllBetTypesService', () => {
   let service: ControlsAllBetTypesService;
@@ -25,8 +26,8 @@ describe('ControlsAllBetTypesService', () => {
     it('should initialize MultipleSelection with correct properties', () => {
       // Arrange
       const mockItems: ItemsSelect[] = [
-        new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
-        new ItemsSelect(2, 'item2', 'Item 2', false, false, true, [])
+        ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
+        ItemsSelectService.initItemsSelect(2, 'item2', 'Item 2', false, false, true, [])
       ];
       multipleSelectionService.checkAllItems = jest.fn();
 
@@ -77,7 +78,7 @@ describe('ControlsAllBetTypesService', () => {
       // Arrange
       const type = 'TestType';
       const mockItems: ItemsSelect[] = [
-        new ItemsSelect(1, 'item1', 'Item 1', false, false, true, [])
+        ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, [])
       ];
 
       // Act

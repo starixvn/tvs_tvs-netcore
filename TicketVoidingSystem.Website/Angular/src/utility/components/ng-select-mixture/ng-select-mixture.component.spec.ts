@@ -3,6 +3,7 @@ import { TestingModule } from '../../../utility/modules/testing.module';
 import { NgSelectMixtureComponent } from './ng-select-mixture.component';
 import { NgSelectMixtureModel } from './ng-select-mixture.model';
 import { NgSelectMixtureItem } from './ng-select-mixture-item.model';
+import { NgSelectMixtureService } from './ng-select-mixture.service';
 
 class Helper {
   static readonly fakeSelectedItems: string[] = ['item1', 'item2'];
@@ -41,13 +42,15 @@ class Helper {
 describe('NgSelectMixtureComponent', () => {
   let component: NgSelectMixtureComponent;
   let fixture: ComponentFixture<NgSelectMixtureComponent>;
-
+  let ngSelectMixtureService: NgSelectMixtureService;
+  
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(NgSelectMixtureComponent);
+    ngSelectMixtureService = fixture.debugElement.injector.get(NgSelectMixtureService);
     component = fixture.componentInstance;
     component.checkedItems.emit = jest.fn();
   });
@@ -60,14 +63,14 @@ describe('NgSelectMixtureComponent', () => {
     // Arrange
     component.selectedItems = Helper.fakeSelectedItems;
     component.model = Helper.fakeModel;
-
+    ngSelectMixtureService.checkBySelectedItem = jest.fn();
     // Act
     component.ngOnInit();
 
     // Assert
     expect(component.isCollapse).toBeFalsy();
     expect(component.model.title).toBeDefined();
-    expect(component.model.items[0].checkBySelectedItem).toHaveBeenCalledWith(Helper.fakeSelectedItems);
+    expect(ngSelectMixtureService.checkBySelectedItem).toHaveBeenCalledWith(Helper.fakeModel.items[0], Helper.fakeSelectedItems);
   });
 
   it('should handle click button toggle', () => {
@@ -85,6 +88,8 @@ describe('NgSelectMixtureComponent', () => {
     // Arrange
     const item = Helper.fakeModel.items[0];
     component.model = Helper.fakeModel;
+    ngSelectMixtureService.unCheckChild = jest.fn();
+    ngSelectMixtureService.checkFromChild = jest.fn();
 
     // Act
     component.emitSingleEvent(item);
@@ -94,14 +99,14 @@ describe('NgSelectMixtureComponent', () => {
     expect(component.model.title).toBe(item.name);
     expect(component.model.isShowPlaceHolder).toBeFalsy();
     expect(component.checkedItems.emit).toHaveBeenCalledWith([item.value]);
-    expect(item.unCheckChild).toHaveBeenCalled();
-    expect(item.checkFromChild).toHaveBeenCalled();
+    expect(ngSelectMixtureService.unCheckChild).toHaveBeenCalled();
+    expect(ngSelectMixtureService.checkFromChild).toHaveBeenCalled();
   });
 
   it('should emit child event and update title', () => {
     // Arrange
     component.model = Helper.fakeModel;
-    component.model.getDisplayedAllChildItems = jest.fn().mockReturnValue('Updated Title');
+    ngSelectMixtureService.getDisplayedAllChildItems = jest.fn().mockReturnValue('Updated Title');
 
     // Act
     component.emitChildEvent();
@@ -143,18 +148,19 @@ describe('NgSelectMixtureComponent', () => {
     // Arrange
     component.selectedItems = Helper.fakeSelectedItems;
     component.model = Helper.fakeModel;
-
+    ngSelectMixtureService.checkBySelectedItem = jest.fn();
     // Act
     component.ngOnInit();
 
     // Assert
-    expect(component.model.items[0].checkBySelectedItem).toHaveBeenCalledWith(Helper.fakeSelectedItems);
+    expect(ngSelectMixtureService.checkBySelectedItem).toHaveBeenCalledWith(Helper.fakeModel.items[0], Helper.fakeSelectedItems);
   });
 
   it('should update title on init', () => {
     // Arrange
     component.selectedItems = Helper.fakeSelectedItems;
     component.model = Helper.fakeModel;
+    ngSelectMixtureService.getDisplayedText = jest.fn().mockReturnValue('New Title');
 
     // Act
     component.ngOnInit();

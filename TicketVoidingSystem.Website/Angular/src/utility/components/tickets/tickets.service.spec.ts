@@ -6,16 +6,16 @@ import { ElementRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 class Helper {
-  static readonly fakeGroups: GroupModel[] = [
-    new GroupModel('Group 1', [
-      new TicketModel({ value: 'TXN001', mainTransId: '1', isChecked: true, status: 'Running', member: 'user1', soldId: 'SOLD001', siteDbGroupId: 1 }),
-      new TicketModel({ value: 'TXN002', mainTransId: '2', isChecked: false, status: 'Running', member: 'user2', soldId: 'SOLD002', siteDbGroupId: 1 })
-    ]),
-    new GroupModel('Group 2', [
-      new TicketModel({ value: 'TXN003', mainTransId: '3', isCricket: true, isChecked: false, status: 'Sold', member: 'user3', soldId: 'SOLD003', siteDbGroupId: 2 }),
-      new TicketModel({ value: 'TXN004', mainTransId: '4', isChecked: true, isDisable: true, status: 'Won', member: 'user4', soldId: 'SOLD004', siteDbGroupId: 2 })
-    ]),
-  ];
+  static readonly fakeGroups = [
+    {name: 'Group 1', tickets: [
+     { value: 'TXN001', mainTransId: '1', isChecked: true, status: 'Running', member: 'user1', soldId: 'SOLD001', siteDbGroupId: 1 },
+      { value: 'TXN002', mainTransId: '2', isChecked: false, status: 'Running', member: 'user2', soldId: 'SOLD002', siteDbGroupId: 1 }
+    ], disabledTickets: []} as GroupModel,
+    {name: 'Group 2', tickets: [
+      { value: 'TXN003', mainTransId: '3', isCricket: true, isChecked: false, status: 'Sold', member: 'user3', soldId: 'SOLD003', siteDbGroupId: 2 },
+      { value: 'TXN004', mainTransId: '4', isChecked: true, isDisable: true, status: 'Won', member: 'user4', soldId: 'SOLD004', siteDbGroupId: 2 }
+    ], disabledTickets: []} as GroupModel,
+  ] as GroupModel[];
 }
 describe('TicketsService', () => {
   let service: TicketsService;
@@ -304,15 +304,15 @@ describe('TicketsService', () => {
       // Arrange
       let iconCheckBox = IconCheckBox.none;
       const testGroups = [
-        new GroupModel('Group 1', [
+        {name: 'Group 1', tickets: [
           new TicketModel({ value: 'TXN001', mainTransId: '1', isChecked: true, status: 'Running', member: 'user1', soldId: 'SOLD001', siteDbGroupId: 1 }),
           new TicketModel({ value: 'TXN002', mainTransId: '2', isChecked: true, status: 'Running', member: 'user2', soldId: 'SOLD002', siteDbGroupId: 1 })
-        ]),
-        new GroupModel('Group 2', [
+        ], disabledTickets: []} as GroupModel,
+        {name: 'Group 2', tickets: [
           new TicketModel({ value: 'TXN003', mainTransId: '3', isChecked: true, status: 'Sold', member: 'user3', soldId: 'SOLD003', siteDbGroupId: 2 }),
           new TicketModel({ value: 'TXN004', mainTransId: '4', isChecked: true, status: 'Won', member: 'user4', soldId: 'SOLD004', siteDbGroupId: 2 })
-        ]),
-      ];
+        ], disabledTickets: []} as GroupModel,
+      ] as GroupModel[];
 
       // Action
       iconCheckBox = TicketsService.updateIconCheckBox(testGroups);
@@ -325,14 +325,14 @@ describe('TicketsService', () => {
       // Arrange
       let iconCheckBox = IconCheckBox.none;
       const testGroups = [
-        new GroupModel('Group 1', [
+        {name: 'Group 1', tickets: [
           new TicketModel({ value: 'TXN001', mainTransId: '1', isChecked: true, isDisable: false, status: 'Running', member: 'user1', soldId: 'SOLD001', siteDbGroupId: 1 }),
           new TicketModel({ value: 'TXN002', mainTransId: '2', isChecked: false, isDisable: true, status: 'Running', member: 'user2', soldId: 'SOLD002', siteDbGroupId: 1 })
-        ]),
-        new GroupModel('Group 2', [
+        ], disabledTickets: []} as GroupModel,
+        {name: 'Group 2', tickets: [
           new TicketModel({ value: 'TXN003', mainTransId: '3', isChecked: false, isDisable: true, status: 'Sold', member: 'user3', soldId: 'SOLD003', siteDbGroupId: 2 }),
           new TicketModel({ value: 'TXN004', mainTransId: '4', isChecked: false, isDisable: true, status: 'Won', member: 'user4', soldId: 'SOLD004', siteDbGroupId: 2 })
-        ]),
+        ], disabledTickets: []} as GroupModel,
       ];
 
       // Action
@@ -346,14 +346,14 @@ describe('TicketsService', () => {
       // Arrange
       let iconCheckBox = IconCheckBox.all;
       const testGroups = [
-        new GroupModel('Group 1', [
+        {name: 'Group 1', tickets: [
           new TicketModel({ value: 'TXN001', mainTransId: '1', isChecked: false, isDisable: true, status: 'Running', member: 'user1', soldId: 'SOLD001', siteDbGroupId: 1 }),
           new TicketModel({ value: 'TXN002', mainTransId: '2', isChecked: false, isDisable: true, status: 'Running', member: 'user2', soldId: 'SOLD002', siteDbGroupId: 1 })
-        ]),
-        new GroupModel('Group 2', [
+        ], disabledTickets: []} as GroupModel,
+        {name: 'Group 2', tickets: [
           new TicketModel({ value: 'TXN003', mainTransId: '3', isChecked: false, isDisable: true, status: 'Sold', member: 'user3', soldId: 'SOLD003', siteDbGroupId: 2 }),
           new TicketModel({ value: 'TXN004', mainTransId: '4', isChecked: false, isDisable: true, status: 'Won', member: 'user4', soldId: 'SOLD004', siteDbGroupId: 2 })
-        ]),
+        ], disabledTickets: []} as GroupModel,
       ];
 
       // Action

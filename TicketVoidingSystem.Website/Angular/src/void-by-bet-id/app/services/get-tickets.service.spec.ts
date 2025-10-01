@@ -65,10 +65,10 @@ class Helper {
     groups: []
   } as unknown as TicketsViewModel;
 
-  static readonly fakeGroupModel = new GroupModel('Test Group', [
+  static readonly fakeGroupModel = {name: 'Test Group', tickets: [
     { isChecked: false, isDisable: false },
     { isChecked: false, isDisable: false }
-  ] as unknown as TicketModel[]);
+  ] as TicketModel[]} as GroupModel;
 }
 
 describe('GetTicketsService', () => {
@@ -76,10 +76,24 @@ describe('GetTicketsService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [GetTicketsService, TicketsService]
+      providers: [GetTicketsService, TicketsService, GroupService]
     });
     service = TestBed.inject(GetTicketsService);
     jest.clearAllMocks();
+    
+    // Mock GroupService.initGroup method
+    const groupService = TestBed.inject(GroupService);
+    jest.spyOn(groupService, 'initGroup').mockImplementation((name: string, tickets: any[]) => {
+      const group = {
+        name: name,
+        tickets: tickets || [],
+        isCheckAll: false,
+        isExpanded: true,
+        isDisabled: false,
+        disabledTickets: []
+      };
+      return group as any;
+    });
   });
 
   it('should be created', () => {

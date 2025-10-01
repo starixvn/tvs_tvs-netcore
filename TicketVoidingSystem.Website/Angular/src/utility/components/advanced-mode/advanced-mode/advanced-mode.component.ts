@@ -21,6 +21,7 @@ import { AdvancedModeApiService } from './advanced-mode-api.service';
 import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
 import { AdvancedModeService } from './advanced-mode.service';
 import { ControlsAllBetTypesService } from '../../advanced-mode-add-request/controls-all-bet-types/controls-all-bet-types.service';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 @Component({
   standalone: true,
@@ -207,7 +208,7 @@ export class AdvancedModeComponent implements OnChanges {
   private renderPlayer(players: Player[]) {
     const itemSelects: Array<ItemsSelect> = [];
     for (let i = 0; i < players.length; i++) {
-      const item = new ItemsSelect(i, players[i].betChoice, players[i].oddsInfo, true, true, true, []);
+      const item = ItemsSelectService.initItemsSelect(i, players[i].betChoice, players[i].oddsInfo, true, true, true, []);
       itemSelects.push(item);
     }
 

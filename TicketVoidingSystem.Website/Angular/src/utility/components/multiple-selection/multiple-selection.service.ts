@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ItemsSelect } from './items-select';
 import { MultipleSelection } from './multiple-selection.model';
+import { ItemsSelectService } from './items-select.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MultipleSelectionService {
+  private readonly itemsSelectService = inject(ItemsSelectService);
+  
   getValueItems(multipleSelection: MultipleSelection) {
     let value = '';
     multipleSelection.items.forEach(item => {
-      const valueItem = item.getValueChildsChecked();
+      const valueItem = this.itemsSelectService.getValueChildsChecked(item);
       if (valueItem !== '') {
         value = value === '' ?
           valueItem : value + ',' + valueItem;
@@ -30,9 +33,9 @@ export class MultipleSelectionService {
     let text = '';
 
     multipleSelection.items.forEach(item => {
-      countChecked += item.countChildsChecked();
+      countChecked += this.itemsSelectService.countChildsChecked(item);
       count += item.countChilds;
-      const textItems = item.getTextChildsChecked();
+      const textItems = this.itemsSelectService.getTextChildsChecked(item);
 
       if (textItems !== '') {
         text = text === '' ?
@@ -57,7 +60,7 @@ export class MultipleSelectionService {
   checkAllItems(multipleSelection: MultipleSelection, isChecked: boolean) {
     multipleSelection.items.forEach(item => {
       item.checked = isChecked;
-      item.checkChilds();
+      this.itemsSelectService.checkChilds(item);
     });
     multipleSelection.selectionTitle = this.getDisplayedItems(multipleSelection);
   }

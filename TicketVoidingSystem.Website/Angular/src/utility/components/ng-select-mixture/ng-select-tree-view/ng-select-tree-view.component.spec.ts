@@ -1,15 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NgSelectTreeViewComponent } from './ng-select-tree-view.component';
 import { NgSelectMixtureItem } from '../ng-select-mixture-item.model';
+import { NgSelectMixtureService } from '../ng-select-mixture.service';
 
 describe('NgSelectTreeViewComponent', () => {
   let component: NgSelectTreeViewComponent;
   let fixture: ComponentFixture<NgSelectTreeViewComponent>;
-
+  let ngSelectMixtureService: NgSelectMixtureService;
+  
   beforeEach(async () => {
     await TestBed.configureTestingModule({}).compileComponents();
 
     fixture = TestBed.createComponent(NgSelectTreeViewComponent);
+    ngSelectMixtureService = fixture.debugElement.injector.get(NgSelectMixtureService);
     component = fixture.componentInstance;
   });
 
@@ -28,9 +31,7 @@ describe('NgSelectTreeViewComponent', () => {
     });
 
     it('should accept items array', () => {
-      const mockItems: NgSelectMixtureItem[] = [
-        new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, [])
-      ];
+      const mockItems = [{value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} ] as NgSelectMixtureItem[];
       component.items = mockItems;
       expect(component.items).toEqual(mockItems);
     });
@@ -43,8 +44,8 @@ describe('NgSelectTreeViewComponent', () => {
 
   describe('handleClickSingleItem', () => {
     it('should set item checked to true', () => {
-      const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
-      const mockItems = [mockItem, new NgSelectMixtureItem('2', 'Item 2', 0, false, false, true, [])];
+      const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+      const mockItems = [mockItem, {value: '2', name: 'Item 2', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem];
       component.items = mockItems;
 
       component.handleClickSingleItem(mockItem);
@@ -53,8 +54,8 @@ describe('NgSelectTreeViewComponent', () => {
     });
 
     it('should uncheck other items when single item is selected', () => {
-      const mockItem1 = new NgSelectMixtureItem('1', 'Item 1', 0, true, false, true, []);
-      const mockItem2 = new NgSelectMixtureItem('2', 'Item 2', 0, true, false, true, []);
+      const mockItem1 = {value: '1', name: 'Item 1', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
+      const mockItem2 = {value: '2', name: 'Item 2', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
       const mockItems = [mockItem1, mockItem2];
       component.items = mockItems;
 
@@ -65,7 +66,7 @@ describe('NgSelectTreeViewComponent', () => {
     });
 
     it('should emit single event with selected item', () => {
-      const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+      const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
       const mockItems = [mockItem];
       component.items = mockItems;
       component.emitSingleEvent.emit = jest.fn();
@@ -77,7 +78,7 @@ describe('NgSelectTreeViewComponent', () => {
 
     it('should handle empty items array', () => {
       component.items = [];
-      const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+      const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
       component.emitSingleEvent.emit = jest.fn();
 
       component.handleClickSingleItem(mockItem);
@@ -89,9 +90,9 @@ describe('NgSelectTreeViewComponent', () => {
 
   describe('unCheckOtherItem', () => {
     it('should uncheck all items except selected item', () => {
-      const mockItem1 = new NgSelectMixtureItem('1', 'Item 1', 0, true, false, true, []);
-      const mockItem2 = new NgSelectMixtureItem('2', 'Item 2', 0, true, false, true, []);
-      const mockItem3 = new NgSelectMixtureItem('3', 'Item 3', 0, true, false, true, []);
+      const mockItem1 = {value: '1', name: 'Item 1', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
+      const mockItem2 = {value: '2', name: 'Item 2', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
+      const mockItem3 = {value: '3', name: 'Item 3', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
       const mockItems = [mockItem1, mockItem2, mockItem3];
       component.items = mockItems;
 
@@ -104,8 +105,8 @@ describe('NgSelectTreeViewComponent', () => {
     });
 
     it('should handle items with same value', () => {
-      const mockItem1 = new NgSelectMixtureItem('1', 'Item 1', 0, true, false, true, []);
-      const mockItem2 = new NgSelectMixtureItem('1', 'Item 1 Copy', 0, true, false, true, []);
+      const mockItem1 = {value: '1', name: 'Item 1', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
+      const mockItem2 = {value: '1', name: 'Item 1 Copy', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem;
       const mockItems = [mockItem1, mockItem2];
       component.items = mockItems;
 
@@ -119,15 +120,15 @@ describe('NgSelectTreeViewComponent', () => {
   describe('handleClickChildItem', () => {
     it('should emit child event', () => {
       component.emitChildEvent.emit = jest.fn();
-      component.items = [new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, [])];
+      component.items = [{value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem];
       component.handleClickChildItem();
 
       expect(component.emitChildEvent.emit).toHaveBeenCalled();
     });
 
     it('should uncheck all single select items', () => {
-      const mockItem1 = new NgSelectMixtureItem('1', 'Item 1', 0, true, false, true, []); // single select
-      const mockItem2 = new NgSelectMixtureItem('2', 'Item 2', 1, true, false, true, []); // not single select
+      const mockItem1 = {value: '1', name: 'Item 1', parentId: 0, checked: true, expanded: false, items: []} as NgSelectMixtureItem; // single select
+      const mockItem2 = {value: '2', name: 'Item 2', parentId: 1, checked: true, expanded: false, items: []} as NgSelectMixtureItem; // not single select
       const mockItems = [mockItem1, mockItem2];
       component.items = mockItems;
 
@@ -143,25 +144,24 @@ describe('NgSelectTreeViewComponent', () => {
 
       component.handleClickChildItem();
 
-      // Kiểm tra rằng method đã thực thi thành công bằng cách kiểm tra emit được gọi
       expect(component.emitChildEvent.emit).toHaveBeenCalled();
     });
   });
 
   describe('checkFromChildEvent', () => {
     it('should call checkFromChild on item', () => {
-      const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
-      mockItem.checkFromChild = jest.fn();
+      const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+      ngSelectMixtureService.checkFromChild = jest.fn();
 
       component.checkFromChildEvent(mockItem);
 
-      expect(mockItem.checkFromChild).toHaveBeenCalled();
+      expect(ngSelectMixtureService.checkFromChild).toHaveBeenCalled();
     });
 
     describe('isHaveCheckBox', () => {
       it('should return true when item has children', () => {
-        const childItem = new NgSelectMixtureItem('2', 'Child', 1, false, false, true, []);
-        const mockItem = new NgSelectMixtureItem('1', 'Parent', 0, false, false, true, [childItem]);
+        const childItem = {value: '2', name: 'Child', parentId: 1, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const mockItem = {value: '1', name: 'Parent', parentId: 0, checked: false, expanded: false, items: [childItem]} as NgSelectMixtureItem;
 
         const result = component.isHaveCheckBox(mockItem);
 
@@ -169,7 +169,7 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should return true when item has parentId less than 0', () => {
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', -1, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: -1, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
 
         const result = component.isHaveCheckBox(mockItem);
 
@@ -177,7 +177,7 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should return false when item has no children and parentId >= 0', () => {
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
 
         const result = component.isHaveCheckBox(mockItem);
 
@@ -185,7 +185,7 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should return false when item has no children and parentId > 0', () => {
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', 1, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: 1, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
 
         const result = component.isHaveCheckBox(mockItem);
 
@@ -193,8 +193,8 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should return true when item has both children and parentId < 0', () => {
-        const childItem = new NgSelectMixtureItem('2', 'Child', 1, false, false, true, []);
-        const mockItem = new NgSelectMixtureItem('1', 'Parent', -1, false, false, true, [childItem]);
+        const childItem = {value: '2', name: 'Child', parentId: 1, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const mockItem = {value: '1', name: 'Parent', parentId: -1, checked: false, expanded: false, items: [childItem]} as NgSelectMixtureItem;
 
         const result = component.isHaveCheckBox(mockItem);
 
@@ -204,11 +204,11 @@ describe('NgSelectTreeViewComponent', () => {
 
     describe('Component Integration Tests', () => {
       it('should handle complex tree structure', () => {
-        const grandChild1 = new NgSelectMixtureItem('3', 'GrandChild 1', 2, false, false, true, []);
-        const grandChild2 = new NgSelectMixtureItem('4', 'GrandChild 2', 2, false, false, true, []);
-        const child1 = new NgSelectMixtureItem('2', 'Child 1', 1, false, false, true, [grandChild1, grandChild2]);
-        const child2 = new NgSelectMixtureItem('5', 'Child 2', 1, false, false, true, []);
-        const parent = new NgSelectMixtureItem('1', 'Parent', 0, false, false, true, [child1, child2]);
+        const grandChild1 = {value: '3', name: 'GrandChild 1', parentId: 2, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const grandChild2 = {value: '4', name: 'GrandChild 2', parentId: 2, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const child1 = {value: '2', name: 'Child 1', parentId: 1, checked: false, expanded: false, items: [grandChild1, grandChild2]} as NgSelectMixtureItem;
+        const child2 = {value: '5', name: 'Child 2', parentId: 1, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const parent = {value: '1', name: 'Parent', parentId: 0, checked: false, expanded: false, items: [child1, child2]} as NgSelectMixtureItem;
 
         component.items = [parent];
 
@@ -228,7 +228,7 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should handle disabled state', () => {
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
         component.items = [mockItem];
         component.isDisabled = true;
 
@@ -240,9 +240,9 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should handle multiple single select items', () => {
-        const item1 = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
-        const item2 = new NgSelectMixtureItem('2', 'Item 2', 0, false, false, true, []);
-        const item3 = new NgSelectMixtureItem('3', 'Item 3', 0, false, false, true, []);
+        const item1 = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const item2 = {value: '2', name: 'Item 2', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const item3 = {value: '3', name: 'Item 3', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
         component.items = [item1, item2, item3];
 
         // Select first item
@@ -262,7 +262,7 @@ describe('NgSelectTreeViewComponent', () => {
     describe('Edge Cases', () => {
       it('should handle null items array', () => {
         component.items = null;
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
         component.emitSingleEvent.emit = jest.fn();
         component.emitChildEvent.emit = jest.fn();
 
@@ -274,7 +274,7 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should handle item with null properties', () => {
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
         mockItem.value = null as any;
 
         component.items = [mockItem];
@@ -298,7 +298,7 @@ describe('NgSelectTreeViewComponent', () => {
 
     describe('Output Events', () => {
       it('should emit single event with correct data', () => {
-        const mockItem = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
+        const mockItem = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
         component.items = [mockItem];
         component.emitSingleEvent.emit = jest.fn();
 
@@ -308,8 +308,8 @@ describe('NgSelectTreeViewComponent', () => {
       });
 
       it('should emit events multiple times', () => {
-        const mockItem1 = new NgSelectMixtureItem('1', 'Item 1', 0, false, false, true, []);
-        const mockItem2 = new NgSelectMixtureItem('2', 'Item 2', 0, false, false, true, []);
+        const mockItem1 = {value: '1', name: 'Item 1', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
+        const mockItem2 = {value: '2', name: 'Item 2', parentId: 0, checked: false, expanded: false, items: []} as NgSelectMixtureItem;
         component.items = [mockItem1, mockItem2];
         component.emitSingleEvent.emit = jest.fn();
         component.emitChildEvent.emit = jest.fn();

@@ -5,6 +5,7 @@ import { AdvancedModeConstants } from '../../advanced-mode/advanced-mode.constan
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 class Helper {
   static readonly fakeCommonInfo: [number, string, string, number, string] = [1, 'Team A', 'A', 1, '1,2,3'];
@@ -285,8 +286,8 @@ describe('BetTeamAddRequestService', () => {
       // Arrange
       const multipleSelect = new MultipleSelection();
       multipleSelect.items = [
-        new ItemsSelect(0, 'item1', 'Item 1', true, true, true, []),
-        new ItemsSelect(1, 'item2', 'Item 2', true, true, true, [])
+        ItemsSelectService.initItemsSelect(0, 'item1', 'Item 1', true, true, true, []),
+        ItemsSelectService.initItemsSelect(1, 'item2', 'Item 2', true, true, true, [])
       ];
       const isDisabled = true;
 
@@ -303,8 +304,8 @@ describe('BetTeamAddRequestService', () => {
       // Arrange
       const multipleSelect = new MultipleSelection();
       multipleSelect.items = [
-        new ItemsSelect(0, 'item1', 'Item 1', true, true, true, []),
-        new ItemsSelect(1, 'item2', 'Item 2', true, true, true, [])
+        ItemsSelectService.initItemsSelect(0, 'item1', 'Item 1', true, true, true, []),
+        ItemsSelectService.initItemsSelect(1, 'item2', 'Item 2', true, true, true, [])
       ];
       const isDisabled = false;
 
