@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MultipleSelection } from '../../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../../../../../utility/components/multiple-selection/multiple-selection.component';
 import { TooltipComponent } from '../../../../../../../utility/components/tooltip/tooltip.component';
 import { TestingModule } from '../../../../../../../utility/modules/testing.module';

@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { FilterNotParticipateModel } from '../models/filter-not-participate.model';
