@@ -2,16 +2,16 @@ import { Component, inject, Input, OnChanges, SimpleChanges } from '@angular/cor
 import cloneDeep from 'lodash/cloneDeep';
 import uniqBy from 'lodash/uniqBy';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
+import { ItemsSelectService } from '../../../utility/components/multiple-selection/items-select.service';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
-import { AffectedTicketService } from './affected-ticket.service';
 import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
-import { ItemsSelectService } from '../../../utility/components/multiple-selection/items-select.service';
+import { AffectedTicketService } from './affected-ticket.service';
 
 @Component({
   selector: 'affected-ticket',
@@ -24,7 +24,7 @@ export class AffectedTicketComponent implements OnChanges {
   @Input() model = new AffectedTicketsModel();
   filterBetTypes: MultipleSelection;
   tickets = new TicketsModel();
-  blockBetList: boolean;
+  blockBetList = true;
   otherTickets = new TicketsModel();
   isShowOtherTickets = true;
   isShowAffectedTickets = true;
@@ -32,7 +32,7 @@ export class AffectedTicketComponent implements OnChanges {
   private readonly logAnalysisService = inject(LogAnalysisService);
   private readonly affectedTicketService = inject(AffectedTicketService);
   private readonly ticketsService = inject(TicketsService);
-  
+
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
       this.blockBetList = true;

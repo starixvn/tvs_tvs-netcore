@@ -7,6 +7,10 @@ import { ModalService } from '../../../../../../utility/components/modal/modal.s
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { SanitizeHtmlPipe } from '../../../../../../utility/modules/sanitize-html.pipe';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketComponent } from '../../../../../component/affected-ticket/affected-ticket.component';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
 import { LogInfoReducedOver } from '../models/log-info-reduced-over.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 
@@ -15,13 +19,20 @@ import { PrimitivePropertyEvent } from '../models/primitive-property-event.model
   selector: 'log-info-reduced-over',
   templateUrl: './log-info-reduced-over.component.html',
   styleUrls: ['./log-info-reduced-over.component.scss'],
-  imports: [FormsModule, CommonModule, NgbModule, SanitizeHtmlPipe]
+  imports: [FormsModule, CommonModule, NgbModule, SanitizeHtmlPipe, AffectedTicketComponent],
+  providers: [AffectedTicketService]
 })
 export class LogInfoReducedOverComponent {
+  @Input() issueTypeId: string;
+  @Input() filter: FilterModel;
   @Input() logInfo: LogInfoReducedOver;
   @Input() primitiveProps = new PrimitivePropertyEvent();
 
   private readonly modalService = inject(ModalService);
+  private readonly affectedTicketService = inject(AffectedTicketService);
+
+  affectedTicketsModel = new AffectedTicketsModel();
+
   public displayFullDateTimeFormat(time: Date): string {
     return moment(time).format(DateTimeFormat.FULL_DATE_TIME_FORMAT);
   }
@@ -40,5 +51,10 @@ export class LogInfoReducedOverComponent {
 
   public isShowCountInfo(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
+  }
+
+  showAffectedTicketsDetails(logInfo: LogInfoReducedOver) {
+    this.affectedTicketsModel = this.affectedTicketService.getAffectedTicketsDetails(Number(this.issueTypeId),
+    logInfo.betTypeCount, logInfo.logInfoDetail.logInfoTicketsJson);
   }
 }

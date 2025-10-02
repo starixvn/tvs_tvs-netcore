@@ -4,6 +4,7 @@ import { ModalService } from '../../../../../../utility/components/modal/modal.s
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { LogInfoNotParticipateComponent } from './log-info-not-participate.component';
 
 describe('LogInfoNotParticipateComponent', () => {
@@ -17,7 +18,8 @@ describe('LogInfoNotParticipateComponent', () => {
       imports: [TestingModule],
       providers: [
         ModalService,
-        StaticService
+        StaticService,
+        AffectedTicketService
       ]
     }).compileComponents();
 

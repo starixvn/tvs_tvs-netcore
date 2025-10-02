@@ -5,9 +5,9 @@ import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model'
 import { LogAnalysisService } from '../../services/log-analysis.service';
 import { GroupModel } from '../pool-house-ticket/tickets/group-tickets.model';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 import { AffectedTicketComponent } from './affected-ticket.component';
 import { AffectedTicketService } from './affected-ticket.service';
-import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 
 class Helper {
   static readonly fakeIssueTypeId = '123';
@@ -48,7 +48,7 @@ describe('AffectedTicketComponent', () => {
 
   it('should initialize with default values', () => {
     expect(component.model).toBeDefined();
-    expect(component.blockBetList).toBeFalsy();
+    expect(component.blockBetList).toBeTruthy();
     expect(component.isShowOtherTickets).toBeTruthy();
     expect(component.isShowAffectedTickets).toBeTruthy();
     expect(component.isShowGroupBetTypesCount).toBeTruthy();

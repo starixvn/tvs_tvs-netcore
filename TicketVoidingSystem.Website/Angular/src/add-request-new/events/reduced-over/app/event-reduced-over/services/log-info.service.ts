@@ -35,6 +35,7 @@ export class LogInfoService {
   private assignResultLogInfoToEvents(logInfoEvent: LogInfoReducedOver, logInfoModels: GetLogInfoModel[]): void {
     const logInfoModel = logInfoModels.find(x => x.matchId === logInfoEvent.matchId);
     if (logInfoModel) {
+      logInfoEvent.betTypeCount = logInfoModel.betTypeCount;
       logInfoEvent.logInfoDetail = logInfoModel.logInfoDetail;
       logInfoEvent.messageValidationLogInfo = StaticService.getValidationMessageList(logInfoModel);
     }
