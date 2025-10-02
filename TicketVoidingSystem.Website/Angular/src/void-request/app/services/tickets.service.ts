@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import clone from 'lodash/clone';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { PagingConstant } from '../../../utility/components/paging/paging.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { AppService } from '../app.service';
 import { GetTicketsQuery } from '../models/get-tickets.query';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
-import { TicketsModel } from '../tickets-list/tickets.model';
 import { TicketListService } from '../tickets-list/ticket-list.service';
+import { TicketsModel } from '../tickets-list/tickets.model';
 
 @Injectable(
   { providedIn: 'root' }

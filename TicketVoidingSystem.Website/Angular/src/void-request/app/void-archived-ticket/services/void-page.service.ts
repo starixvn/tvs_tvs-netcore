@@ -1,13 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import clone from 'lodash/clone';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
 import { TicketsService } from '../../services/tickets.service';
 import { VoidPageCommonService } from '../../services/void-page-common.service';
 import { VoidArchivedTicketModel } from '../models/void-archived-ticket.model';
-import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 
 @Injectable()
 export class VoidPageService {

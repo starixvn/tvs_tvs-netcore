@@ -1,9 +1,9 @@
 import { inject } from '@angular/core';
-import sumBy from 'lodash/sumBy';
 import clone from 'lodash/clone';
-import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
-import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import sumBy from 'lodash/sumBy';
+import { GetLogInfoQuery } from '../../../../add-request-new/models/add-request.query';
+import { GetLogInfoModel } from '../../../../add-request-new/models/get-log-info.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';

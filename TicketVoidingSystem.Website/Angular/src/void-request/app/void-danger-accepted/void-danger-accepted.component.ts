@@ -3,7 +3,7 @@ import { Component, ElementRef, Input, OnInit, QueryList, ViewChildren, inject }
 import { FormsModule } from '@angular/forms';
 import clone from 'lodash/clone';
 import { Subscription } from 'rxjs';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';

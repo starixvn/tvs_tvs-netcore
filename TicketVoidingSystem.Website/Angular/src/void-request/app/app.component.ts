@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../add-request-new/models/request-detail.model';
 import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { SignalRService } from '../../utility/services/signal-r.service.native';

@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import clone from 'lodash/clone';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';

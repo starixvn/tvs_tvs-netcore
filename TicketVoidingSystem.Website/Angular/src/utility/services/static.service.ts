@@ -1,15 +1,15 @@
 ﻿import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import moment, { Moment } from 'moment-timezone';
+import { GetLogInfoModel, ValidationMessage } from '../../add-request-new/models/get-log-info.model';
 import { RequestDetailViewModel } from '../../add-request-new/models/request-detail.model';
-import { GetLogInfoModel, ValidationMessage } from '../../add-request/app/add-request/models/get-log-info.model';
 import { ModalType } from '../components/modal/modal.model';
 import { ModalService } from '../components/modal/modal.service';
 import { MultipleSelection } from '../components/multiple-selection/multiple-selection.model';
 import { Tooltip } from '../components/tooltip/tooltip.model';
 import { AbnormalFilterBy, DateTimeFormat, FunctionConst, SubIssueTypeGroup, TVSRequestActionType } from '../constants/config';
 import { IssueTypeConstant } from '../constants/issue-type.constant';
-import { TEXT } from '../constants/text';
 import { RegexConstant } from '../constants/regex';
+import { TEXT } from '../constants/text';
 import { CheckIssueTypeObjectType } from '../models/check-issue-type.model';
 
 export class StaticService {

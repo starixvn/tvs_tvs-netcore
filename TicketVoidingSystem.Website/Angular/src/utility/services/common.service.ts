@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import moment from 'moment-timezone';
-import { GetLogInfoQuery } from '../../add-request/app/add-request/models/add-request.query';
-import { HdpFilterBetType } from '../../add-request/app/add-request/models/hdp-filter-betType.model';
+import { GetLogInfoQuery } from '../../add-request-new/models/add-request.query';
+import { GetLogInfoViewModel } from '../../add-request-new/models/get-log-info.model';
+import { HdpFilterBetType } from '../../add-request-new/models/hdp-filter-betType.model';
+import { RequestDetailViewModel } from '../../add-request-new/models/request-detail.model';
 import { PermissionManage } from '../../manage-request/app/models/permission-manage.model';
 import { Selection } from '../../utility/models/selection.model';
 import { GetOddsInfoQuery, OddsInfo } from '../components/advanced-mode/advanced-mode/advanced-mode.model';
@@ -20,9 +22,7 @@ import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.mode
 import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
 import { VoidedReason } from '../models/reason.model';
 import { Result, SqlResult } from '../models/result';
-import { RequestDetailViewModel } from './../../edit-request/app/request.model';
 import { HttpService } from './http.service';
-import { GetLogInfoViewModel } from '../../add-request-new/models/get-log-info.model';
 @Injectable({
   providedIn: 'root'
 })

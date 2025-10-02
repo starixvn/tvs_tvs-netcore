@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { GetLogInfoQuery } from '../../../add-request/app/add-request/models/add-request.query';
 import { CommonService } from '../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../utility/services/mapping-model-static.service';
 import { StaticService } from '../../../utility/services/static.service';
+import { GetLogInfoQuery } from '../../models/add-request.query';
 import { LogInfoArg } from '../../models/edit/log-info.model';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestDetailViewModel } from '../../models/request-detail.model';

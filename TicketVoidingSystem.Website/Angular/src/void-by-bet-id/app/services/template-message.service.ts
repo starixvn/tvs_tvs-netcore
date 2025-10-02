@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
-import { TemplateValue } from "../../../utility/components/template-message/template-message/template.model";
-import { MatchModel } from "../../../utility/models/match.model";
-import { AbnormalFilterBy } from "../../../utility/constants/config";
-import { TicketsViewModel } from "../model/get-tickets.query";
-import { TemplateService } from "../../../utility/components/template-message/template-message/services/template.service";
+import clone from 'lodash/clone';
 import { MessagesResult } from "../../../utility/components/messages-result/messages-result.model";
-import { clone } from "lodash";
-import { Result } from "../../../utility/models/result";
+import { TemplateService } from "../../../utility/components/template-message/template-message/services/template.service";
+import { TemplateValue } from "../../../utility/components/template-message/template-message/template.model";
 import { TicketsService } from "../../../utility/components/tickets/tickets.service";
+import { AbnormalFilterBy } from "../../../utility/constants/config";
+import { MatchModel } from "../../../utility/models/match.model";
+import { Result } from "../../../utility/models/result";
+import { TicketsViewModel } from "../model/get-tickets.query";
 
 @Injectable()
 export class TemplateMessageService {
