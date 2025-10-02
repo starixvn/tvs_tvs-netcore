@@ -73,31 +73,31 @@ export class NgSelectMixtureService {
     return item;
   }
 
-  private getCountChild(item: NgSelectMixtureItem): number {
-    if (item.items.length === 0) {
-      item.countChild = 1;
+  private getCountChild(itemSelect: NgSelectMixtureItem): number {
+    if (itemSelect.items.length === 0) {
+      itemSelect.countChild = 1;
     }
 
-    item.items.forEach(item => {
-      item.countChild += item.countChild;
+    itemSelect.items.forEach(item => {
+      itemSelect.countChild += item.countChild;
     });
 
-    return item.countChild;
+    return itemSelect.countChild;
   }
 
-  checkChild(item: NgSelectMixtureItem): void {
-    item.items.forEach(item => {
-      item.checked = item.enabled ? item.checked : item.checked;
+  checkChild(itemSelect: NgSelectMixtureItem): void {
+    itemSelect.items.forEach(item => {
+      item.checked = item.enabled ? itemSelect.checked : item.checked;
       this.checkChild(item);
     });
   }
 
-  checkBySelectedItem(item: NgSelectMixtureItem, selectedItems: string[]): void {
-    item.items.forEach(item => {
+  checkBySelectedItem(itemSelect: NgSelectMixtureItem, selectedItems: string[]): void {
+    itemSelect.items.forEach(item => {
       item.checked = selectedItems.includes(item.value);
       this.checkBySelectedItem(item, selectedItems);
     });
-    item.checked = this.isItemGroup(item.value) ? item.items.every(x => x.checked) : selectedItems.includes(item.value);
+    itemSelect.checked = this.isItemGroup(itemSelect.value) ? itemSelect.items.every(x => x.checked) : selectedItems.includes(itemSelect.value);
   }
 
   unCheckChild(items: NgSelectMixtureItem[]): void {
@@ -115,12 +115,12 @@ export class NgSelectMixtureService {
     return item.countChild === this.countChildChecked(item);
   }
 
-  countChildChecked(item: NgSelectMixtureItem): number {
+  countChildChecked(itemSelect: NgSelectMixtureItem): number {
     let count = 0;
-    if (item.items.length === 0) {
-      count = item.checked ? 1 : 0;
+    if (itemSelect.items.length === 0) {
+      count = itemSelect.checked ? 1 : 0;
     }
-    item.items.forEach(item => {
+    itemSelect.items.forEach(item => {
       count += this.countChildChecked(item);
     });
 
@@ -128,13 +128,13 @@ export class NgSelectMixtureService {
   }
 
 
-  getValueChildChecked(item: NgSelectMixtureItem): string[] {
+  getValueChildChecked(itemSelect: NgSelectMixtureItem): string[] {
     const values: string[] = [];
-    if (item.items.length === 0 && item.checked) {
-      values.push(item.value);
+    if (itemSelect.items.length === 0 && itemSelect.checked) {
+      values.push(itemSelect.value);
     }
 
-    item.items.forEach(item => {
+    itemSelect.items.forEach(item => {
       const value = this.getValueChildChecked(item);
       values.push(...value);
     });
@@ -142,13 +142,13 @@ export class NgSelectMixtureService {
     return values;
   }
 
-  getTextChildChecked(item: NgSelectMixtureItem): string {
+  getTextChildChecked(itemSelect: NgSelectMixtureItem): string {
     let text = '';
-    if (item.items.length === 0) {
-      text = item.checked ? item.name : '';
+    if (itemSelect.items.length === 0) {
+      text = itemSelect.checked ? itemSelect.name : '';
     }
 
-    item.items.forEach(item => {
+    itemSelect.items.forEach(item => {
       const textItem = this.getTextChildChecked(item);
       if (textItem !== '') {
         text = text === '' ? textItem : text + ',' + textItem;
