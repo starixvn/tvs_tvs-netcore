@@ -1,16 +1,16 @@
-import { TestingModule } from './../../../utility/modules/testing.module';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
+import { TestingModule } from './../../../utility/modules/testing.module';
 import { VoidNotParticipateModel } from './models/void-page-not-participate.model';
+import { TemplateMessageService } from './services/template-message.service';
 import { VoidPageService } from './services/void-page.service';
 import { VoidNotParticipateComponent } from './void-not-participate.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TemplateMessageService } from './services/template-message.service';
 
 describe('VoidNotParticipateComponent', () => {
   let component: VoidNotParticipateComponent;

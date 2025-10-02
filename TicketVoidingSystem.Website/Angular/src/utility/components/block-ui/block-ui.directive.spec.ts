@@ -1,9 +1,8 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, ElementRef, ViewContainerRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ElementRef, ViewContainerRef } from '@angular/core';
-import { BlockUiDirective } from './block-ui.directive';
 import { BlockUiComponent } from './block-ui.component';
+import { BlockUiDirective } from './block-ui.directive';
 
 @Component({
   template: `
@@ -247,10 +246,7 @@ describe('BlockUiDirective', () => {
     });
 
     it('should use jest.fn() with implementation', () => {
-      const mockImplementation = jest.fn().mockImplementation(() => {
-        console.log('Mock implementation called');
-      });
-      
+      const mockImplementation = jest.fn().mockImplementation(() => {});
       directive['openBlock'] = mockImplementation;
       
       directive.isBlock = true;

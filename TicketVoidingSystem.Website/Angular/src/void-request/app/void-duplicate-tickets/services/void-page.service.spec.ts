@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { DuplicateTicketsModel } from '../../../../add-request/app/add-request/models/event-duplicate-tickets.model';
-import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
-import { GetLogInfoModel, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { DuplicateTicketsModel } from '../../../../add-request-new/models/event-duplicate-tickets.model';
+import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { GetLogInfoModel, Validation } from '../../../../add-request-new/models/get-log-info.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';

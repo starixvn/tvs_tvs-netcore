@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { IssueTypesModel } from '../../../../utility/models/issue-type.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
 import { CommonService } from '../../../../utility/services/common.service';
 import { TicketsService } from '../../services/tickets.service';
 import { VoidPageCommonService } from '../../services/void-page-common.service';
 import { VoidArchivedTicketModel } from '../models/void-archived-ticket.model';
 import { VoidPageService } from './void-page.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
 
 describe('VoidPageService', () => {
   let service: VoidPageService;

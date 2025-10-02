@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { VoidPageService } from './void-page.service';
-import { CommonService } from '../../../../utility/services/common.service';
-import { TicketsService } from '../../services/tickets.service';
-import { TemplateMessageService } from './template-message.service';
-import { HttpService } from '../../../../utility/services/http.service';
-import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { VoidWrongMarketOfferedModel } from '../models/void-wrong-market-offered.model';
-import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { MatchModel } from '../../../../utility/models/match.model';
-import { TicketsModel } from '../../tickets-list/tickets.model';
+import { GetLogInfoModel } from '../../../../add-request-new/models/get-log-info.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
+import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
+import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../utility/services/common.service';
+import { HttpService } from '../../../../utility/services/http.service';
+import { TicketsService } from '../../services/tickets.service';
+import { TicketsModel } from '../../tickets-list/tickets.model';
+import { VoidWrongMarketOfferedModel } from '../models/void-wrong-market-offered.model';
+import { TemplateMessageService } from './template-message.service';
+import { VoidPageService } from './void-page.service';
 
 class Helper {
   static readonly fakeIssueTypes = {
@@ -21,7 +21,7 @@ class Helper {
       { issueTypeId: 2, issueTypeName: 'Wrong Odds' }
     ],
     subIssueTypes: [
-      { subIssueTypeId: 1, subIssueTypeName: 'Wrong Market Type', issueTypeId: 1 },
+      { subIssueTypeId: 1, subIssueTypeName: 'Wrong Market', issueTypeId: 1 },
       { subIssueTypeId: 2, subIssueTypeName: 'Wrong Market Name', issueTypeId: 1 },
       { subIssueTypeId: 3, subIssueTypeName: 'Wrong Odds Value', issueTypeId: 2 }
     ]
@@ -158,7 +158,7 @@ describe('VoidPageService', () => {
 
       // Assert
       expect(result[0].subIssueType.subIssueTypeId).toBe(1);
-      expect(result[0].subIssueType.subIssueTypeName).toBe('Wrong Market Type');
+      expect(result[0].subIssueType.subIssueTypeName).toBe('Wrong Market');
     });
 
     it('should set correct display issue type name', async () => {
@@ -170,7 +170,7 @@ describe('VoidPageService', () => {
       const result = await service.getBasicVoidPageItemsData(issueTypes, requestDetail);
 
       // Assert
-      expect(result[0].displayIssueTypeName).toBe('Wrong Market Offered - Wrong Market Type');
+      expect(result[0].displayIssueTypeName).toBe('Wrong Market Offered - Wrong Market');
     });
 
     it('should handle empty wrong market offered models', async () => {
@@ -288,7 +288,7 @@ describe('VoidPageService', () => {
 
         // Assert
         expect(result.subIssueTypeId).toBe(1);
-        expect(result.subIssueTypeName).toBe('Wrong Market Type');
+        expect(result.subIssueTypeName).toBe('Wrong Market');
       });
 
       it('should return undefined for non-existent sub issue type', () => {

@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import isNull from 'lodash/isNull';
 import moment from 'moment-timezone';
-import { TicketCountOtherSportsComponent } from '../../../add-request/app/add-request/ticket-count-other-sports/ticket-count-other-sports.component';
+import { TicketCountOtherSportsComponent } from '../../../add-request-new/component/ticket-count-other-sports/ticket-count-other-sports.component';
 import { AcceptType, DateTimeFormat, TVSRequestFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../utility/constants/sport.constant';

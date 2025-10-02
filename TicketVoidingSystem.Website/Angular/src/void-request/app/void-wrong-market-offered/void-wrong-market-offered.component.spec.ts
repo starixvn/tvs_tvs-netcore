@@ -1,17 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { QueryList } from '@angular/core';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered.component';
-import { VoidWrongMarketOfferedModel } from './models/void-wrong-market-offered.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { VoidPageService } from './services/void-page.service';
-import { TicketsService } from '../services/tickets.service';
-import { VoidPageCommonService } from '../services/void-page-common.service';
-import { TemplateMessageService } from './services/template-message.service';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
-import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TicketsService } from '../services/tickets.service';
+import { VoidPageCommonService } from '../services/void-page-common.service';
+import { VoidWrongMarketOfferedModel } from './models/void-wrong-market-offered.model';
+import { TemplateMessageService } from './services/template-message.service';
+import { VoidPageService } from './services/void-page.service';
+import { VoidWrongMarketOfferedComponent } from './void-wrong-market-offered.component';
 
 class Helper {
   static readonly fakeRequestDetail = {

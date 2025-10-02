@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
 import { TEXT } from '../../../utility/constants/text';

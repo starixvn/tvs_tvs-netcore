@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import clone from 'lodash/clone';
 import cloneDeep from 'lodash/cloneDeep';
-import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
-import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { WrongHdpModel } from '../../../../add-request-new/models/event-wrong-hdp.model';
+import { WrongOuModel } from '../../../../add-request-new/models/event-wrong-ou.model';
+import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request-new/models/get-log-info.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';

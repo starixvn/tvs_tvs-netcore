@@ -1,5 +1,6 @@
+import { TestBed } from '@angular/core/testing';
 import { Subscription } from 'rxjs';
-import { RequestDetailViewModel } from "../../../edit-request/app/request.model";
+import { RequestDetailViewModel } from "../../../add-request-new/models/request-detail.model";
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from "../models/common-primitive-property.model";
@@ -9,7 +10,6 @@ import { CheckRequestService } from "./check-request.service";
 import { LoadDataService } from "./load-data.service";
 import { SubmitVoidService } from './submit-void.service';
 import { TicketsService } from "./tickets.service";
-import { TestBed } from '@angular/core/testing';
 
 describe('LoadDataService', () => {
   let submitVoidService: jest.Mocked<SubmitVoidService>;

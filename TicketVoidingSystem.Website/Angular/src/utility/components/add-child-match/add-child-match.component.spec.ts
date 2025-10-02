@@ -1,6 +1,6 @@
 import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ChildMatchModel } from '../../../add-request/app/add-request/models/related-event.model';
+import { ChildMatchModel } from '../../../add-request-new/models/related-event.model';
 import { MatchType } from '../../constants/config';
 import { TestingModule } from '../../modules/testing.module';
 import { AddChildMatchComponent } from './add-child-match.component';

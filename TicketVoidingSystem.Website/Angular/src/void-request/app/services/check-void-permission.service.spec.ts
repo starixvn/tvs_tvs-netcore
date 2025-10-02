@@ -1,5 +1,5 @@
 import { TestBed } from "@angular/core/testing";
-import { RequestDetailModel, RequestDetailViewModel } from "../../../edit-request/app/request.model";
+import { RequestDetailModel, RequestDetailViewModel } from "../../../add-request-new/models/request-detail.model";
 import { MatchModel } from "../../../utility/models/match.model";
 import { SqlResult } from "../../../utility/models/result";
 import { CommonService } from "../../../utility/services/common.service";

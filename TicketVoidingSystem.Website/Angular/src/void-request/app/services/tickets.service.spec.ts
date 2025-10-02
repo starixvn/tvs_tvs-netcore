@@ -1,8 +1,10 @@
+import { TestBed } from '@angular/core/testing';
 import clone from 'lodash/clone';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging.model';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
+import { GroupService } from '../../../utility/components/tickets/group.service';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
@@ -12,8 +14,6 @@ import { GetTicketsQuery } from '../models/get-tickets.query';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { TicketsModel } from '../tickets-list/tickets.model';
 import { TicketsService } from './tickets.service';
-import { TestBed } from '@angular/core/testing';
-import { GroupService } from '../../../utility/components/tickets/group.service';
 
 class Helper {
   static readonly fakeResultError: Result<null> = {

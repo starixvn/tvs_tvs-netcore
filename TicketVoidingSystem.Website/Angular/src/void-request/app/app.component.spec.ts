@@ -1,11 +1,11 @@
-import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { EventEmitter } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RequestDetailModel, RequestDetailViewModel } from '../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../utility/constants/issue-type.constant';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../utility/modules/testing.module';
-import { EventEmitter } from '@angular/core';
 
 jest.mock('../../utility/services/signal-r.service.native');
 

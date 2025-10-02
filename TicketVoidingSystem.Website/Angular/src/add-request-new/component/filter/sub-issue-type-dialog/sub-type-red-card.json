@@ -1,8 +1,8 @@
 [
   {
-    "categoryName": "",
-    "isShowCategoryName": false,
-    "isCollapse": false,
+    "categoryName": "No Indication Red Card",
+    "isShowCategoryName": true,
+    "isCollapse": true,
     "groups": [
       {
         "groupId": 22,
@@ -34,7 +34,14 @@
         ],
         "note":"",
         "noteEditable": false
-      },
+      }
+    ]
+  },
+  {
+    "categoryName": "Wrong Indication Red Card",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 23,
         "name": "Wrong Indication Home RC/Away RC",
@@ -63,7 +70,14 @@
         ],
         "note":"",
         "noteEditable": false
-      },
+      }
+    ]
+  },
+  {
+    "categoryName": "Red Card award under Regular Time",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 24,
         "name": "Home RC/Away RC award under Regular Time",
@@ -91,7 +105,14 @@
         ],
         "note":"",
         "noteEditable": false
-      },
+      }
+    ]
+  },
+  {
+    "categoryName": "Replacement of Sent-Off player",
+    "isShowCategoryName": true,
+    "isCollapse": true,
+    "groups": [
       {
         "groupId": 25,
         "name": "Replacement of Sent-Off player",

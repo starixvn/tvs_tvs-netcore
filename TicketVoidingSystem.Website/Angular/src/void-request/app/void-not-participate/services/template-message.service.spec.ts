@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { TemplateMessageService } from './template-message.service';
+import { WrongOddsSportsBookModel } from '../../../../add-request-new/models/event-wrong-odds-sports-book.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { EventType, SportType } from '../../../../utility/constants/sport.constant';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { TicketsModel } from '../../tickets-list/tickets.model';
-import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { Message } from '../../../../utility/components/template-message/messages/message';
-import { WrongOddsSportsBookModel } from '../../../../add-request/app/add-request/models/event-wrong-odds-sports-book.model';
+import { TicketsModel } from '../../tickets-list/tickets.model';
+import { VoidNotParticipateModel } from '../models/void-page-not-participate.model';
+import { TemplateMessageService } from './template-message.service';
 
 class Helper {
   static readonly fakeTemplateValue: TemplateValue = new TemplateValue();

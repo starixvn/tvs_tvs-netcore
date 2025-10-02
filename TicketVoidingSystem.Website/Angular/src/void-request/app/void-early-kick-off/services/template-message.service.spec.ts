@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { TemplateMessageService } from './template-message.service';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
-import { StaticService } from '../../../../utility/services/static.service';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
-import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { MatchModel } from '../../../../utility/models/match.model';
-import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../utility/services/static.service';
+import { TicketsModel } from '../../tickets-list/tickets.model';
+import { VoidPageEarlyKickOffModel } from '../models/void-page-early-kick-off.model';
+import { TemplateMessageService } from './template-message.service';
 
 class Helper {
   static readonly fakeMatchModel = {

@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
-import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { WrongScoreModel } from '../../../../add-request/app/add-request/models/event-wrong-score.model';
-import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel, RequestEventModel } from 'src/add-request-new/models/request-detail.model';
+import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { WrongHdpModel } from '../../../../add-request-new/models/event-wrong-hdp.model';
+import { WrongOuModel } from '../../../../add-request-new/models/event-wrong-ou.model';
+import { WrongScoreModel } from '../../../../add-request-new/models/event-wrong-score.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';

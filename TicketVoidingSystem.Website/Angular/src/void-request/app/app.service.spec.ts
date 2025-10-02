@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../utility/modules/testing.module';
-import { RequestDetailModel, RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../add-request-new/models/request-detail.model';
 import { Result } from '../../utility/models/result';
+import { TestingModule } from '../../utility/modules/testing.module';
 import { HttpService } from '../../utility/services/http.service';
 import { AppService } from './app.service';
 import { GetTicketsQuery } from './models/get-tickets.query';

@@ -1,9 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ValidationMessage } from '../../../../add-request-new/models/get-log-info.model';
 import { TestingModule } from '../../../../utility/modules/testing.module';
-import { LogInfoMessageComponent } from './log-info-message.component';
-import { ModalService } from '../../modal/modal.service';
 import { StaticService } from '../../../../utility/services/static.service';
-import { ValidationMessage } from '../../../../add-request/app/add-request/models/get-log-info.model';
+import { ModalService } from '../../modal/modal.service';
+import { LogInfoMessageComponent } from './log-info-message.component';
 
 class Helper {
   static readonly fakeValidationMessages = [

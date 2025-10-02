@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';

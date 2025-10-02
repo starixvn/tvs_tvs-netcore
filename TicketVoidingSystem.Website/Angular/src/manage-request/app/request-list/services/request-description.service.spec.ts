@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { RequestDescriptionService } from './request-description.service';
-import { CommonService } from '../../../../utility/services/common.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { AppComponent } from '../../app.component';
+import { FilterOddsTypeConstant } from '../../../../add-request-new/events/wrong-odds-sports-book/app/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
+import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';
-import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
-import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { CopyRequestInfoResponse } from '../../../../utility/models/copy-request-info.query';
+import { CommonService } from '../../../../utility/services/common.service';
+import { AppComponent } from '../../app.component';
+import { RequestDescriptionService } from './request-description.service';
 
 class Helper {
   static readonly fakeRequestId = 123;
@@ -371,4 +371,4 @@ describe('RequestDescriptionService', () => {
       expect(result).toBeTruthy();
     });
   });
-}); 
+});

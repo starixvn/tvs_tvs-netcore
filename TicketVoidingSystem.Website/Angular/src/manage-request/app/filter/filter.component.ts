@@ -8,8 +8,9 @@ import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
+import { MultipleSelectionService } from '../../../utility/components/multiple-selection/multiple-selection.service';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
@@ -22,7 +23,6 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from './filter.model';
 import { FilterService } from './filter.service';
-import { MultipleSelectionService } from '../../../utility/components/multiple-selection/multiple-selection.service';
 
 @Component({
   standalone: true,
@@ -150,7 +150,7 @@ export class FilterComponent implements OnInit {
   }
 
   newRequest() {
-    window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/AddRequest/Index`, '_blank');
+    window.open(`${document.body.getAttribute('root-url')}`, '_blank');
   }
 
   openMarkTickets() {

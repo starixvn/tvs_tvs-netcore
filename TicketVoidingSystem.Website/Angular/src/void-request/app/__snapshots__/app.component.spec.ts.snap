@@ -19,6 +19,10 @@ exports[`AppComponent AppComponent should init match snapshot 1`] = `
           class="logo"
           href="?ref=logo"
         >
+           Ticket Voiding 
+          <span>
+             System
+          </span>
         </a>
         <div
           class="right-content"
