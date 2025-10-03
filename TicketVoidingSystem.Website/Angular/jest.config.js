@@ -15,7 +15,6 @@ module.exports = {
   collectCoverage: true,
   collectCoverageFrom: ['src/**/*.ts'],
   maxWorkers: 2,
-  cacheDirectory: '<rootDir>/.jest-cache',
   //collectCoverageFrom: ['src/ab-white-list/**/*.ts'],
   coveragePathIgnorePatterns: ['.spec.ts', '.module.ts', 'src/polyfills.ts', 'main.ts', 'model.ts', 'query.ts'],
   coverageReporters: ['html', ['lcovonly', { 'projectRoot': '../../' }]],
