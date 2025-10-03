@@ -5,6 +5,6 @@ export class ItemsSelect {
   checked: boolean;
   expanded: boolean;
   enable: boolean;
-  items: ItemsSelect[];
+  items: ItemsSelect[] = [];
   countChilds: number;
 }

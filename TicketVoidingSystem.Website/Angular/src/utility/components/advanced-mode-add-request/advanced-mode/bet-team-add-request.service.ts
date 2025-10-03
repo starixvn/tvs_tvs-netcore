@@ -73,7 +73,9 @@ export class BetTeamAddRequestService {
 
   resetAllChecked(betTeam: BetTeamAddRequest){
     betTeam.selections.forEach(selection => {
-      this.resetAllCheckedMultipleSelect(selection.multiSelection.multipleSelect);
+      if (selection.multiSelection?.multipleSelect) {
+        this.resetAllCheckedMultipleSelect(selection.multiSelection.multipleSelect);
+      }
     });
   }
 
@@ -92,7 +94,7 @@ export class BetTeamAddRequestService {
 
   private updateBySelection(betTeam: BetTeamAddRequest, result: BetTeamAddRequestResult) {
     betTeam.selections.forEach(selection => {
-      const value = selection.isMultiple
+      const value = selection.isMultiple && selection.multiSelection?.multipleSelect
         ?  this.multipleSelectionService.getValueItems(selection.multiSelection.multipleSelect)
         : selection.value;
       this.updateResult(result, selection.xmlAttribute, value);

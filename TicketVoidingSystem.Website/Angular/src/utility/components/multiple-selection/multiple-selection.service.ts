@@ -11,6 +11,10 @@ export class MultipleSelectionService {
   
   getValueItems(multipleSelection: MultipleSelection) {
     let value = '';
+    if (!multipleSelection?.items) {
+      return value;
+    }
+
     multipleSelection.items.forEach(item => {
       const valueItem = this.itemsSelectService.getValueChildsChecked(item);
       if (valueItem !== '') {
@@ -27,6 +31,10 @@ export class MultipleSelectionService {
   }
 
   getDisplayedItems(multipleSelection: MultipleSelection) {
+    if (!multipleSelection?.items) {
+      return '';
+    }
+    
     const maxNumberItems = multipleSelection.numberItemsDisplay;
     let countChecked = 0;
     let count = 0;
@@ -58,6 +66,10 @@ export class MultipleSelectionService {
   }
 
   checkAllItems(multipleSelection: MultipleSelection, isChecked: boolean) {
+    if (!multipleSelection?.items) {
+      return;
+    }
+    
     multipleSelection.items.forEach(item => {
       item.checked = isChecked;
       this.itemsSelectService.checkChilds(item);
@@ -71,6 +83,10 @@ export class MultipleSelectionService {
   }
 
   updateChildItemsChecked(multipleSelection: MultipleSelection, checkedItems: string[]) {
+    if (!multipleSelection?.items) {
+      return;
+    }
+    
     multipleSelection.items.forEach(group => {
       group.items.forEach(item => item.checked = checkedItems.includes(item.value));
       group.checked = checkedItems.includes(group.value)
