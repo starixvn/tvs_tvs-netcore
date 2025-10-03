@@ -23,7 +23,7 @@ export class AppComponent implements OnInit {
   issueTypeId: string;
 
   ngOnInit() {
-    this.issueTypeId = window.issueTypeId || IssueTypeConstant.WRONG_HDP;
+    this.issueTypeId = window.issueTypeId || IssueTypeConstant.ABANDONED;
   }
   
   public async saveRequest(): Promise<void> {
