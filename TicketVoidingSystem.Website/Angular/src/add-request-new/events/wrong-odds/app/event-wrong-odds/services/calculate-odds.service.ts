@@ -7,16 +7,21 @@ import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wro
 export class CalculateOddsService {
   private readonly addRequestApiService = inject(AddRequestApiService);
 
-  public async updateOddsInfo(oddsInfo: FilterWrongOddsModel, match: MatchModel, subIssueTypeId: string): Promise<void> {
-    if(match.matchId){
-      const maxBetAndSpreads =  await this.addRequestApiService.getMaxBetAndSpreadOfEvent(this.createMaxBetAndSpreadQuery(match));
+  public async getMaxBetAndUpdateOddsInfo(oddsInfo: FilterWrongOddsModel, match: MatchModel, subIssueTypeId: string): Promise<void> {
+    if (match.matchId) {
+      const maxBetAndSpreads = await this.addRequestApiService.getMaxBetAndSpreadOfEvent(this.createMaxBetAndSpreadQuery(match));
       oddsInfo.maxBetAndSpreadInfo = maxBetAndSpreads;
-      this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
-      this.updateAllowanceRate(oddsInfo);
+      this.updateOddsInfo(oddsInfo, subIssueTypeId);
     };
   }
 
-  public createMaxBetAndSpreadQuery(match: MatchModel): MaxBetAndSpreadQuery{
+  public async updateOddsInfo(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string): Promise<void> {
+    this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
+    this.updateAllowanceRate(oddsInfo);
+    this.updateCorrectOddsAwayUnder(oddsInfo);
+  }
+
+  public createMaxBetAndSpreadQuery(match: MatchModel): MaxBetAndSpreadQuery {
     return {
       matchId: match.matchId,
       parentId: match.parentId,
@@ -24,15 +29,14 @@ export class CalculateOddsService {
     } as MaxBetAndSpreadQuery;
   }
 
-  public resetOddsInfo(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
-    this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
-    this.updateAllowanceRate(oddsInfo);
+  public resetOddsInfo(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string) {
+    this.updateOddsInfo(oddsInfo, subIssueTypeId);
     oddsInfo.correctOddsHomeOver = "";
     oddsInfo.correctOddsAwayUnder = "";
   }
 
-  public updateMaxBetAndSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
-    if(oddsInfo.maxBetAndSpreadInfo?.length > 0){
+  public updateMaxBetAndSpread(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string) {
+    if (oddsInfo.maxBetAndSpreadInfo?.length > 0) {
       oddsInfo.maxBet = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId === subIssueTypeId)?.maxBet ?? 0;
       oddsInfo.spread = oddsInfo.maxBetAndSpreadInfo.find(x => x.subIssueTypeId === subIssueTypeId)?.spread ?? "";
     }
@@ -45,20 +49,20 @@ export class CalculateOddsService {
   public updateAllowanceRate(oddsInfo: FilterWrongOddsModel): void {
     const maxBetDefault = 80000;
     const spreadDefault = 0.15;
-    if(oddsInfo.maxBetAndSpreadInfo?.length === 0 || oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) === 0 && oddsInfo.maxBet === 0)){
+    if (oddsInfo.maxBetAndSpreadInfo?.length === 0 || oddsInfo.maxBet >= maxBetDefault || (Number(oddsInfo.spread) === 0 && oddsInfo.maxBet === 0)) {
       oddsInfo.allowanceRate = "20";
     }
-    else if(Number(oddsInfo.spread) > spreadDefault){
+    else if (Number(oddsInfo.spread) > spreadDefault) {
       oddsInfo.allowanceRate = "30";
     }
-    else{
+    else {
       oddsInfo.allowanceRate = "25";
     }
   }
 
   public updateCorrectOddsAwayUnder(oddsInfo: FilterWrongOddsModel): void {
     const precision = 2;  // Define the number of decimal places
-    if(oddsInfo.correctOddsHomeOver && oddsInfo.spread){
+    if (oddsInfo.correctOddsHomeOver && oddsInfo.spread) {
       const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
       const spreadNum = Number(oddsInfo.spread);
       const sum = correctOddsHomeOverNum + spreadNum;
@@ -69,9 +73,10 @@ export class CalculateOddsService {
   }
 
   public calculateOddsRange(oddsInfo: FilterWrongOddsModel): void {
+    this.updateCorrectOddsAwayUnder(oddsInfo);
     const precision = 2;  // Define the number of decimal places
-    if(oddsInfo.correctOddsAwayUnder){
-      const allowanceRateNum = Number(oddsInfo.allowanceRate)/100;
+    if (oddsInfo.correctOddsAwayUnder) {
+      const allowanceRateNum = Number(oddsInfo.allowanceRate) / 100;
       const correctOddsHomeOverNum = Number(oddsInfo.correctOddsHomeOver);
       const correctOddsAwayUnderNum = Number(oddsInfo.correctOddsAwayUnder);
 
@@ -82,8 +87,8 @@ export class CalculateOddsService {
 
       const belowHomeOver = correctOddsHomeOverNum - allowanceRateNum;
       const belowAwayUnder = correctOddsAwayUnderNum - allowanceRateNum;
-      oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver: belowHomeOver).toFixed(precision);
-      oddsInfo.fromOddsNotVoidAwayUnder = (belowAwayUnder <= -1 ? 2 + belowAwayUnder: belowAwayUnder).toFixed(precision);
+      oddsInfo.fromOddsNotVoidHomeOver = (belowHomeOver <= -1 ? 2 + belowHomeOver : belowHomeOver).toFixed(precision);
+      oddsInfo.fromOddsNotVoidAwayUnder = (belowAwayUnder <= -1 ? 2 + belowAwayUnder : belowAwayUnder).toFixed(precision);
     }
   }
 }

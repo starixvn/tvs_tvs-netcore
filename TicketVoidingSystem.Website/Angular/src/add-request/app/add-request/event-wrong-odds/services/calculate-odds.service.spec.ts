@@ -48,7 +48,7 @@ describe('CalculateOddsService', () => {
       jest.spyOn(addRequestApiService, 'getMaxBetAndSpreadOfEvent').mockResolvedValue(mockMaxBetAndSpreadInfo);
 
       // Act
-      await service.updateOddsInfo(oddsInfo, mockMatchModel, subIssueTypeId);
+      await service.getMaxBetAndUpdateOddsInfo(oddsInfo, mockMatchModel, subIssueTypeId);
 
       // Assert
       expect(oddsInfo.maxBetAndSpreadInfo).toEqual(mockMaxBetAndSpreadInfo);
@@ -65,7 +65,7 @@ describe('CalculateOddsService', () => {
       const spy = jest.spyOn(addRequestApiService, 'getMaxBetAndSpreadOfEvent');
 
       // Act
-      await service.updateOddsInfo(oddsInfo, matchWithoutId, subIssueTypeId);
+      await service.getMaxBetAndUpdateOddsInfo(oddsInfo, matchWithoutId, subIssueTypeId);
 
       // Assert
       expect(oddsInfo.maxBetAndSpreadInfo).toBeUndefined();

@@ -89,7 +89,6 @@ export class EventWrongOddsComponent implements OnInit {
     if (!this.validationService.validateCommonData(this.eventLeagueComponent, this.filterWrongOddsComponent)) {
       return;
     }
-
     this.calculateOddsService.calculateOddsRange(this.logInfoEvent.filterWrongOdds);
     this.addRequestStore.changeBlockingUiStatus(true);
     this.logInfoEvent.linkedLogsViewModel = await this.eventWrongOddsService.getLinkedLog(this.logInfoEvent, this.filter);
@@ -129,7 +128,7 @@ export class EventWrongOddsComponent implements OnInit {
   public async changeMatchEvent(): Promise<void> {
     this.logInfoEvent.matchId = this.eventLeagueComponent.selectedMatch?.matchId;
     this.logInfoEvent.sportType = this.eventLeagueComponent?.selectedMatch.sportType;
-    await this.calculateOddsService.updateOddsInfo(this.logInfoEvent.filterWrongOdds, this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
+    await this.calculateOddsService.getMaxBetAndUpdateOddsInfo(this.logInfoEvent.filterWrongOdds, this.eventLeagueComponent.selectedMatch, this.filter?.subIssueTypeId);
     this.logInfoService.resetLogInfoOfEvent(this.logInfoEvent);
     this.primitiveProps.infoSiteDBDownModel = null;
     this.updateMatchId.emit(this.logInfoEvent.matchId)

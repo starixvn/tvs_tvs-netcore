@@ -31,7 +31,7 @@ export type ModelType =
   | WrongMarketOfferedModel[]
   | OtherIssuesModel
   | NotParticipateModel[]
-  | ReducedOverModel[];
+  | ReducedOverModel[]
   | AbnormalAccountModel
   | AbnormalBetModel
   | DuplicateTicketsModel
