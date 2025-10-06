@@ -40,11 +40,22 @@ public class GetVoidedTicketsServiceImp(IDynamicRepository repository, OnlineSer
 
     private async Task<IEnumerable<VoidedTicketModel>> GetRecoveredTickets(GetVoidedTicketsQuery query)
     {
-        var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
-        var criteria = mapper.Map<GetRecoveredTicketsCriteria>(query);
-        criteria.OnlineServerId = currentOnlineServerId;
+        var criteria = new GetRecoveredTicketsCriteria
+        {
+            RequestId = query.RequestId,
+        };
 
-        return await onlineServerRepository.FetchAsync<VoidedTicketModel>(criteria);
+        var tasks = SiteDbGroupConstant.ServerList
+            .Select(item =>
+            {
+                criteria.SiteDbGroupId = item.Id;
+                return repository.FetchAsync<VoidedTicketModel>(criteria);
+            });
+
+        var responses = await Task.WhenAll(tasks);
+        var recoveredTickets = responses.SelectMany(response => response);
+
+        return recoveredTickets;
     }
 
     private async Task<IEnumerable<VoidedTicketModel>> GetVoidedTickets(GetVoidedTicketsQuery query)

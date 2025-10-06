@@ -33,13 +33,13 @@ public class GetVoidedTicketsServiceTests : IClassFixture<AppSettingFixture>, IC
         var tickets = new List<VoidedTicketModel> { new() { GroupName = "Credit" } };
         var query = new GetVoidedTicketsQuery { IssueTypeId = IssueTypeConstant.RecoverTicket, IsCreditOnly = true };
         mapper.Map<GetRecoveredTicketsCriteria>(Arg.Any<GetVoidedTicketsQuery>()).ReturnsForAnyArgs(new GetRecoveredTicketsCriteria());
-        onlineServerRepository.FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>()).ReturnsForAnyArgs(tickets);
+        repository.FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>()).ReturnsForAnyArgs(tickets);
 
         // Act
         _ = await service.GetTickets(query);
 
         // Assert
-        await onlineServerRepository.Received().FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>());
+        await repository.Received().FetchAsync<VoidedTicketModel>(Arg.Any<GetRecoveredTicketsCriteria>());
     }
 
     [Fact]
