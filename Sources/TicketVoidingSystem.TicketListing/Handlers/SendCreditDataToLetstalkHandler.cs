@@ -73,9 +73,9 @@ public class SendCreditDataToLetstalkHandler(
             FileName = "Ticket_Listing_for_Bettype_Credit.xlsx",
             Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
         };
-        var isHasUusTicket = ticketsCreditNormal.Any(x => string.Equals(x.Currency, CurrencyConstant.UusCode, StringComparison.OrdinalIgnoreCase));
+        var isAllUusTicket = ticketsCreditNormal.All(x => string.Equals(x.Currency, CurrencyConstant.UusCode, StringComparison.OrdinalIgnoreCase));
 
-        return await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), attachment, isHasUusTicket);
+        return await notificationLetstalkService.SendToGroupTicketListing(CreateContent(request), attachment, isAllUusTicket);
     }
 
     private async Task<Result> SendForCredit777(IEnumerable<ExcelTicketModel> ticketsCredit777, ExportExcelQuery request)
@@ -92,9 +92,9 @@ public class SendCreditDataToLetstalkHandler(
             FileName = "Ticket_Listing_for_Bettype_Credit_777.xlsx",
             Bytes = await excelService.GenerateContentAsByteArray(request, TemplateExcelPath.TicketListing)
         };
-        var isHasUusTicket = ticketsCredit777.Any(x => string.Equals(x.Currency, CurrencyConstant.UusCode, StringComparison.OrdinalIgnoreCase));
+        var isAllUusTicket = ticketsCredit777.All(x => string.Equals(x.Currency, CurrencyConstant.UusCode, StringComparison.OrdinalIgnoreCase));
 
-        return await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), attachment, isHasUusTicket);
+        return await notificationLetstalkService.SendToGroupTicketListing777(CreateContent(request), attachment, isAllUusTicket);
     }
 
     private static (IEnumerable<ExcelTicketModel> ticketsCredit777, IEnumerable<ExcelTicketModel> ticketsCreditNormal) GroupTicketsTicketListingAlert(IEnumerable<ExcelTicketModel> tickets)
