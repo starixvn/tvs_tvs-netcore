@@ -47,7 +47,7 @@ public class SendLetsTalkModel
 {
     public int MatchId { get; set; }
 
-    public bool IsHasUusTickets { get; set; }
+    public bool IsAllUusTickets { get; set; }
 
     public string ListBetType { get; set; }
 

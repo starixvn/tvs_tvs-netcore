@@ -79,7 +79,7 @@ public class CheckValidTransIdsServiceImp(
             var sendLetsTalkModel = new SendLetsTalkModel
             {
                 MatchId = group.Key,
-                IsHasUusTickets = group.Any(x => x.IsHasUusTickets),
+                IsAllUusTickets = group.All(x => x.IsAllUusTickets),
                 ListBetType = Helper.GetUnionTransIdString(group.Select(x => x.ListBetType)),
                 ListBetTeam = Helper.GetUnionTransIdString(group.Select(x => x.ListBetTeam))
             };

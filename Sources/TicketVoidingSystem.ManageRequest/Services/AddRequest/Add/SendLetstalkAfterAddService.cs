@@ -39,7 +39,7 @@ public class SendLetstalkAfterAddServiceImp(
         foreach (var sendLetstalkModel in model.SendLetstalkModels)
         {
             var content = CreateContent(model, sendLetstalkModel, requestId);
-            await notificationLetstalkService.SendToGroupAbnormalBetRequest(CreateSubject(model), content, sendLetstalkModel.IsHasUusTickets);
+            await notificationLetstalkService.SendToGroupAbnormalBetRequest(CreateSubject(model), content, sendLetstalkModel.IsAllUusTickets);
         }
     }
 

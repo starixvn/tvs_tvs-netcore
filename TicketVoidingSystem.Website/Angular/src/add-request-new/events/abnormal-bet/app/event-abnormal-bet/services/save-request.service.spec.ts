@@ -1,18 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { SaveRequestService } from './save-request.service';
-import { AddRequestService } from '../../../../../services/add-request.service';
-import { StaticService } from '../../../../../../utility/services/static.service';
-import { SaveRequestArg } from './save-request.model';
-import { AddRequestQuery } from '../../../../../models/add-request.query';
-import { AbnormalBetModel } from '../../../../../models/abnormal-bet.model';
-import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
-import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
-import { AddRequestStore } from '../../../../../services/add-request.store';
-import { FilterModel } from '../../../../../component/filter/filter.model';
-import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
-import { OthersModel } from '../../../../../component/others/others.model';
-import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { CheckboxType } from '../../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../../utility/modules/testing.module';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { FilterModel } from '../../../../../component/filter/filter.model';
+import { OthersModel } from '../../../../../component/others/others.model';
+import { AbnormalBetModel } from '../../../../../models/abnormal-bet.model';
+import { AddRequestQuery } from '../../../../../models/add-request.query';
+import { TransInfoAddRequestModel } from '../../../../../models/trans-info-add-request.model';
+import { AddRequestService } from '../../../../../services/add-request.service';
+import { AddRequestStore } from '../../../../../services/add-request.store';
+import { ConfirmAbnormalBetComponent } from '../confirm-abnormal-bet/confirm-abnormal-bet.component';
+import { ConfirmAbnormalBetModel } from '../confirm-abnormal-bet/confirm-abnormal-bet.model';
+import { SaveRequestArg } from './save-request.model';
+import { SaveRequestService } from './save-request.service';
 
 jest.mock('../../../../../utility/services/static.service', () => ({
   StaticService: {
@@ -79,7 +79,7 @@ describe('SaveRequestService', () => {
           isBlockBetIds: false,
           isShowButtonRemoveInvalid: false,
           invalidTransIds: '',
-          isHasUusTickets: false,
+          isAllUusTickets: false,
           transInfoAddRequestModel: mockTransInfoAddRequestModel,
           isBlockUI: false
         },
@@ -126,7 +126,7 @@ describe('SaveRequestService', () => {
           isBlockBetIds: false,
           isShowButtonRemoveInvalid: false,
           invalidTransIds: '',
-          isHasUusTickets: false,
+          isAllUusTickets: false,
           transInfoAddRequestModel: new TransInfoAddRequestModel(),
           isBlockUI: false
         },
@@ -166,7 +166,7 @@ describe('SaveRequestService', () => {
           isBlockBetIds: false,
           isShowButtonRemoveInvalid: false,
           invalidTransIds: '',
-          isHasUusTickets: false,
+          isAllUusTickets: false,
           transInfoAddRequestModel: new TransInfoAddRequestModel(),
           isBlockUI: false
         },
@@ -261,7 +261,7 @@ describe('SaveRequestService', () => {
           isBlockBetIds: false,
           isShowButtonRemoveInvalid: false,
           invalidTransIds: '',
-          isHasUusTickets: false,
+          isAllUusTickets: false,
           transInfoAddRequestModel: new TransInfoAddRequestModel(),
           isBlockUI: false
         },
