@@ -2,11 +2,12 @@
   [eventHeight]="'603px'" [eventContent]="eventContent" [othersContent]="othersContent">
 </event-base-layout>
 
-<ng-template #eventContent let-eventModel="eventModel" let-filterModel="filterModel" let-otherModel="otherModel" let-primitiveProperty="primitiveProperty">
+<ng-template #eventContent let-eventModel="eventModel" let-filterModel="filterModel" let-otherModel="otherModel" let-primitiveProperty="primitiveProperty"
+  let-issueTypes="issueTypes">
   <event-not-participate #eventNotParticipate [userId]="primitiveProperty.userId" [requestedBy]="primitiveProperty.requestedBy"
     [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess" [isEdit]="primitiveProperty.isEdit" [others]="otherModel"
     [requestId]="primitiveProperty.requestId" [filter]="filterModel" [issueTypeId]="filterModel.issueTypeId"
-    [notParticipateModels]="eventModel">
+    [notParticipateModels]="eventModel" [issueTypes]="issueTypes">
   </event-not-participate>
 </ng-template>
 

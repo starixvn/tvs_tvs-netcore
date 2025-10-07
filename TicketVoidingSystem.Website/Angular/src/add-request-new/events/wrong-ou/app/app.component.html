@@ -3,11 +3,11 @@
 </event-base-layout>
 
 <ng-template #eventContent let-eventModel="eventModel" let-filterModel="filterModel" let-otherModel="otherModel"
-  let-primitiveProperty="primitiveProperty">
+  let-primitiveProperty="primitiveProperty" let-issueTypes="issueTypes">
   <event-wrong-ou #eventWrongOU [userId]="primitiveProperty.userId" [requestedBy]="primitiveProperty.requestedBy"
     [actionIdOfFirstTimeAccess]="primitiveProperty.actionIdOfFirstTimeAccess" [isEdit]="primitiveProperty.isEdit"
     [others]="otherModel" [requestId]="primitiveProperty.requestId" [filter]="filterModel"
-    [issueTypeId]="filterModel.issueTypeId" [wrongOuModels]="eventModel">
+    [issueTypeId]="filterModel.issueTypeId" [wrongOuModels]="eventModel" [issueTypes]="issueTypes">
   </event-wrong-ou>
 </ng-template>
 

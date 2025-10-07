@@ -24,6 +24,7 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   @Input() logInfo: LogInfoWrongOddsSportsBook;
   @Input() requestId: number;
   @Input() isEdit: boolean;
+  @Input() isVoided: boolean = false;
   @Input() primitiveProps: PrimitiveProperty;
   @Input() issueTypeId: string;
   @Output() searchEvent = new EventEmitter<string>();

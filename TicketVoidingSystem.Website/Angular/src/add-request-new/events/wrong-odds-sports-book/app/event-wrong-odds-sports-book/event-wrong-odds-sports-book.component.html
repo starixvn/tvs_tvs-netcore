@@ -17,7 +17,7 @@
 </div>
 }
 <info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel"></info-site-db-down>
-<log-info-wrong-odds-sports-book [isEdit]="isEdit" [logInfo]="logInfoEvent" [requestId]="requestId"
+<log-info-wrong-odds-sports-book [isEdit]="isEdit" [logInfo]="logInfoEvent" [requestId]="requestId" [isVoided]="filter.isVoided"
   [issueTypeId]="filter.issueTypeId" (searchEvent)="handleSearchEvent()" [primitiveProps]="primitiveProps">
 </log-info-wrong-odds-sports-book>
 @if (primitiveProps.isShowErrorNoBetType) {
