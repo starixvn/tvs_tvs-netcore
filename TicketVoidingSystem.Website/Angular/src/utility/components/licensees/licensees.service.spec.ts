@@ -241,4 +241,58 @@ describe('LicenseesService', () => {
       expect(group.licensees[1].isChecked).toBe(false);
     });
   });
+
+  describe('checkedLicensee', () => {
+    it('should set group as checked when all licensees are checked', () => {
+      // Arrange
+      const licensee1 = new Licensee(1, 'Licensee 1', true);
+      const licensee2 = new Licensee(2, 'Licensee 2', true);
+      const group = new GroupLicensee('Group 1', [licensee1, licensee2], true);
+
+      // Act
+      service.checkedLicensee(group);
+
+      // Assert
+      expect(group.isChecked).toBe(true);
+    });
+
+    it('should set group as unchecked when not all licensees are checked', () => {
+      // Arrange
+      const licensee1 = new Licensee(1, 'Licensee 1', true);
+      const licensee2 = new Licensee(2, 'Licensee 2', false);
+      const group = new GroupLicensee('Group 1', [licensee1, licensee2], false);
+      // Manually set one licensee as checked after constructor
+      group.licensees[0].isChecked = true;
+
+      // Act
+      service.checkedLicensee(group);
+
+      // Assert
+      expect(group.isChecked).toBe(false);
+    });
+
+    it('should set group as unchecked when no licensees are checked', () => {
+      // Arrange
+      const licensee1 = new Licensee(1, 'Licensee 1', false);
+      const licensee2 = new Licensee(2, 'Licensee 2', false);
+      const group = new GroupLicensee('Group 1', [licensee1, licensee2], false);
+
+      // Act
+      service.checkedLicensee(group);
+
+      // Assert
+      expect(group.isChecked).toBe(false);
+    });
+
+    it('should handle empty licensees array', () => {
+      // Arrange
+      const group = new GroupLicensee('Group 1', [], false);
+
+      // Act
+      service.checkedLicensee(group);
+
+      // Assert
+      expect(group.isChecked).toBe(true); // Empty array should be considered as all checked
+    });
+  });
 });

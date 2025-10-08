@@ -18,7 +18,7 @@
             (click)="group.isCollapse = !group.isCollapse"></span>
           <label>
             <input type="checkbox" [(ngModel)]="group.isChecked" [disabled]="disabled"
-              (ngModelChange)="changeCheckGroupToModel(group);changeLicensees()" />
+              (ngModelChange)="checkedGroup(group);changeCheckGroupToModel()" />
             {{group.groupName}}
           </label>
         </td>
@@ -27,7 +27,7 @@
             <div class="licensee" *ngFor="let licensee of group.licensees">
               <label>
                 <input type="checkbox" [(ngModel)]="licensee.isChecked" [disabled]="disabled"
-                  (ngModelChange)="changeCheckGroupToModel(group);changeLicensees()" />
+                  (ngModelChange)="checkedLicensee(group);changeCheckGroupToModel()" />
                 {{licensee.name}}
               </label>
             </div>

@@ -28,8 +28,16 @@ export class LicenseesComponent {
     this.licenseesService.changeCheckAllLicensee(this.model);
   }
 
-  changeCheckGroupToModel(group: GroupLicensee){
-    this.licenseesService.checkedGroup(group);
+  changeCheckGroupToModel(){
     this.licenseesService.changeCheckGroupToModel(this.model);
+    this.changeLicensees();
+  }
+
+  checkedGroup(group: GroupLicensee){
+    this.licenseesService.checkedGroup(group);
+  }
+
+  checkedLicensee(group: GroupLicensee){
+    this.licenseesService.checkedLicensee(group);
   }
 }

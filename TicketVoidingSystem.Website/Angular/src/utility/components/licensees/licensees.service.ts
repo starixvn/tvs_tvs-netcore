@@ -30,7 +30,11 @@ export class LicenseesService {
     groupLicensee.isChecked = groupLicensee.groupLicensees.every(x => x.isChecked);
   }
 
-  checkedGroup(groupLicensee: GroupLicensee) {
-    groupLicensee.licensees.forEach(item => { item.isChecked = groupLicensee.isChecked });
+  checkedGroup(group: GroupLicensee) {
+    group.licensees.forEach(item => {item.isChecked = group.isChecked});
+  }
+
+  checkedLicensee(group: GroupLicensee) {
+    group.isChecked = group.licensees.every(item => item.isChecked);
   }
 }
