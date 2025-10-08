@@ -183,7 +183,7 @@ describe('EventBaseLayoutComponent', () => {
       component.initStaticData();
 
       expect(component.primitiveProperty.isEdit).toBeFalsy();
-      expect(component.primitiveProperty.title).toBe('Home / Manage Request / Add Request');
+      expect(component.primitiveProperty.title).toBe('Add Request');
     });
 
     it('should initialize static data for edit request', () => {
@@ -193,7 +193,7 @@ describe('EventBaseLayoutComponent', () => {
 
       expect(component.primitiveProperty.isEdit).toBeTruthy();
       expect(component.primitiveProperty.requestId).toBe(123);
-      expect(component.primitiveProperty.title).toBe('Home / Manage Request / Edit Request - 123');
+      expect(component.primitiveProperty.title).toBe('Edit Request - 123');
     });
   });
 

@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { IssueTypeShowSubOnConfirmConstant } from 'src/utility/constants/issue-type-show-sub-on-confirm.constant';
 import { TVSRequestActionType } from '../../../utility/constants/config';
+import { IssueTypeShowSubOnConfirmConstant } from '../../../utility/constants/issue-type-show-sub-on-confirm.constant';
 import { Selection } from '../../../utility/models/selection.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
