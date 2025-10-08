@@ -15,7 +15,7 @@
             <div>Please double check below type if correct before proceeding</div>
             <div class="ms-2">
               <div>Issue Type: <strong>{{issueTypeName}}</strong></div>
-              @if (model.isShowSubIssueType) {
+              @if (isShowSubIssues) {
               <div>Sub Type: <strong>{{subIssueTypeName}}</strong></div>
               }
               <div>Action: <strong>{{actionName}}</strong></div>

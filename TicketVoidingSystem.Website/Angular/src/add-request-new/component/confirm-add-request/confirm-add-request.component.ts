@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { IssueTypeShowSubOnConfirmConstant } from 'src/utility/constants/issue-type-show-sub-on-confirm.constant';
+import { TVSRequestActionType } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { IssueTypes } from '../filter/issue-types.model';
 import { ConfirmAddRequestModel } from './confirm-add-request.model';
-import { TVSRequestActionType } from '../../../utility/constants/config';
 
 @Component({
     selector: 'confirm-add-request',
@@ -15,6 +16,7 @@ import { TVSRequestActionType } from '../../../utility/constants/config';
 })
 export class ConfirmAddRequestComponent implements OnChanges {
   @Input() isOpen: boolean;
+  @Input() issueTypeId: string;
   @Input() model = new ConfirmAddRequestModel();
   @Input() issueTypes: IssueTypes;
   @Input() voidActions: Selection[] = [];
@@ -27,7 +29,8 @@ export class ConfirmAddRequestComponent implements OnChanges {
   issueTypeName: string;
   subIssueTypeName: string
   actionName: string;
-  
+  isShowSubIssueType: boolean;
+
   ngOnChanges(changes: SimpleChanges): void {
     this.onChangeIssueType(changes);
     this.onChangeAction(changes);
@@ -38,9 +41,14 @@ export class ConfirmAddRequestComponent implements OnChanges {
     if (changes['isOpen'] && this.isOpen) {
       const isShowCheckbox = this.siteDBDownInfoJson?.length > 0 && this.selectedVoidAction !== TVSRequestActionType.TAKE_NOTE_ID.toString();
       this.model.isHasAffectedTicketSiteDBDown = isShowCheckbox;
-      this.model.isMarkTicketSiteDbDown = isShowCheckbox;    }
+      this.model.isMarkTicketSiteDbDown = isShowCheckbox;
+    }
   }
-  
+
+  get isShowSubIssues(): boolean {
+    return this.subIssueTypeName && IssueTypeShowSubOnConfirmConstant.shouldShowSubIssues(this.issueTypeId?.toString());
+  }
+
   onClickCancel() {
     this.model.isOpen = false;
     this.clickCancel.emit();
