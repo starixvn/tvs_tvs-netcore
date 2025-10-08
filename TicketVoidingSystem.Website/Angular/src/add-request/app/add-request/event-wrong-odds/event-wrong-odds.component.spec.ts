@@ -182,7 +182,7 @@ describe('EventWrongOddsComponent', () => {
         sportType: 1
       } as MatchModel
     } as EventLeagueComponent;
-    calculateOddsService.updateOddsInfo = jest.fn();
+    calculateOddsService.getMaxBetAndUpdateOddsInfo = jest.fn();
     logInfoService.resetLogInfoOfEvent = jest.fn();
     component.updateMatchId.emit = jest.fn();
 
@@ -192,7 +192,7 @@ describe('EventWrongOddsComponent', () => {
     // Assert
     expect(component.logInfoEvent.matchId).toBe(123);
     expect(component.logInfoEvent.sportType).toBe(1);
-    expect(calculateOddsService.updateOddsInfo).toHaveBeenCalled();
+    expect(calculateOddsService.getMaxBetAndUpdateOddsInfo).toHaveBeenCalled();
     expect(logInfoService.resetLogInfoOfEvent).toHaveBeenCalled();
     expect(component.updateMatchId.emit).toHaveBeenCalledWith(123);
   });

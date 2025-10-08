@@ -7,13 +7,18 @@ import { FilterWrongOddsModel, MaxBetAndSpreadQuery } from '../models/filter-wro
 export class CalculateOddsService {
   private readonly addRequestApiService = inject(AddRequestApiService);
 
-  public async updateOddsInfo(oddsInfo: FilterWrongOddsModel, match: MatchModel, subIssueTypeId: string): Promise<void> {
+  public async getMaxBetAndUpdateOddsInfo(oddsInfo: FilterWrongOddsModel, match: MatchModel, subIssueTypeId: string): Promise<void> {
     if(match.matchId){
       const maxBetAndSpreads =  await this.addRequestApiService.getMaxBetAndSpreadOfEvent(this.createMaxBetAndSpreadQuery(match));
       oddsInfo.maxBetAndSpreadInfo = maxBetAndSpreads;
-      this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
-      this.updateAllowanceRate(oddsInfo);
+      this.updateOddsInfo(oddsInfo, subIssueTypeId);
     };
+  }
+
+  public async updateOddsInfo(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string): Promise<void> {
+    this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
+    this.updateAllowanceRate(oddsInfo);
+    this.updateCorrectOddsAwayUnder(oddsInfo);
   }
 
   public createMaxBetAndSpreadQuery(match: MatchModel): MaxBetAndSpreadQuery{
@@ -25,8 +30,7 @@ export class CalculateOddsService {
   }
 
   public resetOddsInfo(oddsInfo: FilterWrongOddsModel, subIssueTypeId: string){
-    this.updateMaxBetAndSpread(oddsInfo, subIssueTypeId);
-    this.updateAllowanceRate(oddsInfo);
+    this.updateOddsInfo(oddsInfo, subIssueTypeId);
     oddsInfo.correctOddsHomeOver = "";
     oddsInfo.correctOddsAwayUnder = "";
   }

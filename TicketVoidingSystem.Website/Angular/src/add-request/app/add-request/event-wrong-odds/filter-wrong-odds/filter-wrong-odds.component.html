@@ -69,8 +69,8 @@
           <span class="input-group-text border-radius-right-0">Spread</span>
         </div>
         <div class="input-group-sm div-input spread-input me-2">
-          <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (change)="changeFilter();isValidSpread()"
-            (change)="changeSpread()" class="form-control border-radius-left-0" [disabled]="isDisabled">
+          <input type="text" [(ngModel)]="filterWrongOddsModel.spread" (change)="changeFilter();changeSpread()"
+            class="form-control border-radius-left-0" [disabled]="isDisabled">
         </div>
       </div>
     </div>
@@ -103,8 +103,7 @@
         </div>
         <div class="input-group-sm div-input correct-odds-input me-2">
           <input type="text" [(ngModel)]="filterWrongOddsModel.correctOddsHomeOver" [disabled]="isDisabled"
-            (change)="changeFilter();isValidFilterCorrectOdds()" (change)="changeCorrectOdds()"
-            class="form-control border-radius-left-0">
+            (change)="changeFilter();changeCorrectOdds()" class="form-control border-radius-left-0">
         </div>
       </div>
     </div>
