@@ -391,7 +391,7 @@ const reducedOver = {
 
 const configPages = [
   //homePage,
-  //manageVoidServices,
+  manageVoidServices,
   //abExceptionList,
   markTickets,
   //ticketListing,

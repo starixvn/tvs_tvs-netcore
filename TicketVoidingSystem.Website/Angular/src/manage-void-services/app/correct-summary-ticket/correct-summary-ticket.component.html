@@ -1,0 +1,73 @@
+<div ngbAccordion #acc="ngbAccordion" activeIds="toggle-1,toggle-2,toggle-3">
+  <div ngbAccordionItem id="toggle-1" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center w-100">
+          <h5 class="m-0">Correct Summary Ticket 19999</h5>
+          <div class="ms-auto me-2">
+            <button type="button" class="btn btn-sm btn-outline-danger ms-2" (click)="$event.stopPropagation(); resetAll()">Reset All</button>
+          </div>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body" [blockUi]="isBlock">
+        <bet-ids #betIds [hideInvalid]="false"
+          [hideDifferentMatch]="true" [disabled]="isDisabledBetIds" [isShowLabel]="false" [hideWarningMove]="true">
+        </bet-ids>
+        <div class="action-buttons mt-3">
+          <div class="action-item">
+            <div class="label-action">(1) Call SP: TicketVoiding_BetTicket14_Insert</div>
+            <div class="button-action">
+              <button class="btn btn-primary btn-sm" [disabled]="statusInsertBetTicket14.isDisableButton" (click)="insertBetTicket14()">Save</button>
+            </div>
+            <div class="status-action" [ngClass]="{'text-success': !statusInsertBetTicket14.isFailed, 'text-danger': statusInsertBetTicket14.isFailed}">
+              {{statusInsertBetTicket14.status}}
+            </div>
+          </div>
+          <div class="action-item">
+            <div class="label-action text-red">(2) Waiting for ticket bettrans14 (TW) to be updated</div>
+          </div>
+          <div class="action-item">
+            <div class="label-action">(3) Call SP: TicketVoiding_SummaryTicket19999_Update</div>
+            <div class="button-action">
+              <button class="btn btn-success btn-sm" [disabled]="statusUpdateSummaryTicket19999.isDisableButton" (click)="updateSummaryTicket19999()">Process</button>
+            </div>
+            <div class="status-action" [ngClass]="{'text-success': !statusUpdateSummaryTicket19999.isFailed, 'text-danger': statusUpdateSummaryTicket19999.isFailed}">
+              {{statusUpdateSummaryTicket19999.status}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div ngbAccordionItem id="toggle-3" [collapsed]="false">
+    <h2 ngbAccordionHeader>
+      <button ngbAccordionButton>
+        <div class="d-flex align-items-center justify-content-between">
+          <h5 class="m-0">*** Guideline</h5>
+        </div>
+      </button>
+    </h2>
+    <div ngbAccordionCollapse>
+      <div class="accordion-body">
+        <div class="ms-3">
+          1. Capture before tickets in bettrans14 -> Insert into table TVS_BetTicket14
+        </div>
+        ​​​​​​<div class="ms-3">
+          2. Update ticket bettrans14 (TW)
+        </div>
+        ​​​​​​<div class="ms-3">
+          3. Update ticket 19999<br />
+          <div class="ms-3">Update balance correction</div>
+          <div class="ms-3">Insert routine task</div>
+          <div class="ms-3">Insert BalanceTrigger of ticket</div>
+          <div class="ms-3">Truncate table TVS_BetTicket14</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<tooltip [tooltip]="tooltip"></tooltip>

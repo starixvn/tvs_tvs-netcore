@@ -44,6 +44,14 @@
         </div>
       </ng-template>
     </li>
+    <li [ngbNavItem]="7">
+      <a ngbNavLink>Correct Summary Ticket</a>
+      <ng-template ngbNavContent>
+        <div class="container-fluid mb-3">
+          <correct-summary-ticket></correct-summary-ticket>
+        </div>
+      </ng-template>
+    </li>
   </ul>
   <div [ngbNavOutlet]="nav"></div>
 </div>
