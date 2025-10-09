@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BetIdsComponent } from '../../../utility/components/bet-ids/bet-ids.component';
+import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
 import { AppApiService } from '../app-api.service';
@@ -10,6 +11,7 @@ describe('CorrectSummaryTicketComponent', () => {
   let component: CorrectSummaryTicketComponent;
   let fixture: ComponentFixture<CorrectSummaryTicketComponent>;
   let mockAppApiService: jest.Mocked<AppApiService>;
+  let mockNumberItemService: jest.Mocked<NumberItemService>;
   let mockBetIdsComponent: jest.Mocked<BetIdsComponent>;
 
   beforeEach(async () => {
@@ -17,7 +19,14 @@ describe('CorrectSummaryTicketComponent', () => {
     mockAppApiService = {
       insertBetTicket14: jest.fn(),
       updateSummaryTicket19999: jest.fn()
-    } as any;
+    } as unknown as jest.Mocked<AppApiService>;
+
+    mockNumberItemService = {
+      resetAllItemsToValid: jest.fn(),
+      checkDuplicatedItems: jest.fn(),
+      updateInvalidItems: jest.fn(),
+      updateBeingBalanceUp: jest.fn()
+    } as unknown as jest.Mocked<NumberItemService>;
 
     // Create mock for BetIdsComponent
     mockBetIdsComponent = {
@@ -25,17 +34,15 @@ describe('CorrectSummaryTicketComponent', () => {
       isHasBetId: jest.fn(),
       getAllBetIds: jest.fn(),
       groupNumber: {
-        resetAllItemsToValid: jest.fn(),
-        checkDuplicatedItems: jest.fn(),
-        updateInvalidItems: jest.fn(),
-        updateBeingBalanceUp: jest.fn()
+        items: []
       }
-    } as any;
+    } as unknown as jest.Mocked<BetIdsComponent>;
 
     await TestBed.configureTestingModule({
       imports: [CorrectSummaryTicketComponent],
       providers: [
-        { provide: AppApiService, useValue: mockAppApiService }
+        { provide: AppApiService, useValue: mockAppApiService },
+        { provide: NumberItemService, useValue: mockNumberItemService }
       ]
     }).compileComponents();
 
@@ -112,8 +119,8 @@ describe('CorrectSummaryTicketComponent', () => {
       await component.insertBetTicket14();
 
       // Assert
-      expect(mockBetIdsComponent.groupNumber.resetAllItemsToValid).toHaveBeenCalled();
-      expect(mockBetIdsComponent.groupNumber.checkDuplicatedItems).toHaveBeenCalled();
+      expect(mockNumberItemService.resetAllItemsToValid).toHaveBeenCalled();
+      expect(mockNumberItemService.checkDuplicatedItems).toHaveBeenCalled();
       expect(mockAppApiService.insertBetTicket14).toHaveBeenCalledWith(transIds);
       expect(component.isBlock).toBeFalsy();
       expect(component.isDisabledBetIds).toBeTruthy();
@@ -162,8 +169,8 @@ describe('CorrectSummaryTicketComponent', () => {
       await component.insertBetTicket14();
 
       // Assert
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', TEXT.INVALID_TICKETS);
-      expect(mockBetIdsComponent.groupNumber.updateBeingBalanceUp).toHaveBeenCalledWith('456', TEXT.BEING_BALANCE_UP);
+      expect(mockNumberItemService.updateInvalidItems).toHaveBeenCalledWith([],'123', TEXT.INVALID_TICKETS);
+      expect(mockNumberItemService.updateBeingBalanceUp).toHaveBeenCalledWith([],'456', TEXT.BEING_BALANCE_UP);
     });
   });
 
@@ -212,8 +219,8 @@ describe('CorrectSummaryTicketComponent', () => {
         component['beforeInsertBetTicket14']();
 
         // Assert
-        expect(mockBetIdsComponent.groupNumber.resetAllItemsToValid).toHaveBeenCalled();
-        expect(mockBetIdsComponent.groupNumber.checkDuplicatedItems).toHaveBeenCalled();
+        expect(mockNumberItemService.resetAllItemsToValid).toHaveBeenCalled();
+        expect(mockNumberItemService.checkDuplicatedItems).toHaveBeenCalled();
       });
     });
 
@@ -305,8 +312,8 @@ describe('CorrectSummaryTicketComponent', () => {
         component['updateTicketsValidaiton'](result);
 
         // Assert
-        expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123,456', TEXT.INVALID_TICKETS);
-        expect(mockBetIdsComponent.groupNumber.updateBeingBalanceUp).toHaveBeenCalledWith('789,012', TEXT.BEING_BALANCE_UP);
+        expect(mockNumberItemService.updateInvalidItems).toHaveBeenCalledWith([], '123,456', TEXT.INVALID_TICKETS);
+        expect(mockNumberItemService.updateBeingBalanceUp).toHaveBeenCalledWith([], '789,012', TEXT.BEING_BALANCE_UP);
       });
     });
   });

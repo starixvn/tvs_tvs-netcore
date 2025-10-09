@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { CSSCLASS, GroupNumber, NumberItem } from './bet-ids.model';
 import { StaticService } from '../../services/static.service';
+import { CSSCLASS, GroupNumber, NumberItem } from './bet-ids.model';
 
 @Injectable({
   providedIn: 'root'
@@ -79,6 +79,13 @@ export class NumberItemService {
     if (StaticService.isStringHasLength(text)) {
       const movedItems = text.split(',');
       items.forEach(item => this.setItemInvalid(movedItems, item, CSSCLASS.MOVED));
+    }
+  }
+
+  updateBeingBalanceUp(items: NumberItem[], text: string, tooltipText: string) {
+    if (StaticService.isStringHasLength(text)) {
+      const transIds = text.split(',');
+      items.forEach(item => this.setItemInvalid(transIds, item, CSSCLASS.MOVED, tooltipText));
     }
   }
 

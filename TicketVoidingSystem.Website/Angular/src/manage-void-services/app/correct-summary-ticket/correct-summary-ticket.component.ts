@@ -3,6 +3,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
 import { BetIdsComponent } from '../../../utility/components/bet-ids/bet-ids.component';
+import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -29,6 +30,7 @@ export class CorrectSummaryTicketComponent {
   statusUpdateSummaryTicket19999 = new UpdateSummaryStatusModel(true);
 
   appApiService = inject(AppApiService);
+  numberItemService = inject(NumberItemService);
 
   public resetAll() {
     this.betIdsComponent.clearBetId();
@@ -63,8 +65,8 @@ export class CorrectSummaryTicketComponent {
   }
 
   private beforeInsertBetTicket14() {
-    this.betIdsComponent.groupNumber.resetAllItemsToValid();
-    this.betIdsComponent.groupNumber.checkDuplicatedItems();
+    this.numberItemService.resetAllItemsToValid(this.betIdsComponent.groupNumber);
+    this.numberItemService.checkDuplicatedItems(this.betIdsComponent.groupNumber.items);
   }
 
   private afterInsertBetTicket14(result: InsertBetTicket14ResultModel) {
@@ -89,7 +91,7 @@ export class CorrectSummaryTicketComponent {
   }
 
   private updateTicketsValidaiton(result: InsertBetTicket14ResultModel) {
-    this.betIdsComponent.groupNumber.updateInvalidItems(result.invalidTransIds, TEXT.INVALID_TICKETS);
-    this.betIdsComponent.groupNumber.updateBeingBalanceUp(result.balanceUpTransIds, TEXT.BEING_BALANCE_UP);
+    this.numberItemService.updateInvalidItems(this.betIdsComponent.groupNumber.items, result.invalidTransIds, TEXT.INVALID_TICKETS);
+    this.numberItemService.updateBeingBalanceUp(this.betIdsComponent.groupNumber.items, result.balanceUpTransIds, TEXT.BEING_BALANCE_UP);
   }
 }

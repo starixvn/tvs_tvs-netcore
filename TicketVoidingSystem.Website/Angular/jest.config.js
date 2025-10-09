@@ -9,7 +9,7 @@ module.exports = {
     //'<rootDir>/src/manage-void-services/app/correct-summary-ticket/**/*.spec.ts',
   ],
   testPathIgnorePatterns: [
-    '<rootDir>/src/manage-void-services/'
+    //'<rootDir>/src/manage-void-services/'
   ],
   setupFilesAfterEnv : ['<rootDir>/test-setup.ts'],
   collectCoverage: true,

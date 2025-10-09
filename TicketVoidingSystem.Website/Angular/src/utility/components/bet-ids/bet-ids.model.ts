@@ -13,15 +13,6 @@ export class CSSCLASS {
 export class GroupNumber {
     items: Array<NumberItem> = [];
     isSelectedAll = false;
-            });
-        }
-    }
-
-    updateBeingBalanceUp(text: string, tooltipText: string) {
-        if (StaticService.isStringHasLength(text)) {
-            const transIds = text.split(',');
-            this.items.forEach(item => {
-                this.setItemInvalid(transIds, item, CSSCLASS.MOVED, tooltipText);
 }
 
 export class NumberItem {
