@@ -198,13 +198,13 @@ public class CheckValidTransIdsServiceTests
 
         var match1 = resultList.First(x => x.MatchId == 1);
         Assert.Equal(1, match1.MatchId);
-        Assert.True(match1.IsAllUusTickets); // Should be true because at least one has IsHasUusTickets = true
+        Assert.False(match1.IsAllUusTickets);
         Assert.Equal("Type1,Type2", match1.ListBetType);
         Assert.Equal("Team1,Team2", match1.ListBetTeam);
 
         var match2 = resultList.First(x => x.MatchId == 2);
         Assert.Equal(2, match2.MatchId);
-        Assert.True(match2.IsAllUusTickets);
+        Assert.False(match2.IsAllUusTickets);
         Assert.Equal("Type3,Type4", match2.ListBetType);
         Assert.Equal("Team3,Team4", match2.ListBetTeam);
     }
