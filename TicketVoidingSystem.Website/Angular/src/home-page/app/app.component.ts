@@ -62,8 +62,7 @@ export class AppComponent{
   openIssueType(issueType: IssueTypeHomePage) {
     const controllerName = this.cleanName(issueType.issueTypeName);
     if (controllerName) {
-      const url = `TicketVoidingSystem/${controllerName}/Add/Index`
-      window.open(`${document.body.getAttribute('root-url')}${url}`, '_blank');
+      window.location.assign(`TicketVoidingSystem/${controllerName}/Add/Index`);
     }
   }
 

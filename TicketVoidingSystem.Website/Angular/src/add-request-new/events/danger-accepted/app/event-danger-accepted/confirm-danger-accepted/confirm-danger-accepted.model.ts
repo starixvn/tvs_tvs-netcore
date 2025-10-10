@@ -2,6 +2,7 @@ export class ConfirmDangerAcceptedModel {
   isOpenDialog: boolean;
   issueTypeName: string;
   subIssueTypeName: string;
+  actionName: string;
   requestId: number;
   requestedBy: string;
   isHasSettledTicket: boolean;

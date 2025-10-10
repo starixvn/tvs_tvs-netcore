@@ -121,6 +121,7 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
+      service['showPopupConfirmSave'] = jest.fn();
 
       const result = await service.recheckLogInfoBeforeSaveRequest(arg);
 
@@ -133,7 +134,6 @@ describe('SaveRequestService', () => {
 
     it('should return false when validation fails', async () => {
       jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
-
       const arg: SaveRequestArg = {
         addRequestStore,
         allEvents: [],
@@ -161,7 +161,7 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
+      service['showPopupConfirmSave'] = jest.fn();
       const result = await service.recheckLogInfoBeforeSaveRequest(arg);
 
       expect(result).toBe(false);
@@ -182,7 +182,12 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{
+            value: '1',
+            name: 'Test Action'
+          }]
         } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
@@ -218,7 +223,6 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
       await service.saveRequest(arg);
 
       expect(arg.confirmDangerAccepted.isOpenDialog).toBe(true);
@@ -230,7 +234,7 @@ describe('SaveRequestService', () => {
       const arg: SaveRequestArg = {
         addRequestStore,
         allEvents: [],
-        filter: { isVoided: false } as FilterModel,
+        filter: { isVoided: false, action: '1', actions: [{ value: '1', name: 'Test Action' }] } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
         logInfoComponents: {
@@ -254,7 +258,6 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
       await service.saveRequest(arg);
 
       expect(addRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
@@ -266,7 +269,7 @@ describe('SaveRequestService', () => {
       const arg: SaveRequestArg = {
         addRequestStore,
         allEvents: [],
-        filter: { isVoided: false } as FilterModel,
+        filter: { isVoided: false, action: '1',actions: [{ value: '1', name: 'Test Action' }] } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
         logInfoComponents: {
@@ -290,7 +293,6 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
       await service.onClickConfirmSave(arg);
 
       expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
@@ -300,11 +302,10 @@ describe('SaveRequestService', () => {
 
     it('should show error when data is invalid', async () => {
       jest.spyOn(validationService, 'validateCommonData').mockReturnValue(false);
-
       const arg: SaveRequestArg = {
         addRequestStore,
         allEvents: [],
-        filter: { isVoided: false } as FilterModel,
+        filter: { isVoided: false, action: '1', actions: [{ value: '1', name: 'Test Action' }] } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
         logInfoComponents: {
@@ -328,7 +329,6 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
       await service.onClickConfirmSave(arg);
 
       expect(popupService.showError).toHaveBeenCalledWith(TEXT.INVALID_DATA_IN_REQUEST);
@@ -343,7 +343,6 @@ describe('SaveRequestService', () => {
           subIssueTypeId: 1
         } as LogInfoRelatedEvent
       ];
-
       const result = service['validateVarCheck'](events);
 
       expect(result).toBe(true);
@@ -394,7 +393,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
@@ -415,7 +416,6 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
       const result = service['assignEventToModel'](event, arg, tvDetectionModel);
 
       expect(result.isMainMatch).toBe(true);
@@ -454,7 +454,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         eventLeagueComponent: {} as EventLeagueComponent,
         filterTimeAreaComponent: {} as FilterTimeAreaComponent,
@@ -475,7 +477,6 @@ describe('SaveRequestService', () => {
         tvDetectionComponent: {} as TvDetectionComponent,
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel
       };
-
       const result = service['assignEventToModel'](event, arg, tvDetectionModel);
 
       expect(result.isMainMatch).toBe(true);
@@ -505,7 +506,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [
           {
@@ -544,7 +547,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [
           {
@@ -580,7 +585,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [
           {
@@ -619,7 +626,8 @@ describe('SaveRequestService', () => {
           isVoided: false,
           issueTypeId: '1',
           subIssueTypeId: '1',
-          action: TVSRequestActionType.TAKE_NOTE_ID.toString()
+          action: TVSRequestActionType.TAKE_NOTE_ID.toString(),
+          actions: [{ value: TVSRequestActionType.TAKE_NOTE_ID.toString(), name: 'Test Action' }]
         } as FilterModel,
         allEvents: [],
         actionIdOfFirstTimeAccess: 'DIFFERENT_ACTION',
@@ -647,7 +655,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [
           {
@@ -683,7 +693,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [],
         requestId: 123,
@@ -713,7 +725,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [],
         isEdit: true,
@@ -744,7 +758,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '2'
+          subIssueTypeId: '2',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [],
         issueTypes: {
@@ -776,7 +792,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: false,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [],
         confirmDangerAccepted: {} as ConfirmDangerAcceptedModel,
@@ -804,7 +822,9 @@ describe('SaveRequestService', () => {
         filter: {
           isVoided: true,
           issueTypeId: '1',
-          subIssueTypeId: '1'
+          subIssueTypeId: '1',
+          action: '1',
+          actions: [{ value: '1', name: 'Test Action' }]
         } as FilterModel,
         allEvents: [
           {

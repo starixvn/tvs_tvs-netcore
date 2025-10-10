@@ -238,13 +238,17 @@ describe('FilterComponent', () => {
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
     element.setAttribute('old-site-root-url', '/');
-    window.open = jest.fn();
+    const mockAssign = jest.fn();
+    Object.defineProperty(window, 'location', {
+      value: { assign: mockAssign },
+      writable: true
+    });
 
     // Action
     component.newRequest();
 
     // Assert
-    expect(window.open).toHaveBeenCalledTimes(1);
+    expect(mockAssign).toHaveBeenCalledTimes(1);
   });
 
   it('#modelChange should emit with expected FilterModel when call #updateModel', async () => {

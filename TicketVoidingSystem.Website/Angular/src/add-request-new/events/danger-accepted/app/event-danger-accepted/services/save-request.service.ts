@@ -84,6 +84,7 @@ export class SaveRequestService {
       this.validationService.isEditingByAnotherUser(arg.isEdit, Number(document.getElementById('body').getAttribute('user-id')), arg.userId);
     arg.confirmDangerAccepted.issueTypeName = arg.issueTypes.issueTypes.find(x => x.issueTypeId.toString() === arg.filter.issueTypeId).issueTypeName;
     arg.confirmDangerAccepted.subIssueTypeName = arg.issueTypes.subIssueTypes.find(x => x.subIssueTypeId.toString() === arg.filter.subIssueTypeId).subIssueTypeName;
+    arg.confirmDangerAccepted.actionName = arg.filter.actions.find(x => x.value.toString() === arg.filter.action).name;
     arg.confirmDangerAccepted.isOpenDialog = true;
   }
 

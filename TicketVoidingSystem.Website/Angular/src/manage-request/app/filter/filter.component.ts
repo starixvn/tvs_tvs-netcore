@@ -150,7 +150,7 @@ export class FilterComponent implements OnInit {
   }
 
   newRequest() {
-    window.open(`${document.body.getAttribute('root-url')}`, '_blank');
+    window.location.assign(document.body.getAttribute('root-url'));
   }
 
   openMarkTickets() {
