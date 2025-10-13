@@ -4,7 +4,6 @@ import { CheckboxType, TVSRequestActionType } from '../../../../../../utility/co
 import { TEXT } from '../../../../../../utility/constants/text';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { CheckTransIdsQuery, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 import { NumberItemService } from '../../../../../../utility/components/bet-ids/number-item.service';
