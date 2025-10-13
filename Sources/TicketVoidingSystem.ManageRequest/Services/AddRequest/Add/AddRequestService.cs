@@ -24,7 +24,7 @@ public class AddRequestServiceImp(
         var markTicketError = getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService));
         if (markTicketError != null)
         {
-            NotifyAddRequestError(markTicketResult);
+            await HandleErrorAddRequest(query, markTicketResult);
             return markTicketError;
         }
 
@@ -34,14 +34,16 @@ public class AddRequestServiceImp(
         }
         catch (Exception exception)
         {
-            NotifyAddRequestError(markTicketResult);
+            await HandleErrorAddRequest(query, markTicketResult);
             _ = loggingService.ErrorAsync(exception);
             return getUpdateResultService.CreateErrorResult(exception);
         }
     }
 
-    private void NotifyAddRequestError(MarkTicketsResult markTicketResult)
+    private async Task HandleErrorAddRequest(AddRequestQuery query, MarkTicketsResult markTicketResult)
     {
+        await marketTicketsWhenEditService.ExecuteUnMarkTickets(query.IssueTypeId, query.MarkTransIds);
+
         var content = MessageHelper.CreateAddRequestFailed(markTicketResult.MarkedTickets.Count());
         notificationService.ExecuteBackground(() => notificationService.InsertNotification(NotificationType.Error, content, NotificationTargetType.IgnoreCurrentUser, null));
     }

@@ -7,6 +7,8 @@ namespace TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 public interface MarkTicketsWhenAddEditService
 {
     Task<MarkTicketsResult> Execute(int issueTypeId, string markTransIds, string unMarkTransIds);
+
+    Task<MarkTicketsResult> ExecuteUnMarkTickets(int issueTypeId, string unMarkTransIds);
 }
 
 public class MarkTicketsWhenAddEditServiceImp(MarkTicketsService markTicketsService) : MarkTicketsWhenAddEditService
@@ -56,7 +58,7 @@ public class MarkTicketsWhenAddEditServiceImp(MarkTicketsService markTicketsServ
         return await markTicketsService.MarkTicketsInTVS(markTransIds, issueTypeId, MarkTypeConstant.ExecuteMarkTickets);
     }
 
-    private async Task<MarkTicketsResult> ExecuteUnMarkTickets(int issueTypeId, string unMarkTransIds)
+    public async Task<MarkTicketsResult> ExecuteUnMarkTickets(int issueTypeId, string unMarkTransIds)
     {
         return await markTicketsService.MarkTicketsInTVS(unMarkTransIds, issueTypeId, MarkTypeConstant.ExecuteUnMarkTickets);
     }
