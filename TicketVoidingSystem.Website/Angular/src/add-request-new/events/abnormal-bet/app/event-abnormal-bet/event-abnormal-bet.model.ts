@@ -1,12 +1,12 @@
-import { TransInfoAddRequestModel } from "../../../../models/trans-info-add-request.model";
 import { MatchInfo } from "../../../../../utility/models/event.model";
 import { InfoSiteDBDownModel } from "../../../../component/info-site-db-down/info-site-db-down.model";
+import { TransInfoAddRequestModel } from "../../../../models/trans-info-add-request.model";
 
 export class PrimitiveProperty {
   isBlockBetIds = false;
   isShowButtonRemoveInvalid = false;
   invalidTransIds: string;
-  isHasUusTickets: boolean;
+  isAllUusTickets: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   isBlockUI = false;
   abWhiteListTransIds: string;
@@ -50,13 +50,13 @@ export class ValidationAbnormalBet {
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;
   isHasWarningRemovedTickets: boolean;
-  isHasUusTickets: boolean;
+  isAllUusTickets: boolean;
   transIdsOfSiteDBDown?: string;
 }
 
 export interface SendLetstalkModel {
   matchId: number;
-  isHasUusTickets: boolean;
+  isAllUusTickets: boolean;
   listBetteam: string;
   listBettype: string;
 }

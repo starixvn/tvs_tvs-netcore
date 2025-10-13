@@ -36,8 +36,8 @@ public class SendLetstalkAfterAddServiceTests
             SubIssueTypeId = subIssueTypeId,
             SendLetstalkModels = new List<SendLetsTalkModel>
             {
-                new (){ IsHasUusTickets = false, MatchId = 1 },
-                new (){ IsHasUusTickets = true, MatchId = 1 }
+                new (){ IsAllUusTickets = false, MatchId = 1 },
+                new (){ IsAllUusTickets = true, MatchId = 1 }
             }
         };
 

@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import { ValidationService } from './validation.service';
-import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { BetIdsComponent } from '../../../../../utility/components/bet-ids/bet-ids.component';
 import { CheckboxType, TVSRequestActionType } from '../../../../../utility/constants/config';
+import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AddRequestApiService } from '../../add-request-api.service';
 import { PermissionAddRequest } from '../../models/permission-add-request.model';
 import { ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs } from './validation.model';
+import { ValidationService } from './validation.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -205,7 +205,7 @@ describe('ValidationService', () => {
           nonLiveTransIds: [],
           differentLiveScoreTransIds: [],
           abWhiteListTransIds: [],
-          isHasUusTickets: false
+          isAllUusTickets: false
         }
       };
 

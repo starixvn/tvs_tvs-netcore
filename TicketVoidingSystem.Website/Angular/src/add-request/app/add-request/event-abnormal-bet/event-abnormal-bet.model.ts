@@ -6,7 +6,7 @@ export class PrimitiveProperty {
   isBlockBetIds = false;
   isShowButtonRemoveInvalid = false;
   invalidTransIds: string;
-  isHasUusTickets: boolean;
+  isAllUusTickets: boolean;
   transInfoAddRequestModel: TransInfoAddRequestModel;
   isBlockUI = false;
   abWhiteListTransIds: string;
@@ -50,13 +50,13 @@ export class ValidationAbnormalBet {
   differentLiveScoreTransIds: string;
   abWhiteListTransIds: string;
   isHasWarningRemovedTickets: boolean;
-  isHasUusTickets: boolean;
+  isAllUusTickets: boolean;
   transIdsOfSiteDBDown?: string;
 }
 
 export interface SendLetstalkModel {
   matchId: number;
-  isHasUusTickets: boolean;
+  isAllUusTickets: boolean;
   listBetteam: string;
   listBettype: string;
 }

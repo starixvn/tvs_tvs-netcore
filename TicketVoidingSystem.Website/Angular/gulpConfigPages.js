@@ -391,21 +391,21 @@ const reducedOver = {
 
 const configPages = [
   //homePage,
-  manageVoidServices,
+ // manageVoidServices,
   //abExceptionList,
-  markTickets,
+  //markTickets,
   //ticketListing,
   //voidSingleBet,
   //voidRequest,
   //manageRequest,
-  // addRequest,
-  // editRequest,
+   addRequest,
+   editRequest,
   //voidByBetId
-  archivedTicket,
-  dangerAccepted,
-  redCard,
-  wrongScore,
-  technicalError,
+  //archivedTicket,
+  //dangerAccepted,
+  //redCard,
+  //wrongScore,
+  //technicalError,
   // wrongHdp,
   // wrongOu,
   // wrongOdds,
@@ -414,12 +414,12 @@ const configPages = [
   //wrongMarketOffered,
   //wrongOfferedName,
   //abnormalAccounts,
-  otherIssues,
-  notParticipate,
+  //otherIssues,
+  //notParticipate,
   //abnormalBet,
   //duplicateTickets,
   //recoverTicket
-  reducedOver
+  //reducedOver
 ];
 
 module.exports = configPages;

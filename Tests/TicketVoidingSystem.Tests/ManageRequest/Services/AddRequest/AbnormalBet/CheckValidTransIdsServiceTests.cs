@@ -183,10 +183,10 @@ public class CheckValidTransIdsServiceTests
         // Arrange
         var sendLetsTalkModels = new List<SendLetsTalkModel>
         {
-            new() { MatchId = 1, IsHasUusTickets = true, ListBetType = "Type1", ListBetTeam = "Team1" },
-            new() { MatchId = 1, IsHasUusTickets = false, ListBetType = "Type2", ListBetTeam = "Team2" },
-            new() { MatchId = 2, IsHasUusTickets = true, ListBetType = "Type3", ListBetTeam = "Team3" },
-            new() { MatchId = 2, IsHasUusTickets = false, ListBetType = "Type4", ListBetTeam = "Team4" },
+            new() { MatchId = 1, IsAllUusTickets = true, ListBetType = "Type1", ListBetTeam = "Team1" },
+            new() { MatchId = 1, IsAllUusTickets = false, ListBetType = "Type2", ListBetTeam = "Team2" },
+            new() { MatchId = 2, IsAllUusTickets = true, ListBetType = "Type3", ListBetTeam = "Team3" },
+            new() { MatchId = 2, IsAllUusTickets = false, ListBetType = "Type4", ListBetTeam = "Team4" },
         };
 
         // Act
@@ -198,13 +198,13 @@ public class CheckValidTransIdsServiceTests
 
         var match1 = resultList.First(x => x.MatchId == 1);
         Assert.Equal(1, match1.MatchId);
-        Assert.True(match1.IsHasUusTickets); // Should be true because at least one has IsHasUusTickets = true
+        Assert.False(match1.IsAllUusTickets);
         Assert.Equal("Type1,Type2", match1.ListBetType);
         Assert.Equal("Team1,Team2", match1.ListBetTeam);
 
         var match2 = resultList.First(x => x.MatchId == 2);
         Assert.Equal(2, match2.MatchId);
-        Assert.True(match2.IsHasUusTickets);
+        Assert.False(match2.IsAllUusTickets);
         Assert.Equal("Type3,Type4", match2.ListBetType);
         Assert.Equal("Team3,Team4", match2.ListBetTeam);
     }

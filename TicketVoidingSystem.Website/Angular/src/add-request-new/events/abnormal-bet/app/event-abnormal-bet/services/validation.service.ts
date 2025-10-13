@@ -1,9 +1,9 @@
 import { inject, Injectable } from '@angular/core';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
 import { CheckboxType, TVSRequestActionType } from '../../../../../../utility/constants/config';
-import { TEXT} from '../../../../../../utility/constants/text';
-import { AddRequestApiService } from '../../../../../services/add-request-api.service';
+import { TEXT } from '../../../../../../utility/constants/text';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
+import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { CheckTransIdsQuery, ValidationAbnormalBet } from '../event-abnormal-bet.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from './validation.model';
 
@@ -145,6 +145,6 @@ export class ValidationService {
 
     args.primitiveProps.isShowButtonRemoveInvalid = this.checkCanShowButtonRemove(validationAbnormalBet, isHasPermissionAddSettledTicket, transIdsAreNotNumber);
     args.primitiveProps.invalidTransIds = this.getInvalidTransIds(validationAbnormalBet, isHasPermissionAddSettledTicket, transIdsAreNotNumber);
-    args.primitiveProps.isHasUusTickets = validationAbnormalBet.isHasUusTickets;
+    args.primitiveProps.isAllUusTickets = validationAbnormalBet.isAllUusTickets;
   }
 }
