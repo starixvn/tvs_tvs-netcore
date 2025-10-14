@@ -91,7 +91,7 @@ public static class BetTypeExtension
 
     public static bool IsSportTypeOfVirtualSports6(this int sportTypeId)
     {
-        List<int> VS6SportType = [SportTypeConstant.VirtualBetByBasketball, SportTypeConstant.ESoccer, SportTypeConstant.EVolleyball];
+        int[] VS6SportType = [SportTypeConstant.VirtualBetByBasketball, SportTypeConstant.ESoccer, SportTypeConstant.EVolleyball];
         return VS6SportType.Contains(sportTypeId);
     }
 
