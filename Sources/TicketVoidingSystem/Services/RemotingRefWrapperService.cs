@@ -99,14 +99,14 @@ public class RemotingRefWrapperServiceImp(IRemotingRefService remotingRefService
 
     public string GetLeagueName(int sportTypeId, object leagueId, string language)
     {
-        return IsSportTypeOfVirtualSports5(sportTypeId) || sportTypeId.IsRacingVirtualSports() || IsSportTypeOfVirtualSports6(sportTypeId)
+        return IsSportTypeOfVirtualSports5(sportTypeId) || sportTypeId.IsRacingVirtualSports() || sportTypeId.IsSportTypeOfVirtualSports6()
             ? remotingRefService.GetLeagueName3rd(ToString(leagueId), language, string.Empty)
             : remotingRefService.GetLeagueName(ToString(leagueId), language, string.Empty);
     }
 
     public string GetTeamName(int sportTypeId, object teamId, string language)
     {
-        return IsSportTypeOfVirtualSports5(sportTypeId) || IsSportTypeOfVirtualSports6(sportTypeId)
+        return IsSportTypeOfVirtualSports5(sportTypeId) || sportTypeId.IsSportTypeOfVirtualSports6()
             ? remotingRefService.GetTeamName3rd(ToString(teamId), language, string.Empty)
             : remotingRefService.GetTeamName(ToString(teamId), language, string.Empty);
     }
@@ -114,10 +114,5 @@ public class RemotingRefWrapperServiceImp(IRemotingRefService remotingRefService
     private static bool IsSportTypeOfVirtualSports5(int sportType)
     {
         return sportType is SportTypeConstant.VirtuallySoccer;
-    }
-
-    private static bool IsSportTypeOfVirtualSports6(int sportType)
-    {
-        return sportType is SportTypeConstant.VirtualBetByBasketball;
     }
 }

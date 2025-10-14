@@ -39,6 +39,10 @@ public static class SportTypeConstant
 
     public const int VirtualBetByBasketball = 134;     // Virtual Sports 6
 
+    public const int ESoccer = 116;     // Virtual Sports 6
+
+    public const int EVolleyball = 114;     // Virtual Sports 6
+
     public const int VirtualSteepleChase = 125;     // Virtual Sports 7
 
     public const int VirtualHarnessRacing = 126;     // Virtual Sports 7

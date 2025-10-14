@@ -35,9 +35,15 @@ export class FilterService {
             (sportType < 180 || sportType > 186) &&
             ((sportType < 190 || sportType > 199) && sportType !== 177) &&
             sportType !== 178 && sportType !== 179 &&
-            sportType !== 188 && sportType !== 147 && sportType !== 134 &&
+            sportType !== 188 && sportType !== 147 &&
+            !this.isSportTypeVs6(sportType) &&
             !this.isSportTypeVs7(sportType)
         );
+    }
+
+    private isSportTypeVs6(sportType: number): boolean {
+        const sportTypeVs6 = [134, 116, 114];
+        return sportTypeVs6.includes(sportType);
     }
 
     isInvalidOtherProducts(sportType: number): boolean {
@@ -58,7 +64,7 @@ export class FilterService {
             && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
             && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
             && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
-            && (sportType !== 134)                                              //sportTypes invalid in  Virtual Sports 6
+            && !this.isSportTypeVs6(sportType)                                  //sportTypes invalid in  Virtual Sports 6
             && !this.isSportTypeVs7(sportType);                                 //sportTypes invalid in  Virtual Sports 7
     }
 
