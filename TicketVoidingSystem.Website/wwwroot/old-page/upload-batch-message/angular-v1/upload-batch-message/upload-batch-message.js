@@ -32,6 +32,10 @@
                 product.IsChecked = product.Name === groupName ? true : false;
             });
 
+            vm.updateValueNumberClasses();
+        };
+
+        vm.updateValueNumberClasses = function () {
             $('.value-number-invalid').each(function () {
                 $(this).removeClass("value-number-invalid").addClass("value-number");
             });

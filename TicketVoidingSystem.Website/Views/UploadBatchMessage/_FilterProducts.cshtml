@@ -12,7 +12,7 @@
             </div>
             <div class="products">
                 <div class="product" ng-repeat="product in group.Products">
-                    <input class="float-left product-id" type="checkbox" id="product-{{product.Value}}" value="{{product.Value}}" ng-checked="group.IsChecked" ng-disabled="!group.IsChecked" />
+                    <input class="float-left product-id" type="checkbox" id="product-{{product.Value}}" value="{{product.Value}}" ng-checked="group.IsChecked" ng-disabled="!group.IsChecked" ng-click="vm.updateValueNumberClasses()" />
                     <label class="product-label" for="product-{{product.Value}}">{{product.Name}}</label>
                 </div>
             </div>
