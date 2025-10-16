@@ -5,35 +5,33 @@ import { ConfirmationComponent } from '../../../utility/components/confirmation/
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TEXT } from '../../../utility/constants/text';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
-import { GroupNumber, NumberItem } from '../../../utility/components/bet-ids/bet-ids.model';
+import { TicketsViewModel } from '../model/get-tickets.query';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 
+class Helper {
+  static readonly fakeTicketsViewModel = {
+    groups: [{ tickets: [{isChecked: true, mainTransId: '123'}]}],
+  } as TicketsViewModel;
+}
 describe('ValidationService', () => {
   let service: ValidationService;
   let betIdsComponent: BetIdsComponent;
-  let numberItemService: NumberItemService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule],
-      providers: [ValidationService, NumberItemService]
+      providers: [ValidationService]
     });
 
     service = TestBed.inject(ValidationService);
-    numberItemService = TestBed.inject(NumberItemService);
-    
-    // Tạo GroupNumber với NumberItem thực tế
-    const groupNumber = new GroupNumber();
-    groupNumber.items = [
-      new NumberItem('123'),
-      new NumberItem('456'),
-      new NumberItem('789'),
-      new NumberItem('012')
-    ];
-    
     betIdsComponent = {
-      groupNumber: groupNumber
+      groupNumber: {
+        updateInvalidItems: jest.fn(),
+        updateMoved: jest.fn()
+      }
     } as unknown as BetIdsComponent;
+
+    Helper.fakeTicketsViewModel.getNumberOfCheckedTickets = jest.fn().mockReturnValue(1);
   });
 
   it('should be created', () => {
@@ -45,51 +43,15 @@ describe('ValidationService', () => {
       // Arrange
       const invalidTransIds = '123,456';
       const movedTransIds = '789,012';
+      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
+      betIdsComponent.groupNumber.updateMoved = jest.fn();
       
-      // Spy on NumberItemService methods
-      const updateInvalidItemsSpy = jest.spyOn(numberItemService, 'updateInvalidItems');
-      const updateMovedSpy = jest.spyOn(numberItemService, 'updateMoved');
-
       // Act
       service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
 
       // Assert
-      expect(updateInvalidItemsSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, invalidTransIds, TEXT.INVALID_TICKETS);
-      expect(updateMovedSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, movedTransIds);
-    });
-
-    it('should update items with invalid status when invalidTransIds provided', () => {
-      // Arrange
-      const invalidTransIds = '123,456';
-      const movedTransIds = '';
-      
-      // Spy on NumberItemService methods
-      const updateInvalidItemsSpy = jest.spyOn(numberItemService, 'updateInvalidItems');
-      const updateMovedSpy = jest.spyOn(numberItemService, 'updateMoved');
-
-      // Act
-      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
-
-      // Assert
-      expect(updateInvalidItemsSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, invalidTransIds, TEXT.INVALID_TICKETS);
-      expect(updateMovedSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, movedTransIds);
-    });
-
-    it('should update items with moved status when movedTransIds provided', () => {
-      // Arrange
-      const invalidTransIds = '';
-      const movedTransIds = '789,012';
-      
-      // Spy on NumberItemService methods
-      const updateInvalidItemsSpy = jest.spyOn(numberItemService, 'updateInvalidItems');
-      const updateMovedSpy = jest.spyOn(numberItemService, 'updateMoved');
-
-      // Act
-      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
-
-      // Assert
-      expect(updateInvalidItemsSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, invalidTransIds, TEXT.INVALID_TICKETS);
-      expect(updateMovedSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, movedTransIds);
+      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, TEXT.INVALID_TICKETS);
+      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
     });
   });
 
@@ -102,9 +64,9 @@ describe('ValidationService', () => {
       const confirmationComponent = {
         checkValidation: jest.fn().mockReturnValue(true)
       } as unknown as ConfirmationComponent;
-
+      
       // Act
-      const result = service.checkValidation(messagesComponent, confirmationComponent);
+      const result = service.checkValidation(Helper.fakeTicketsViewModel, messagesComponent, confirmationComponent, null);
 
       // Assert
       expect(result).toBe(true);
@@ -122,7 +84,7 @@ describe('ValidationService', () => {
       } as unknown as ConfirmationComponent;
 
       // Act
-      const result = service.checkValidation(messagesComponent, confirmationComponent);
+      const result = service.checkValidation(Helper.fakeTicketsViewModel, messagesComponent, confirmationComponent, null);
 
       // Assert
       expect(result).toBe(false);
@@ -138,9 +100,9 @@ describe('ValidationService', () => {
       const confirmationComponent = {
         checkValidation: jest.fn().mockReturnValue(false)
       } as unknown as ConfirmationComponent;
-
+      
       // Act
-      const result = service.checkValidation(messagesComponent, confirmationComponent);
+      const result = service.checkValidation(Helper.fakeTicketsViewModel, messagesComponent, confirmationComponent, null);
 
       // Assert
       expect(result).toBe(false);
@@ -158,11 +120,38 @@ describe('ValidationService', () => {
       } as unknown as ConfirmationComponent;
 
       // Act
-      const result = service.checkValidation(messagesComponent, confirmationComponent);
+      const result = service.checkValidation(Helper.fakeTicketsViewModel, messagesComponent, confirmationComponent, null);
 
       // Assert
       expect(result).toBe(false);
       expect(messagesComponent.checkValidation).toHaveBeenCalled();
+      expect(confirmationComponent.checkValidation).not.toHaveBeenCalled();
+    });
+
+    
+    it('should return false when no tickets are selected', () => {
+      // Arrange
+      const messagesComponent = {
+        checkValidation: jest.fn().mockReturnValue(false)
+      } as unknown as TemplateMessageComponent;
+      const confirmationComponent = {
+        checkValidation: jest.fn().mockReturnValue(false)
+      } as unknown as ConfirmationComponent;
+      const ticketsViewModel = {
+        groups: [{ tickets: []}]
+      } as TicketsViewModel;
+      ticketsViewModel.getNumberOfCheckedTickets = jest.fn().mockReturnValue(0);
+
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.checkValidation(ticketsViewModel, messagesComponent, confirmationComponent, tooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(tooltip.display).toHaveBeenCalled();
+      expect(messagesComponent.checkValidation).not.toHaveBeenCalled();
       expect(confirmationComponent.checkValidation).not.toHaveBeenCalled();
     });
   });

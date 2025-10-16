@@ -1,10 +1,8 @@
 import { inject, Injectable} from '@angular/core';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
-import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TEXT } from '../../../utility/constants/text';
 import { Result } from '../../../utility/models/result';
-import { VoidMatch } from '../models/void-match.model';
 
 @Injectable(
   { providedIn: 'root' }
@@ -54,26 +52,5 @@ export class PopupService {
         window.close();
       }
     });
-  }
-
-  public getWarningInTemplateMessage(matchHasTickets: VoidMatch[], templateMessageComponents: TemplateMessageComponent[]): string {
-    const matchesHaveWarning = this.getMatchesHaveWarning(matchHasTickets, templateMessageComponents);
-
-    if (matchesHaveWarning.length > 0) {
-      const matchIdList = `- Match Id: ${matchesHaveWarning.join(', ')}`;
-      const warningMessage = `<div><i class="fa fa-exclamation-triangle pt-2 text-warn"></i>There are some message info you do not input in these matches:</div>
-                                  <div>${matchIdList}</div></br>`;
-
-      return warningMessage;
-    }
-
-    return '';
-  }
-
-  private getMatchesHaveWarning(matchHasTickets: VoidMatch[], templateMessageComponents: TemplateMessageComponent[]): number[] {
-    const matchHasWarning = matchHasTickets.filter(voidMatch =>
-      templateMessageComponents.find(x => x.value.matchId === voidMatch.matchModel.matchId).isHasWarningForDynamicInput());
-
-    return matchHasWarning.map(x => x.matchModel.matchId);
   }
 }

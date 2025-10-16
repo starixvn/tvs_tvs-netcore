@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -28,7 +27,7 @@ public class GetGroupBetTypesHandlerTests
         {
             BetTypes = null
         };
-        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>()).ReturnsForAnyArgs(new List<int> { 1234 });
+        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>()).ReturnsForAnyArgs([1234]);
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);
@@ -46,7 +45,7 @@ public class GetGroupBetTypesHandlerTests
         {
             BetTypes = "1234"
         };
-        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>()).ReturnsForAnyArgs(new List<int> { 1234 });
+        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<GetGroupBetTypesRequest>()).ReturnsForAnyArgs([1234]);
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);

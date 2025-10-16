@@ -77,9 +77,9 @@ namespace TicketVoidingSystem.Resources {
                 return ResourceManager.GetString("Bettype", resourceCulture);
             }
         }
-        
+
         /// <summary>
-        ///   Looks up a localized string similar to &lt;BetType Id=&quot;{0}&quot; BetTeam=&quot;{1}&quot; Set=&quot;{2}&quot; Game=&quot;{3}&quot; Value=&quot;{4}&quot; ValueHdp1=&quot;{5}&quot; ValueHdp2=&quot;{6}&quot; Goal=&quot;{7}&quot; BetOption=&quot;{8}&quot; OddsSpread=&quot;{9}&quot; OddsId=&quot;{10}&quot; Transdesc=&quot;{11}&quot; VirtualHead=&quot;{12}&quot; /&gt;.
+        ///   Looks up a localized string similar to &lt;BetType Id=&quot;{0}&quot; BetTeam=&quot;{1}&quot; Set=&quot;{2}&quot; Game=&quot;{3}&quot; Value=&quot;{4}&quot; ValueHdp1=&quot;{5}&quot; ValueHdp2=&quot;{6}&quot; Goal=&quot;{7}&quot; BetOption=&quot;{8}&quot; OddsSpread=&quot;{9}&quot; OddsId=&quot;{10}&quot; Transdesc=&quot;{11}&quot; VirtualHead=&quot;{12}&quot; Performance=&quot;{13}&quot; PlayerAndOdds={14}&quot; /&gt;.
         /// </summary>
         public static string BetTypeXml {
             get {

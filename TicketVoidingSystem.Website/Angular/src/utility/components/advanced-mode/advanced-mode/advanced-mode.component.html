@@ -472,7 +472,8 @@
                                               @if (selection.multiSelection.name !== '') {
                                                 <span class="me-1">{{selection.multiSelection.name}}</span>
                                               }
-                                              <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect">
+                                              <multiple-select class="multiple-selection-{{index}}-selection-{{indexSelection}}" [multipleSelect]="selection.multiSelection.multipleSelect"
+                                              (checkedItems)="updateOtherSelection(betTeam, selection)">
                                               </multiple-select>
                                             </div>
                                           }

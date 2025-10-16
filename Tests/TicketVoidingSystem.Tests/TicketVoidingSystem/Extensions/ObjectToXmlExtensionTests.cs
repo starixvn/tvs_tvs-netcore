@@ -99,11 +99,11 @@ public class ObjectToXmlExtensionTests
                 Transdesc = "Description B"
             }
         };
-        var expected = $"<BetTypes>{Environment.NewLine}<BetType Id=\"1\" BetTeam=\"Team A\" Set=\"1\" Game=\"2\" Value=\"10\" ValueHdp1=\"0.5\" ValueHdp2=\"-0.5\" " +
-                       $"Goal=\"2.5\" BetOption=\"Option A\" OddsSpread=\"1.5\" OddsId=\"123\" Transdesc=\"Description A\" VirtualHead=\"All\" />" +
-                       $"{Environment.NewLine}<BetType Id=\"2\" BetTeam=\"Team B\" " + $"Set=\"2\" Game=\"3\" Value=\"20\" ValueHdp1=\"0.25\" ValueHdp2=\"-0.25\" " +
-                       $"Goal=\"3.5\" BetOption=\"Option B\" OddsSpread=\"2.5\" OddsId=\"456\" Transdesc=\"Description B\" VirtualHead=\"All\" />" +
-                       $"{Environment.NewLine}</BetTypes>";
+        const string expected = $"<BetTypes><BetType Id=\"1\" BetTeam=\"Team A\" Set=\"1\" Game=\"2\" Value=\"10\" ValueHdp1=\"0.5\" ValueHdp2=\"-0.5\" " +
+                                $"Goal=\"2.5\" BetOption=\"Option A\" OddsSpread=\"1.5\" OddsId=\"123\" Transdesc=\"Description A\" VirtualHead=\"All\" Performance=\"All\" PlayerAndOdds=\"All\"/>" +
+                                $"<BetType Id=\"2\" BetTeam=\"Team B\" " + $"Set=\"2\" Game=\"3\" Value=\"20\" ValueHdp1=\"0.25\" ValueHdp2=\"-0.25\" " +
+                                $"Goal=\"3.5\" BetOption=\"Option B\" OddsSpread=\"2.5\" OddsId=\"456\" Transdesc=\"Description B\" VirtualHead=\"All\" Performance=\"All\" PlayerAndOdds=\"All\"/>" +
+                                $"</BetTypes>";
 
         // Act
         var result = betTypes.ToBetTypeXml();

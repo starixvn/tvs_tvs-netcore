@@ -56,6 +56,8 @@ export class BetTeamResult {
   oddsId: string;
   transdesc: string;
   virtualHead: string;
+  performance: string;
+  playerAndOdds: string;
 }
 
 export class CheckedBetType extends BetTeamResult {
@@ -106,4 +108,6 @@ export class OddsInfo {
   betChoice: string;
   playNamesChineseTraditional: string;
   playNamesChineseSimplified: string;
+  oddsInfo: string;
+  performance: string;
 }

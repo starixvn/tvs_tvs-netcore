@@ -22,7 +22,6 @@ import { PagingModel } from '../../utility/components/paging/paging.model';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
-import { GroupModel } from '../../utility/components/tickets/group.model';
 import { TicketsComponent } from '../../utility/components/tickets/tickets.component';
 import { TicketsModel } from '../../utility/components/tickets/tickets.model';
 import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';

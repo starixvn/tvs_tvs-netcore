@@ -56,7 +56,8 @@ export class BetTeamAddRequestResult {
   betIdY: string; // store selected value
   filterBetIdX: string; // filter data in SPs only
   filterBetIdY: string; // filter data in SPs only
-
+  performance: string;
+  
   // Add common key for all bet types
   firstValue: string;
   secondValue: string;

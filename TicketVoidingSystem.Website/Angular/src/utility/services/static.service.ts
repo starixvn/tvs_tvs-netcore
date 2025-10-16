@@ -14,12 +14,15 @@ import { CheckIssueTypeObjectType } from '../models/check-issue-type.model';
 
 export class StaticService {
   static isVoidAction(actionId: number): boolean {
-    return actionId === TVSRequestActionType.MANUAL_VOID_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_WINNING_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY
-      || actionId === TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID
-      || actionId === TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID;
+    const voidActionIds = [
+      TVSRequestActionType.MANUAL_VOID_ID,
+      TVSRequestActionType.AUTO_VOID_WINNING_ID,
+      TVSRequestActionType.AUTO_VOID_INSTANT_ID,
+      TVSRequestActionType.AUTO_VOID_INSTANT_WITHOUT_POLICY,
+      TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID,
+      TVSRequestActionType.AUTO_VOID_RESULT_KEYED_ID
+    ];
+    return voidActionIds.includes(actionId);
   }
 
   static checkAllIssueTypes(issueTypeId: string | number): CheckIssueTypeObjectType {
@@ -287,12 +290,16 @@ export class StaticService {
   }
 
   static isHaveCancelCashOutTicket(issueTypeId: string | number): boolean {
-    return issueTypeId?.toString() === IssueTypeConstant.DANGER_ACCEPTED ||
-      issueTypeId?.toString() === IssueTypeConstant.RED_CARD ||
-      issueTypeId?.toString() === IssueTypeConstant.WRONG_SCORE ||
-      issueTypeId?.toString() === IssueTypeConstant.WRONG_MARKET_OFFERED ||
-      issueTypeId?.toString() === IssueTypeConstant.TECHNICAL_ERROR ||
-      issueTypeId?.toString() === IssueTypeConstant.MATCH_EARLY_COMPLETED;
+    const issueTypeHaveCancelCashOutTicket = [
+      IssueTypeConstant.DANGER_ACCEPTED,
+      IssueTypeConstant.RED_CARD,
+      IssueTypeConstant.WRONG_SCORE,
+      IssueTypeConstant.WRONG_MARKET_OFFERED,
+      IssueTypeConstant.TECHNICAL_ERROR,
+      IssueTypeConstant.MATCH_EARLY_COMPLETED
+    ];
+
+    return issueTypeHaveCancelCashOutTicket.includes(issueTypeId?.toString());
   }
 
   static isCorrectFormatMultipleDecimal(value: string, element: string, tooltip: Tooltip, errorText: string): boolean {
@@ -348,10 +355,7 @@ export class StaticService {
 
     const LENGTH_OF_OVER = 3;
     const PREFIX = '8';
-    let value = text;
-    if (value.length < LENGTH_OF_OVER && value.length > 0) {
-      value = value.padStart(LENGTH_OF_OVER, '0');
-    }
+    const value = text.length < LENGTH_OF_OVER && text.length > 0 ? text.padStart(LENGTH_OF_OVER, '0') : text;
 
     return `${PREFIX}${value}`;
   }
@@ -444,9 +448,7 @@ export class StaticService {
       (hasCancelCashOut ? `, Cancel CO: ${totalCancelCashOut}` : '') +
       `)`;
 
-    return isAbnormalAccount
-      ? baseTitle
-      : `Void Time: ${strFromTime} - ${strToTime} ${baseTitle}`;
+    return isAbnormalAccount ? baseTitle : `Void Time: ${strFromTime} - ${strToTime} ${baseTitle}`;
   }
 
   static formatFullEnglishDate(timestamp: string | Date): string {
@@ -454,4 +456,14 @@ export class StaticService {
     return new Intl.DateTimeFormat('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(date);
   }
 
+  static isNumber(value: string): boolean {
+    return /^\+?(0|[1-9]\d*)$/.test(value);
+  }
+
+  static isSettled(value: string): boolean {
+    return value.toLowerCase().indexOf('won') > -1
+      || value.toLowerCase().indexOf('lose') > -1
+      || value.toLowerCase().indexOf('draw') > -1
+      || value.toLowerCase().indexOf('lost') > -1;
+  };
 }

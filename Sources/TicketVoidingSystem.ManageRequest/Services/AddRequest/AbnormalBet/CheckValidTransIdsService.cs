@@ -44,16 +44,11 @@ public class CheckValidTransIdsServiceImp(
 
     public static List<GetAbnormalBetTicketModel> MapAbnormalBetTicketRequests(IEnumerable<GetAbnormalBetTicketModel> abnormalBetTicketRequests)
     {
-        var result = new List<GetAbnormalBetTicketModel>();
         var validTickets = abnormalBetTicketRequests.Where(x => x.RemarkId == 0);
         var otherTickets = abnormalBetTicketRequests.Where(x => x.RemarkId > RemarkConstant.InvalidTicketId);
         var isInvalidTickets = abnormalBetTicketRequests.Where(x => IsInvalidTicket(x, validTickets, otherTickets)).DistinctBy(x => x.TransId);
 
-        result.AddRange(validTickets);
-        result.AddRange(otherTickets);
-        result.AddRange(isInvalidTickets);
-
-        return result;
+        return [.. validTickets, .. otherTickets, .. isInvalidTickets];
     }
 
     private async Task<(IEnumerable<MatchInfoAddRequest>, IEnumerable<ValidationAbnormalBet>, IEnumerable<TransInfoAddRequestModel>,

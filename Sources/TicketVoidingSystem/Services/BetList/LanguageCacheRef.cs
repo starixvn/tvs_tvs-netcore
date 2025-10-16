@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using Fanex.RemotingRef;
 
@@ -90,4 +91,20 @@ public class LanguageCacheRef(string language, IRemotingRefService remotingRefSe
 
     public string GetVirtualSportMatchCodeFormat(string matchCode, string refId)
         => remotingRefService.GetVirtualSportMatchCodeFormat(matchCode, refId, language);
+
+    public BetChoiceInfo GetKenoBetChoiceInfo(string kenoBetChoiceId)
+    {
+        var choiceName = remotingRefService.GetKenoBetChoice(kenoBetChoiceId, language, out var kenoBetTypeId);
+        return new BetChoiceInfo(choiceName, kenoBetTypeId);
+    }
+    public BetChoiceInfo GetLotteryBetChoiceInfo(string lotteryBetChoiceId)
+    {
+        var choiceName = remotingRefService.GetLotteryBetChoice(lotteryBetChoiceId, language, out var lotteryBetTypeId);
+        return new BetChoiceInfo(choiceName, lotteryBetTypeId);
+    }
+    public BetChoiceInfo GetTableGamesBetChoiceInfo(string tableGamesBetChoiceId)
+    {
+        var choiceName = remotingRefService.GetTableGamesBetChoice(tableGamesBetChoiceId, language, out var tableGamesBetTypeId);
+        return new BetChoiceInfo(choiceName, tableGamesBetTypeId);
+    }
 }

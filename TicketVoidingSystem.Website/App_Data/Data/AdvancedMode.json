@@ -35746,6 +35746,855 @@
       ],
       "Type": 8,
       "BetTypes": "8835"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "PlayerAndOdds"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "680"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "PlayerAndOdds"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "681"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "PlayerAndOdds"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "682"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "PlayerAndOdds"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "683"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "PlayerAndOdds"
+        }
+      ],
+      "Name": "",
+      "Value": "",
+      "Type": 8,
+      "BetTypes": "684"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "654"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "657"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "660"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "663"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "666"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "668"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "670"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "672"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "673"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Over",
+              "Value": "o"
+            },
+            {
+              "Name": "Under",
+              "Value": "u"
+            }
+          ],
+          "Name": "",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value:",
+          "Value": "",
+          "XmlAttribute": "ValueHdp1",
+          "IsMultiple": true
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "674"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "653"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "655"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "685"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "656"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "658"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "686"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "659"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "661"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "687"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "662"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "664"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "688"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "665"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "667"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "669"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Points:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "671"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Points",
+              "Value": "points"
+            },
+            {
+              "Name": "3pt FG Made",
+              "Value": "three_points"
+            },
+            {
+              "Name": "Assists",
+              "Value": "assists"
+            },
+            {
+              "Name": "Rebounds",
+              "Value": "rebounds"
+            }
+          ],
+          "Name": "Performance:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Performance"
+        },
+        {
+          "Name": "Others:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "675"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "Points+Assists",
+              "Value": "points+assists"
+            },
+            {
+              "Name": "Points+Rebounds",
+              "Value": "points+rebounds"
+            }
+          ],
+          "Name": "Performance:",
+          "Value": "All",
+          "IsMultiple": true,
+          "XmlAttribute": "Performance"
+        },
+        {
+          "Name": "Others:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "676"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Yes",
+              "Value": "Y"
+            },
+            {
+              "Name": "No",
+              "Value": "N"
+            }
+          ],
+          "Name": "Yes/No:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "677"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Yes",
+              "Value": "Y"
+            },
+            {
+              "Name": "No",
+              "Value": "N"
+            }
+          ],
+          "Name": "Yes/No:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "679"
+    },
+    {
+      "Selections": [
+        {
+          "Name": "Player:",
+          "Value": "All",
+          "XmlAttribute": "Transdesc"
+        },
+        {
+          "Name": "Others:",
+          "Value": "All",
+          "XmlAttribute": "BetTeam"
+        }
+      ],
+      "Type": 8,
+      "BetTypes": "678"
     }
   ]
 }

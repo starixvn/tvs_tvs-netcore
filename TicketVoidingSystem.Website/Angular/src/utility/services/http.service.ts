@@ -36,8 +36,12 @@ export class HttpService {
     const response = await this.getResponseBlob(query, url, timeoutEvent);
     if(response) {
       const disposition = response.headers.get('content-disposition');
-      const fileName = disposition.split('filename=')[1];
-      saveAs(response.body, fileName);
+      if (disposition) {
+        const fileName = disposition.split('filename=')[1];
+        if (fileName) {
+          saveAs(response.body, fileName);
+        }
+      }
     }
   }
 
@@ -46,7 +50,9 @@ export class HttpService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json;charset=UTF-8' });
     const response = await this.http.post(url, body,
       { headers: headers, responseType: 'blob', observe: 'response' }).pipe(timeout(300000), catchError(_ => {
-        timeoutEvent();
+        if (timeoutEvent) {
+          timeoutEvent();
+        }
         return of(null);
       })).toPromise();
     return response;

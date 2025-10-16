@@ -73,16 +73,8 @@ export class VoidEarlyKickOffComponent implements OnInit {
     this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidPageItems);
   }
 
-  onClickCopyLicenseesToClipboard(text: string): void {
-    this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
-  }
-
   onClickVoidAllMatches(): void {
     this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
-  }
-
-  updateDetailViewModel(): void {
-    this.voidPageItems[0].detailViewModel = this.requestDetail;
   }
 
   getKickOffDate(matchId: number): string {

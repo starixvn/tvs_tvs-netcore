@@ -12,14 +12,13 @@ import { GroupBetTypeVirtualSport } from '../components/bettypes-virtualsports/b
 import { BetTypesModel } from '../components/bettypes/bettypes.model';
 import { GroupLicensee } from '../components/licensees/licensees.model';
 import { NapUserInfoModel } from '../components/menu-bar/menu-bar.model';
-import { Tooltip } from '../components/tooltip/tooltip.model';
 import { BalanceUp } from '../models/balance-up.model';
 import { CheckingPermissionModel } from '../models/checking-permission.model';
 import { CopyRequestInfoQuery, CopyRequestInfoResponse } from '../models/copy-request-info.query';
 import { Currency } from '../models/currency.model';
 import { MatchInfoViewModel, SportInfo } from '../models/event.model';
 import { IssueInfo, IssueType, IssueTypesModel } from '../models/issue-type.model';
-import { CheckMatchWithRefNoQuery, FirstTicketTime, MatchModel } from '../models/match.model';
+import { FirstTicketTime, MatchModel } from '../models/match.model';
 import { VoidedReason } from '../models/reason.model';
 import { Result, SqlResult } from '../models/result';
 import { HttpService } from './http.service';
@@ -96,36 +95,6 @@ export class CommonService {
 
   async getVoidedReason(subId: number, sportTypeId: number): Promise<VoidedReason> {
     return this.httpService.postJson({subId: subId, sportTypeId: sportTypeId}, `api/VoidRequest/GetVoidedReason`);
-  }
-
-  async checkMatchIdWithRefNo(query: CheckMatchWithRefNoQuery, tooltip: Tooltip): Promise<boolean> {
-    const NUMBER_ONE = 1;
-    const NUMBER_TWO = 2;
-    const NUMBER_THREE = 3;
-    const NUMBER_FOUR = 4;
-    const NUMBER_FIVE = 5;
-    const NUMBER_SIX = 6;
-    const url = 'Match/CheckMatchIdWithRefNo';
-    const data = await this.httpService.postJson<CheckMatchWithRefNoQuery, Result<string>>(query, url);
-
-    switch (data.errorCode) {
-      case NUMBER_ONE:
-      case NUMBER_TWO:
-      case NUMBER_THREE:
-      case NUMBER_FOUR:
-        tooltip.display('match-id', data.errorMsg);
-        break;
-      case NUMBER_FIVE:
-        tooltip.display('from-bet-id', data.errorMsg);
-        break;
-      case NUMBER_SIX:
-        tooltip.display('to-bet-id', data.errorMsg);
-        break;
-      default:
-        break;
-    }
-
-    return data.isSuccessful;
   }
 
   async checkVoidBetPermission(query: CheckingPermissionModel): Promise<SqlResult> {

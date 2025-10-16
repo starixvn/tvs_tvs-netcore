@@ -1,5 +1,4 @@
-﻿import '../../extensions/string.extension';
-import { TicketModel } from './ticket.model';
+﻿import { TicketModel } from './ticket.model';
 
 export class GroupModel {
     name: string;

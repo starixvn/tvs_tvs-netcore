@@ -7,7 +7,6 @@ import { RequestDetailViewModel } from '../../../add-request-new/models/request-
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
-import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { StaticService } from '../../../utility/services/static.service';
 import { LogInfoNewComponent } from '../log-info-new/log-info-new.component';
@@ -77,10 +76,6 @@ export class VoidDangerAcceptedComponent implements OnInit {
     this.voidPageCommonService.onClickShowTemplateMessage(voidMatch, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidMatches);
   }
 
-  onClickCopyLicenseesToClipboard(text: string): void {
-    this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
-  }
-
   onClickVoidAllMatches(): void {
     this.voidPageCommonService.onClickVoidAllMatches(this.voidMatches, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
@@ -116,18 +111,6 @@ export class VoidDangerAcceptedComponent implements OnInit {
 
   public isWrongOdds(): boolean {
     return StaticService.isWrongOdds(this.requestDetail.request?.issueTypeId.toString());
-  }
-
-  public isSubTypeWrongHdpOrWrong1stHdp(): boolean {
-    return this.isSubTypeWrongHdp() || this.isSubTypeWrong1stHdp();
-  }
-
-  private isSubTypeWrongHdp(): boolean {
-    return this.voidMatches[0].subIssueType.subIssueTypeId === SubIssueTypeConstant.WRONG_HDP;
-  }
-
-  private isSubTypeWrong1stHdp(): boolean {
-    return this.voidMatches[0].subIssueType.subIssueTypeId === SubIssueTypeConstant.WRONG_1ST_HDP;
   }
 
   public isWrongScore(): boolean {

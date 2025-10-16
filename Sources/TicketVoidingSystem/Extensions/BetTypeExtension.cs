@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Models;
-using TicketVoidingSystem.Resources;
 
 namespace TicketVoidingSystem.Extensions;
 
@@ -12,7 +7,7 @@ public static class BetTypeExtension
 {
     public static bool IsParlay(this int id)
     {
-        List<int> betTypesParlay =
+        int[] betTypesParlay =
         [
             BetTypeConstant.SystemParlay, BetTypeConstant.VirtualSportParlay, BetTypeConstant.VirtualSport4MixParlay,
             BetTypeConstant.VirtualSport5MixParlay
@@ -48,8 +43,8 @@ public static class BetTypeExtension
 
     public static bool IsSabaPromotion(this int id)
     {
-        int[] SportTypeSabaPromotions = [17000, 17001, 17002, 17003, 17004, 17006, 17007, 17008, 17009, 17010];
-        return SportTypeSabaPromotions.Contains(id);
+        int[] sportTypeSabaPromotions = [17000, 17001, 17002, 17003, 17004, 17006, 17007, 17008, 17009, 17010];
+        return sportTypeSabaPromotions.Contains(id);
     }
 
     public static bool IsOutright(this int id)
@@ -76,7 +71,7 @@ public static class BetTypeExtension
 
     private static bool IsVirtualSport5BetType(this int id)
     {
-        List<int> betTypesVirtualSport5 = [11050, 11051, 11052, 11053, 11054, 11055, 11099];
+        int[] betTypesVirtualSport5 = [11050, 11051, 11052, 11053, 11054, 11055, 11099];
         return betTypesVirtualSport5.Contains(id);
     }
 
@@ -90,13 +85,13 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport2(this int sportTypeId)    // Sport Type of VirtualSport2 except 177, 198
     {
-        List<int> VirtualSportsSportTypeIds = [190, 191, 192, 193, 194, 195, 196, 197];
+        int[] VirtualSportsSportTypeIds = [190, 191, 192, 193, 194, 195, 196, 197];
         return VirtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
     public static bool IsRacingVirtualSports(this int sportTypeId)
     {
-        List<int> virtualSportsNotSupportMatchCode =
+        int[] virtualSportsNotSupportMatchCode =
         [
             SportTypeConstant.VirtualHorseRacing, SportTypeConstant.VirtualDogRacing, // VS2 Racing
             SportTypeConstant.VirtualSteepleChase, SportTypeConstant.VirtualHarnessRacing, SportTypeConstant.VirtualMotorRacing // VS7
@@ -106,8 +101,8 @@ public static class BetTypeExtension
 
     public static bool IsVirtualSport345(this int sportTypeId) // Sport Type of VS3-VS4-VS5
     {
-        List<int> VirtualSportsSportTypeIds = [178, 179, 188, 9908, 147];
-        return VirtualSportsSportTypeIds.Contains(sportTypeId);
+        int[] virtualSportsSportTypeIds = [178, 179, 188, 9908, 147];
+        return virtualSportsSportTypeIds.Contains(sportTypeId);
     }
 
     public static bool IsSabaTimeMachine(this int betTypeId)
@@ -128,23 +123,5 @@ public static class BetTypeExtension
     public static string TranslateChineseSimplified(this string name)
     {
         return name.Replace("Next", "下一个");
-    }
-
-    public static string ToXml(this IEnumerable<BetTypeXml> betTypes)
-    {
-        if (betTypes == null)
-        {
-            return null;
-        }
-
-        var temp = new StringBuilder();
-        foreach (var item in betTypes)
-        {
-            var betType = Environment.NewLine + string.Format(StringResource.BetTypeXml,
-                item.Id, item.BetTeam, item.Set, item.Game, item.Value, item.ValueHdp1, item.ValueHdp2, item.Goal, item.BetOption, item.OddsSpread, item.OddsId, item.Transdesc, item.VirtualHead);
-            temp.Append(betType.Replace("=\"\"", "=\"All\""));
-        }
-
-        return $"<BetTypes>{temp}{Environment.NewLine}</BetTypes>";
     }
 }

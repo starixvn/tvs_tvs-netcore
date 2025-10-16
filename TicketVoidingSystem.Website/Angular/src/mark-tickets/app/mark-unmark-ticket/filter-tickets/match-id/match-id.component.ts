@@ -206,9 +206,9 @@ export class MatchIdComponent implements OnInit {
 
   getParams(): GetTicketsQuery {
     this.model.licenseeNames = this.getCheckedLicensees().join(',');
-    this.model.liveIndicator = this.eventType.value.isNumber() ? Number(this.eventType.value) : null;
-    this.model.liveAwayScore =  `${this.model.liveAwayScore}`.isNumber() ? Number(this.model.liveAwayScore) : null;
-    this.model.liveHomeScore = `${this.model.liveHomeScore}`.isNumber() ? Number(this.model.liveHomeScore) : null;
+    this.model.liveIndicator = StaticService.isNumber(this.eventType.value) ? Number(this.eventType.value) : null;
+    this.model.liveAwayScore =  StaticService.isNumber(`${this.model.liveAwayScore}`) ? Number(this.model.liveAwayScore) : null;
+    this.model.liveHomeScore = StaticService.isNumber(`${this.model.liveHomeScore}`) ? Number(this.model.liveHomeScore) : null;
 
     const checkedBetTypes = this.groupBetTypesService.getValueCheckedBetTypes(this.groupBetTypes.groupBetTypes);
     this.model.betTypes = this.advancedModelComponent.getBetTypeModels(checkedBetTypes);

@@ -62,6 +62,10 @@ export class TicketsService {
   }
 
   private getLastedSoldId(groups: GroupModel[]): string {
+    if (!groups || groups.length === 0) {
+      return '';
+    }
+    
     const lastGroup = groups.length - 1;
     const lastedGroup = groups[lastGroup];
     const lastedTicket = lastedGroup.tickets[lastedGroup.tickets.length - 1];

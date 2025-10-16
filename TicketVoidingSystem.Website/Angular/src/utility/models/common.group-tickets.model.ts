@@ -1,4 +1,4 @@
-import '../extensions/string.extension';
+import { StaticService } from '../services/static.service';
 import { CommonTicketModel } from './common.ticket.model';
 
 export class CommonGroupTicketsModel<T extends CommonTicketModel> {
@@ -130,7 +130,7 @@ export class CommonGroupTicketsModel<T extends CommonTicketModel> {
     checkSettledTickets(): boolean {
         let result = false;
         for (let i = 0; i < this.tickets.length && !result; i++) {
-            if (this.tickets[i].isChecked && this.tickets[i].status.isSettled()) {
+            if (this.tickets[i].isChecked && StaticService.isSettled(this.tickets[i].status)) {
                 result = true;
             }
         }

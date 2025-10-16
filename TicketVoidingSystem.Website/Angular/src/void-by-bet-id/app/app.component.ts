@@ -142,7 +142,7 @@ export class AppComponent implements OnInit {
   }
 
   async voidBet() {
-    if(!this.validationService.checkValidation(this.messagesComponent, this.confirmationComponent)) {
+    if(!this.validationService.checkValidation(this.ticketsViewModel, this.messagesComponent, this.confirmationComponent, this.tooltip)) {
       return;
     }
     this.showConfirmBeforeVoid();

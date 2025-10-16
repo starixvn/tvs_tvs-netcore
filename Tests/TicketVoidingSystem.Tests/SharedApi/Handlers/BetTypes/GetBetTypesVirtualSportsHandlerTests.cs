@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -30,7 +29,7 @@ public class GetBetTypesVirtualSportsHandlerTests
             Mode = 1
         };
         const string betTypesHaveTickets = "1234";
-        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<BetTypeQueryModel>()).ReturnsForAnyArgs(new List<int> { 1234 });
+        betTypesRepository.GetBetTypesHaveTickets(Arg.Any<BetTypeQueryModel>()).ReturnsForAnyArgs([1234]);
 
         // Act
         _ = await handler.Handle(request, CancellationToken.None);

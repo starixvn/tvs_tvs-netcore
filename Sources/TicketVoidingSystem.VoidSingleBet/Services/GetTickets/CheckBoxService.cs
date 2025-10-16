@@ -12,7 +12,7 @@ public class CheckBoxServiceImp : CheckBoxService
 {
     public bool IsDisable(GetTicketModel item, UserPermission permission)
     {
-        var betTypesSaba = new List<int> { 228, 229 };
+        int[] betTypesSaba = [228, 229];
         if (DefaultDisable(item, permission))
         {
             return true;

@@ -89,7 +89,7 @@ public class BetTypesRepositoryImp(IDynamicRepository repository, OnlineServerRe
 
     public async Task<IEnumerable<int>> GetBetTypesHaveTickets(BetTypeQueryModel query)
     {
-        var betTypesInAllServers = new List<int>();
+        List<int> betTypesInAllServers = [];
         var criteria = new GetBetTypesHaveTicketsCriteria
         {
             MatchId = query.MatchId,

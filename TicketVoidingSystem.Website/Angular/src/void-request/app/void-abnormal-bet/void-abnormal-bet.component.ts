@@ -69,10 +69,6 @@ export class VoidAbnormalBetComponent implements OnInit {
     this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription, this.voidPageItems);
   }
 
-  onClickCopyLicenseesToClipboard(text: string): void {
-    this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
-  }
-
   onClickVoidAllMatches(): void {
     this.voidPageCommonService.onClickVoidAllMatches(this.voidPageItems, this.messageAreaComponents?.toArray(), this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }
