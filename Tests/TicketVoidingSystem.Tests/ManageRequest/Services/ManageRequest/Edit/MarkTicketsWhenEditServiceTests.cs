@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
 using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Services;
 using Xunit;
 using MarkTicketsService = TicketVoidingSystem.ManageRequest.Services.AddRequest.Add.MarkTicketsService;
 
@@ -14,12 +16,16 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Services.ManageRequest.Edit;
 public class MarkTicketsWhenEditServiceTests
 {
     private readonly MarkTicketsService markTicketsService;
+    private readonly IDynamicRepository dynamicRepository;
+    private readonly SessionService sessionService;
     private readonly MarkTicketsWhenAddEditServiceImp service;
 
     public MarkTicketsWhenEditServiceTests()
     {
         markTicketsService = Substitute.For<MarkTicketsService>();
-        service = new MarkTicketsWhenAddEditServiceImp(markTicketsService);
+        dynamicRepository = Substitute.For<IDynamicRepository>();
+        sessionService = Substitute.For<SessionService>();
+        service = new MarkTicketsWhenAddEditServiceImp(markTicketsService, sessionService, dynamicRepository);
     }
 
     [Fact]

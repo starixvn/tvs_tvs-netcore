@@ -284,7 +284,8 @@
         <Setting Key="TicketVoiding_Request_Insert" SpName="TicketVoiding_Request_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Request_Update" SpName="TicketVoiding_Request_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Request_Select" SpName="TicketVoiding_Request_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
-        <Setting Key="TicketVoiding_RequestList_Select" SpName="TicketVoiding_RequestList_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+		<Setting Key="TicketVoiding_Request_Validate" SpName="TicketVoiding_Request_Validate" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+		<Setting Key="TicketVoiding_RequestList_Select" SpName="TicketVoiding_RequestList_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_RequestList_UpdateStatus" SpName="TicketVoiding_RequestList_UpdateStatus" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_RequestListInfo_Select" SpName="TicketVoiding_RequestListInfo_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_RequestList_Archive_Select" SpName="TicketVoiding_RequestList_Archive_Select" DbName="DBARC.bodb_Archive.wsv_nap" TimeOut="600" />
