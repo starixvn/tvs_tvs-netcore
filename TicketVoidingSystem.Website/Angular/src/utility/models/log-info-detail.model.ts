@@ -25,4 +25,6 @@ export class LogInfoDetail {
     logInfoTicketsJson?: string;
     wrongMarket?: string;
     actualMarket?: string;
+    excludedTicketsCount?: number;
+    excludedTicketsJson?: string;
 }

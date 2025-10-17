@@ -111,7 +111,6 @@ export class AddRequestApiService {
     return this.httpService.postJson(query, 'api/AddRequest/GetLogInfoTickets');
   }
 
-
   /* istanbul ignore next */
   async getMaxBetAndSpreadOfEvent(query: MaxBetAndSpreadQuery): Promise<MaxBetAndSpreadInfo[]> {
     return this.httpService.postJson(query, 'api/AddRequest/GetMaxBetAndSpread');

@@ -13,4 +13,5 @@ export class AffectedTicketsModel {
     logInfoTicketsJson: string;
     groupBetTypesCount: GroupBetTypeCountModel[];
     isShowDetailBetTypeCount: boolean;
+    isExcludeBetType: boolean;
 }

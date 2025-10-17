@@ -7,6 +7,7 @@ public class BetTypeTicketsInfo : BetTypeCountJsonModel
     public string OriginalBetTypeName { get; set; }
     public string InputtedRuns { get; set; }
     public string PlayerAndOdds { get; set; }
+    public int? MatchId { get; set; }
 }
 
 public class BetTypeCountJsonModel

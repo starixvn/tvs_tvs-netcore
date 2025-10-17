@@ -12,6 +12,7 @@ import { TicketsComponent } from '../pool-house-ticket/tickets/tickets.component
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
 import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 import { AffectedTicketService } from './affected-ticket.service';
+import { GroupBetTypeCountModel } from '../../models/get-log-info.model';
 
 @Component({
   selector: 'affected-ticket',
@@ -41,11 +42,36 @@ export class AffectedTicketComponent implements OnChanges {
       this.ticketsService.checkAllTickets(this.otherTickets.groups);
 
       this.initFilterBetTypes();
+      this.updateGroupBetTypeCountModel();
       await this.logAnalysisService.writeLogClickLiveGameDetails(`${this.model.issueTypeId}`);
       this.blockBetList = false;
     }
   }
 
+  public updateGroupBetTypeCountModel() {
+    if(this.model.isExcludeBetType) {
+      const betTypeCountMap = this.getBetTypeCountMap();
+    
+      this.model.groupBetTypesCount = Array.from(betTypeCountMap.entries()).map(([betTypeName, ticketsCount]) => {
+        const groupBetTypeCount = new GroupBetTypeCountModel();
+        groupBetTypeCount.name = `${betTypeName} - ${ticketsCount} ticket(s)`;
+        return groupBetTypeCount;
+      });
+
+      this.model.isShowDetailBetTypeCount = true;
+    }
+  }
+  
+  private getBetTypeCountMap(): Map<string, number> {
+    const allTickets = this.tickets.groups.flatMap(group => group.tickets);
+    
+    return allTickets.reduce((map, ticket) => {
+      const betTypeName = ticket.isParlay ? ticket.subBetType : ticket.betType;
+      map.set(betTypeName, (map.get(betTypeName) || 0) + 1);
+      return map;
+    }, new Map<string, number>());
+  }
+  
   public closeClick() {
     this.isShowOtherTickets = true;
     this.isShowAffectedTickets = true;

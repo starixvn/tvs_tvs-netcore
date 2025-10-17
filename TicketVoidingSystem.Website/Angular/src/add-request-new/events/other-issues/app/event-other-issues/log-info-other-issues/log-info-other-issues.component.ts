@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import clone from 'lodash/clone';
+import * as _ from 'lodash';
 import moment from 'moment-timezone';
 import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
@@ -12,6 +12,8 @@ import { GroupBetTypeCountModel } from '../../../../../models/get-log-info.model
 import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
+import { clone } from 'lodash';
+
 @Component({
     selector: 'log-info-other-issues',
     templateUrl: './log-info-other-issues.component.html',
@@ -65,9 +67,7 @@ export class LogInfoOtherIssuesComponent implements OnInit {
 
   public showAffectedTicketsDetails() {
     this.updateBetTypeCountModel();
-    this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
-    this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketService.updateShowAffectedTicketsDetails(this.affectedTicketsModel, this.logInfo.logInfoDetail.logInfoTicketsJson, Number(this.issueTypeId));
     this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 

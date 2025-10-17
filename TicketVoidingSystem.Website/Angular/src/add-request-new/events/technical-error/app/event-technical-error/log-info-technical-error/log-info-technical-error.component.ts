@@ -1,5 +1,4 @@
 import { Component, inject, Input } from '@angular/core';
-import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { BlockUiDirective } from '../../../../../../utility/components/block-ui/block-ui.directive';
 import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
@@ -12,6 +11,7 @@ import { GroupBetTypeCountModel } from '../../../../../models/get-log-info.model
 import { AffectedTicketsModel } from '../../../../../models/live-game-early-ticket.model';
 import { LogInfoTechnicalError } from '../models/log-info-technical-error.model';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
+import { clone } from 'lodash';
 
 @Component({
   selector: 'log-info-technical-error',
@@ -53,9 +53,7 @@ export class LogInfoTechnicalErrorComponent {
 
   public showAffectedTicketsDetails() {
     this.updateBetTypeCountModel();
-    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
-    this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketService.updateShowAffectedTicketsDetails(this.affectedTicketsModel, this.logInfo.logInfoDetail.logInfoTicketsJson, Number(this.issueTypeId));
     this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 }
