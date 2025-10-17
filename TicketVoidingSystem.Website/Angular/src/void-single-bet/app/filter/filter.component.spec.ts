@@ -304,7 +304,7 @@ describe('FilterComponent', () => {
     component.issueType = { value: '11' } as Type;
     component.subIssueType = { value: '27' } as Type;
     component.allBetTypes = [];
-    component.groupBetTypes = {} as any;
+    component.groupBetTypes = { groupBetTypes: [] } as any;
     filterService.handleBetTypeOfBasketball = jest.fn();
     component.updateEventType = new EventEmitter<string>();
     jest.spyOn(component.updateEventType, 'emit');
@@ -313,7 +313,7 @@ describe('FilterComponent', () => {
     component.changeEventType();
 
     // Assert
-    expect(filterService.handleBetTypeOfBasketball).toHaveBeenCalledWith('1', '11', '27', [], {});
+    expect(filterService.handleBetTypeOfBasketball).toHaveBeenCalledWith('1', '11', '27', [], { groupBetTypes: [] });
     expect(component.updateEventType.emit).toHaveBeenCalledWith('1');
   });
 
@@ -343,7 +343,7 @@ describe('FilterComponent', () => {
     component.issueType = { value: '11' } as Type;
     component.subIssueType = { value: '27' } as Type;
     component.allBetTypes = [{ id: 1, isChecked: false }] as any; // Non-empty array
-    component.groupBetTypes = {} as any;
+    component.groupBetTypes = { groupBetTypes: [] } as any;
     component.matchViewModel = { sportType: 2 } as any; // Basketball sport type (SportType.BASKETBALL = 2)
     filterService.handleBetTypeOfBasketball = jest.fn();
     component.updateSubIssueTypeEvent = new EventEmitter<number>();
@@ -353,7 +353,7 @@ describe('FilterComponent', () => {
     component.changeSubIssueTypeEvent();
 
     // Assert
-    expect(filterService.handleBetTypeOfBasketball).toHaveBeenCalledWith('1', '11', '27', [{ id: 1, isChecked: false }], {});
+    expect(filterService.handleBetTypeOfBasketball).toHaveBeenCalledWith('1', '11', '27', [{ id: 1, isChecked: false }], { groupBetTypes: [] });
     expect(component.updateSubIssueTypeEvent.emit).toHaveBeenCalledWith(27);
   });
 
@@ -363,8 +363,8 @@ describe('FilterComponent', () => {
     component.issueType = { value: '11' } as Type;
     component.subIssueType = { value: '27' } as Type;
     component.allBetTypes = [];
-    component.groupBetTypes = {} as any;
-    component.matchViewModel = { sportType: 2 } as any; // Non-basketball sport type
+    component.groupBetTypes = { groupBetTypes: [] } as any;
+    component.matchViewModel = { sportType: 1 } as any; // Non-basketball sport type
     filterService.handleBetTypeOfBasketball = jest.fn();
     component.updateSubIssueTypeEvent = new EventEmitter<number>();
     jest.spyOn(component.updateSubIssueTypeEvent, 'emit');
@@ -446,7 +446,7 @@ describe('FilterComponent', () => {
     component.selectedComboParlay = ['1', '2'];
     component.fromTimeComponent = { validateWithTooltip: jest.fn().mockReturnValue(true) } as any;
     component.toTimeComponent = { validateWithTooltip: jest.fn().mockReturnValue(true) } as any;
-    component.groupBetTypes = { getValueCheckedBetTypes: jest.fn().mockReturnValue([]) } as any;
+    component.groupBetTypes = { groupBetTypes: [] } as any;
     component.advancedModeComponent = { getBetTypeModels: jest.fn().mockReturnValue([]) } as any;
     
     filterService.isTransDateValidity = jest.fn().mockReturnValue(true);

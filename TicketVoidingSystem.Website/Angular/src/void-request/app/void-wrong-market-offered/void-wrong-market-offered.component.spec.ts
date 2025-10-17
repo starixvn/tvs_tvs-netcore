@@ -256,18 +256,6 @@ describe('VoidWrongMarketOfferedComponent', () => {
     );
   });
 
-  it('should handle onClickCopyLicenseesToClipboard', () => {
-    // Arrange
-    const testText = 'Test Licensee Text';
-    voidPageCommonService.onClickCopyLicenseesToClipboard = jest.fn();
-
-    // Act
-    component.onClickCopyLicenseesToClipboard(testText);
-
-    // Assert
-    expect(voidPageCommonService.onClickCopyLicenseesToClipboard).toHaveBeenCalledWith(testText);
-  });
-
   it('should handle onClickVoidAllMatches', () => {
     // Arrange
     component.voidPageItems = Helper.fakeVoidPageItems;

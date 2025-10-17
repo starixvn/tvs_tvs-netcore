@@ -1,11 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import _ from 'lodash';
-import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
-import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -22,6 +16,12 @@ import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
 import { VoidPageService } from './void-page.service';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { WrongHdpModel } from '../../../../add-request-new/models/event-wrong-hdp.model';
+import { WrongOuModel } from '../../../../add-request-new/models/event-wrong-ou.model';
+import { GetLogInfoModel, Validation, GetLogInfoViewModel } from '../../../../add-request-new/models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
 
 class Helper {
   static readonly fakeRequestId = 50121;

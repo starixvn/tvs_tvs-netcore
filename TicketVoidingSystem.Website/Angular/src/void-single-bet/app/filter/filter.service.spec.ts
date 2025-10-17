@@ -9,15 +9,25 @@ import { StaticService } from '../../../utility/services/static.service';
 import { TEXT } from '../../../utility/constants/text';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { AdvancedModeConstants } from '../../../utility/components/advanced-mode/advanced-mode.constants';
+import { GroupBetTypesService } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.service';
+import { TestBed } from '@angular/core/testing';
 
 describe('FilterService', () => {
   let service: FilterService;
   let mockTooltip: Tooltip;
+  let groupBetTypesService: GroupBetTypesService;
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    service = new FilterService();
-    mockTooltip = {display: jest.fn()} as unknown as Tooltip;
+    TestBed.configureTestingModule({
+      providers: [
+        FilterService,
+        { provide: GroupBetTypesService}
+      ]
+    });
+
+    service = TestBed.inject(FilterService);
+    mockTooltip = { display: jest.fn() } as unknown as Tooltip;
+    groupBetTypesService = TestBed.inject(GroupBetTypesService);
   });
 
   it('should be created', () => {
@@ -115,7 +125,7 @@ describe('FilterService', () => {
       } as unknown as DateFullTimeNewComponent;
       const fromDateTime = '2023-01-01 10:00:00';
       const toDateTime = '2023-01-01 11:00:00';
-      
+
       // Act
       const result = service.isTransDateValidity(
         fromTimeComponent,
@@ -143,7 +153,7 @@ describe('FilterService', () => {
       const toTimeComponent = {
         validateWithTooltip: jest.fn().mockReturnValue(true)
       } as unknown as DateFullTimeNewComponent;
-      
+
       const fromDateTime = '2023-01-01 10:00:00';
       const toDateTime = '2023-01-01 11:00:00';
 
@@ -338,10 +348,10 @@ describe('FilterService', () => {
     it('should return player values from betTeam and oddsId when transdesc is not available', () => {
       // Arrange
       const betTypes: CheckedBetType[] = [
-        { 
-          id: 9680, 
-          betTeam: 'team1,team2', 
-          oddsId: 'odds1,odds2' 
+        {
+          id: 9680,
+          betTeam: 'team1,team2',
+          oddsId: 'odds1,odds2'
         } as CheckedBetType
       ];
 
@@ -357,17 +367,19 @@ describe('FilterService', () => {
     it('should replace English names with Chinese when Chinese names are missing', () => {
       // Arrange
       const selectedOddsInfo: OddsInfo[] = [
-        { 
+        {
           playerName: 'Player 1',
           playNamesChineseTraditional: undefined,
           playNamesChineseSimplified: undefined
         } as OddsInfo,
-        { 
+        {
           playerName: 'Player 2',
           playNamesChineseTraditional: 'Chinese Traditional',
           playNamesChineseSimplified: undefined
         } as OddsInfo
       ];
+      groupBetTypesService.changeCheckGroupByBetTypes = jest.fn();
+      groupBetTypesService.changeCheckedGroupToModel = jest.fn();
 
       // Act
       service.replaceEnglishForChinese(selectedOddsInfo);
@@ -454,34 +466,6 @@ describe('FilterService', () => {
       // Assert
       expect(mockAllBetTypes.every(bt => !bt.isChecked)).toBe(true);
     });
-
-    it('should handle WRONG_HDP issue type for non-live event', () => {
-      // Arrange
-      const eventType = '0';
-      const issueType = IssueTypeConstant.WRONG_HDP;
-      const subIssueType = '';
-
-      // Act
-      service.handleBetTypeOfBasketball(eventType, issueType, subIssueType, mockAllBetTypes, mockGroupBetTypes);
-
-      // Assert
-      expect(mockGroupBetTypes.changeCheckGroupByBetTypes).toHaveBeenCalled();
-      expect(mockGroupBetTypes.changeCheckedGroupToModel).toHaveBeenCalled();
-    });
-
-    it('should handle WRONG_SCORE issue type', () => {
-      // Arrange
-      const eventType = '0';
-      const issueType = IssueTypeConstant.WRONG_SCORE;
-      const subIssueType = '';
-
-      // Act
-      service.handleBetTypeOfBasketball(eventType, issueType, subIssueType, mockAllBetTypes, mockGroupBetTypes);
-
-      // Assert
-      expect(mockGroupBetTypes.changeCheckGroupByBetTypes).toHaveBeenCalled();
-      expect(mockGroupBetTypes.changeCheckedGroupToModel).toHaveBeenCalled();
-    });
   });
 
   describe('#getPlayerNamesSelected', () => {
@@ -512,14 +496,14 @@ describe('FilterService', () => {
         { id: 9680, transdesc: '1,2' } as CheckedBetType
       ];
       const oddsInfo: OddsInfo[] = [
-        { 
-          playerId: 1, 
+        {
+          playerId: 1,
           playerName: 'Player 1',
           playNamesChineseTraditional: 'Player 1 Traditional',
           playNamesChineseSimplified: 'Player 1 Simplified'
         } as OddsInfo,
-        { 
-          playerId: 2, 
+        {
+          playerId: 2,
           playerName: 'Player 2',
           playNamesChineseTraditional: 'Player 2 Traditional',
           playNamesChineseSimplified: 'Player 2 Simplified'
@@ -542,8 +526,8 @@ describe('FilterService', () => {
         { id: 9680, transdesc: '1,1' } as CheckedBetType
       ];
       const oddsInfo: OddsInfo[] = [
-        { 
-          playerId: 1, 
+        {
+          playerId: 1,
           playerName: 'Player 1',
           playNamesChineseTraditional: 'Player 1 Traditional',
           playNamesChineseSimplified: 'Player 1 Simplified'

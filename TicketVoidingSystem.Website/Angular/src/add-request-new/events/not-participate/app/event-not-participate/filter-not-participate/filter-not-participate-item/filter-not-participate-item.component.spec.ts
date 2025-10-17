@@ -13,7 +13,7 @@ import { ValidationService } from '../../services/validation.service';
 import { FilterNotParticipateItemComponent } from './filter-not-participate-item.component';
 
 class Helper {
-  static readonly fakePlayer: Player = {
+  static readonly fakePlayer = {
     playerId: 1,
     playerName: 'Test Player',
     disabled: false,
@@ -22,7 +22,7 @@ class Helper {
     betChoice: '1',
     playNamesChineseSimplified: '',
     playNamesChineseTraditional: ''
-  };
+  } as Player;
 
   static readonly fakeBetType: NotParticipateBetTypeModel = {
     playerId: 1,

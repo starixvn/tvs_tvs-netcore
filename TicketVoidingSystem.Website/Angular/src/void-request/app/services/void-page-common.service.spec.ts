@@ -11,6 +11,8 @@ import { LoadDataService } from './load-data.service';
 import { PopupService } from './popup.service';
 import { TicketsService } from './tickets.service';
 import { VoidPageCommonService } from './void-page-common.service';
+import { CommonService } from '../../../utility/services/common.service';
+import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 
 describe('VoidPageCommonService', () => {
   let clipboardService: jest.Mocked<ClipboardService>;
@@ -18,6 +20,7 @@ describe('VoidPageCommonService', () => {
   let ticketsService: jest.Mocked<TicketsService>;
   let checkRequestService: jest.Mocked<CheckRequestService>;
   let loadDataService: jest.Mocked<LoadDataService>;
+  let commonService: jest.Mocked<CommonService>;
   let voidPageCommonService: VoidPageCommonService;
 
   beforeEach(() => {
@@ -29,7 +32,8 @@ describe('VoidPageCommonService', () => {
         { provide: PopupService, useValue: { showWarningExportExcel: jest.fn() } },
         { provide: TicketsService, useValue: { exportTicketsAsExcelFile: jest.fn() } },
         { provide: CheckRequestService, useValue: { isRequestModified: jest.fn() } },
-        { provide: LoadDataService, useValue: { onClickShowVoidTickets: jest.fn(), checkLoadedFullDataBeforeVoid: jest.fn(), onClickShowTemplateMessage: jest.fn() } }
+        { provide: LoadDataService, useValue: { onClickShowVoidTickets: jest.fn(), checkLoadedFullDataBeforeVoid: jest.fn(), onClickShowTemplateMessage: jest.fn() } },
+        { provide: CommonService, useValue: { getVoidedReason: jest.fn() } }
       ]
     });
     clipboardService = TestBed.inject(ClipboardService) as jest.Mocked<ClipboardService>;
@@ -37,21 +41,25 @@ describe('VoidPageCommonService', () => {
     ticketsService = TestBed.inject(TicketsService) as jest.Mocked<TicketsService>;
     checkRequestService = TestBed.inject(CheckRequestService) as jest.Mocked<CheckRequestService>;
     loadDataService = TestBed.inject(LoadDataService) as jest.Mocked<LoadDataService>;
+    commonService = TestBed.inject(CommonService) as jest.Mocked<CommonService>;
     voidPageCommonService = TestBed.inject(VoidPageCommonService);
   });
 
-  it('#showWarningExportExcel should called #popupService.showWarningExportExcel', async () => {
+  it('#exportTickets should call #popupService.showWarningExportExcel when total > maxPagingItems', async () => {
     const spyShowWarningExportExcel = jest.spyOn(popupService, 'showWarningExportExcel').mockImplementation();
-    voidPageCommonService.showWarningExportExcel();
+    const item = new VoidPageCommonItem();
+    item.pagingVoidTickets = new PagingModel();
+    item.pagingVoidTickets.total = 2000000;
+    await voidPageCommonService.exportTickets(item, null);
 
     expect(spyShowWarningExportExcel).toHaveBeenCalledTimes(1);
   });
 
-  it('#isRequestModified should called #checkRequestService.isRequestModified', async () => {
-    const spyIsRequestModified = jest.spyOn(checkRequestService, 'isRequestModified').mockImplementation();
-    await voidPageCommonService['isRequestModified'](null, null);
+  it('#getVoidedReason should call #commonService.getVoidedReason', async () => {
+    const spyGetVoidedReason = jest.spyOn(commonService, 'getVoidedReason').mockImplementation();
+    await voidPageCommonService.getVoidedReason(1, 1);
 
-    expect(spyIsRequestModified).toHaveBeenCalledTimes(1);
+    expect(spyGetVoidedReason).toHaveBeenCalledTimes(1);
   });
 
   it('#exportTickets should called #popupService.showWarningExportExcel', async () => {
@@ -81,11 +89,22 @@ describe('VoidPageCommonService', () => {
     expect(spyOnClickShowVoidTickets).toHaveBeenCalledTimes(1);
   });
 
-  it('#checkLoadedFullDataBeforeVoid should called #loadDataService.checkLoadedFullDataBeforeVoid', async () => {
-    const spyCheckLoadedFullDataBeforeVoid = jest.spyOn(loadDataService, 'checkLoadedFullDataBeforeVoid').mockImplementation();
-    await voidPageCommonService.checkLoadedFullDataBeforeVoid(null, null, null, null);
+  it('#getDisplayIssueTypeName should return correct display name', async () => {
+    const issueTypes = {
+      issueTypes: [
+        { issueTypeId: 1, issueTypeName: 'Test Issue' }
+      ]
+    } as IssueTypesModel;
+    const subIssueType = { 
+      subIssueTypeId: 1, 
+      issueTypeId: 1, 
+      subIssueTypeName: 'Test Sub Issue',
+      subIssueTypeNameCS: 'Test Sub Issue CS'
+    };
+    
+    const result = voidPageCommonService.getDisplayIssueTypeName(1, subIssueType, issueTypes);
 
-    expect(spyCheckLoadedFullDataBeforeVoid).toHaveBeenCalledTimes(1);
+    expect(result).toBe('Test Issue - Test Sub Issue');
   });
 
   it('#onClickShowTemplateMessage should called #loadDataService.onClickShowTemplateMessage', async () => {
@@ -126,10 +145,14 @@ describe('VoidPageCommonService', () => {
     expect(spyAfterLoadUnderneathDataSubscription).toHaveBeenCalledTimes(1);
   });
 
-  it('#onClickVoidAllMatches should not unsubscribe #afterLoadUnderneathDataSubscription', async () => {
+  it('#onClickVoidAllMatches should not unsubscribe when afterLoadUnderneathDataSubscription is null', async () => {
     const primitiveProperty = new CommonPrimitiveProperty();
     primitiveProperty.userPassword = '123123';
+    const spyCheckLoadedFullDataBeforeVoid = jest.spyOn(loadDataService, 'checkLoadedFullDataBeforeVoid').mockImplementation();
 
     voidPageCommonService.onClickVoidAllMatches(null, [], null, primitiveProperty, null);
+
+    // Should not throw error and should set up timer subscription
+    expect(spyCheckLoadedFullDataBeforeVoid).not.toHaveBeenCalled();
   });
 });

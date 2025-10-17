@@ -112,14 +112,6 @@ describe('AppComponent', () => {
     expect(actual).toBeTruthy();
   });
 
-  it('updateBlockUI should update #isBlockUI', async () => {
-    component.updateBlockUI(false);
-    expect(component.isBlockUI).toBeFalsy();
-
-    component.updateBlockUI(true);
-    expect(component.isBlockUI).toBeTruthy();
-  });
-
   it('should handle null requestDetail', async () => {
     component.requestDetail = null;
     const actual = component.isLikelyVoidDangerAccepted();

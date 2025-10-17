@@ -98,14 +98,6 @@ describe('VoidAbnormalBetComponent', () => {
     expect(voidPageCommonService.onClickShowTemplateMessage).toHaveBeenCalledTimes(1);
   });
 
-  it('#onClickCopyLicenseesToClipboard should called voidPageCommonService.onClickCopyLicenseesToClipboard', async () => {
-    voidPageCommonService.onClickCopyLicenseesToClipboard = jest.fn();
-
-    component.onClickCopyLicenseesToClipboard(null);
-
-    expect(voidPageCommonService.onClickCopyLicenseesToClipboard).toHaveBeenCalledTimes(1);
-  });
-
   it('#onClickVoidAllMatches should called voidPageCommonService.onClickVoidAllMatches', async () => {
     voidPageCommonService.onClickVoidAllMatches = jest.fn();
     component.messageAreaComponents = new QueryList<MessageAreaComponent>();

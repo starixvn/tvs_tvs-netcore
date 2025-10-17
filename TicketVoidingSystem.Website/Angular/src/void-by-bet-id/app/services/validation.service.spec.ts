@@ -7,6 +7,8 @@ import { TEXT } from '../../../utility/constants/text';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { TicketsViewModel } from '../model/get-tickets.query';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TicketsService } from '../../../utility/components/tickets/tickets.service';
+import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
 
 class Helper {
   static readonly fakeTicketsViewModel = {
@@ -16,7 +18,8 @@ class Helper {
 describe('ValidationService', () => {
   let service: ValidationService;
   let betIdsComponent: BetIdsComponent;
-
+  let ticketsService: TicketsService;
+  let numberItemService: NumberItemService;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule],
@@ -31,7 +34,9 @@ describe('ValidationService', () => {
       }
     } as unknown as BetIdsComponent;
 
-    Helper.fakeTicketsViewModel.getNumberOfCheckedTickets = jest.fn().mockReturnValue(1);
+    ticketsService = TestBed.inject(TicketsService);
+    numberItemService = TestBed.inject(NumberItemService);
+    ticketsService.getNumberOfCheckedTickets = jest.fn().mockReturnValue(1);
   });
 
   it('should be created', () => {
@@ -43,15 +48,15 @@ describe('ValidationService', () => {
       // Arrange
       const invalidTransIds = '123,456';
       const movedTransIds = '789,012';
-      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-      betIdsComponent.groupNumber.updateMoved = jest.fn();
+      numberItemService.updateInvalidItems = jest.fn();
+      numberItemService.updateMoved = jest.fn();
       
       // Act
       service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
 
       // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, TEXT.INVALID_TICKETS);
-      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
+      expect(numberItemService.updateInvalidItems).toHaveBeenCalledWith(betIdsComponent.groupNumber?.items, invalidTransIds, TEXT.INVALID_TICKETS);
+      expect(numberItemService.updateMoved).toHaveBeenCalledWith(betIdsComponent.groupNumber?.items, movedTransIds);
     });
   });
 
@@ -140,7 +145,8 @@ describe('ValidationService', () => {
       const ticketsViewModel = {
         groups: [{ tickets: []}]
       } as TicketsViewModel;
-      ticketsViewModel.getNumberOfCheckedTickets = jest.fn().mockReturnValue(0);
+
+      ticketsService.getNumberOfCheckedTickets = jest.fn().mockReturnValue(0);
 
       const tooltip = new Tooltip();
       tooltip.display = jest.fn();
