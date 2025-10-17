@@ -56,7 +56,7 @@ public class VoidEmailContentServiceImp(
         [
             IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore,
             IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError,
-            IssueTypeConstant.WrongOddsSportsBook
+            IssueTypeConstant.WrongOddsSportsBook, IssueTypeConstant.SecondTeamBatting
         ];
 
         if (issueTypesHasCancelCO.Contains(mailVoidViewModel.IssueTypeId))

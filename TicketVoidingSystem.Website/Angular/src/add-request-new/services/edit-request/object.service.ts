@@ -96,7 +96,7 @@ export class ObjectService {
       args.requestModel.wrongOfferedNameModel = args.detailViewModel.wrongOfferedNameModel;
     } else if (checkIssueType.isOtherIssues || checkIssueType.isMatchEarlyCompleted) {
       args.requestModel.otherIssuesModel = args.detailViewModel.otherIssuesModel;
-    } else if (checkIssueType.isTechnicalError) {
+    } else if (checkIssueType.isTechnicalError || checkIssueType.isSecondTeamBatting) {
       args.requestModel.technicalErrorModel = args.detailViewModel.technicalErrorModel;
     }
   }

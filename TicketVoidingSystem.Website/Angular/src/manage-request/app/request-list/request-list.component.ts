@@ -110,7 +110,6 @@ export class RequestListComponent implements OnInit, OnChanges {
     if (this.isTechnicalErrorProviderMistake(issueTypeId, details)) {
       return false;
     }
-    
     if (
       issueTypeId.toString() === IssueTypeConstant.ARCHIVED_TICKET ||
       issueTypeId.toString() === IssueTypeConstant.ABNORMAL_ACCOUNT ||
@@ -356,7 +355,8 @@ export class RequestListComponent implements OnInit, OnChanges {
       StaticService.isWrongOdds,
       StaticService.isWrong1stHDP,
       StaticService.isWrong1stOU,
-      StaticService.isMatchEarlyCompleted
+      StaticService.isMatchEarlyCompleted,
+      StaticService.isSecondTeamBatting
     ].some(fn => fn(issueTypeStr)) && !this.isTechnicalErrorProviderMistake(issueTypeId, details);
   }
 

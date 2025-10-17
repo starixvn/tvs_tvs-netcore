@@ -26,7 +26,8 @@ export class IssueTypeConstant {
   static readonly WRONG_OFFERED_NAME = '26';
   static readonly MATCH_COMPLETED = '14';
   static readonly MATCH_EARLY_COMPLETED = '27';
-  
+  static readonly SECOND_TEAM_BATTING = '28';
+
   static readonly NAME_WRITE_LOG = new Map<string, string>([
     [IssueTypeConstant.ABNORMAL_BET, 'ABNORMAL_BET'],
     [IssueTypeConstant.ABNORMAL_ACCOUNT, 'ABNORMAL_ACCOUNT'],
@@ -53,7 +54,8 @@ export class IssueTypeConstant {
     [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK, 'WRONG_ODDS_SPORTS_BOOK'],
     [IssueTypeConstant.WRONG_OFFERED_NAME, 'WRONG_OFFERED_NAME'],
     [IssueTypeConstant.MATCH_COMPLETED, 'MATCH_COMPLETED'],
-    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'MATCH_EARLY_COMPLETED']
+    [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'MATCH_EARLY_COMPLETED'],
+    [IssueTypeConstant.SECOND_TEAM_BATTING, 'SECOND_TEAM_BATTING']
   ]);
 }
 

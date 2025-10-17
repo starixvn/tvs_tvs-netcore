@@ -177,7 +177,8 @@ export class FilterComponent implements OnInit, OnChanges {
       [IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK]: { action: 170 },
       [IssueTypeConstant.WRONG_OFFERED_NAME]: { subIssueType: 175, action: 165 },
       [IssueTypeConstant.OTHER_ISSUES]: { subIssueType: 175, action: 165 },
-      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: { action: 170 }
+      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: { action: 170 },
+      [IssueTypeConstant.SECOND_TEAM_BATTING]: { action: 170 }
     };
 
     const widthValues = widthMapping[this.model.issueTypeId] || {};
@@ -215,12 +216,6 @@ export class FilterComponent implements OnInit, OnChanges {
   isArchivedTicket(): boolean {
     return StaticService.isArchivedTicket(this.issueTypes.issueId?.toString());
   }
-
-  // haveAbnormalBetFromPermission(): boolean {
-  //   return _.findIndex(this.issueTypesPermission, function (o) {
-  //     return StaticService.isAbnormalBet(o.issueTypeId.toString());
-  //   }) > -1;
-  // }
 
   isEditOrExternalUrl(): boolean {
     return this.isEdit || this.isExternalUrl;

@@ -34,7 +34,8 @@ export class ActionVoidService {
       [IssueTypeConstant.DUPLICATE_TICKETS]: [],
       [IssueTypeConstant.WRONG_OFFERED_NAME]: ActionVoidByIssueTypeConst.WRONG_OFFERRED_NAME,
       [IssueTypeConstant.OTHER_ISSUES]: ActionVoidByIssueTypeConst.OTHER_ISSUES,
-      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: ActionVoidByIssueTypeConst.OTHER_ISSUES
+      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: ActionVoidByIssueTypeConst.OTHER_ISSUES,
+      [IssueTypeConstant.SECOND_TEAM_BATTING]: ActionVoidByIssueTypeConst.OTHER_ISSUES
     };
 
     let actionIds: number[] = [];

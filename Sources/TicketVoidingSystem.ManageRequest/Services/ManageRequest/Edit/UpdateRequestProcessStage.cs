@@ -83,6 +83,7 @@ public class UpdateRequestProcessStageImp( // NOSONAR
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
         command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
         command.MatchEarlyCompletedInfo = query.MatchEarlyCompletedInfo?.ToEventMatchEarlyCompletedXml();
+        command.SecondTeamBattingInfo = query.SecondTeamBattingInfo?.ToEventTechnicalErrorXml();
 
         return command;
     }

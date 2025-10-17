@@ -29,7 +29,11 @@ export class LogInfoService {
     query.requestId = isEdit ? requestId : null;
     query.actionId = Number(filter.action);
     query.issueTypeId = Number(filter.issueTypeId);
-    query.technicalErrorModel = technicalErrorModels;
+    if(StaticService.isSecondTeamBatting(Number(filter.issueTypeId))) {
+      query.secondTeamBattingModel = technicalErrorModels;
+    } else {
+      query.technicalErrorModel = technicalErrorModels;
+    }
 
     return query;
   }

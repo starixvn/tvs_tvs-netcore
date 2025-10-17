@@ -32,7 +32,8 @@ export class IssueTypeIconConstant {
     [IssueTypeConstant.WRONG_OFFERED_NAME, 'fas fa-tag'],
     [IssueTypeConstant.MATCH_COMPLETED, 'fas fa-check-circle'],
     [IssueTypeConstant.MATCH_EARLY_COMPLETED, 'fas fa-check-circle'],
-    [IssueTypeConstant.AB_REAL_MEMBER, 'fas fa-user-check']
+    [IssueTypeConstant.AB_REAL_MEMBER, 'fas fa-user-check'],
+    [IssueTypeConstant.SECOND_TEAM_BATTING, 'fa fa-baseball-bat-ball']
   ]);
 
   static getIconClass(issueTypeId: string | number): string {

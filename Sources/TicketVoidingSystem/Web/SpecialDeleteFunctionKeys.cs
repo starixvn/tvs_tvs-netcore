@@ -104,4 +104,5 @@ public static class SpecialDeleteFunctionKeys
     public const string WrongOfferedName = "WrongOfferedName";
     public const string OtherIssues = "OtherIssues";
     public const string MatchEarlyCompleted = "MatchEarlyCompleted";
+    public const string SecondTeamBatting = "SecondTeamBatting";
 }

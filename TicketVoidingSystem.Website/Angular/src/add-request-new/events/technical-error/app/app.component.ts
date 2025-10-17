@@ -15,7 +15,11 @@ import { EventTechnicalErrorComponent } from './event-technical-error/event-tech
 export class AppComponent {
   @ViewChild('eventTechnicalError') eventTechnicalErrorComponent: EventTechnicalErrorComponent;
   model = new RequestModel();
-  issueTypeId = IssueTypeConstant.TECHNICAL_ERROR;
+  issueTypeId: string;
+
+  ngOnInit() {
+    this.issueTypeId = window.issueTypeId || IssueTypeConstant.TECHNICAL_ERROR;
+  }
 
   public async saveRequest(): Promise<void> {
     this.eventTechnicalErrorComponent.saveRequest();

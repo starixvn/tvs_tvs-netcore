@@ -73,7 +73,8 @@ export class AppComponent implements OnInit {
       || StaticService.isReducedOver(this.issueTypeId)
       || StaticService.isAbandoned(this.issueTypeId)
       || StaticService.isOtherIssues(this.issueTypeId)
-      || StaticService.isMatchEarlyCompleted(this.issueTypeId);
+      || StaticService.isMatchEarlyCompleted(this.issueTypeId)
+      || StaticService.isSecondTeamBatting(this.issueTypeId);
   }
 
   isLikelyVoidEarlyKickOff(): boolean {

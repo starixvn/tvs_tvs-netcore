@@ -114,6 +114,7 @@ public class GetRequestServiceImp(
                 break;
 
             case IssueTypeConstant.TechnicalError:
+            case IssueTypeConstant.SecondTeamBatting:
                 viewModel.TechnicalErrorModel = await MapEventTechnicalError(secondResultSet);
                 break;
 

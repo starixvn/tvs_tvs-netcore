@@ -89,4 +89,6 @@ public class EditRequestQuery
     public OtherIssuesViewModel? MatchEarlyCompletedInfo { get; set; }
 
     public TechnicalErrorViewModel? TechnicalErrorInfo { get; set; }
+
+    public TechnicalErrorViewModel? SecondTeamBattingInfo { get; set; }
 }

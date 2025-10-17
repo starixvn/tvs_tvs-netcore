@@ -83,6 +83,7 @@ public class LogInfoServiceImp(
             IssueTypeConstant.WrongOfferedName => GetLogInfoViewModelWrongOfferedName(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.OtherIssues => GetLogInfoViewModelOtherIssues(query, validations, ticketRequests, logInfoDetails),
             IssueTypeConstant.MatchEarlyCompleted => await GetLogInfoViewModelMatchEarlyCompleted(query, validations, ticketRequests, logInfoDetails, betTypeCount),
+            IssueTypeConstant.SecondTeamBatting => await GetLogInfoViewModelTechnicalError(query, validations, ticketRequests, logInfoDetails, betTypeCount),
             _ => GetLogInfoViewModelDefault(validations, ticketRequests, logInfoDetails)
         };
     }
@@ -258,79 +259,50 @@ public class LogInfoServiceImp(
     private static List<GetLogInfoModel> GetLogInfoViewModelWrongOfferedName(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return
-        [
-            new GetLogInfoModel
-            {
-                MatchId = query.WrongOfferedNameModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true)
-            }
-        ];
+        return [CreateGetLogInfoModel(query.WrongOfferedNameModel.MatchId, validations, ticketRequests, logInfoDetails)];
     }
 
     private static List<GetLogInfoModel> GetLogInfoViewModelOtherIssues(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return
-        [
-            new GetLogInfoModel
-            {
-                MatchId = query.OtherIssuesModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true),
-            }
-        ];
+        return [CreateGetLogInfoModel(query.OtherIssuesModel.MatchId, validations, ticketRequests, logInfoDetails)];
     }
 
     private async Task<List<GetLogInfoModel>> GetLogInfoViewModelMatchEarlyCompleted(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
+        var getLogInfoModel = CreateGetLogInfoModel(query.MatchEarlyCompletedModel.MatchId, validations, ticketRequests, logInfoDetails);
         var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(query.MatchEarlyCompletedModel.MatchId, betTypeCount);
-        return
-        [
-            new GetLogInfoModel
-            {
-                MatchId = query.MatchEarlyCompletedModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true),
-                BetTypeCount = preparedBetTypeCount
-            }
-        ];
+        getLogInfoModel.BetTypeCount = preparedBetTypeCount;
+        return [getLogInfoModel];
+    }
+
+    private static GetLogInfoModel CreateGetLogInfoModel(int matchId, IEnumerable<Validation> validations,
+               IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
+    {
+        return new GetLogInfoModel
+        {
+            MatchId = matchId,
+            Validation = LogInfoHelper.CombineValidations(validations, _ => true),
+            TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
+            LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true)
+        };
     }
 
     private async Task<List<GetLogInfoModel>> GetLogInfoViewModelTechnicalError(GetLogInfoQuery query, IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
-        var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(query.TechnicalErrorModel.MatchId, betTypeCount);
-        return
-        [
-            new GetLogInfoModel
-            {
-                MatchId = query.TechnicalErrorModel.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true),
-                BetTypeCount = preparedBetTypeCount
-            }
-        ];
+        var matchId = IssueTypeConstant.SecondTeamBatting == query.IssueTypeId ? query.SecondTeamBattingModel.MatchId : query.TechnicalErrorModel.MatchId;
+        var getLogInfoModel = CreateGetLogInfoModel(matchId, validations, ticketRequests, logInfoDetails);
+        var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(matchId, betTypeCount);
+        getLogInfoModel.BetTypeCount = preparedBetTypeCount;
+        return [getLogInfoModel];
     }
 
     private static List<GetLogInfoModel> GetLogInfoViewModelDefault(IEnumerable<Validation> validations,
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails)
     {
-        return
-        [
-            new GetLogInfoModel
-            {
-                Validation = LogInfoHelper.CombineValidations(validations, _ => true),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, _ => true),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, _ => true)
-            }
-        ];
+        return [CreateGetLogInfoModel(0, validations, ticketRequests, logInfoDetails)];
     }
 
     private async Task<GetLogInfoCriteria> GetLogInfoCriteria(GetLogInfoQuery query) //NOSONAR
@@ -356,6 +328,7 @@ public class LogInfoServiceImp(
         criteria.WrongOfferedNameInfo = query.WrongOfferedNameModel?.ToWrongOfferedNameInfoXml();
         criteria.OtherIssuesInfo = query.OtherIssuesModel?.ToOtherIssuesInfoXml();
         criteria.MatchEarlyCompletedInfo = query.MatchEarlyCompletedModel?.ToMatchEarlyCompletedInfoXml();
+        criteria.SecondTeamBattingInfo = query.SecondTeamBattingModel?.ToTechnicalErrorInfoXml();
         criteria.OnlineServerId = currentOnlineServerId;
 
         return criteria;

@@ -34,7 +34,8 @@ public static class PermissionIssueTypeConfig
                     new() { FunctionKey = SpecialDeleteFunctionKeys.WrongOddsSportsBook, IssueTypeId = IssueTypeConstant.WrongOddsSportsBook },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.WrongOfferedName, IssueTypeId = IssueTypeConstant.WrongOfferedName },
                     new() { FunctionKey = SpecialDeleteFunctionKeys.OtherIssues, IssueTypeId = IssueTypeConstant.OtherIssues },
-                    new() { FunctionKey = SpecialDeleteFunctionKeys.MatchEarlyCompleted, IssueTypeId = IssueTypeConstant.MatchEarlyCompleted }
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.MatchEarlyCompleted, IssueTypeId = IssueTypeConstant.MatchEarlyCompleted },
+                    new() { FunctionKey = SpecialDeleteFunctionKeys.SecondTeamBatting, IssueTypeId = IssueTypeConstant.SecondTeamBatting }
                 };
             return permission;
         }

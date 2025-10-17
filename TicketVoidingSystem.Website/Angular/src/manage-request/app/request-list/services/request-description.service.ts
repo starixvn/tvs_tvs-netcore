@@ -46,7 +46,8 @@ export class RequestDescriptionService {
       [IssueTypeConstant.WRONG_OU]: this.createWrongOuContent,
       [IssueTypeConstant.WRONG_1ST_OU]: this.createWrongOuContent,
       [IssueTypeConstant.WRONG_ODDS]: this.createWrongOddsContent,
-      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: this.createMatchEarlyCompletedContent
+      [IssueTypeConstant.MATCH_EARLY_COMPLETED]: this.createMatchEarlyCompletedContent,
+      [IssueTypeConstant.SECOND_TEAM_BATTING]: this.createTechnicalErrorContent
     };
     const handler = ISSUE_TYPE_HANDLERS[copyInfoResponse.requestInfo.issueTypeId.toString()];
 
