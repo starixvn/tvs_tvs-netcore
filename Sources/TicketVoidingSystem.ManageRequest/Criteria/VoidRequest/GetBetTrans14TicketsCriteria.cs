@@ -5,6 +5,7 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
 
 public class GetBetTrans14TicketsCriteria : OnlineServerCriteriaBase
 {
+    public int MatchId { get; set; }
     public int RequestId { get; set; }
     public string OnlineServerId { get; set; }
 

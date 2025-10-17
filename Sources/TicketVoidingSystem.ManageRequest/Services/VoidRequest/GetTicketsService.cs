@@ -51,6 +51,7 @@ public class GetTicketsServiceImp(IMapper mapper, OnlineServerRepository onlineS
     {
         var currentOnlineServerId = await onlineServerRepository.GetOnlineServerIds();
         var criteria = mapper.Map<GetBetTrans14TicketsCriteria>(query);
+        criteria.MatchId = query.Match?.MatchId ?? 0;
         criteria.OnlineServerId = currentOnlineServerId;
         var tickets = await onlineServerRepository.FetchAsync<GetTicketModel>(criteria);
 
