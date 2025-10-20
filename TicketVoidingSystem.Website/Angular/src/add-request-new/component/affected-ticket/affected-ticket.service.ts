@@ -59,7 +59,7 @@ export class AffectedTicketService {
     return affectedTicketsModel;
   }
 
-  updateShowAffectedTicketsDetails(affectedTicketsModel: AffectedTicketsModel, logInfoTicketsJson: string, issueTypeId: number, isExcludeBetType: boolean = false) {
+  updateShowAffectedTicketsDetails(affectedTicketsModel: AffectedTicketsModel, logInfoTicketsJson: string, issueTypeId: number, isExcludeBetType = false) {
     affectedTicketsModel.logInfoTicketsJson = logInfoTicketsJson;
     affectedTicketsModel.issueTypeId = issueTypeId;
     affectedTicketsModel.isOpen = true;

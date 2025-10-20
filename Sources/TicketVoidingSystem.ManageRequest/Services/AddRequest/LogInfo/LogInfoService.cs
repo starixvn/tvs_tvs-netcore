@@ -113,15 +113,15 @@ public class LogInfoServiceImp(
         IEnumerable<TicketRequest> ticketRequests, IEnumerable<LogInfoDetail> logInfoDetails, IEnumerable<BetTypeTicketsInfo> betTypeCount)
     {
         List<GetLogInfoModel> getLogInfoModels = [];
-        foreach (var item in query.DangerAcceptedModels)
+        foreach (var matchId in query.DangerAcceptedModels.Select(x => x.MatchId))
         {
-            var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(item.MatchId, betTypeCount.Where(x => x.MatchId == item.MatchId));
+            var preparedBetTypeCount = await UpdateBetTypeTicketsInfo(matchId, betTypeCount.Where(x => x.MatchId == matchId));
             getLogInfoModels.Add(new GetLogInfoModel
             {
-                MatchId = item.MatchId,
-                Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == item.MatchId),
-                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == item.MatchId),
-                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == item.MatchId),
+                MatchId = matchId,
+                Validation = LogInfoHelper.CombineValidations(validations, x => x.MatchId == matchId),
+                TicketRequest = LogInfoHelper.CombineTicketRequest(ticketRequests, x => x.MatchId == matchId),
+                LogInfoDetail = LogInfoHelper.CombineLogInfoDetail(validations, logInfoDetails, x => x.MatchId == matchId),
                 BetTypeCount = preparedBetTypeCount
             });
         }
