@@ -15,7 +15,7 @@ public class MarkTicketsCommand : OnlineServerCriteriaBase
 
     public string TransIds { get; set; }
 
-    public int IssueTypeId { get; set; }
+    public int? IssueTypeId { get; set; }
 
     public override string GetSettingKey() => Helper.GetSettingKeyBySiteDbGroupId(SiteDbGroupId, "Nap_SpecialDelete_MarkTickets_Update");
 
