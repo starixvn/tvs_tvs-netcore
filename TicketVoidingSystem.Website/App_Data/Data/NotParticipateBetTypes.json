@@ -79,6 +79,150 @@
     {
       "BetTypeId": 9673,
       "ParentId": 3
+    },
+    {
+      "BetTypeId": 653,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 654,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 655,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 685,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 656,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 657,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 658,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 686,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 659,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 660,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 661,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 687,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 662,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 663,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 664,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 688,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 665,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 666,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 667,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 668,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 669,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 670,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 671,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 672,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 673,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 674,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 675,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 676,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 677,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 678,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 679,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 680,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 681,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 682,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 683,
+      "ParentId": 3
+    },
+    {
+      "BetTypeId": 684,
+      "ParentId": 3
     }
   ]
 }
