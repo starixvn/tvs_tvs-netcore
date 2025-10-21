@@ -14,8 +14,8 @@ export class ValidationService {
     private readonly ticketsService = inject(TicketsService);
 
     highlightInvalidTransIds(betIdsComponent: BetIdsComponent, invalidTransIds: string, movedTransIds: string) {
-        this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber?.items, invalidTransIds, TEXT.INVALID_TICKETS);
-        this.numberItemService.updateMoved(betIdsComponent.groupNumber?.items, movedTransIds);
+        this.numberItemService.updateInvalidItems(betIdsComponent?.groupNumber?.items, invalidTransIds, TEXT.INVALID_TICKETS);
+        this.numberItemService.updateMoved(betIdsComponent?.groupNumber?.items, movedTransIds);
     }
 
     checkValidation(ticketsViewModel: TicketsViewModel, messagesComponent: TemplateMessageComponent, confirmationComponent: ConfirmationComponent, tooltip: Tooltip) {
