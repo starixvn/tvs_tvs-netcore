@@ -13,6 +13,7 @@ public static class RemarkConstant
     public const string DifferentMatch = "Different match";
     public const string Default = "";
     public const string TicketSiteDbDown = "Ticket of siteDB down";
+    public const string BalanceUpTransIds = "Being Balance Up";
 
     public const byte InvalidTicketId = 1;
     public const byte MovedOrDuplicatedTicketId = 2;
@@ -25,6 +26,7 @@ public static class RemarkConstant
     public const byte AbWhiteListTransIdsId = 9;
     public const byte DefaultId = 0;
     public const byte TicketSiteDbDownId = 10;
+    public const byte BalanceUpTransIdsId = 11;
 
     public static IEnumerable<RemarkModel> RemarkList =>
         new List<RemarkModel>
@@ -39,7 +41,8 @@ public static class RemarkConstant
             new() { Id = NonLiveTicketId, Name = NonLiveTicket },
             new() { Id = DifferentLiveScoreId, Name = DifferentLiveScore },
             new() { Id = DefaultId, Name = Default },
-            new() { Id = TicketSiteDbDownId, Name = TicketSiteDbDown }
+            new() { Id = TicketSiteDbDownId, Name = TicketSiteDbDown },
+            new() { Id = BalanceUpTransIdsId, Name = BalanceUpTransIds }
         };
 }
 

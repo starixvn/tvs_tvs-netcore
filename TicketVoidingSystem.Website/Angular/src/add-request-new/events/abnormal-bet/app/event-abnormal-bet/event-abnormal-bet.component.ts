@@ -121,6 +121,7 @@ export class EventAbnormalBetComponent implements OnInit {
 
   public removeInvalidTransIds(): void {
     this.betIdsComponent.removeTransId(this.primitiveProps.invalidTransIds);
+    this.betIdsComponent.removeTransId(this.primitiveProps.balanceUpTransIds);
     this.abnormalBetModel.abWhiteListTransIds = this.abnormalBetModel.abWhiteListTransIds ? this.abnormalBetModel.abWhiteListTransIds + ',' + this.primitiveProps.abWhiteListTransIds
       : this.primitiveProps.abWhiteListTransIds;
     this.primitiveProps.abWhiteListTransIds = '';

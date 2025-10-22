@@ -56,7 +56,8 @@ public class UsernameCheckServiceImp(OnlineServerRepository onlineServerReposito
             MarkTransIds = JoinNonEmptyValues(results, x => x.MarkTransIds),
             UsernamesOfCreditCashService = JoinNonEmptyValues(results, x => x.UsernamesOfCreditCashService),
             SiteDBDownUserNames = siteDBDownInfo?.SiteDBDownUserNames,
-            SiteDBDownInfoJson = siteDBDownInfo?.SiteDBDownInfoJson
+            SiteDBDownInfoJson = siteDBDownInfo?.SiteDBDownInfoJson,
+            UsernamesOfBalanceUp = JoinNonEmptyValues(results, x => x.UsernamesOfBalanceUp)
         };
     }
 

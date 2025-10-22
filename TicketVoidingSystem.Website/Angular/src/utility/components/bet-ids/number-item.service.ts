@@ -75,10 +75,10 @@ export class NumberItemService {
     }
   }
 
-  updateMoved(items: NumberItem[], text: string) {
+  updateMoved(items: NumberItem[], text: string, tooltipText?: string) {
     if (StaticService.isStringHasLength(text)) {
       const movedItems = text.split(',');
-      items.forEach(item => this.setItemInvalid(movedItems, item, CSSCLASS.MOVED));
+      items.forEach(item => this.setItemInvalid(movedItems, item, CSSCLASS.MOVED, tooltipText));
     }
   }
 

@@ -10,6 +10,7 @@ export class PrimitiveProperty {
   transInfoAddRequestModel: TransInfoAddRequestModel;
   isBlockUI = false;
   abWhiteListTransIds: string;
+  balanceUpTransIds: string;
 }
 
 export interface CheckTransIdsQuery {
@@ -52,6 +53,7 @@ export class ValidationAbnormalBet {
   isHasWarningRemovedTickets: boolean;
   isAllUusTickets: boolean;
   transIdsOfSiteDBDown?: string;
+  balanceUpTransIds?: string;
 }
 
 export interface SendLetstalkModel {

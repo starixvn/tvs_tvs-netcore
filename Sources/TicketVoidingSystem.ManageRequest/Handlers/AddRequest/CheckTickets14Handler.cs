@@ -23,7 +23,8 @@ public class CheckTickets14Handler(OnlineServerRepository onlineServerRepository
         {
             InvalidTransIds = Helper.GetIntersectTransIdString(results.Select(x => x.InvalidTransIds)),
             UnsupportedDateRangeTransIds = Helper.GetUnionTransIdString(results.Select(x => x.UnsupportedDateRangeTransIds)),
-            TransInfoJson = string.Join(",", results.Where(x => !string.IsNullOrWhiteSpace(x.TransInfoJson)).Select(x => x.TransInfoJson))
+            TransInfoJson = string.Join(",", results.Where(x => !string.IsNullOrWhiteSpace(x.TransInfoJson)).Select(x => x.TransInfoJson)),
+            BalanceUpTransIds = Helper.GetUnionTransIdString(results.Select(x => x.BalanceUpTransIds))
         };
     }
 }

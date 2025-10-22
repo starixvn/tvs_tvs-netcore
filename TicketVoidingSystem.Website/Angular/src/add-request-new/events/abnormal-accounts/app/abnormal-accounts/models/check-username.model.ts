@@ -15,7 +15,6 @@ export interface CheckValidUsernamesQuery {
   isRemoveCreditCashService: boolean;
 }
 
-
 export class CheckUsernamesViewModel {
   validation: ValidationAbnormalAccount;
   transInfoAddRequestModel: TransInfoAddRequestModel;
@@ -34,4 +33,5 @@ export class ValidationAbnormalAccount {
   isExceededTotalUsernames: boolean;
   transInfo: string;
   isTicketLimitExceeded: boolean;
+  usernamesOfBalanceUp: string;
 }
