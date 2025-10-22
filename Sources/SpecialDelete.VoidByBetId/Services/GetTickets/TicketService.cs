@@ -23,6 +23,7 @@ public class TicketServiceImp(
         ticket.IsDisable = conditionService.IsDisableCheckBox(item, permission);
         ticket.IsCricket = conditionService.IsNetPosition(item.BetType, item.IsDeposit);
         ticket.Value = item.TransId.ToString();
+        ticket.BetdaqId = item.BetdaqId;
 
         return ticket;
     }

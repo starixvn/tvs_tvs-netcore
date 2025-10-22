@@ -18,6 +18,7 @@
     isChecked: boolean;
     isCricket: boolean;
     soldId: string;
+    betdaqId: number;
     mainTransId: string;
     isMarked: boolean;
     siteDbGroupId: number;

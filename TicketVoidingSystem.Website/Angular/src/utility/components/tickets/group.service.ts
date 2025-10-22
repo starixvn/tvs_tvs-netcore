@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
-import { TicketModel } from './ticket.model';
+import { SPECIALGROUP } from '../../constants/tickets-list.constant';
 import { BetID } from '../../models/bet-id.model';
 import { CommonTicketModel } from '../../models/common.ticket.model';
-import { GroupModel } from './group.model';
-import { SPECIALGROUP } from '../../constants/tickets-list.constant';
 import { StaticService } from '../../services/static.service';
+import { GroupModel } from './group.model';
+import { TicketModel } from './ticket.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class GroupService {
   }
 
   checkSettledTickets(tickets: TicketModel[]): boolean {
-    return tickets.some(ticket => ticket.isChecked && StaticService.isSettled(ticket.status));
+    return tickets.some(ticket => ticket.isChecked && StaticService.isSettled(ticket.status) && !StaticService.isCashOut(ticket.betdaqId));
   }
 
   getTicketSold(tickets: TicketModel[]): string {

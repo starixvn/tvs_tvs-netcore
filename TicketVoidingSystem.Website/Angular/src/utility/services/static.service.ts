@@ -473,4 +473,8 @@ export class StaticService {
       || value.toLowerCase().indexOf('draw') > -1
       || value.toLowerCase().indexOf('lost') > -1;
   };
+
+  static isCashOut(betdaqId: number): boolean {
+    return betdaqId === -2;
+  };
 }
