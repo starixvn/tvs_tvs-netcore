@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
+import orderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import { MatchType } from '../../../../../../utility/constants/config';
 import { ChildMatchModel } from '../../../../../models/related-event.model';
 import { CheckAddPermissionService } from '../../../../../services/check-permission.service';
@@ -28,7 +29,7 @@ export class SearchEventService {
     arg.primitiveProps.isShowLogInfoEvents = false;
     arg.primitiveProps.infoSiteDBDownModel = null;
     await this.getLogInfoForAllEvents(arg, newestRelatedEvents);
-    arg.allEvents = _.orderBy(_.uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
+    arg.allEvents = orderBy(uniqBy(arg.allEvents, x => x.matchId), ['matchCode'], ['asc']);
 
     if (!this.checkPermissionService.isAccountHasAddRequestPermission(arg.filter.action,
       arg.allEvents.some(x => x.isHasInstantlySettledTicket), arg.allEvents.some(x => x.isHasSettledTicket), arg.permission)) {

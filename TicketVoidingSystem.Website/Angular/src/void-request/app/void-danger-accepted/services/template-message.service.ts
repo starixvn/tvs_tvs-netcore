@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
-import { WrongHdpModel } from '../../../../add-request/app/add-request/models/event-wrong-hdp.model';
-import { WrongOuModel } from '../../../../add-request/app/add-request/models/event-wrong-ou.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import first from 'lodash/first';
+import { WrongHdpModel } from '../../../../add-request-new/models/event-wrong-hdp.model';
+import { WrongOuModel } from '../../../../add-request-new/models/event-wrong-ou.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { SubIssueTypeGroup, TVSRequestFilterBy } from '../../../../utility/constants/config';
@@ -89,7 +89,7 @@ export class TemplateMessageService {
     const liveScoreList = voidMatch.logInfoDetail.liveScores.split('|');
     const OverUnder = "3";
     templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
-    templateValue.score = _.first(liveScoreList).replace(/ /g, '');
+    templateValue.score = first(liveScoreList).replace(/ /g, '');
     templateValue.wrongMarket = wrongOuModel.wrongMarket;
     templateValue.actualMarket = wrongOuModel.actualMarket;
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;

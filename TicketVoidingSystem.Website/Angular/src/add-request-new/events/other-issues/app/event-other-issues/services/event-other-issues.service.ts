@@ -1,5 +1,5 @@
 import { inject, Injectable } from "@angular/core";
-import * as _ from 'lodash';
+import assignIn from 'lodash/assignIn';
 import moment from 'moment-timezone';
 import { GroupBetTypesAddRequestModel } from '../../../../../../utility/components/advanced-mode-add-request/group-bet-types/group-bet-types.model';
 import { GetBetTypesQuery, TimeRangeModel } from '../../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
@@ -10,11 +10,13 @@ import { FilterOtherIssuesModel } from '../models/filter-other-isssues.model';
 import { OtherIssuesGetLogInfoQuery } from '../models/get-log-info.query';
 import { LogInfoOtherIssues } from '../models/log-info-other-issues.model';
 import { ValidationService } from './validation.service';
+import { BetTypeService } from "../../../../../../utility/components/advanced-mode-add-request/group-bet-types/bet-type.service";
 
 @Injectable()
 export class EventOtherIssuesService {
   private readonly commonService = inject(CommonService);
   private readonly validationService = inject(ValidationService);
+  private readonly betTypeService = inject(BetTypeService);
 
   async getGroupBetTypes(matchId: number, filterOtherIssuesModel: FilterOtherIssuesModel, subIssueTypeId: string, issueTypeId: string): Promise<GroupBetTypesAddRequestModel> {
     const query: GetBetTypesQuery = {
@@ -25,7 +27,7 @@ export class EventOtherIssuesService {
       query.timeRanges = [this.createTimeRangeModel(filterOtherIssuesModel)];
     }
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    const groupBetTypesModel = new GroupBetTypesAddRequestModel(_.assignIn([], data.groupBetTypes), true, '', false);
+    const groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);
 
     return groupBetTypesModel;
   }

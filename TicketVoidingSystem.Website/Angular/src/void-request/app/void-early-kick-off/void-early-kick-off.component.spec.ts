@@ -1,16 +1,16 @@
-import { EarlyKickOffModel } from '../../../add-request/app/add-request/models/event-eko.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EarlyKickOffModel } from '../../../add-request-new/models/event-eko.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageEarlyKickOffModel } from './models/void-page-early-kick-off.model';
 import { VoidPageService } from './services/void-page.service';
 import { VoidEarlyKickOffComponent } from './void-early-kick-off.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('VoidEarlyKickOffComponent', () => {
   let component: VoidEarlyKickOffComponent;

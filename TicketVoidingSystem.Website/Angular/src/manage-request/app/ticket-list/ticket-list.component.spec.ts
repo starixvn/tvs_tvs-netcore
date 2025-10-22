@@ -1,10 +1,9 @@
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { IssueInfo } from '../../../utility/models/issue-type.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { TicketListComponent } from './ticket-list.component';
 import { TicketListModal } from './ticket-list.modal';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('TicketListComponent', () => {
   let component: TicketListComponent;

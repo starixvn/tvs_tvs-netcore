@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { NotParticipateModel } from '../../../../add-request/app/add-request/models/event-not-participate.model';
-import { RedCardModel } from '../../../../add-request/app/add-request/models/event-red-card.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { NotParticipateModel } from '../../../../add-request-new/models/event-not-participate.model';
+import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request-new/models/get-log-info.model';
+import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';

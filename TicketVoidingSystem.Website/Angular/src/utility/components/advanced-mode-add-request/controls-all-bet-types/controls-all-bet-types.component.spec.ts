@@ -1,12 +1,13 @@
 import { ControlsAllBetTypesComponent } from './controls-all-bet-types.component';
-import { ControlsAllBetTypesLists } from './controls-all-bet-types.model';
+import { ControlsAllBetTypes } from './controls-all-bet-types.model';
 
-describe('ControlsAllBetTypesComponent', () => {
+describe('ControlsAllBetTypesComponent', () => {  
   it('#isShowContent should return true when betTeam has type controls All', () => {
     // Arrange
     const component = new ControlsAllBetTypesComponent();
-    component.controlsAllBetTypesLists = ControlsAllBetTypesLists.MultipleSelectionList;
-    component.controlsAllBetTypesLists[0].isShow = true;
+    const mockControlsAllBetTypes = new ControlsAllBetTypes();
+    mockControlsAllBetTypes.isShow = true;
+    component.controlsAllBetTypesLists = [mockControlsAllBetTypes];
 
     // Action & Asset
     expect(component.isShowContent()).toBeTruthy();

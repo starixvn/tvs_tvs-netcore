@@ -1,17 +1,17 @@
-import { DuplicateTicketsModel } from '../../../add-request/app/add-request/models/event-duplicate-tickets.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DuplicateTicketsModel } from '../../../add-request-new/models/event-duplicate-tickets.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { AbnormalFilterBy } from '../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageDuplicateTicketsModel } from './models/void-page-duplicate-tickets.model';
 import { VoidPageService } from './services/void-page.service';
 import { VoidDuplicateTicketsComponent } from './void-duplicate-tickets.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('VoidDuplicateTicketsComponent', () => {
   let component: VoidDuplicateTicketsComponent;

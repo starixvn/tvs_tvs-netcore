@@ -14,7 +14,9 @@
           [innerHTML]="countInfoContent(logInfo.logInfoDetail.cashOutCount, logInfo.logInfoDetail.settleCount, logInfo.logInfoDetail.instantlySettleCount) | sanitizeHtml"></span>
         },
         Parlay Count: <strong>{{logInfo.logInfoDetail.mainParlayCount}} </strong>
-        <span class="bet-type-count" (click)="showAffectedTicketsDetails()">Details</span><br />
+        @if (!isVoided) {
+          <span class="bet-type-count" (click)="showAffectedTicketsDetails()">Details</span><br />
+        }
         @if (logInfo.logInfoDetail.cancelCashOutCount > 0) {
         <span>Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong></span>
         }

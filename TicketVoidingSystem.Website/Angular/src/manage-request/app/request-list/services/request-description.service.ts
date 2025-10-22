@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import groupBy from 'lodash/groupBy';
 import moment from 'moment-timezone';
 import { ClipboardService } from 'ngx-clipboard';
-import { FilterOddsTypeConstant } from '../../../../add-request/app/add-request/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
+import { FilterOddsTypeConstant } from '../../../../add-request-new/events/wrong-odds-sports-book/app/event-wrong-odds-sports-book/models/filter-wrong-odds-sports-book.model';
 import { DateTimeFormat, TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
 import { SportType } from '../../../../utility/constants/sport.constant';

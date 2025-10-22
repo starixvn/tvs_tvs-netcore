@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { ValidationMessage } from '../../../../add-request/app/add-request/models/get-log-info.model';
+import { ValidationMessage } from '../../../../add-request-new/models/get-log-info.model';
 import { StaticService } from '../../../../utility/services/static.service';
 import { ModalService } from '../../modal/modal.service';
 

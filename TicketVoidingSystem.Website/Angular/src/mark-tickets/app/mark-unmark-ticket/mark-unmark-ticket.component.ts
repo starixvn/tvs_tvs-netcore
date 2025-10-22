@@ -22,6 +22,8 @@ import { AllMarkedTicketListComponent } from './all-marked-ticket-list/all-marke
 import { AllMarkedTicketModel } from './all-marked-ticket-list/all-marked-ticket.model';
 import { FilterTicketsComponent } from './filter-tickets/filter-tickets.component';
 import { FilterSearchBy } from './filter-tickets/filter.model';
+import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
+import { TicketsListService } from '../tickets-list/tickets-list.service';
 
 @Component({
   standalone: true,
@@ -40,7 +42,9 @@ export class MarkUnmarkTicketComponent {
   private readonly appService = inject(AppService);
   private readonly commonService = inject(CommonService);
   private readonly modalService = inject(ModalService);
-
+  private readonly numberItemService = inject(NumberItemService);
+  private readonly ticketsListService = inject(TicketsListService);
+  
   getStatus: string;
   paging = new PagingModel();
   pagingOfAllMarked = new PagingModel();
@@ -101,12 +105,13 @@ export class MarkUnmarkTicketComponent {
       this.isBetIdBorder = this.query.status !== '0';
       this.licenseesName = data.licenseesName;
       this.showLicensees = true;
-      this.ticketsModel.initData(data);
+      this.ticketsListService.initData(this.ticketsModel, data);
       this.paging.total = data.totalItems;
       if (this.query.searchBy === FilterSearchBy.BET_IDS) {
-        this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.invalidTransIds);
-        this.filterTickets.betIdsComponent.groupNumber.updateInvalidItems(data.markedTransIds);
-        this.filterTickets.betIdsComponent.groupNumber.updateMoved(data.movedTransIds);
+        this.numberItemService.updateInvalidItems(this.filterTickets.betIdsComponent.groupNumber.items, data.invalidTransIds, TEXT.INVALID_TICKETS);
+        this.numberItemService.updateInvalidItems(this.filterTickets.betIdsComponent.groupNumber.items, data.invalidTransIds);
+        this.numberItemService.updateInvalidItems(this.filterTickets.betIdsComponent.groupNumber.items, data.markedTransIds);
+        this.numberItemService.updateMoved(this.filterTickets.betIdsComponent.groupNumber.items, data.movedTransIds);
       }
     } catch {
       this.isShowTickets = false;
@@ -139,7 +144,7 @@ export class MarkUnmarkTicketComponent {
     this.match = await this.commonService.getMatch(parseInt(ticketDetailId.matchId, 10));
     const data = await this.appService.getTicketsDetail(this.queryTicket);
     this.isBlockTickets = false;
-    this.ticketsModel.initData(data);
+    this.ticketsListService.initData(this.ticketsModel, data);
     this.licenseesName = data.licenseesName;
     this.showLicensees = true;
     this.paging.total = data.totalItems;

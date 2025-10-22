@@ -28,7 +28,9 @@
   (searchEvent)="handleSearchEvent()"
   [primitiveProps]="primitiveProps">
 </log-info-wrong-offered-name>
-<confirm-add-request [isOpen]="confirmAddRequest.isOpen"
+<confirm-add-request
+  [isOpen]="confirmAddRequest.isOpen"
+  [issueTypeId]="filter.issueTypeId"
   [model]="confirmAddRequest"
   [issueTypes]="issueTypes"
   [voidActions]="filter.actions"

@@ -1,8 +1,9 @@
 import { inject } from '@angular/core';
-import _ from 'lodash';
-import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
-import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import clone from 'lodash/clone';
+import sumBy from 'lodash/sumBy';
+import { GetLogInfoQuery } from '../../../../add-request-new/models/add-request.query';
+import { GetLogInfoModel } from '../../../../add-request-new/models/get-log-info.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TVSRequestFilterBy } from '../../../../utility/constants/config';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
@@ -66,9 +67,9 @@ export class VoidPageService {
       x.logInfoDetail = logInfoList.find(y => y.logInfoDetail.matchId === x.matchId && y.scoreId === x.scoreId).logInfoDetail;
     });
     if (requestDetail.wrongScoreModels[0].filterBy !== TVSRequestFilterBy.CHECK_TIME) {
-      voidMatches[0].logInfoDetail.singleCount = _.sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.singleCount);
-      voidMatches[0].logInfoDetail.mainParlayCount = _.sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.mainParlayCount);
-      voidMatches[0].logInfoDetail.cancelCashOutCount = _.sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.cancelCashOutCount);
+      voidMatches[0].logInfoDetail.singleCount = sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.singleCount);
+      voidMatches[0].logInfoDetail.mainParlayCount = sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.mainParlayCount);
+      voidMatches[0].logInfoDetail.cancelCashOutCount = sumBy(requestDetail.wrongScoreModels.filter(x => x.logInfoDetail), x => x.logInfoDetail.cancelCashOutCount);
       voidMatches[0].logInfoDetail.voidFromTime = requestDetail.wrongScoreModels.find(x => x.logInfoDetail).logInfoDetail.voidFromTime;
       voidMatches[0].logInfoDetail.voidToTime = requestDetail.wrongScoreModels.findLast(x => x.logInfoDetail).logInfoDetail.voidToTime;
       voidMatches[0].logInfoDetail.liveScores = null;
@@ -86,7 +87,7 @@ export class VoidPageService {
       element.templateValue.numberOfSubType = element.matchModel.numberOfSubType;
       element.voidReason = await this.commonService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
-      element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
+      element.licenseeAffectedList = clone(element.licenseeAffectedList);
     }
   }
 

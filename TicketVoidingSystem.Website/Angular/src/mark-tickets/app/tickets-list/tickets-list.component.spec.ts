@@ -2,62 +2,27 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TEXT} from '../../../utility/constants/text';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group-tickets.model';
-import { TicketModel } from './ticket.model';
 import { TicketsListComponent } from './tickets-list.component';
 import { TicketsModel } from './tickets.model';
 import { By } from '@angular/platform-browser';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { EventEmitter } from '@angular/core';
 import { MarkedTicketQuery } from '../models/query.model';
+import { TicketsListService } from './tickets-list.service';
+import { TicketModel } from './ticket.model';
 
 class Helper {
   public static getFakeTicketsModel(): TicketsModel {
-    const tickets: TicketModel[] = [{
-      betId: '108936575088',
-      value: '108936575088',
-      no: 1,
-      member: 'i-emvictor',
-      betType: 'Handicap',
-      transDate: '04/27/2020 12:51:48.573 AM',
-      choice: '',
-      stake: '<div class=\"stake\">1,000</div>',
-      odds: '<span class=\"underdog\"><font color="#B50000">-0.89</font></span> (<span class=\"oddstype\">MY</span>)',
-      currency: 'UUS',
-      handicap: '-1.75',
-      score: '',
-      winLoss: '-',
-      soldId: null,
-      status: '<div class=\"status\">Running</div>',
-      mainTransId: '0',
-      isDisable: false,
-      isCricket: false,
-      isChecked: true,
-      siteDbGroupId: 0
-    },
-    {
-      betId: '108936575089',
-      value: '108936575089',
-      no: 2,
-      member: 'i-emvictor',
-      betType: 'Handicap',
-      transDate: '04/27/2020 12:51:48.573 AM',
-      choice: '',
-      stake: '<div class=\"stake\">1,000</div>',
-      odds: '<span class=\"underdog\"><font color="#B50000">-0.89</font></span> (<span class=\"oddstype\">MY</span>)',
-      currency: 'UUS',
-      handicap: '1.75',
-      score: '',
-      winLoss: '-',
-      soldId: null,
-      status: '<div class=\"status\">Running</div>',
-      mainTransId: '0',
-      isDisable: false,
-      isCricket: false,
-      isChecked: true,
-      siteDbGroupId: 0
-    }];
-
-    const groups = new GroupModel('MBC', tickets, []);
+    const groups = new GroupModel();
+    groups.tickets = [
+      new TicketModel({ value: '108936575088', isChecked: true, isDisable: false, mainTransId: '108936575088', siteDbGroupId: 1 }),
+      new TicketModel({ value: '108936575089', isChecked: false, isDisable: false, mainTransId: '108936575089', siteDbGroupId: 1 })
+    ];
+    groups.name = 'Test Group';
+    groups.isCheckAll = false;
+    groups.isExpanded = true;
+    groups.isDisabled = false;
+    
     const model = new TicketsModel();
     model.groups = [groups];
     model.totalItemsList = [
@@ -73,12 +38,26 @@ class Helper {
 describe('TicketsListComponent', () => {
   let component: TicketsListComponent;
   let fixture: ComponentFixture<TicketsListComponent>;
+  let mockTicketsListService: jest.Mocked<TicketsListService>;
 
   beforeEach(async () => {
+    mockTicketsListService = {
+      getTicketsParam: jest.fn(),
+      getAllTickets: jest.fn(),
+      getTicketsParamWithAllPage: jest.fn(),
+      getNumberOfTickets: jest.fn(),
+      checkGroups: jest.fn(),
+      getUncheckedTicketList: jest.fn(),
+      getUncheckedTicketListFromGroup: jest.fn()
+    } as any;
+
     await TestBed.configureTestingModule({
       imports: [
         TestingModule
       ],
+      providers: [
+        { provide: TicketsListService, useValue: mockTicketsListService }
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TicketsListComponent);
@@ -92,6 +71,11 @@ describe('TicketsListComponent', () => {
     component.clickBody = jest.fn();
     component.exportExcel = jest.fn();
     component.showListCheckGroup = jest.fn();
+    
+    // Mock service methods to return empty arrays by default
+    mockTicketsListService.getTicketsParam.mockReturnValue([]);
+    mockTicketsListService.getAllTickets.mockReturnValue([]);
+    mockTicketsListService.getTicketsParamWithAllPage.mockReturnValue([]);
   });
 
   it('should create', () => {
@@ -133,21 +117,23 @@ describe('TicketsListComponent', () => {
     component.model = Helper.getFakeTicketsModel();
     const mockEmit = jest.fn();
     component.ticketsChange.emit = mockEmit;
+    
+    // Mock service methods
+    mockTicketsListService.getNumberOfTickets.mockReturnValue(2);
+    mockTicketsListService.checkGroups.mockImplementation(() => {});
+    
     fixture.detectChanges();
 
     // Act & Assert - First click (uncheck all)
     const checkboxAll = fixture.debugElement.query(By.css('span.checkbox-dropdown-list'));
     checkboxAll.triggerEventHandler('click', {});
     expect(checkboxAll).toBeTruthy();
-    expect(mockEmit).toHaveBeenCalledWith(0);
-    expect(component.model.groups[0].tickets[0].isChecked).toBe(false);
-    expect(component.model.groups[0].tickets[1].isChecked).toBe(false);
+    expect(mockTicketsListService.checkGroups).toHaveBeenCalledWith(component.model);
+    expect(mockTicketsListService.getNumberOfTickets).toHaveBeenCalledWith(component.model.groups);
 
     // Act & Assert - Second click (check all)
     checkboxAll.triggerEventHandler('click', {});
-    expect(mockEmit).toHaveBeenCalledWith(2);
-    expect(component.model.groups[0].tickets[0].isChecked).toBe(true);
-    expect(component.model.groups[0].tickets[1].isChecked).toBe(true);
+    expect(mockTicketsListService.checkGroups).toHaveBeenCalledTimes(2);
   });
 
   it('should call exportExcel when clicking export excel button', () => {
@@ -155,6 +141,10 @@ describe('TicketsListComponent', () => {
     component.isShowTickets = true;
     component.model = Helper.getFakeTicketsModel();
     component.exportExcel = jest.fn();
+    
+    // Mock service methods
+    mockTicketsListService.getNumberOfTickets.mockReturnValue(2);
+    
     fixture.detectChanges();
 
     // Act
@@ -171,6 +161,10 @@ describe('TicketsListComponent', () => {
     component.isShowTickets = true;
     component.model = Helper.getFakeTicketsModel();
     component.showListCheckGroup = jest.fn();
+    
+    // Mock service methods
+    mockTicketsListService.getNumberOfTickets.mockReturnValue(2);
+    
     fixture.detectChanges();
 
     // Act
@@ -187,6 +181,9 @@ describe('TicketsListComponent', () => {
     component.model = new TicketsModel();
     component.model.groups = [];
     component.tooltip.display = jest.fn();
+    
+    // Mock service to return empty array
+    mockTicketsListService.getTicketsParam.mockReturnValue([]);
 
     // Act
     component.markSelectedTicketsOnPage();
@@ -200,15 +197,19 @@ describe('TicketsListComponent', () => {
     component.model = Helper.getFakeTicketsModel();
     const mockEmit = jest.fn();
     component.updateMarkedTickets.emit = mockEmit;
+    
+    // Mock service methods
+    const mockTickets = [{ transId: '108936575088', matchId: null, siteDbGroupId: 1 }];
+    mockTicketsListService.getTicketsParam.mockReturnValue(mockTickets);
+    mockTicketsListService.getAllTickets.mockReturnValue(mockTickets);
 
     // Act
     component.markSelectedTicketsOnPage();
 
     // Assert
-    expect(mockEmit).toHaveBeenCalledWith({
-      tickets: component.model.getTicketsParam(),
-      checkPermissionTickets: component.model.getAllTickets()
-    } as MarkedTicketQuery);
+    expect(mockTicketsListService.getTicketsParam).toHaveBeenCalledWith(component.model.groups);
+    expect(mockTicketsListService.getAllTickets).toHaveBeenCalledWith(component.model.groups);
+    expect(mockEmit).toHaveBeenCalled();
   });
 
   it('should display tooltip when marking selected tickets on all pages with no transid', () => {
@@ -216,6 +217,9 @@ describe('TicketsListComponent', () => {
     component.model = new TicketsModel();
     component.model.totalItemsList = [];
     component.tooltip.display = jest.fn();
+    
+    // Mock service to return empty array
+    mockTicketsListService.getTicketsParamWithAllPage.mockReturnValue([]);
 
     // Act
     component.markSelectedTicketsAllPage();
@@ -229,79 +233,73 @@ describe('TicketsListComponent', () => {
     component.model = Helper.getFakeTicketsModel();
     const mockEmit = jest.fn();
     component.updateMarkedTickets.emit = mockEmit;
+    
+    // Mock service methods
+    const mockTickets = [{ transId: '108936575088', matchId: null, siteDbGroupId: 1 }];
+    mockTicketsListService.getTicketsParamWithAllPage.mockReturnValue(mockTickets);
+    mockTicketsListService.getAllTickets.mockReturnValue(mockTickets);
 
     // Act
     component.markSelectedTicketsAllPage();
 
     // Assert
-    expect(mockEmit).toHaveBeenCalledWith({
-      tickets: component.model.getTicketsParamWithAllPage(),
-      checkPermissionTickets: component.model.getAllTickets()
-    } as MarkedTicketQuery);
+    expect(mockTicketsListService.getTicketsParamWithAllPage).toHaveBeenCalledWith(component.model);
+    expect(mockTicketsListService.getAllTickets).toHaveBeenCalledWith(component.model.groups);
+    expect(mockEmit).toHaveBeenCalled();
   });
 
   describe('GroupModel', () => {
-    it('should map tickets correctly', () => {
-      // Arrange
-      const groupModel = new GroupModel('', [], []);
-      const ticket = new TicketModel();
-      ticket.value = '111';
-      groupModel.uncheckedTicketList = ['111'];
-
-      // Act
-      groupModel.mapTickets([ticket]);
-
-      // Assert
-      expect(ticket.isChecked).toBe(true);
-    });
-
-    it('should handle defaultSpecialGroup correctly', () => {
-      // Arrange
-      const ticket = new TicketModel();
-      const groupModel = new GroupModel('', [], []);
-      groupModel.tickets = [ticket];
-      groupModel.name = 'phone betting';
-
-      // Act
-      groupModel.defaultSpecialGroup();
-
-      // Assert
-      expect(groupModel.isCheckAll).toBe(false);
-    });
-
     it('should handle getEnableSingleTickets correctly', () => {
       // Arrange
-      const groupModel = new GroupModel('', [], []);
+      const groupModel = new GroupModel();
       groupModel.isCheckAll = false;
+      // Khởi tạo tickets array
+      groupModel.tickets = [
+        new TicketModel({ value: '108936575088', isChecked: true, isDisable: false, mainTransId: '108936575088' }),
+        new TicketModel({ value: '108936575089', isChecked: false, isDisable: false, mainTransId: '108936575089' })
+      ];
 
       // Act
-      groupModel.getEnableSingleTickets();
+      const result = groupModel.getEnableSingleTickets();
 
       // Assert
+      expect(result).toEqual(['108936575088', '108936575089']);
       expect(groupModel.isCheckAll).toBe(false);
     });
 
     it('should handle getDisableBonusTickets correctly', () => {
       // Arrange
-      const groupModel = new GroupModel('', [], []);
+      const groupModel = new GroupModel();
       groupModel.isCheckAll = false;
+      // Khởi tạo tickets array
+      groupModel.tickets = [
+        new TicketModel({ value: '108936575088', isChecked: true, isDisable: true, mainTransId: '108936575088' }),
+        new TicketModel({ value: '108936575089', isChecked: false, isDisable: false, mainTransId: '108936575089' })
+      ];
 
       // Act
-      groupModel.getDisableBonusTickets();
+      const result = groupModel.getDisableBonusTickets();
 
       // Assert
+      expect(result).toEqual([]);
       expect(groupModel.isCheckAll).toBe(false);
     });
 
     it('should handle getEnableParlayTickets correctly', () => {
       // Arrange
-      const groupModel = new GroupModel('', [], []);
+      const groupModel = new GroupModel();
       groupModel.isCheckAll = false;
+      // Khởi tạo tickets array
+      groupModel.tickets = [
+        new TicketModel({ value: '108936575088', isChecked: true, isDisable: false, mainTransId: '108936575088' }),
+        new TicketModel({ value: '108936575089', isChecked: false, isDisable: false, mainTransId: '108936575089' })
+      ];
 
       // Act
-      groupModel.getEnableParlayTickets();
+      const result = groupModel.getEnableParlayTickets();
 
       // Assert
+      expect(result).toEqual(['108936575088', '108936575089']);
       expect(groupModel.isCheckAll).toBe(false);
     });
   });

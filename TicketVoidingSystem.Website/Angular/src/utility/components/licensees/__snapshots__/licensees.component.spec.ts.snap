@@ -4,6 +4,7 @@ exports[`LicenseesComponent should match snapshot when component is initialized 
 <licensees
   checkAllLicensee={[Function Boolean]}
   groupLicenseesChange={[Function EventEmitter_]}
+  licenseesService={[Function Object]}
   model={[Function GroupLicenseeModel]}
 >
   <div
@@ -38,6 +39,7 @@ exports[`LicenseesComponent should match snapshot when disabled is true 1`] = `
   checkAllLicensee={[Function Boolean]}
   disabled={[Function Boolean]}
   groupLicenseesChange={[Function EventEmitter_]}
+  licenseesService={[Function Object]}
   model={[Function GroupLicenseeModel]}
 >
   <div
@@ -71,6 +73,7 @@ exports[`LicenseesComponent should match snapshot with model data 1`] = `
 <licensees
   checkAllLicensee={[Function Boolean]}
   groupLicenseesChange={[Function EventEmitter_]}
+  licenseesService={[Function Object]}
   model={[Function GroupLicenseeModel]}
 >
   <div

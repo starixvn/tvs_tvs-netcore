@@ -7,10 +7,12 @@ import { EventDateFilterComponent } from '../event-date-filter/event-date-filter
 import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../models/check-username.model';
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
+import { UserNameService } from '../../../../../../utility/components/user-names/user-name.service';
 
 @Injectable()
 export class ValidationService {
   private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly userNameService = inject(UserNameService);
 
   isValidCommonData(productFilterComponent: ProductFilterComponent, eventDateFilterComponent: EventDateFilterComponent): boolean {
     return productFilterComponent.isValidComponent() && eventDateFilterComponent.isValidEventDate();
@@ -24,7 +26,7 @@ export class ValidationService {
   }
 
   async checkValidUsernames(args: ValidationBusinessRuleArgs): Promise<ValidationBusinessRuleOutput> {
-    const usernames = args.usernamesComponent.groupUsername.getAllValue();
+    const usernames = this.userNameService.getAllValue(args.usernamesComponent.groupUsername);
     try {
       args.primitiveProps.isShowError = false;
       args.primitiveProps.infoSiteDBDownModel = null;
@@ -68,9 +70,9 @@ export class ValidationService {
   }
 
   private checkDuplicatedUsernames(args: ValidationBusinessRuleArgs, usernames: string): ValidationBusinessRuleOutput | null {
-    args.usernamesComponent.groupUsername.resetAllValue();
-    if (args.usernamesComponent.groupUsername.getDuplicatedItems(usernames).length > 0) {
-      args.usernamesComponent.groupUsername.updateDuplicatedItems(usernames);
+    this.userNameService.resetAllValue(args.usernamesComponent.groupUsername);
+    if (this.userNameService.getDuplicatedItems(usernames).length > 0) {
+      this.userNameService.updateDuplicatedItems(args.usernamesComponent.groupUsername, usernames);
       return { isValid: args.usernamesComponent.checkValidItems() } as ValidationBusinessRuleOutput;
     }
     return null;
@@ -116,7 +118,7 @@ export class ValidationService {
   private handleSiteDbDown(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel): ValidationBusinessRuleOutput | null {
     args.primitiveProps.infoSiteDBDownModel = viewModel.infoSiteDBDownModel;
     if (viewModel.infoSiteDBDownModel) {
-      args.usernamesComponent.groupUsername.updateWarningSiteDBDown(viewModel.infoSiteDBDownModel.usernames);
+      this.userNameService.updateWarningSiteDBDown(args.usernamesComponent.groupUsername, viewModel.infoSiteDBDownModel.usernames);
       if (args.usernamesComponent.isAllUsernamesOffSiteDbDown()) {
         return { isValid: false } as ValidationBusinessRuleOutput;
       }
@@ -167,7 +169,7 @@ export class ValidationService {
   }
 
   private highlightInvalidUsernames(usernamesComponent: UsernamesComponent, invalidUsernames: string): boolean {
-    usernamesComponent.groupUsername.updateInvalid(invalidUsernames);
+    this.userNameService.updateInvalid(usernamesComponent.groupUsername, invalidUsernames);
     return usernamesComponent.checkValidItems();
   }
 

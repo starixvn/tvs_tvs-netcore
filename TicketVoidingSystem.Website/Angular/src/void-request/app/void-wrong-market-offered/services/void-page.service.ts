@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import _ from 'lodash';
-import { GetLogInfoQuery } from '../../../../add-request/app/add-request/models/add-request.query';
-import { GetLogInfoModel } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import clone from 'lodash/clone';
+import { GetLogInfoQuery } from '../../../../add-request-new/models/add-request.query';
+import { GetLogInfoModel } from '../../../../add-request-new/models/get-log-info.model';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { MappingModelStaticService } from '../../../../utility/services/mapping-model-static.service';
@@ -13,9 +13,9 @@ import { TemplateMessageService } from './template-message.service';
 
 @Injectable()
 export class VoidPageService {
-  commonService = inject(CommonService);
-  ticketsService = inject(TicketsService);
-  templateMessageService = inject(TemplateMessageService);
+  private readonly commonService = inject(CommonService);
+  private readonly ticketsService = inject(TicketsService);
+  private readonly templateMessageService = inject(TemplateMessageService);
 
   async getIssueTypes(): Promise<IssueTypesModel> {
     return this.commonService.getIssueTypes();
@@ -45,12 +45,12 @@ export class VoidPageService {
     for (const item of voidPageItems) {
       const ticketQuery = this.ticketsService.initTicketQuery(requestDetail, item.matchModel, item.requestDetailId);
       item.voidTicketsMini = await this.ticketsService.getVoidTicketsMini(ticketQuery);
-      item.templateValue = this.templateMessageService.getTemplateValue(item, requestDetail);
+      item.templateValue = this.templateMessageService.getTemplateValue(item);
       item.voidReason = await this.commonService.getVoidedReason(item.subIssueType.subIssueTypeId, item.matchModel.sportType);
       item.isAllLiveTickets = item.voidTicketsMini.isAllLiveTickets;
       item.isAllNonLiveTickets = item.voidTicketsMini.isAllNonLiveTickets;
       item.licenseeAffectedList = item.voidTicketsMini.licenseeAffectedList;
-      item.licenseeAffectedList = _.clone(item.licenseeAffectedList);
+      item.licenseeAffectedList = clone(item.licenseeAffectedList);
     }
   }
 

@@ -17,7 +17,7 @@
 </div>
 }
 <info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel"></info-site-db-down>
-<log-info-wrong-odds-sports-book [isEdit]="isEdit" [logInfo]="logInfoEvent" [requestId]="requestId"
+<log-info-wrong-odds-sports-book [isEdit]="isEdit" [logInfo]="logInfoEvent" [requestId]="requestId" [isVoided]="filter.isVoided"
   [issueTypeId]="filter.issueTypeId" (searchEvent)="handleSearchEvent()" [primitiveProps]="primitiveProps">
 </log-info-wrong-odds-sports-book>
 @if (primitiveProps.isShowErrorNoBetType) {
@@ -26,7 +26,12 @@
   No valid tickets found in the current range
 </div>
 }
-<confirm-add-request [isOpen]="confirmAddRequest.isOpen" [model]="confirmAddRequest" [issueTypes]="issueTypes" [voidActions]="filter.actions"
+<confirm-add-request
+  [isOpen]="confirmAddRequest.isOpen"
+  [issueTypeId]="filter.issueTypeId"
+  [model]="confirmAddRequest"
+  [issueTypes]="issueTypes"
+  [voidActions]="filter.actions"
   [selectedVoidAction]="filter.action" [selectedSubIssueType]="issueTypes.subIssueId"
   [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson"
   (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancelSaveRequest()">

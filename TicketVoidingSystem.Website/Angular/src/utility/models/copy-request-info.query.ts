@@ -1,4 +1,4 @@
-import { OperatorInfo } from "../../add-request/app/add-request/others/others.model";
+import { OperatorInfo } from "../../add-request-new/component/others/others.model";
 import { LogInfoDetail } from "./log-info-detail.model";
 
 export class CopyRequestInfoQuery {

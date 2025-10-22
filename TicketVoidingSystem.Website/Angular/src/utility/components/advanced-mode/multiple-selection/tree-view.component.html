@@ -5,7 +5,7 @@
                (click)="item.expanded = !item.expanded"></i>
             <label [ngClass]="{'margin-left-13': item.items.length == 0}">
                 <input type="checkbox" [(ngModel)]="item.checked" 
-                       (ngModelChange)="item.checkChilds();clickEvent(item)" 
+                       (ngModelChange)="checkChilds(item);clickEvent(item)" 
                        [disabled]="!item.enable"  (keyup.shift)="keyUp()" (keydown.shift)="keyDown()" />
                 {{ item.text }}
             </label>

@@ -16,6 +16,7 @@
             <div class="ms-2">
               <div>Issue Type: <strong>{{model.issueTypeName}}</strong></div>
               <div>Sub Type: <strong>{{model.subIssueTypeName}}</strong></div>
+              <div>Action: <strong>{{model.actionName}}</strong></div>
             </div>
           </div>
           @if (model.warningRelatedEvents.length > 0) {
@@ -51,7 +52,7 @@
           @if (model.isHasAffectedTicketSiteDBDown) {
             <div class="mg-top-10">
               <label><input type="checkbox"
-                  [(ngModel)]="model.isMarkTicketSiteDbDown"/> 
+                  [(ngModel)]="model.isMarkTicketSiteDbDown"/>
                   Mark ticket(s) of the siteDB down to prevent settling, and void them later.</label>
             </div>
           }

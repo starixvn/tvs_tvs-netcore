@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import * as _ from 'lodash';
+import first from 'lodash/first';
+import isEqual from 'lodash/isEqual';
 import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
 import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
 import { NgSelectMixtureComponent } from '../../../../../../utility/components/ng-select-mixture/ng-select-mixture.component';
@@ -14,6 +15,8 @@ import { FilterReducedOverModel } from '../models/filter-reduced-over.model';
 import { FilterReducedOverService } from '../services/filter-reduced-over.service';
 import { ValidationService } from '../services/validation.service';
 import { PrimitivePropertyItem } from './filter-reduced-over-item.model';
+import { MultipleSelectionService } from '../../../../../../utility/components/multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../../../../../utility/components/multiple-selection/items-select.service';
 
 @Component({
   selector: 'filter-reduced-over-item',
@@ -40,7 +43,9 @@ export class FilterReducedOverItemComponent implements OnInit {
   private readonly element = inject(ElementRef);
   private readonly validationService = inject(ValidationService);
   private readonly filterService = inject(FilterReducedOverService);
-
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
+  private readonly itemsSelectService = inject(ItemsSelectService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -87,9 +92,9 @@ export class FilterReducedOverItemComponent implements OnInit {
       if (firstReducedOverBetType.isHasPlayer) {
         const playersOfCheckedBetTypes = this.originalPlayers.filter(x => checkedBetTypeIds.includes(x.betTypeId.toString()));
         this.model.playerMultipleSelection.items = this.filterService.renderPlayer(playersOfCheckedBetTypes);
-        this.model.playerMultipleSelection.items.forEach(x => x.checkBySelectedItem(this.model.playerIds));
-        this.model.playerMultipleSelection.isCheckAll = this.model.playerMultipleSelection.items.every(x => x.allChildIsChecked());
-        this.model.playerMultipleSelection.selectionTitle = this.model.playerMultipleSelection.getDisplayedItems();
+        this.model.playerMultipleSelection.items.forEach(x => this.itemsSelectService.checkBySelectedItem(x, this.model.playerIds));
+        this.model.playerMultipleSelection.isCheckAll = this.model.playerMultipleSelection.items.every(x => this.itemsSelectService.allChildIsChecked(x));
+        this.model.playerMultipleSelection.selectionTitle = this.multipleSelectionService.getDisplayedItems(this.model.playerMultipleSelection);
       } else {
         this.model.playerMultipleSelection.items = [];
       }
@@ -113,7 +118,7 @@ export class FilterReducedOverItemComponent implements OnInit {
   }
 
   public resetValue(newBetTypeIds: string[]): void {
-    if (!_.isEqual(this.model.betTypeIds, newBetTypeIds)) {
+    if (!isEqual(this.model.betTypeIds, newBetTypeIds)) {
       this.model.wicketOver = null;
       this.model.runs = null;
       this.model.playerIds = [];
@@ -131,7 +136,7 @@ export class FilterReducedOverItemComponent implements OnInit {
   }
 
   private updateStatusControlByCheckedBetTypes(checkedBetTypeIds: string[]): void {
-    const reducedOverModel = this.originalReducedOverBetTypes.find(x => x.betTypeId.toString() === _.first(checkedBetTypeIds));
+    const reducedOverModel = this.originalReducedOverBetTypes.find(x => x.betTypeId.toString() === first(checkedBetTypeIds));
     this.primitivePropertyItem.isDisabledWicketOver = !reducedOverModel?.isHasOverWicket;
     this.primitivePropertyItem.isDisabledRuns = !reducedOverModel?.isHasRuns;
     this.primitivePropertyItem.isDisabledPlayer = !reducedOverModel?.isHasPlayer;

@@ -94,17 +94,14 @@ export class ReplaceCommonValuesService {
   }
 
   private getEnglishInning(inning: string): string {
-    const innings = inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.englishValue).join(', ');
-    return innings;
+    return inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.englishValue).join(', ');
   }
 
   private getChineseTraditionalInning(inning: string): string {
-    const innings = inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.chineseTraditionalValue).join(', ');
-    return innings;
+    return inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.chineseTraditionalValue).join(', ');
   }
 
   private getChineseSimplifiedInning(inning: string): string {
-    const innings = inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.chineseSimplifiedValue).join(', ');
-    return innings;
+    return inning.split(',').map(x => OrdinalNumberConstant.ORDINAL_NUMBER.find(y => y.value === x)?.chineseSimplifiedValue).join(', ');
   }
 }

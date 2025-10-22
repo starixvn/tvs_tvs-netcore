@@ -45,10 +45,11 @@ describe('AppService', () => {
   it('#getGroupBetTypes should return expected data', async() => {
     // Arrange
     const groupBettype: GroupBetType[] = [
-      new GroupBetType('1H', [new BetType(15, '1H 1X2', false, 0, true)], true),
-      new GroupBetType('FT', [new BetType(4, 'Correct Score', false, 0, true)], true),
-    ];
-    const expectedGroupBettypesModel = new GroupBetTypesModel(groupBettype, true);
+      { groupName: '1H', betTypes: [new BetType(15, '1H 1X2', false, 0, true)], isChecked: true },
+      { groupName: 'FT', betTypes: [new BetType(4, 'Correct Score', false, 0, true)], isChecked: true },
+    ] as GroupBetType[];
+    
+    const expectedGroupBettypesModel = {groupBetTypes: groupBettype, isChecked: true, result: {errorCode: 0}} as GroupBetTypesModel;
     httpService.postJson.mockResolvedValue(expectedGroupBettypesModel);
     
     // Action
@@ -105,7 +106,7 @@ describe('AppService', () => {
   it('#getTickets should return expected data', async() => {
     // Arrange
     const expectedTicketsModel = new TicketsModel();
-    expectedTicketsModel.groups = [new GroupModel('MBC Group', [{mainTransId: '12312'} as TicketModel])];
+    expectedTicketsModel.groups = [{name: 'MBC Group', tickets: [{mainTransId: '12312'} as TicketModel]}] as GroupModel[];
     expectedTicketsModel.totalItems = 1;
     httpService.postJson.mockResolvedValue(expectedTicketsModel);
     

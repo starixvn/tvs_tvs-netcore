@@ -33,8 +33,7 @@ class Helper {
   static readonly fakePermission = new PermissionAddRequest();
   static readonly fakeIssueTypes = {
     issueTypes: [{ issueTypeId: 1, issueTypeName: 'Test Issue Type' }],
-    selectedSubIssueTypes: [{ subIssueTypeId: 1, subIssueTypeName: 'Test Sub Issue Type' }],
-    subIssueTypes: [],
+    subIssueTypes: [{ subIssueTypeId: 1, subIssueTypeName: 'Test Sub Issue Type' }],
     issueId: 1,
     subIssueId: 1
   } as IssueTypes;

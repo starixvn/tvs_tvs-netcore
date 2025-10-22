@@ -1,15 +1,15 @@
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { IssueInfo } from '../../../../utility/models/issue-type.model';
+import { MatchModel } from '../../../../utility/models/match.model';
+import { TestingModule } from '../../../../utility/modules/testing.module';
+import { CommonService } from '../../../../utility/services/common.service';
 import { AppService } from '../../app.service';
 import { TabInfoRequest, TicketListModal } from '../ticket-list.modal';
 import { TicketsModel } from '../tickets/tickets.model';
 import { RequestInfoComponent } from './request-info.component';
 import { GeneralInfo, GeneralInfoViewModel } from './request-info.model';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CommonService } from '../../../../utility/services/common.service';
-import { TestingModule } from '../../../../utility/modules/testing.module';
-import { MatchModel } from '../../../../utility/models/match.model';
 
 describe('RequestInfoComponent', () => {
   let component: RequestInfoComponent;

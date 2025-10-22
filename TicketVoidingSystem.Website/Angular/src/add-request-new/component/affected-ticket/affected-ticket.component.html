@@ -11,7 +11,7 @@
           <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeClick()"></button>
         </div>
         <div class="modal-body">
-          <div class="affected-bet-type-area mb-3">
+          <div class="affected-bet-type-area mb-3" [blockUi]="blockBetList">
             @if (tickets.groups.length > 0) {
             <div>
               @if (model.isShowDetailBetTypeCount) {
@@ -46,7 +46,7 @@
               @if (isShowAffectedTickets) {
               <div class="section-body">
                 @if (isShowAffectedTickets) {
-                <tickets [model]="tickets" [blockUi]="blockBetList"></tickets>
+                <tickets [model]="tickets"></tickets>
                 }
               </div>
               }
@@ -61,7 +61,7 @@
               </div>
               @if (isShowOtherTickets) {
               <div class="section-body">
-                <tickets [model]="otherTickets" [blockUi]="blockBetList"></tickets>
+                <tickets [model]="otherTickets"></tickets>
               </div>
               }
             </div>

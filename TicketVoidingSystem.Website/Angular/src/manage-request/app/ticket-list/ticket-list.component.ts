@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, inject } from '@angular/core';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
-import { CommonService } from '../../../utility/services/common.service';
-import { TicketListModal } from './ticket-list.modal';
-import { RequestInfoComponent } from './request-info/request-info.component';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
+import { CommonService } from '../../../utility/services/common.service';
+import { RequestInfoComponent } from './request-info/request-info.component';
+import { TicketListModal } from './ticket-list.modal';
 
 @Component({
   standalone: true,

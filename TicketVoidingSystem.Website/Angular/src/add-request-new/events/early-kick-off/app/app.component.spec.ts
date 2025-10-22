@@ -58,8 +58,9 @@ describe('AppComponent', () => {
     });
 
     it('should set issueTypeId to EARLY_KICK_OFF constant', () => {
+      // Gọi ngOnInit để trigger lifecycle hook
+      component.ngOnInit();
       expect(component.issueTypeId).toBe(IssueTypeConstant.EARLY_KICK_OFF);
-      expect(component.issueTypeId).toBe('3');
     });
   });
 

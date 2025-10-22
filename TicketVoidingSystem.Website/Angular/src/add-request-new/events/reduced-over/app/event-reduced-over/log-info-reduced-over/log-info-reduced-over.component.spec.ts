@@ -4,6 +4,7 @@ import { ModalService } from '../../../../../../utility/components/modal/modal.s
 import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { AffectedTicketService } from '../../../../../component/affected-ticket/affected-ticket.service';
 import { PrimitivePropertyEvent } from '../models/primitive-property-event.model';
 import { LogInfoReducedOverComponent } from './log-info-reduced-over.component';
 
@@ -16,7 +17,8 @@ describe('LogInfoReducedOverComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [
-        ModalService
+        ModalService,
+        AffectedTicketService
       ]
     }).compileComponents();
 
@@ -44,9 +46,9 @@ describe('LogInfoReducedOverComponent', () => {
     const requestId = 123;
     const transIds = 'ABC123';
     const spy = jest.spyOn(StaticService, 'openPopupTransIds');
-    
+
     component.openPopupTransIds(requestId, transIds);
-    
+
     expect(spy).toHaveBeenCalledWith(requestId, transIds, modalService);
   });
 
@@ -55,9 +57,9 @@ describe('LogInfoReducedOverComponent', () => {
     const settleCount = 3;
     const instantlySettleCount = 1;
     const spy = jest.spyOn(StaticService, 'countInfoContent');
-    
+
     component.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
-    
+
     expect(spy).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
   });
 
@@ -77,9 +79,9 @@ describe('LogInfoReducedOverComponent', () => {
     const settleCount = 3;
     const instantlySettleCount = 1;
     const spy = jest.spyOn(StaticService, 'isShowCountInfo');
-    
+
     component.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
-    
+
     expect(spy).toHaveBeenCalledWith(cashOutCount, settleCount, instantlySettleCount);
   });
 });

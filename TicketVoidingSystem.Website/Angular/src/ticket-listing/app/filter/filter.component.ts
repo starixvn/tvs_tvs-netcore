@@ -30,6 +30,8 @@ import { AppComponent } from '../app.component';
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
 import { FilterEvent, Item, Licensee, Type } from './filter.model';
+import { BetTypesService } from '../../../utility/components/bettypes/bettypes.service';
+import { GroupBetTypesService } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.service';
 
 @Component({
   standalone: true,
@@ -81,12 +83,14 @@ export class FilterComponent implements OnInit {
   commonService = inject(CommonService);
   blockUIService = inject(BlockUiService);
   appComponent = inject(AppComponent);
-
+  betTypesService = inject(BetTypesService);
+  groupBetTypesService = inject(GroupBetTypesService);
+  
   async ngOnInit() {
     this.tooltip.element = this.element;
     await this.initFilter();
     this.setDateTime();
-    this.groupBetTypes = new GroupBetTypesModel([], false);
+    this.groupBetTypes = new GroupBetTypesModel();
     this.renderComboParlay();
   }
 
@@ -187,7 +191,7 @@ export class FilterComponent implements OnInit {
       this.query.eventType = 2;
     } else {
       this.groupBetTypes.isChecked = true;
-      this.groupBetTypes.changeCheckedModelToGroup();
+      this.groupBetTypesService.changeCheckedModelToGroup(this.groupBetTypes);
     }
 
     if (Product.STATIC_BETTYPES.indexOf(value) > -1) {
@@ -195,7 +199,7 @@ export class FilterComponent implements OnInit {
     }
 
     if (Product.BET_BUILDER === value) {
-      this.betTypes = new BetTypesModel([], false);
+      this.betTypes = new BetTypesModel();
     }
 
     await this.blurMatchId();
@@ -210,7 +214,7 @@ export class FilterComponent implements OnInit {
     const data = await this.commonService.getBetTypes(query);
     this.blockUIService.stop();
     if (data.result.errorCode === 0) {
-      this.commonBetTypes = new BetTypesModel(data.betTypes, true);
+      this.commonBetTypes = this.betTypesService.initBetTypesModel(data.betTypes, true);
     }
   }
 
@@ -268,7 +272,7 @@ export class FilterComponent implements OnInit {
       && !this.isSportTypeVs7(sportType);                                 //sportTypes invalid in  Virtual Sports 7
   }
 
-  private isSportTypeVs7(sportType: number){
+  private isSportTypeVs7(sportType: number) {
     const sportTypeVs7 = [125, 126, 127];
 
     return sportTypeVs7.includes(sportType);
@@ -318,7 +322,7 @@ export class FilterComponent implements OnInit {
 
   async handleByProduct() {
     if (Product.GET_BETTYPES.indexOf(this.query.product) > -1) {
-      this.groupBetTypes = new GroupBetTypesModel([], false);
+      this.groupBetTypes = new GroupBetTypesModel();
       await this.handleBetTypes();
       this.changeMatchEvent.emit(this.matchId);
     }
@@ -373,8 +377,8 @@ export class FilterComponent implements OnInit {
       }
     }
 
-    this.groupBetTypes = new GroupBetTypesModel(data.groupBetTypes, true);
-    this.changeBetTypes(this.groupBetTypes.getAllBetType());
+    this.groupBetTypes = this.groupBetTypesService.initGroupBetTypesModel(data.groupBetTypes, true);
+    this.changeBetTypes(this.groupBetTypesService.getAllBetType(this.groupBetTypes.groupBetTypes));
   }
 
   async handleBetTypesOfBetBuilder(query: GetBetTypesQuery) {
@@ -386,9 +390,9 @@ export class FilterComponent implements OnInit {
 
     const betTypes: BetTypeModel[] = [];
     data.forEach(item => {
-      betTypes.push(new BetTypeModel(item.selectionType.toString(), item.selectionName, false, Product.BET_BUILDER, true));
+      betTypes.push(this.betTypesService.initBetTypeModel(item.selectionType.toString(), item.selectionName, false, Product.BET_BUILDER, true));
     });
-    this.betTypes = new BetTypesModel(betTypes, true);
+    this.betTypes = this.betTypesService.initBetTypesModel(betTypes, true);
   }
 
   async handleGroupBetTypesOfVirtualSports(query: GetBetTypesQuery) {
@@ -471,7 +475,8 @@ export class FilterComponent implements OnInit {
     } else if (this.query.product === Product.VIRTUAL_SPORTS && this.groupsBetTypesVS.betTypes.length > 0) {
       return this.betTypesVSComponent.validate();
     } else {
-      return this.betTypesComponent.validate();    }
+      return this.betTypesComponent.validate();
+    }
   }
 
   updateDisabledTransDate() {
@@ -495,7 +500,7 @@ export class FilterComponent implements OnInit {
       this.query.selectionType = '';
     }
     if (this.isShowAdvancedMode()) {
-      const checkedBetTypes = this.groupBetTypes.getValueCheckedBetTypes();
+      const checkedBetTypes = this.groupBetTypesService.getValueCheckedBetTypes(this.groupBetTypes.groupBetTypes);
       const betTeams = this.advancedModeComponent.getBetTypeModels(checkedBetTypes);
       this.query.betTeams = betTeams;
     }
@@ -505,7 +510,7 @@ export class FilterComponent implements OnInit {
     return this.query;
   }
 
-  getSelectionSubParlays(bet: string) {
+  private getSelectionSubParlays(bet: string) {
     if (bet !== "SubParlay") {
       return "";
     }
@@ -513,13 +518,13 @@ export class FilterComponent implements OnInit {
     return this.selectedComboParlay.join(',');
   }
 
-  getCheckedBetTypes(): string {
+  private getCheckedBetTypes(): string {
     if (this.query.product === Product.SPORTS_BOOK) {
-      return this.groupBetTypes.getValueCheckedBetTypes();
+      return this.groupBetTypesService.getValueCheckedBetTypes(this.groupBetTypes.groupBetTypes);
     } else if (this.query.product === Product.VIRTUAL_SPORTS) {
       return this.betTypesVSComponent.getCheckedBetTypes().join(',');
     } else {
-      return this.betTypes.getCheckedBetTypes().join(',');
+      return this.betTypesService.getCheckedBetTypes(this.betTypes.betTypes).join(',');
     }
   }
 
@@ -589,7 +594,7 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  public handleBetTypesAndAdvancedMode(): void {
+  handleBetTypesAndAdvancedMode(): void {
     this.checkAndDisabledAllBetTypes();
     this.checkAndDisabledAllGroupBetTypes();
   }
@@ -604,6 +609,23 @@ export class FilterComponent implements OnInit {
 
   isShowSelectionSubParlay(): boolean {
     return this.singleOrSubParlay === "SubParlay";
+  }
+
+  changeBallSequenceItem() {
+    this.ballSequences.isChecked = true;
+    this.ballSequences.value = [];
+    this.ballSequences.items.forEach(item => {
+      if (item.isChecked) {
+        this.ballSequences.value.push(item.value);
+      } else {
+        this.ballSequences.isChecked = false;
+      }
+    });
+  }
+
+  changeBallSequenceAll() {
+    this.ballSequences.items.forEach(item => item.isChecked = this.ballSequences.isChecked);
+    this.ballSequences.value = this.ballSequences.isChecked ? [1, 2, 3] : [];
   }
 }
 

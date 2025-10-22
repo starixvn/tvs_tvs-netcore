@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { EarlyKickOffModel } from '../../../../add-request/app/add-request/models/event-eko.model';
-import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request/app/add-request/models/get-log-info.model';
-import { TransInfoAddRequestModel } from '../../../../add-request/app/add-request/models/trans-info-add-request.model';
-import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { EarlyKickOffModel } from '../../../../add-request-new/models/event-eko.model';
+import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request-new/models/get-log-info.model';
+import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';

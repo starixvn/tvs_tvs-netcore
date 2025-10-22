@@ -115,4 +115,26 @@ describe('TicketsComponent', () => {
     // Assert
     expect(mockEventPagingChange).toHaveBeenCalledTimes(1);
   });
+
+  it('#getTitle should return "Recovered Tickets" when isRecoverTicket returns true', () => {
+    // Arrange
+    component.issueTypeId = 22;
+
+    // Act
+    const result = component.getTitle();
+
+    // Assert
+    expect(result).toBe('Recovered Tickets');
+  });
+
+  it('#getTitle should return "Voided Tickets" when isRecoverTicket returns false', () => {
+    // Arrange
+    component.issueTypeId = 1;
+
+    // Act
+    const result = component.getTitle();
+
+    // Assert
+    expect(result).toBe('Voided Tickets');
+  });
 });

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { Subscription } from 'rxjs';
 import { BlockFullUiComponent } from '../../utility/components/block-full-ui/block-full-ui.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
@@ -63,7 +63,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   showAddUserModal() {
     this.addUserModel.isOpen = true;
-    this.addUserModel = _.clone(this.addUserModel);
+    this.addUserModel = clone(this.addUserModel);
   }
 
   async handleSearchEvent(): Promise<void> {

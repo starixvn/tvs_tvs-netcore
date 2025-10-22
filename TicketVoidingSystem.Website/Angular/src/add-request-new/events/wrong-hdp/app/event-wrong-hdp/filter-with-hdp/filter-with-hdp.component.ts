@@ -60,7 +60,7 @@ export class FilterWithHdpComponent implements OnInit {
   }
 
   private initTeamFavorite(): void {
-    if (this.isEdit && (this.filterWithHdpModel.homeFavorite || this.filterWithHdpModel.awayFavorite)) {
+    if (this.filterWithHdpModel.homeFavorite || this.filterWithHdpModel.awayFavorite) {
       this.teamFavorite = this.filterWithHdpModel.homeFavorite ? TeamFavorite.HOME : TeamFavorite.AWAY;
     } else {
       this.teamFavorite = TeamFavorite.HOME;

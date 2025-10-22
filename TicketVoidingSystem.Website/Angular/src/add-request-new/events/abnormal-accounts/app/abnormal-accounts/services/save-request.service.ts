@@ -13,7 +13,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { SaveRequestArg } from '../models/save-request.model';
 import { ValidationBusinessRuleArgs } from '../models/validation.model';
 import { ValidationService } from './validation.service';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 
 @Injectable()
 export class SaveRequestService {
@@ -117,7 +117,7 @@ export class SaveRequestService {
   }
 
   private createAbnormalAccountModel(args: SaveRequestArg): AbnormalAccountModel {
-    const model = _.clone(args.abnormalAccountModel);
+    const model = clone(args.abnormalAccountModel);
     model.usernames = this.getUsernamesForSaveRequest(args.abnormalAccountModel.usernames, args.confirmAddRequestComponent, args.primitiveProps.infoSiteDBDownModel?.usernames);
     model.accountWinlostModels
       = this.getAccountWinlostModelsForSaveRequest(args.filter.action, args.abnormalAccountModel.accountWinlostModels, args.confirmAddRequestComponent);

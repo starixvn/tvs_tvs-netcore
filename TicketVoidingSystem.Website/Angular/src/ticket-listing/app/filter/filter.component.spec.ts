@@ -4,15 +4,8 @@ import { AppService } from '../app.service';
 import { CommonService } from '../../../utility/services/common.service';
 import { BlockUiService } from '../../../utility/components/block-ui/block-ui.service';
 import { ElementRef, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { NgSelectModule } from '@ng-select/ng-select';
 import { AdvancedModeComponent } from '../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
-import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
-import { BetTypesVirtualSportComponent } from '../../../utility/components/bettypes-virtualsports/bettypes-virtualsports.component';
-import { DateFullTimeNewComponent } from '../../../utility/components/date-time/date-full-time-new/date-full-time-new.component';
-import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Product } from '../../../utility/constants/config';
 import { GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
@@ -22,6 +15,7 @@ import { FilterEvent } from './filter.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { AppComponent } from '../app.component';
+import { BallSequences } from '../../../utility/models/ball-sequences';
 
 class Helper {
   static readonly mockLicensees = [
@@ -54,12 +48,7 @@ class Helper {
         blueHighlight: false
       }],
       isChecked: false,
-      isShow: true,
-      changeCheckedGroupToBetType: () => {},
-      changeCheckedBetTypeToGroup: () => {},
-      getCheckedBetTypes: () => [1],
-      getValueCheckedBetTypes: () => ['1'],
-      hasBetType: () => true
+      isShow: true
     }],
     isChecked: false,
     result: {
@@ -67,23 +56,8 @@ class Helper {
       errorMsg: '',
       isSuccessful: true,
       data: null
-    },
-    changeCheckedModelToGroup: () => {},
-    changeCheckedGroupToModel: () => {},
-    getCheckedBetTypes: () => [1],
-    getValueCheckedBetTypes: () => '1',
-    getAllBetType: () => [{
-      id: 1,
-      name: 'Test Bet Type',
-      liveIndicator: false,
-      type: 1,
-      value: '1',
-      isChecked: false,
-      redHighlight: false,
-      blueHighlight: false
-    }],
-    hasBetType: () => true
-  } as unknown as GroupBetTypesModel;
+    }
+  } as GroupBetTypesModel;
 
   static readonly mockMatch = {
     matchCode: 'TEST123',
@@ -125,7 +99,6 @@ describe('FilterComponent', () => {
   let fixture: ComponentFixture<FilterComponent>;
   let appService: AppService;
   let commonService: CommonService;
-  let blockUiService: BlockUiService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -133,19 +106,23 @@ describe('FilterComponent', () => {
         TestingModule
       ],
       providers: [
-        { provide: AppService, useValue: { 
-          getLicensees: jest.fn().mockResolvedValue(Helper.mockLicensees),
-          getMatchInfo: jest.fn().mockResolvedValue(Helper.mockMatch),
-          getSelectionTypes: jest.fn().mockResolvedValue([])
-        }},
-        { provide: CommonService, useValue: {
-          getBetTypes: jest.fn().mockResolvedValue(Helper.mockBetTypes),
-          getGroupBetTypes: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes),
-          getBetTypesVirtualSports: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes)
-        }},
-        { provide: BlockUiService, useValue: { start: jest.fn(), stop: jest.fn() }},
-        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }},
-        { provide: AppComponent, useValue: {}}
+        {
+          provide: AppService, useValue: {
+            getLicensees: jest.fn().mockResolvedValue(Helper.mockLicensees),
+            getMatchInfo: jest.fn().mockResolvedValue(Helper.mockMatch),
+            getSelectionTypes: jest.fn().mockResolvedValue([])
+          }
+        },
+        {
+          provide: CommonService, useValue: {
+            getBetTypes: jest.fn().mockResolvedValue(Helper.mockBetTypes),
+            getGroupBetTypes: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes),
+            getBetTypesVirtualSports: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes)
+          }
+        },
+        { provide: BlockUiService, useValue: { start: jest.fn(), stop: jest.fn() } },
+        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') } },
+        { provide: AppComponent, useValue: {} }
       ]
     }).compileComponents();
 
@@ -153,7 +130,6 @@ describe('FilterComponent', () => {
     component = fixture.componentInstance;
     appService = TestBed.inject(AppService);
     commonService = TestBed.inject(CommonService);
-    blockUiService = TestBed.inject(BlockUiService);
 
     // Initialize searchEvent
     component.searchEvent = new EventEmitter<FilterEvent>();
@@ -194,17 +170,13 @@ describe('FilterComponent', () => {
       validate: jest.fn().mockReturnValue(true),
       getBetTypeModels: jest.fn().mockReturnValue([])
     } as unknown as AdvancedModeComponent;
-    component.groupBetTypes = {
-      getValueCheckedBetTypes: jest.fn().mockReturnValue('1')
-    } as unknown as GroupBetTypesModel;
+    component.groupBetTypes = Helper.mockGroupBetTypes;
     component.ballSequences = {
       value: [],
       name: '',
       items: [],
-      isChecked: false,
-      changeAll: jest.fn(),
-      changeItem: jest.fn()
-    };
+      isChecked: false
+    } as BallSequences;
     component.disabledTransDate = true;
     component.singleOrSubParlay = 'All';
     component.checkMatch = '';
@@ -224,7 +196,6 @@ describe('FilterComponent', () => {
     expect(emitArg.match).toBe(Helper.mockMatch);
     expect(emitArg.query.matchId).toBe(123);
     expect(emitArg.query.product).toBe(Product.SPORTS_BOOK);
-    expect(emitArg.query.betTypes).toBe('1');
     expect(emitArg.query.ballSequence).toBe('');
   });
 
@@ -232,7 +203,7 @@ describe('FilterComponent', () => {
     // Arrange
     component.matchId = '';
     jest.spyOn(component.searchEvent, 'emit');
-    
+
     // Mock tooltip
     component.tooltip = {
       display: jest.fn(),
@@ -304,7 +275,7 @@ describe('FilterComponent', () => {
     component.singleOrSubParlay = 'All';
 
     // Act
-    const result = component.getSelectionSubParlays('All');
+    const result = component['getSelectionSubParlays']('All');
 
     // Assert
     expect(result).toBe('');
@@ -316,7 +287,7 @@ describe('FilterComponent', () => {
     component.selectedComboParlay = ['1', '2'];
 
     // Act
-    const result = component.getSelectionSubParlays('SubParlay');
+    const result = component['getSelectionSubParlays']('SubParlay');
 
     // Assert
     expect(result).toBe('1,2');

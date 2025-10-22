@@ -5,23 +5,34 @@ import { ConfirmationComponent } from '../../../utility/components/confirmation/
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { TEXT } from '../../../utility/constants/text';
 import { TestingModule } from '../../../utility/modules/testing.module';
+import { NumberItemService } from '../../../utility/components/bet-ids/number-item.service';
+import { GroupNumber, NumberItem } from '../../../utility/components/bet-ids/bet-ids.model';
 
 describe('ValidationService', () => {
   let service: ValidationService;
   let betIdsComponent: BetIdsComponent;
+  let numberItemService: NumberItemService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule],
-      providers: [ValidationService]
+      providers: [ValidationService, NumberItemService]
     });
 
     service = TestBed.inject(ValidationService);
+    numberItemService = TestBed.inject(NumberItemService);
+    
+    // Tạo GroupNumber với NumberItem thực tế
+    const groupNumber = new GroupNumber();
+    groupNumber.items = [
+      new NumberItem('123'),
+      new NumberItem('456'),
+      new NumberItem('789'),
+      new NumberItem('012')
+    ];
+    
     betIdsComponent = {
-      groupNumber: {
-        updateInvalidItems: jest.fn(),
-        updateMoved: jest.fn()
-      }
+      groupNumber: groupNumber
     } as unknown as BetIdsComponent;
   });
 
@@ -34,15 +45,51 @@ describe('ValidationService', () => {
       // Arrange
       const invalidTransIds = '123,456';
       const movedTransIds = '789,012';
-      betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-      betIdsComponent.groupNumber.updateMoved = jest.fn();
+      
+      // Spy on NumberItemService methods
+      const updateInvalidItemsSpy = jest.spyOn(numberItemService, 'updateInvalidItems');
+      const updateMovedSpy = jest.spyOn(numberItemService, 'updateMoved');
 
       // Act
       service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
 
       // Assert
-      expect(betIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith(invalidTransIds, TEXT.INVALID_TICKETS);
-      expect(betIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith(movedTransIds);
+      expect(updateInvalidItemsSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, invalidTransIds, TEXT.INVALID_TICKETS);
+      expect(updateMovedSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, movedTransIds);
+    });
+
+    it('should update items with invalid status when invalidTransIds provided', () => {
+      // Arrange
+      const invalidTransIds = '123,456';
+      const movedTransIds = '';
+      
+      // Spy on NumberItemService methods
+      const updateInvalidItemsSpy = jest.spyOn(numberItemService, 'updateInvalidItems');
+      const updateMovedSpy = jest.spyOn(numberItemService, 'updateMoved');
+
+      // Act
+      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
+
+      // Assert
+      expect(updateInvalidItemsSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, invalidTransIds, TEXT.INVALID_TICKETS);
+      expect(updateMovedSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, movedTransIds);
+    });
+
+    it('should update items with moved status when movedTransIds provided', () => {
+      // Arrange
+      const invalidTransIds = '';
+      const movedTransIds = '789,012';
+      
+      // Spy on NumberItemService methods
+      const updateInvalidItemsSpy = jest.spyOn(numberItemService, 'updateInvalidItems');
+      const updateMovedSpy = jest.spyOn(numberItemService, 'updateMoved');
+
+      // Act
+      service.highlightInvalidTransIds(betIdsComponent, invalidTransIds, movedTransIds);
+
+      // Assert
+      expect(updateInvalidItemsSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, invalidTransIds, TEXT.INVALID_TICKETS);
+      expect(updateMovedSpy).toHaveBeenCalledWith(betIdsComponent.groupNumber.items, movedTransIds);
     });
   });
 

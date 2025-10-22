@@ -119,9 +119,9 @@ export class EventBaseLayoutComponent implements OnInit, AfterViewInit, OnDestro
     this.primitiveProperty.isEdit = this.editRequestService.isActionEditRequest();
     if (this.primitiveProperty.isEdit) {
       this.primitiveProperty.requestId = this.editRequestService.getRequestId();
-      this.primitiveProperty.title = `Home / Manage Request / Edit Request - ${this.primitiveProperty.requestId}`;
+      this.primitiveProperty.title = `Edit Request - ${this.primitiveProperty.requestId}`;
     } else {
-      this.primitiveProperty.title = 'Home / Manage Request / Add Request';
+      this.primitiveProperty.title = 'Add Request';
     }
   }
 

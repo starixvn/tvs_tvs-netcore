@@ -59,13 +59,12 @@ describe('AppComponent', () => {
 
     it('should set issueTypeId to WRONG_OFFERED_NAME constant', () => {
       expect(component.issueTypeId).toBe(IssueTypeConstant.WRONG_OFFERED_NAME);
-      expect(component.issueTypeId).toBe('1');
     });
   });
 
   describe('saveRequest Method', () => {
     it('should call eventWrongOfferedNameComponent.saveRequest when saveRequest is called', async () => {
-      // Arrange - mock đã được khởi tạo ở beforeEach
+      // Arrange
       component.eventWrongOfferedNameComponent = {} as EventWrongOfferedNameComponent;
       component.eventWrongOfferedNameComponent.saveRequest = jest.fn();
 

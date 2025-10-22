@@ -13,7 +13,7 @@
     <div class="dropdown-header" [ngClass]="{'item-selected': multipleSelect.isCheckAll}">
       <label [ngClass]="{'cursor-not-allowed': isDisabled}">
         <input class="me-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="isDisabled"
-          (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();"
+          (ngModelChange)="checkAllItems();changeItems();"
           [ngClass]="{'cursor-not-allowed': isDisabled}" />
         {{multipleSelect.checkAllCheckBoxText}}
       </label>

@@ -1,18 +1,18 @@
-import { RedCardModel } from '../../../add-request/app/add-request/models/event-red-card.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { QueryList } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RedCardModel } from '../../../add-request-new/models/event-red-card.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
 import { VoidMatch } from '../models/void-match.model';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { VoidPageService } from './services/void-page.service';
 import { VoidDangerAcceptedComponent } from './void-danger-accepted.component';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { QueryList } from '@angular/core';
-import { MessageAreaComponent } from '../message-area/message-area.component';
-import { TestingModule } from '../../../utility/modules/testing.module';
 
 describe('VoidDangerAcceptedComponent', () => {
   let component: VoidDangerAcceptedComponent;

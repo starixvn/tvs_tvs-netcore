@@ -1,6 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { EventBaseService } from '../../component/event-base-layout/event-base.service';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestDetailViewModel } from '../../models/request-detail.model';
 import { RequestModel } from '../../models/request.model';
@@ -14,7 +13,6 @@ describe('EditRequestService', () => {
   let addRequestApiService: AddRequestApiService;
   let logInfoService: LogInfoService;
   let objectService: ObjectService;
-  let eventBaseService: EventBaseService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,14 +23,12 @@ describe('EditRequestService', () => {
     addRequestApiService = TestBed.inject(AddRequestApiService);
     logInfoService = TestBed.inject(LogInfoService);
     objectService = TestBed.inject(ObjectService);
-    eventBaseService = TestBed.inject(EventBaseService);
 
     // Mock các function
     addRequestApiService.getRequestById = jest.fn();
     logInfoService.getLogInfo = jest.fn();
     objectService.getPrimitiveProperty = jest.fn();
     objectService.mapRequestModel = jest.fn();
-    eventBaseService.backToAccessDeniedPage = jest.fn();
   });
 
   it('should be created', () => {
@@ -269,7 +265,6 @@ describe('EditRequestService', () => {
       expect(objectService.getPrimitiveProperty).toHaveBeenCalled();
       expect(logInfoService.getLogInfo).toHaveBeenCalled();
       expect(objectService.mapRequestModel).toHaveBeenCalled();
-      expect(eventBaseService.backToAccessDeniedPage).not.toHaveBeenCalled();
     });
 
     it('should redirect to access denied page when API returns null', async () => {

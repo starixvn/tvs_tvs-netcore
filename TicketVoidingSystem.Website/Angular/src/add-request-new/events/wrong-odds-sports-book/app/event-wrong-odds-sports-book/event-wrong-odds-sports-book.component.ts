@@ -30,6 +30,7 @@ import { EventWrongOddsSportsBookService } from './services/event-wrong-odds-spo
 import { LogInfoService } from './services/log-info.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { BetTypeService } from '../../../../../utility/components/advanced-mode-add-request/group-bet-types/bet-type.service';
 
 @Component({
   selector: 'event-wrong-odds-sports-book',
@@ -58,7 +59,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   @ViewChild('filterWrongOddsSportsBook') filterWrongOddsSportsBookComponent: FilterWrongOddsSportsBookComponent;
   @ViewChild('advancedMode') advancedMode: AdvancedModeAddRequestComponent;
 
-  groupBetTypesModel = new GroupBetTypesAddRequestModel([], false, '', false);
+  groupBetTypesModel = new GroupBetTypesAddRequestModel();
   advancedModeAddRequestModel: AdvancedModeAddRequestModel;
   logInfoEvent = new LogInfoWrongOddsSportsBook();
   confirmAddRequest = new ConfirmAddRequestModel();
@@ -72,6 +73,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
   private readonly saveRequestService = inject(SaveRequestService);
   private readonly commonService = inject(CommonService);
   private readonly validationService = inject(ValidationService);
+  private readonly betTypeService = inject(BetTypeService);
 
   async ngOnInit() {
     this.permission = await this.addRequestApiService.getPermissionAddRequest();
@@ -87,7 +89,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     groupBetTypes.forEach(x => x.betTypes.forEach(y => y.isChecked = true));
     const checkedBetTypes = groupBetTypes.flatMap(x => x.betTypes);
     this.logInfoEvent = this.eventWrongOddsSportsBookService.assignModelsToEvents(this.wrongOddsSportsBookModel);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], groupBetTypes), true, '', this.filter.isVoided);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(assignIn([], groupBetTypes), true, '', this.filter.isVoided);
     const betTeamsResult = this.wrongOddsSportsBookModel.betTeamsResult;
     betTeamsResult.forEach(x => x.isDisabled = this.filter.isVoided);
     this.advancedModeAddRequestModel = {
@@ -104,7 +106,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     }
     this.resetLogInfo();
     await this.getGroupBetTypes();
-    const allBetTypes = this.groupBetTypesModel.getAllBetTypes();
+    const allBetTypes = this.betTypeService.getAllBetTypes(this.groupBetTypesModel.groupBetTypes);
     this.advancedMode?.changeBetTypes(allBetTypes);
     this.advancedMode?.resetAllBetTeams();
     if (allBetTypes.length === 0) {
@@ -144,7 +146,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
     };
     this.addRequestStore.changeBlockingUiStatus(true);
     const data = await this.commonService.getGroupBetTypesTvs(query);
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel(assignIn([], data.groupBetTypes), true, '', false);
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 
@@ -205,7 +207,7 @@ export class EventWrongOddsSportsBookComponent implements OnInit {
 
   private resetBetTypeAndAdvancedMode() {
     this.advancedMode?.clearBetTeam();
-    this.groupBetTypesModel = new GroupBetTypesAddRequestModel([], true, '', false);
+    this.groupBetTypesModel = this.betTypeService.initGroupBetTypesAddRequestModel([], true, '', false);
   }
 
   async onClickConfirmSaveRequest() {

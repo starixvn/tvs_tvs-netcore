@@ -1,17 +1,18 @@
 import { Injectable, inject } from '@angular/core';
-import _ from 'lodash';
+import forEach from 'lodash/forEach';
 import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { ABExceptionListLevel } from '../../../utility/constants/config';
 import { Selection } from '../../../utility/models/selection.model';
 import { AppService } from '../app.service';
 import { FilterModel } from '../filter/filter.model';
 import { GroupSiteModel, SiteModel } from '../models/site.model';
+import { ItemsSelectService } from '../../../utility/components/multiple-selection/items-select.service';
 
 @Injectable()
 export class FilterService {
   appService = inject(AppService);
-
+  
   async getSites(): Promise<GroupSiteModel[]> {
     return this.appService.getSites();
   }
@@ -36,9 +37,9 @@ export class FilterService {
       if (group.groupName !== 'All' || group.groupId !== 'All') {
         const temp = [];
         group.sites.forEach(itemSelect => {
-          temp.push(new ItemsSelect(0, itemSelect.siteId, itemSelect.siteName, true, true, true, []));
+          temp.push(ItemsSelectService.initItemsSelect(0, itemSelect.siteId, itemSelect.siteName, true, true, true, []));
         });
-        items.push(new ItemsSelect(0, group.groupId, group.groupName, true, true, true, temp));
+        items.push(ItemsSelectService.initItemsSelect(0, group.groupId, group.groupName, true, true, true, temp));
       }
     });
     multipleSelection.items = items;
@@ -49,7 +50,7 @@ export class FilterService {
   async initSubType(): Promise<Selection[]> {
     const selections = [];
     const subIssueTypes = await this.appService.getSubTypes();
-    _.forEach(subIssueTypes, function(item) {
+    forEach(subIssueTypes, function(item) {
       selections.push(
         {
           name: item.subIssueTypeName,

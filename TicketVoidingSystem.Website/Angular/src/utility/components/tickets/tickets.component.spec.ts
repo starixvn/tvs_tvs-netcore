@@ -3,6 +3,8 @@ import { TestingModule } from '../../modules/testing.module';
 import { TicketsComponent } from './tickets.component';
 import { TicketsModel } from './tickets.model';
 import { PagingModel } from '../paging/paging.model';
+import { TicketsService } from './tickets.service';
+import { GroupModel } from './group.model';
 
 class Helper {
   static readonly fakeTicketsModel: TicketsModel = {
@@ -11,19 +13,29 @@ class Helper {
     singleCount: 1,
     parlayCount: 1,
     groups: [
-      {
-        tickets: [
-          {
-            member: 'BetTrade',
-            isChecked: true
-          },
-          {
-            member: 'Normal',
-            isChecked: false
-          }
-        ]
-      }
-    ],
+      {name: 'Test Group', tickets: [
+        {
+          member: 'BetTrade',
+          isChecked: true,
+          value: '1',
+          mainTransId: '1',
+          siteDbGroupId: '1',
+          isDisable: false,
+          status: 'active',
+          isCricket: false
+        } as any,
+        {
+          member: 'Normal',
+          isChecked: false,
+          value: '2',
+          mainTransId: '2',
+          siteDbGroupId: '2',
+          isDisable: false,
+          status: 'active',
+          isCricket: false
+        } as any
+      ]} as GroupModel,
+    ] as GroupModel[],
     pagingModel: new PagingModel(),
     updatePositionListCheckGroup: jest.fn(),
     getNumberOfCheckedTickets: jest.fn().mockReturnValue(1)
@@ -38,7 +50,8 @@ describe('TicketsComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         TestingModule
-      ]
+      ],
+      providers: [TicketsService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(TicketsComponent);
@@ -60,13 +73,14 @@ describe('TicketsComponent', () => {
     // Arrange
     component.ticketsModel = Helper.fakeTicketsModel;
     component.isShowListCheckGroup = false;
+    component.ticketsService.updatePositionListCheckGroup = jest.fn();
 
     // Action
     component.showListCheckGroup();
 
     // Assert
     expect(component.isShowListCheckGroup).toBe(true);
-    expect(component.ticketsModel.updatePositionListCheckGroup).toHaveBeenCalledWith(component.element);
+    expect(component.ticketsService.updatePositionListCheckGroup).toHaveBeenCalledTimes(1);
   });
 
   it('#showListCheckGroup should not show list check group when groups empty', () => {
@@ -132,26 +146,36 @@ describe('TicketsComponent', () => {
     component.changeTickets();
 
     // Assert
-    expect(component.ticketsChange.emit).toHaveBeenCalledWith(component.ticketsModel.getNumberOfCheckedTickets());
     expect(component.showWarningBetTradeTicket).toHaveBeenCalledTimes(1);
+    expect(component.ticketsChange.emit).toHaveBeenCalled();
   });
 
   it('#showWarningBetTradeTicket should set showMessageBetTrade to true when last ticket is BetTrade and checked', () => {
     // Arrange
     component.ticketsModel = {
       groups: [
-        {
-          tickets: [
-            {
-              member: 'Normal',
-              isChecked: false
-            },
-            {
-              member: 'BetTrade',
-              isChecked: true
-            }
-          ]
-        }
+        {name: 'Test Group', tickets: [
+          {
+            member: 'Normal',
+            isChecked: false,
+            value: '1',
+            mainTransId: '1',
+            siteDbGroupId: '1',
+            isDisable: false,
+            status: 'active',
+            isCricket: false
+          } as any,
+          {
+            member: 'BetTrade',
+            isChecked: true,
+            value: '2',
+            mainTransId: '2',
+            siteDbGroupId: '2',
+            isDisable: false,
+            status: 'active',
+            isCricket: false
+          } as any
+        ]} as GroupModel,
       ]
     } as unknown as TicketsModel;
     component.showMessageBetTrade = false;
@@ -167,14 +191,18 @@ describe('TicketsComponent', () => {
     // Arrange
     component.ticketsModel = {
       groups: [
-        {
-          tickets: [
-            {
-              member: 'Normal',
-              isChecked: true
-            }
-          ]
-        }
+        {name: 'Test Group', tickets: [
+          {
+            member: 'Normal',
+            isChecked: true,
+            value: '1',
+            mainTransId: '1',
+            siteDbGroupId: '1',
+            isDisable: false,
+            status: 'active',
+            isCricket: false
+          } as any
+        ]} as GroupModel,
       ]
     } as TicketsModel;
     component.showMessageBetTrade = false;

@@ -9,8 +9,8 @@ import { PagingComponent } from '../../../utility/components/paging/paging.compo
 import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { TEXT} from '../../../utility/constants/text';
 import { SubIssueTypeConstant } from '../../../utility/constants/sub-issue-type.constant';
+import { TEXT } from '../../../utility/constants/text';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Selection } from '../../../utility/models/selection.model';
 import { RequestStatus } from '../../../utility/models/signal-r.model';
@@ -235,7 +235,10 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   openRequestDetails(requestId: number, eventDate: Date, issueTypeId: number, createdDate: Date, details?: DetailRequestModel[]) {
     if (this.checkCanEdit(eventDate, issueTypeId, createdDate, details)) {
-      window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/EditRequest/Index/${requestId}`, '_blank');
+      const issueTypeName = this.issueTypesModel.issueTypes.find(x => x.issueTypeId === issueTypeId)?.issueTypeName;
+      if (issueTypeName) {
+        window.open(`${document.body.getAttribute('root-url')}${this.getUrlEditRequest(issueTypeName, requestId)}`, '_blank');
+      }
     }
   }
 
@@ -254,6 +257,13 @@ export class RequestListComponent implements OnInit, OnChanges {
 
   requestListTrackByFn(__: number, item: RequestModel) {
     return item.requestId;
+  }
+
+  private getUrlEditRequest(issueTypeName: string, requestId: number): string {
+    const controllerName = issueTypeName.replace(/[\s()]/g, "");
+    const url = `TicketVoidingSystem/${controllerName}/Edit/${requestId}`;
+
+    return url;
   }
 
   private updateRequestStatus(requestStatus: RequestStatus[], displayedRequests: RequestModel[]) {

@@ -2,7 +2,7 @@ import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Result } from '../../../utility/models/result';
 import { TestingModule } from '../../../utility/modules/testing.module';
-import { MessagesResult } from './messages-result';
+import { MessagesResult } from './messages-result.model';
 import { MessagesResultComponent } from './messages-result.component';
 
 describe('MessagesResultComponent', () => {

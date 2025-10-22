@@ -1,23 +1,23 @@
-import { SubmitVoidService } from './../services/submit-void.service';
-import { CheckRequestService } from './../services/check-request.service';
-import { PopupService } from './../services/popup.service';
-import { TemplateService } from './../../../utility/components/template-message/template-message/services/template.service';
+import { QueryList } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
+import { TestingModule } from '../../../utility/modules/testing.module';
+import { MessageAreaComponent } from '../message-area/message-area.component';
+import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
+import { CheckVoidPermissionService } from '../services/check-void-permission.service';
+import { InsertQueueService } from '../services/insert-queue.service';
+import { LoadDataService } from '../services/load-data.service';
+import { LogChangeContentService } from '../services/log-change-content.service';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
+import { TemplateService } from './../../../utility/components/template-message/template-message/services/template.service';
+import { CheckRequestService } from './../services/check-request.service';
+import { PopupService } from './../services/popup.service';
+import { SubmitVoidService } from './../services/submit-void.service';
 import { VoidPageService } from './services/void-page.service';
-import { TestingModule } from '../../../utility/modules/testing.module';
-import { LoadDataService } from '../services/load-data.service';
-import { InsertQueueService } from '../services/insert-queue.service';
-import { CheckVoidPermissionService } from '../services/check-void-permission.service';
-import { LogChangeContentService } from '../services/log-change-content.service';
-import { BasicRequestInfo } from '../models/basic-request-info.model';
 import { VoidAbnormalBetComponent } from './void-abnormal-bet.component';
-import { QueryList } from '@angular/core';
-import { MessageAreaComponent } from '../message-area/message-area.component';
 
 describe('VoidAbnormalBetComponent', () => {
   let component: VoidAbnormalBetComponent;

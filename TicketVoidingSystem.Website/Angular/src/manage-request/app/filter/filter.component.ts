@@ -8,8 +8,9 @@ import isEmpty from 'lodash/isEmpty';
 import isUndefined from 'lodash/isUndefined';
 import moment from 'moment-timezone';
 import { AutoRefreshComponent } from '../../../utility/components/auto-refresh/auto-refresh.component';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
+import { MultipleSelectionService } from '../../../utility/components/multiple-selection/multiple-selection.service';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { DateTimeFormat, ManageRequestStatus } from '../../../utility/constants/config';
@@ -60,8 +61,10 @@ export class FilterComponent implements OnInit {
   userId: string;
   products: MultipleSelection;
   selectedStatus: string[];
+  
   element = inject(ElementRef);
   commonService = inject(CommonService);
+  multipleSelectionService = inject(MultipleSelectionService);
 
   constructor() {
     this.tooltip.element = this.element;
@@ -141,13 +144,13 @@ export class FilterComponent implements OnInit {
   updateProductIdDefault() {
     const previousSelectedProducts = localStorage.getItem(LocalStorageCacheConstant.PREVIOUS_SELECTED_PRODUCT_MANAGE_REQUEST + this.userId);
     if (previousSelectedProducts) {
-      this.products.updateChildItemsChecked(previousSelectedProducts.split(','));
+      this.multipleSelectionService.updateChildItemsChecked(this.products, previousSelectedProducts.split(','));
     }
-    this.model.productTypeIds = this.products?.getValueItems();
+    this.model.productTypeIds = this.multipleSelectionService.getValueItems(this.products);
   }
 
   newRequest() {
-    window.open(`${document.body.getAttribute('root-url')}TicketVoidingSystem/AddRequest/Index`, '_blank');
+    window.location.assign(document.body.getAttribute('root-url'));
   }
 
   openMarkTickets() {

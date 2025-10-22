@@ -15,6 +15,7 @@ import { CommonService } from '../../../../utility/services/common.service';
 import { GetTicketsQuery } from '../../models/query.model';
 import { Currencies, FilterSearchBy } from './filter.model';
 import { MatchIdComponent } from './match-id/match-id.component';
+import { NumberItemService } from '../../../../utility/components/bet-ids/number-item.service';
 
 @Component({
   standalone: true,
@@ -35,6 +36,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
 
   private readonly commonService = inject(CommonService);
   private readonly elementRef = inject(ElementRef);
+  private readonly numberItemService = inject(NumberItemService);
 
   model = new GetTicketsQuery();
   searchBy = new FilterSearchBy();
@@ -123,7 +125,7 @@ export class FilterTicketsComponent implements OnInit, OnChanges {
     if (this.searchBy.value === FilterSearchBy.MATCH_ID) {
       return this.matchIdComponent.checkValidate();
     } else if (this.searchBy.value === FilterSearchBy.BET_IDS) {
-      this.betIdsComponent.groupNumber.resetAllItemsToValid();
+      this.numberItemService.resetAllItemsToValid(this.betIdsComponent.groupNumber);
       return this.betIdsComponent.isHasBetId();
     }
 

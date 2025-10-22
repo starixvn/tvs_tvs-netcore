@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TreeViewComponent } from './tree-view.component';
 import { ItemsSelect } from '../items-select';
+import { ItemsSelectService } from '../items-select.service';
 
 describe('TreeViewComponent', () => {
   let component: TreeViewComponent;
@@ -20,8 +21,8 @@ describe('TreeViewComponent', () => {
   describe('Input Properties', () => {
     it('should accept items input', () => {
       const mockItems: ItemsSelect[] = [
-        new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
-        new ItemsSelect(2, 'item2', 'Item 2', false, false, true, [])
+        ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
+        ItemsSelectService.initItemsSelect(2, 'item2', 'Item 2', false, false, true, [])
       ];
 
       component.items = mockItems;
@@ -62,7 +63,7 @@ describe('TreeViewComponent', () => {
 
   describe('handleClick', () => {
     it('should set lastItem when called', () => {
-      const mockItem = new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
+      const mockItem = ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
       component.items = [mockItem];
       
       component.handleClick(mockItem);
@@ -71,7 +72,7 @@ describe('TreeViewComponent', () => {
     });
 
     it('should not call handleEventWithShiftCheckbox when isShiftKey is false', () => {
-      const mockItem = new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
+      const mockItem = ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
       component.items = [mockItem];
       component.isShiftKey = false;
       
@@ -90,7 +91,7 @@ describe('TreeViewComponent', () => {
 
   describe('handleEventWithShiftCheckbox', () => {
     it('should not call checkToListItem when lastItem is undefined', () => {
-      const mockItem = new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
+      const mockItem = ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
       component.lastItem = undefined;
       
       // Create spy manually since spyOn is not available
@@ -110,10 +111,10 @@ describe('TreeViewComponent', () => {
   describe('checkToListItem', () => {
     beforeEach(() => {
       component.items = [
-        new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
-        new ItemsSelect(2, 'item2', 'Item 2', false, false, true, []),
-        new ItemsSelect(3, 'item3', 'Item 3', false, false, true, []),
-        new ItemsSelect(4, 'item4', 'Item 4', false, false, true, [])
+        ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
+        ItemsSelectService.initItemsSelect(2, 'item2', 'Item 2', false, false, true, []),
+        ItemsSelectService.initItemsSelect(3, 'item3', 'Item 3', false, false, true, []),
+        ItemsSelectService.initItemsSelect(4, 'item4', 'Item 4', false, false, true, [])
       ];
     });
 
@@ -205,7 +206,7 @@ describe('TreeViewComponent', () => {
     it('should handle empty items array', () => {
       component.items = [];
       
-      const mockItem = new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
+      const mockItem = ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
       component.lastItem = mockItem;
       
       expect(() => {
@@ -217,7 +218,7 @@ describe('TreeViewComponent', () => {
     });
 
     it('should handle single item in array', () => {
-      const singleItem = new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
+      const singleItem = ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []);
       component.items = [singleItem];
       component.lastItem = singleItem;
       
@@ -231,10 +232,10 @@ describe('TreeViewComponent', () => {
   describe('Integration Tests', () => {
     it('should handle complete shift+click workflow', () => {
       component.items = [
-        new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
-        new ItemsSelect(2, 'item2', 'Item 2', false, false, true, []),
-        new ItemsSelect(3, 'item3', 'Item 3', false, false, true, []),
-        new ItemsSelect(4, 'item4', 'Item 4', false, false, true, [])
+        ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
+        ItemsSelectService.initItemsSelect(2, 'item2', 'Item 2', false, false, true, []),
+        ItemsSelectService.initItemsSelect(3, 'item3', 'Item 3', false, false, true, []),
+        ItemsSelectService.initItemsSelect(4, 'item4', 'Item 4', false, false, true, [])
       ];
 
       const firstItem = component.items[0];
@@ -255,10 +256,10 @@ describe('TreeViewComponent', () => {
 
     it('should handle multiple shift+click operations', () => {
       component.items = [
-        new ItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
-        new ItemsSelect(2, 'item2', 'Item 2', false, false, true, []),
-        new ItemsSelect(3, 'item3', 'Item 3', false, false, true, []),
-        new ItemsSelect(4, 'item4', 'Item 4', false, false, true, [])
+        ItemsSelectService.initItemsSelect(1, 'item1', 'Item 1', false, false, true, []),
+        ItemsSelectService.initItemsSelect(2, 'item2', 'Item 2', false, false, true, []),
+        ItemsSelectService.initItemsSelect(3, 'item3', 'Item 3', false, false, true, []),
+        ItemsSelectService.initItemsSelect(4, 'item4', 'Item 4', false, false, true, [])
       ];
 
       // First shift+click: items 0 to 2

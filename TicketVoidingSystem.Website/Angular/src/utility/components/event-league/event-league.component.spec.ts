@@ -1,12 +1,12 @@
+import { SimpleChange } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
+import { TEXT } from '../../../utility/constants/text';
+import { MatchModel } from '../../../utility/models/match.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
+import { CommonService } from '../../../utility/services/common.service';
 import { EventLeagueComponent } from './event-league.component';
 import { ValidationService } from './validation.service';
-import { CommonService } from '../../../utility/services/common.service';
-import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
-import { MatchModel } from '../../../utility/models/match.model';
-import { SimpleChange } from '@angular/core';
-import { TEXT } from '../../../utility/constants/text';
 
 class Helper {
   static readonly fakeMatchId = 123;

@@ -1,6 +1,7 @@
 import { ElementRef } from '@angular/core';
 import { CommonGroupTicketsModel } from './common.group-tickets.model';
 import { CommonTicketModel } from './common.ticket.model';
+import { GroupService } from '../components/tickets/group.service';
 
 enum IconCheckBox {
     none = 0,
@@ -10,12 +11,11 @@ enum IconCheckBox {
 
 export class CommonTicketsModel<T extends CommonGroupTicketsModel<CommonTicketModel>> {
     id: string;
-
     groups = Array<T>();
     groupOtherTickets = Array<T>();
     iconCheckBox: IconCheckBox;
     iconCheckBoxTop: string;
-
+    
     getCheckedTickets(isChecked: boolean): string[] {
         const result: string[] = [];
         this.groups.forEach(group => {
@@ -41,7 +41,7 @@ export class CommonTicketsModel<T extends CommonGroupTicketsModel<CommonTicketMo
             group.tickets.forEach(item => {
                 item.isChecked = uncheckTransIds.indexOf(item.value) > -1 ? false : item.isChecked;
             });
-            group.setIsCheckAll();
+            group.isCheckAll = GroupService.setIsCheckAll(group.tickets);
             group.checkDisableTickets();
         });
     }

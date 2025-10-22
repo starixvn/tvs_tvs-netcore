@@ -37,8 +37,6 @@ describe('ValidationService', () => {
   it('#validateUsernames should call #checkValidItems when have error invalidUsernames', async () => {
     const usernamesComponent = TestBed.createComponent(UsernamesComponent).componentInstance;
     usernamesComponent.groupUsername = new GroupUsername();
-    usernamesComponent.groupUsername.resetAllValue = jest.fn();
-    usernamesComponent.groupUsername.updateInvalid = jest.fn();
     usernamesComponent.checkValidItems = jest.fn().mockReturnValue(true);
     const checkUsernameModel: CheckUsernameModel = {
       invalidUsernames: 'name',
@@ -48,8 +46,6 @@ describe('ValidationService', () => {
 
     const result = await validationService.validateUsernames('name', usernamesComponent);
 
-    expect(usernamesComponent.groupUsername.resetAllValue).toHaveBeenCalledTimes(1);
-    expect(usernamesComponent.groupUsername.updateInvalid).toHaveBeenCalledTimes(1);
     expect(usernamesComponent.checkValidItems).toHaveBeenCalledTimes(1);
     expect(result).toBeTruthy();
   });
@@ -57,7 +53,6 @@ describe('ValidationService', () => {
   it('#validateUsernames should call #checkValidItems when have not error', async () => {
     const usernamesComponent = TestBed.createComponent(UsernamesComponent).componentInstance;
     usernamesComponent.groupUsername = new GroupUsername();
-    usernamesComponent.groupUsername.resetAllValue = jest.fn();
     usernamesComponent.checkValidItems = jest.fn().mockReturnValue(true);
     const checkUsernameModel: CheckUsernameModel = {
       invalidUsernames: '',
@@ -67,7 +62,6 @@ describe('ValidationService', () => {
 
     const result = await validationService.validateUsernames('name', usernamesComponent);
 
-    expect(usernamesComponent.groupUsername.resetAllValue).toHaveBeenCalledTimes(1);
     expect(usernamesComponent.checkValidItems).toHaveBeenCalledTimes(1);
     expect(result).toBeTruthy();
   });

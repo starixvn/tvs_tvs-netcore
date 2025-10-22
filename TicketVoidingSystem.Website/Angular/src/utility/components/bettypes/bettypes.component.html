@@ -2,7 +2,7 @@
   <div class="bettypes">
     <div class="header">
       <label>
-        <input type="checkbox" class="checkbox-all-bettypes" [(ngModel)]="model.isChecked" (ngModelChange)="model.changeAll()" [disabled]="isDisabledAllBetTypes"/>
+        <input type="checkbox" class="checkbox-all-bettypes" [(ngModel)]="model.isChecked" (ngModelChange)="changeAll()" [disabled]="isDisabledAllBetTypes"/>
         All Bet types
       </label>
     </div>
@@ -10,7 +10,7 @@
       @for (bettype of model.betTypes; track bettype) {
         @if (bettype.isShow) {
           <label>
-            <input type="checkbox" [(ngModel)]="bettype.isChecked" (ngModelChange)="model.changeItem()" [disabled]="isDisabledAllBetTypes"/>
+            <input type="checkbox" [(ngModel)]="bettype.isChecked" (ngModelChange)="changeItem()" [disabled]="isDisabledAllBetTypes"/>
             {{bettype.name}}
           </label>
         }

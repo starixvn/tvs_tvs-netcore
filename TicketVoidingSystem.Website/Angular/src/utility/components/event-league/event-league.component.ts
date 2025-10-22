@@ -5,7 +5,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import isEmpty from 'lodash/isEmpty';
 import isNull from 'lodash/isNull';
 import { Subscription, timer } from 'rxjs';
-import { AddRequestStore } from '../../../add-request/app/add-request/add-request.store';
+import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
 import { TEXT } from '../../../utility/constants/text';
 import { MatchModel } from '../../../utility/models/match.model';
 import { CommonService } from '../../../utility/services/common.service';

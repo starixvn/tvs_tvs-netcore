@@ -106,7 +106,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.ArchivedTicket, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ArchivedTicket, Policy = Constant.Policy.Read)]
     public ActionResult ArchivedTicket(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/archived-ticket/index.cshtml");
@@ -116,7 +116,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.DangerAccepted, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.DangerAccepted, Policy = Constant.Policy.Read)]
     public ActionResult DangerAccepted(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/danger-accepted/index.cshtml");
@@ -126,7 +126,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.RedCard, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RedCard, Policy = Constant.Policy.Read)]
     public ActionResult RedCard(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/red-card/index.cshtml");
@@ -136,7 +136,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongScore, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongScore, Policy = Constant.Policy.Read)]
     public ActionResult WrongScore(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/wrong-score/index.cshtml");
@@ -146,7 +146,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.TechnicalError, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.TechnicalError, Policy = Constant.Policy.Read)]
     public ActionResult TechnicalError(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/technical-error/index.cshtml");
@@ -156,7 +156,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongHDP, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongHDP, Policy = Constant.Policy.Read)]
     public ActionResult WrongHdp(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.WrongHDP;
@@ -167,7 +167,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.Wrong1stHDP, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.Wrong1stHDP, Policy = Constant.Policy.Read)]
     public ActionResult Wrong1stHdp(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.Wrong1stHDP;
@@ -178,8 +178,8 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.EKOandWrongKO, Constant.Policy.Read)]
-    public ActionResult EarlyKickOffTime(int id)
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, Policy = Constant.Policy.Read)]
+    public ActionResult EarlyKickOff(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.EarlyKickOffTime;
         return View("~/wwwroot/dist/ticket-voiding-system/early-kick-off/index.cshtml");
@@ -189,7 +189,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.EKOandWrongKO, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.EKOandWrongKO, Policy = Constant.Policy.Read)]
     public ActionResult WrongKickOffTime(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.WrongKickOffTime;
@@ -200,7 +200,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongMarketOffered, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongMarketOffered, Policy = Constant.Policy.Read)]
     public ActionResult WrongMarketOffered(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.WrongMarketOffered;
@@ -211,7 +211,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOfferedName, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongOfferedName, Policy = Constant.Policy.Read)]
     public ActionResult WrongOfferedName(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.WrongOfferedName;
@@ -222,7 +222,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOU, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongOU, Policy = Constant.Policy.Read)]
     public ActionResult WrongOu(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.WrongOU;
@@ -233,7 +233,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.Wrong1stOU, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.Wrong1stOU, Policy = Constant.Policy.Read)]
     public ActionResult Wrong1stOu(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.Wrong1stOU;
@@ -244,7 +244,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOdds, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongOdds, Policy = Constant.Policy.Read)]
     public ActionResult WrongOdds(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/wrong-odds/index.cshtml");
@@ -254,7 +254,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.WrongOddsSportsBook, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.WrongOddsSportsBook, Policy = Constant.Policy.Read)]
     public ActionResult WrongOddsSportsBook(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/wrong-odds-sports-book/index.cshtml");
@@ -264,7 +264,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.AbnormalAccount, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AbnormalAccount, Policy = Constant.Policy.Read)]
     public ActionResult AbnormalAccount(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/abnormal-accounts/index.cshtml");
@@ -274,7 +274,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.AbnormalBet, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AbnormalBet, Policy = Constant.Policy.Read)]
     public ActionResult AbnormalBet(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/abnormal-bet/index.cshtml");
@@ -284,7 +284,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.DuplicateTickets, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.DuplicateTickets, Policy = Constant.Policy.Read)]
     public ActionResult DuplicateTickets(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/duplicate-tickets/index.cshtml");
@@ -294,7 +294,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.RecoverTicket, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.RecoverTicket, Policy = Constant.Policy.Read)]
     public ActionResult RecoverTicket(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/recover-ticket/index.cshtml");
@@ -304,7 +304,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.OtherIssues, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.OtherIssues, Policy = Constant.Policy.Read)]
     public ActionResult OtherIssues(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.OtherIssues;
@@ -315,7 +315,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.MatchEarlyCompleted, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.MatchEarlyCompleted, Policy = Constant.Policy.Read)]
     public ActionResult MatchEarlyCompleted(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.MatchEarlyCompleted;
@@ -326,7 +326,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.NotParticipate, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.NotParticipate, Policy = Constant.Policy.Read)]
     public ActionResult NotParticipate(int id)
     {
         return View("~/wwwroot/dist/ticket-voiding-system/not-participate/index.cshtml");
@@ -336,7 +336,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.ReducedOver, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.ReducedOver, Policy = Constant.Policy.Read)]
     public ActionResult ReducedOver(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.ReducedOver;
@@ -347,7 +347,7 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [Route("Add")]
     [Route("Add/Index")]
     [Route("Edit/{id}")]
-    [IssueTypeAuth(SpecialDeleteFunctionKeys.Abandoned, Constant.Policy.Read)]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.Abandoned, Policy = Constant.Policy.Read)]
     public ActionResult Abandoned(int id)
     {
         ViewBag.IssueTypeId = IssueTypeConstant.Abandoned;

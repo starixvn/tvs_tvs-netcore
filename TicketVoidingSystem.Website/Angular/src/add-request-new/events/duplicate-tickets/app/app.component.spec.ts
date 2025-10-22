@@ -57,15 +57,14 @@ describe('AppComponent', () => {
       expect(component.model).toBeInstanceOf(RequestModel);
     });
 
-    it('should set issueTypeId to WRONG_SCORE constant', () => {
-      expect(component.issueTypeId).toBe(IssueTypeConstant.WRONG_SCORE);
-      expect(component.issueTypeId).toBe('3');
+    it('should set issueTypeId to DUPLICATE_TICKETS constant', () => {
+      expect(component.issueTypeId).toBe(IssueTypeConstant.DUPLICATE_TICKETS);
     });
   });
 
   describe('saveRequest Method', () => {
     it('should call eventDuplicateTickets.saveRequest when saveRequest is called', async () => {
-      // Arrange - mock đã được khởi tạo ở beforeEach
+      // Arrange
       component.eventDuplicateTickets = {} as EventDuplicateTicketsComponent;
       component.eventDuplicateTickets.saveRequest = jest.fn();
 

@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GroupNumber, NumberItem } from '../../../../../../utility/components/bet-ids/bet-ids.model';
 import { CommonModule } from '@angular/common';
+import { NumberItemService } from '../../../../../../utility/components/bet-ids/number-item.service';
 
 @Component({
   standalone: true,
@@ -15,6 +16,8 @@ export class AbExceptionListComponent {
   @Input() isVoided = false;
   @Output() changeAbExceptionList = new EventEmitter<string>();
 
+  private readonly numberItemService = inject(NumberItemService);
+  
   groupNumber = new GroupNumber();
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -30,7 +33,7 @@ export class AbExceptionListComponent {
   }
 
   removeItem(item: NumberItem) {
-    this.groupNumber.remove(item);
+    this.numberItemService.remove(this.groupNumber.items, item);
     this.betIds = this.betIds.replace(item.value, '');
     this.changeAbExceptionList.emit(this.betIds);
   }

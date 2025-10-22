@@ -2,26 +2,27 @@ import { inject, Injectable } from '@angular/core';
 import groupBy from 'lodash/groupBy';
 import { Item } from '../../../utility/models/item.model';
 import { BetTypeCountModel, GroupBetTypeCountModel } from '../../models/get-log-info.model';
-import { LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
+import { AffectedTicketsModel, LogInfoTicketsQuery } from '../../models/live-game-early-ticket.model';
 import { AddRequestApiService } from '../../services/add-request-api.service';
 import { TicketsModel } from '../pool-house-ticket/tickets/tickets.model';
+import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 
 @Injectable()
 export class AffectedTicketService {
   private readonly addRequestApiService = inject(AddRequestApiService);
-
+  private readonly ticketsService = inject(TicketsService);
   async getAffectedTickets(issueTypeId: number, logInfoTicketsJson: string) {
-    const ticketsLogInfo = new TicketsModel();
     if (logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
         logInfoTicketsJson: logInfoTicketsJson,
         issueTypeId: issueTypeId
       };
       const result = await this.addRequestApiService.GetLogInfoTickets(query);
-      ticketsLogInfo.initData(result);
+      const ticketsLogInfo = this.ticketsService.initData(result);
+      return ticketsLogInfo;
     }
 
-    return ticketsLogInfo;
+    return new TicketsModel();
   }
 
   updateBetTypeCountModel(betTypeCount: BetTypeCountModel[]): GroupBetTypeCountModel[] {
@@ -46,5 +47,15 @@ export class AffectedTicketService {
     };
 
     return groupBetTypesCount;
+  }
+
+  getAffectedTicketsDetails(issueTypeId: number, betTypeCount: BetTypeCountModel[], logInfoTicketsJson: string): AffectedTicketsModel {
+    return {
+      groupBetTypesCount: this.updateBetTypeCountModel(betTypeCount),
+      isShowDetailBetTypeCount: true,
+      issueTypeId: issueTypeId,
+      logInfoTicketsJson: logInfoTicketsJson,
+      isOpen: true
+    }
   }
 }

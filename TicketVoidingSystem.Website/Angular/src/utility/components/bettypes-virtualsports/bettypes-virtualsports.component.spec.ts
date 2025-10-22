@@ -59,28 +59,6 @@ describe('BetTypesVirtualSportComponent', () => {
     expect(component.display).toBeTruthy();
   });
 
-  it('should return false for changeDisplay when betTypes is empty', () => {
-    // Arrange
-    component.group = Helper.emptyGroupBetType;
-
-    // Act
-    const result = component.changeDisplay();
-
-    // Assert
-    expect(result).toBeFalsy();
-  });
-
-  it('should return true for changeDisplay when betTypes has items', () => {
-    // Arrange
-    component.group = Helper.fakeGroupBetType;
-
-    // Act
-    const result = component.changeDisplay();
-
-    // Assert
-    expect(result).toBeTruthy();
-  });
-
   it('should validate and return true when betTypes are checked', () => {
     // Arrange
     component.group = Helper.fakeGroupBetType;

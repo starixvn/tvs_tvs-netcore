@@ -1,7 +1,7 @@
 ﻿import { CommonModule } from '@angular/common';
 import { Component, Input, SimpleChange } from '@angular/core';
 import { SanitizeHtmlPipe } from '../../modules/sanitize-html.pipe';
-import { MessagesResult } from './messages-result';
+import { MessagesResult } from './messages-result.model';
 
 @Component({
     standalone: true,

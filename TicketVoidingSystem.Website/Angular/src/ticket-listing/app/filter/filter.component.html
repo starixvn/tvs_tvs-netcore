@@ -131,12 +131,12 @@
         <div class="optional-filters">
           <span>Ball Sequence:</span>
           <label>
-            <input type="checkbox" [(ngModel)]="ballSequences.isChecked" (ngModelChange)="ballSequences.changeAll()" />
+            <input type="checkbox" [(ngModel)]="ballSequences.isChecked" (ngModelChange)="changeBallSequenceAll()" />
             {{ballSequences.name}}
           </label>
           @for (item of ballSequences.items; track item) {
             <label>
-              <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="ballSequences.changeItem()" />
+              <input type="checkbox" [(ngModel)]="item.isChecked" (ngModelChange)="changeBallSequenceItem()" />
               {{item.name}}
             </label>
           }

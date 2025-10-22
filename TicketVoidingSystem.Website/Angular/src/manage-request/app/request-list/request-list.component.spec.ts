@@ -7,7 +7,7 @@ import { BlockUiService } from '../../../utility/components/block-ui/block-ui.se
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
 import { IssueTypeConstant } from '../../../utility/constants/issue-type.constant';
-import { TEXT} from '../../../utility/constants/text';
+import { TEXT } from '../../../utility/constants/text';
 import { CopyRequestInfoResponse } from '../../../utility/models/copy-request-info.query';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { Result } from '../../../utility/models/result';
@@ -478,6 +478,8 @@ describe('RequestListComponent', () => {
     element.setAttribute('root-url', '/');
     document.body.appendChild(element);
     component.checkCanEdit = jest.fn().mockImplementation(() => true);
+    component['getUrlEditRequest'] = jest.fn().mockImplementation(() => 'TicketVoidingSystem/AbnormalBet/Edit/12345');
+    component.issueTypesModel = Helper.fakeIssueTypesModel;
     window.open = jest.fn();
 
     // Act

@@ -1,12 +1,11 @@
 
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
 import flatten from 'lodash/flatten';
 import uniq from 'lodash/uniq';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
-import { ItemsSelect } from '../../../utility/components/multiple-selection/items-select';
-import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../utility/components/multiple-selection/multiple-selection.component';
 import { StaticService } from '../../../utility/services/static.service';
 import { GroupBettypesPoolHouseComponent } from './group-bettypes-pool-house/group-bettypes-pool-house.component';
@@ -15,7 +14,8 @@ import { LinkedLogComponent } from './linked-log/linked-log.component';
 import { PoolHouseTicketValue } from './pool-house-ticket.constant';
 import { PoolHouseTicketsModel, PoolHouseTicketsSection } from './pool-house-ticket.model';
 import { TicketsComponent } from './tickets/tickets.component';
-import { TicketsModel } from './tickets/tickets.model';
+import { TicketsService } from './tickets/tickets.service';
+import { ItemsSelectService } from '../../../utility/components/multiple-selection/items-select.service';
 
 @Component({
     selector: 'pool-house-tickets',
@@ -33,6 +33,8 @@ export class PoolHouseTicketComponent implements OnChanges {
   otherSection: PoolHouseTicketsSection;
   isBlock: boolean;
   blockBetList: boolean;
+
+  private readonly ticketsService = inject(TicketsService);
 
   public async ngOnChanges(changes: SimpleChanges) {
     if (changes['model'] && this.model.isOpen) {
@@ -52,8 +54,7 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   public getAffectedSection(): PoolHouseTicketsSection {
-    const affectedTickets = new TicketsModel();
-    affectedTickets.initData(this.model.affectedTickets);
+    const affectedTickets = this.ticketsService.initData(this.model.affectedTickets);
 
     this.affectedSection = {
       isAffected: true,
@@ -67,9 +68,8 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   public getOtherSection(): PoolHouseTicketsSection {
-    const otherTickets = new TicketsModel();
-    otherTickets.initData(this.model.otherTickets);
-    otherTickets.checkAllTickets();
+    const otherTickets = this.ticketsService.initData(this.model.otherTickets);
+    this.ticketsService.checkAllTickets(otherTickets.groups);
     const otherGroupBetTypes = this.model.groupBetTypes.filter(x => x.groupName === 'Others');
     this.otherSection = {
       isAffected: false,
@@ -86,17 +86,17 @@ export class PoolHouseTicketComponent implements OnChanges {
   private changeCheckBetTypeAndTicket(): void {
     if (this.model.checkedBetTypes === PoolHouseTicketValue.SELECT_ALL_BETTYPE) {
       this.affectedSection.groupBetTypesModel.checkAllBetType();
-      this.affectedSection.tickets.checkAllTicketsForPoolHousePopup();
+      this.ticketsService.checkAllTicketsForPoolHousePopup(this.affectedSection.tickets.groups);
     } else {
       this.affectedSection.groupBetTypesModel.checkBetType(this.model.checkedBetTypes.split(',').map(i => Number(i)));
-      this.affectedSection.tickets.handleCheckTicketByBetTypes(this.model.checkedBetTypes.split(',').map(i => Number(i)));
+      this.ticketsService.handleCheckTicketByBetTypes(this.affectedSection.tickets.groups, this.model.checkedBetTypes.split(',').map(i => Number(i)));
     }
-    this.affectedSection.tickets.updateSelectedTickets();
+    this.ticketsService.updateSelectedTickets(this.affectedSection.tickets);
   }
 
   public changedBetTypes(betTypes: number[]) {
-    this.affectedSection.tickets.handleCheckTicketByBetTypes(betTypes);
-    this.affectedSection.tickets.updateSelectedTickets();
+    this.ticketsService.handleCheckTicketByBetTypes(this.affectedSection.tickets.groups, betTypes);
+    this.ticketsService.updateSelectedTickets(this.affectedSection.tickets);
   }
 
   public closeClick(): void {
@@ -119,14 +119,14 @@ export class PoolHouseTicketComponent implements OnChanges {
   }
 
   updateSelectedBetTypes(betTypes: string[]) {
-    this.otherSection.tickets.handleCheckTicketByBetTypes(betTypes.map(i => Number(i)));
+    this.ticketsService.handleCheckTicketByBetTypes(this.otherSection.tickets.groups, betTypes.map(i => Number(i)));
   }
 
   initFilterBetTypes(groupBetTypes: GroupBetType[]): MultipleSelection {
     const multipleSelection = StaticService.initDefaultMultipleSelection('280px', 1);
     multipleSelection.items = groupBetTypes
       .flatMap(x => x.betTypes)
-      .map(x => new ItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
+      .map(x => ItemsSelectService.initItemsSelect(0, x.id.toString(), x.name, true, true, true, []));
 
     return multipleSelection;
   }

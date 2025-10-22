@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
-import * as _ from 'lodash';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
 import { GroupNumber } from '../../../../../../utility/components/bet-ids/bet-ids.model';
+import { NumberItemService } from '../../../../../../utility/components/bet-ids/number-item.service';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
 import { TEXT} from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
@@ -11,6 +11,7 @@ import { RecoverTicketModel } from '../../../../../models/recover-ticket.model';
 import { CheckRecoverTicketResult } from '../models/check-recover-ticket-result.model';
 import { PrimitiveProperty } from '../models/primitive-property.model';
 import { ValidationService } from './validation.service';
+import cloneDeep from 'lodash/cloneDeep';
 
 class Helper {
   static readonly fakeCheckRecoverTicketResult: CheckRecoverTicketResult = {
@@ -25,6 +26,7 @@ class Helper {
 describe('ValidationService', () => {
   let service: ValidationService;
   let addRequestApiService: AddRequestApiService;
+  let numberItemService: NumberItemService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -34,6 +36,7 @@ describe('ValidationService', () => {
 
     service = TestBed.inject(ValidationService);
     addRequestApiService = TestBed.inject(AddRequestApiService);
+    numberItemService = TestBed.inject(NumberItemService);
   });
 
   it('should be created', () => {
@@ -75,8 +78,7 @@ describe('ValidationService', () => {
       const mockBetIdsComponent = {
         isHasBetId: () => true,
         groupNumber: {
-          resetAllItemsToValid: jest.fn(),
-          checkDuplicatedItems: jest.fn()
+          items: []
         },
         isAllBetIdsValid: () => true,
         getAllBetIds: () => ['123', '456']
@@ -93,6 +95,8 @@ describe('ValidationService', () => {
       const mockTooltip = {} as Tooltip;
 
       jest.spyOn(addRequestApiService, 'checkRecoverTicket').mockResolvedValue(null);
+      jest.spyOn(numberItemService, 'resetAllItemsToValid').mockImplementation();
+      jest.spyOn(numberItemService, 'checkDuplicatedItems').mockImplementation();
 
       // Act
       const result = await service.checkBusinessRule(
@@ -105,8 +109,8 @@ describe('ValidationService', () => {
 
       // Assert
       expect(result.isValid).toBeFalsy();
-      expect(mockBetIdsComponent.groupNumber.resetAllItemsToValid).toHaveBeenCalled();
-      expect(mockBetIdsComponent.groupNumber.checkDuplicatedItems).toHaveBeenCalled();
+      expect(numberItemService.resetAllItemsToValid).toHaveBeenCalledWith(mockBetIdsComponent.groupNumber);
+      expect(numberItemService.checkDuplicatedItems).toHaveBeenCalledWith(mockBetIdsComponent.groupNumber.items);
     });
 
     it('should highlight invalid trans IDs and return valid result', async () => {
@@ -114,10 +118,7 @@ describe('ValidationService', () => {
       const mockBetIdsComponent = {
         isHasBetId: () => true,
         groupNumber: {
-          resetAllItemsToValid: jest.fn(),
-          checkDuplicatedItems: jest.fn(),
-          updateInvalidItems: jest.fn(),
-          updateMoved: jest.fn()
+          items: []
         },
         isAllBetIdsValid: () => true,
         getAllBetIds: () => ['123', '456']
@@ -143,6 +144,9 @@ describe('ValidationService', () => {
       } as CheckRecoverTicketResult;
 
       jest.spyOn(addRequestApiService, 'checkRecoverTicket').mockResolvedValue(mockValidationResult);
+      jest.spyOn(numberItemService, 'resetAllItemsToValid').mockImplementation();
+      jest.spyOn(numberItemService, 'checkDuplicatedItems').mockImplementation();
+      jest.spyOn(numberItemService, 'updateInvalidItems').mockImplementation();
 
       // Act
       const result = await service.checkBusinessRule(
@@ -157,9 +161,9 @@ describe('ValidationService', () => {
       expect(result.isValid).toBeTruthy();
       expect(result.transInfoJson).toBe('{"info": "test"}');
       expect(result.unMarkTransIds).toBe('111');
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('123', TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
-      expect(mockBetIdsComponent.groupNumber.updateInvalidItems).toHaveBeenCalledWith('456', TEXT.INVALID_TICKETS);
-      expect(mockBetIdsComponent.groupNumber.updateMoved).toHaveBeenCalledWith('789');
+      expect(numberItemService.updateInvalidItems).toHaveBeenCalledWith(mockBetIdsComponent.groupNumber.items, '123', TEXT.INVALID_EXISTING_ON_OTHER_REQUEST);
+      expect(numberItemService.updateInvalidItems).toHaveBeenCalledWith(mockBetIdsComponent.groupNumber.items, '456', TEXT.INVALID_TICKETS);
+      expect(numberItemService.updateInvalidItems).toHaveBeenCalledWith(mockBetIdsComponent.groupNumber.items, '789');
     });
   });
 
@@ -178,8 +182,6 @@ describe('ValidationService', () => {
 
   it('#checkBusinessRule should call #checkTickets14 return validation model with invalid', async () => {
     const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
     const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
     const mockTooltip = {} as Tooltip;
@@ -187,26 +189,24 @@ describe('ValidationService', () => {
     betIdsComponent.isHasBetId = mockIsHasBetId;
     betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
     betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
     addRequestApiService.checkRecoverTicket = jest.fn().mockImplementation(() => null);
     service['highlightInvalidTransIds'] = jest.fn();
+    jest.spyOn(numberItemService, 'resetAllItemsToValid').mockImplementation();
+    jest.spyOn(numberItemService, 'checkDuplicatedItems').mockImplementation();
 
     const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
+    expect(numberItemService.resetAllItemsToValid).toHaveBeenCalledTimes(1);
+    expect(numberItemService.checkDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
   });
 
   it('#checkBusinessRule should call #updateInvalidItems return validation model with invalid', async () => {
-    const results = _.cloneDeep(Helper.fakeCheckRecoverTicketResult);
+    const results = cloneDeep(Helper.fakeCheckRecoverTicketResult);
     results.invalidTransIds = '123445';
     const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn();
     const mockIsAllBetIdsValid = jest.fn().mockImplementation(() => false);
     const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
@@ -216,26 +216,24 @@ describe('ValidationService', () => {
     betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
     betIdsComponent.isAllBetIdsValid = mockIsAllBetIdsValid;
     betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
     addRequestApiService.checkRecoverTicket = jest.fn().mockImplementation(() => results);
     service['highlightInvalidTransIds'] = jest.fn();
+    jest.spyOn(numberItemService, 'resetAllItemsToValid').mockImplementation();
+    jest.spyOn(numberItemService, 'checkDuplicatedItems').mockImplementation();
 
     const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
+    expect(numberItemService.resetAllItemsToValid).toHaveBeenCalledTimes(1);
+    expect(numberItemService.checkDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(false);
   });
 
   it('#checkBusinessRule should return validation model with valid', async () => {
-    const results = _.cloneDeep(Helper.fakeCheckRecoverTicketResult);
+    const results = cloneDeep(Helper.fakeCheckRecoverTicketResult);
     results.invalidTransIds = null;
     const mockIsHasBetId = jest.fn().mockImplementation(() => true);
-    const mockGroupNumberResetAllItemsToValid = jest.fn();
-    const mockGroupNumberCheckDuplicatedItems = jest.fn();
     const mockGroupNumberGetAllBetIds = jest.fn().mockImplementation(() => ['123', '456']);
     const mockIsAllBetIdsValid = jest.fn().mockImplementation(() => true);
     const mockPrimitiveProps = { permission: {} as PermissionAddRequest } as PrimitiveProperty;
@@ -245,18 +243,17 @@ describe('ValidationService', () => {
     betIdsComponent.getAllBetIds = mockGroupNumberGetAllBetIds;
     betIdsComponent.isAllBetIdsValid = mockIsAllBetIdsValid;
     betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.resetAllItemsToValid = mockGroupNumberResetAllItemsToValid;
-    betIdsComponent.groupNumber.checkDuplicatedItems = mockGroupNumberCheckDuplicatedItems;
-    betIdsComponent.groupNumber.updateInvalidItems = jest.fn();
-    betIdsComponent.groupNumber.updateMoved = jest.fn();
 
     jest.spyOn(addRequestApiService, 'checkRecoverTicket').mockResolvedValue(results);
+    jest.spyOn(numberItemService, 'resetAllItemsToValid').mockImplementation();
+    jest.spyOn(numberItemService, 'checkDuplicatedItems').mockImplementation();
+    jest.spyOn(numberItemService, 'updateInvalidItems').mockImplementation();
 
     const result = await service.checkBusinessRule(betIdsComponent, new RecoverTicketModel(), 1, mockPrimitiveProps, mockTooltip);
 
     expect(mockIsHasBetId).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberResetAllItemsToValid).toHaveBeenCalledTimes(1);
-    expect(mockGroupNumberCheckDuplicatedItems).toHaveBeenCalledTimes(1);
+    expect(numberItemService.resetAllItemsToValid).toHaveBeenCalledTimes(1);
+    expect(numberItemService.checkDuplicatedItems).toHaveBeenCalledTimes(1);
     expect(mockGroupNumberGetAllBetIds).toHaveBeenCalledTimes(1);
     expect(result.isValid).toBe(true);
   });
@@ -266,12 +263,13 @@ describe('ValidationService', () => {
     model.existingReqTransIds = '12344';
     model.invalidTransIds = '12345';
     model.unsupportedDateRangeTransIds = '23456';
-    const mockUpdateInvalidItems = jest.fn();
     const betIdsComponent = {} as BetIdsComponent;
     betIdsComponent.groupNumber = new GroupNumber();
-    betIdsComponent.groupNumber.updateInvalidItems = mockUpdateInvalidItems;
+    betIdsComponent.groupNumber.items = [];
+    jest.spyOn(numberItemService, 'updateInvalidItems').mockImplementation();
+    
     service['highlightInvalidTransIds'](model, betIdsComponent);
 
-    expect(mockUpdateInvalidItems).toHaveBeenCalledTimes(2);
+    expect(numberItemService.updateInvalidItems).toHaveBeenCalledTimes(3);
   });
 });

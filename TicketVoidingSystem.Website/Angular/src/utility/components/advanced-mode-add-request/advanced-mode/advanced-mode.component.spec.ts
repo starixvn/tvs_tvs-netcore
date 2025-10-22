@@ -7,6 +7,8 @@ import { AdvancedModeAddRequestModel } from '../advanced-mode-add-request.model'
 import { BetTypeAddRequest } from '../group-bet-types/group-bet-types.model';
 import { BetTeamAddRequest } from './advanced-mode.model';
 import { SimpleChange } from '@angular/core';
+import { MultipleSelectionService } from '../../multiple-selection/multiple-selection.service';
+import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 class Helper {
   static readonly fakeMatchId = 123;
@@ -17,10 +19,19 @@ class Helper {
     checkedBetTypes: [],
     betTeamsResult: [],
     selectedAllBetTypes: []
-  } as unknown as AdvancedModeAddRequestModel;
+  } as AdvancedModeAddRequestModel;
   static readonly fakeBetTeams = [
-    new BetTeamAddRequest([0, 'Test Team', 'value', 1, '1'], [], [], true)
-  ] as unknown as BetTeamAddRequest[];
+    {
+      index: 0,
+      name: 'Test Team',
+      value: 'value',
+      type: 1,
+      betTypes: '1',
+      isShow: true,
+      selections: [],
+      inputs: []
+    }
+  ] as BetTeamAddRequest[];
   static readonly fakeOddsInfo = [
     {
       betTypeId: '1',
@@ -38,11 +49,30 @@ describe('AdvancedModeComponent', () => {
   let commonService: CommonService;
 
   beforeEach(async () => {
+    const mockItemsSelectService = {
+      getValueChildsChecked: jest.fn().mockReturnValue(''),
+      countChildsChecked: jest.fn().mockReturnValue(0),
+      getTextChildsChecked: jest.fn().mockReturnValue(''),
+      checkChilds: jest.fn()
+    };
+
+    const mockMultipleSelectionService = {
+      getValueItems: jest.fn().mockReturnValue(''),
+      getValueCheckedItemsList: jest.fn().mockReturnValue([]),
+      getDisplayedItems: jest.fn().mockReturnValue(''),
+      checkAllItems: jest.fn(),
+      updateItemChecked: jest.fn(),
+      updateChildItemsChecked: jest.fn(),
+      updateDisableStatus: jest.fn()
+    };
+
     await TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [
         CommonService,
-        StaticService
+        StaticService,
+        { provide: ItemsSelectService, useValue: mockItemsSelectService },
+        { provide: MultipleSelectionService, useValue: mockMultipleSelectionService }
       ]
     }).compileComponents();
 
@@ -152,10 +182,7 @@ describe('AdvancedModeComponent', () => {
       multiSelection: null,
       isMultiple: false,
       xmlAttribute: 'test',
-      isDisabled: false,
-      renderItems: function(items: any[]) {
-        this.items = items || [];
-      }
+      isDisabled: false
     }];
 
     // Act

@@ -165,7 +165,9 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     if (this.primitiveProps.filterBy === TVSRequestFilterBy.CHECK_TIME) {
       this.mainEvent.subIssueTypeId = Number(this.filter.subIssueTypeId);
       this.mainEvent.isMainMatch = true;
+      this.mainEvent.matchId = this.eventLeagueComponent.selectedMatch.matchId;
       this.mainEvent.parentId = this.eventLeagueComponent.selectedMatch.parentId;
+      this.mainEvent.eventDate = this.eventLeagueComponent.selectedMatch.eventDate;
       await this.relatedEventsComponent.getDataWhenSearch();
     }
     else {

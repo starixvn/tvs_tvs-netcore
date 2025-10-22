@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { ReducedOverBetType } from '../models/bet-type-reduced-over-json.model';
 import { FilterReducedOverModel } from '../models/filter-reduced-over.model';

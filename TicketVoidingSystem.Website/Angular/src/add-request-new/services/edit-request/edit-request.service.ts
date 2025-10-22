@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { EventBaseService } from '../../component/event-base-layout/event-base.service';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
 import { RequestModel } from '../../models/request.model';
 import { AddRequestApiService } from '../add-request-api.service';
@@ -13,7 +12,6 @@ export class EditRequestService {
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly logInfoService = inject(LogInfoService);
   private readonly objectService = inject(ObjectService);
-  private readonly eventBaseService = inject(EventBaseService);
 
   getRequestId() {
     const url = window.location.href;

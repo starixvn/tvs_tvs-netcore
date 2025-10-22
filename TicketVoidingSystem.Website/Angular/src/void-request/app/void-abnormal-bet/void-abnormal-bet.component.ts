@@ -1,19 +1,19 @@
+import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
+import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
+import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { IssueTypesModel } from '../../../utility/models/issue-type.model';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';
+import { PasswordAreaComponent } from '../password-area/password-area.component';
 import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
+import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { VoidAbnormalBetModel } from './models/void-abnormal-bet.model';
 import { VoidPageService } from './services/void-page.service';
-import { CommonModule } from '@angular/common';
-import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
-import { PasswordAreaComponent } from '../password-area/password-area.component';
-import { TicketsListComponent } from '../tickets-list/tickets-list.component';
-import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 
 @Component({
   standalone: true,

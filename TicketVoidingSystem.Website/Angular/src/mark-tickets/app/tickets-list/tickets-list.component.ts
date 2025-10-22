@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseTicketsListComponent } from '../../../utility/components/base-tickets-list/base-tickets-list.component';
@@ -11,6 +11,9 @@ import { DataPermission } from '../models/result.model';
 import { TicketsModel } from './tickets.model';
 import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
+import { TicketsListService } from './tickets-list.service';
+import { TicketModel } from './ticket.model';
+import { GroupModel } from './group-tickets.model';
 
 @Component({
   standalone: true,
@@ -29,6 +32,8 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   markedTicketsQuery = new MarkedTicketQuery();
   tooltip = new Tooltip();
 
+  private readonly ticketsListService = inject(TicketsListService);
+  
   constructor(readonly element: ElementRef) {
     super();
     this.tooltip.element = this.element;
@@ -39,23 +44,23 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
   }
 
   markSelectedTicketsOnPage(): void {
-    const tickets = this.model.getTicketsParam();
+    const tickets = this.ticketsListService.getTicketsParam(this.model.groups);
     if (tickets.length === 0) {
       this.tooltip.display('invalid-data', TEXT.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
-      this.markedTicketsQuery.checkPermissionTickets = this.model.getAllTickets();
+      this.markedTicketsQuery.checkPermissionTickets = this.ticketsListService.getAllTickets(this.model.groups);
       this.updateMarkedTickets.emit(this.markedTicketsQuery);
     }
   }
 
   markSelectedTicketsAllPage(): void {
-    const tickets = this.model.getTicketsParamWithAllPage();
+    const tickets = this.ticketsListService.getTicketsParamWithAllPage(this.model);
     if (tickets.length === 0) {
       this.tooltip.display('invalid-data', TEXT.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
-      this.markedTicketsQuery.checkPermissionTickets = this.model.getAllTickets();
+      this.markedTicketsQuery.checkPermissionTickets = this.ticketsListService.getAllTickets(this.model.groups);
       this.updateMarkedTickets.emit(this.markedTicketsQuery);
     }
   }
@@ -66,5 +71,21 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
 
   changeTickets(): void {
     this.ticketsChange.emit(this.model.getNumberOfCheckedTickets());
+  }
+
+  checkGroups(){
+    this.ticketsListService.checkGroups(this.model);
+  }
+
+  getNumberOfTickets(){
+    return this.ticketsListService.getNumberOfTickets(this.model.groups);
+  }
+
+  getUncheckedTicketList(ticket: TicketModel){
+    return this.ticketsListService.getUncheckedTicketList(this.model, ticket);
+  }
+
+  getUncheckedTicketListFromGroup(group: GroupModel){
+    return this.ticketsListService.getUncheckedTicketListFromGroup(this.model, group);
   }
 }

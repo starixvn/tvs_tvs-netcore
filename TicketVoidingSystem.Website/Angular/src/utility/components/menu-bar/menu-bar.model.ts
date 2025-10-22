@@ -1,8 +1,4 @@
 export class MenuItem {
-  constructor() {
-    this.items = [];
-  }
-
   id: number;
   name: string;
   isActive: boolean;
@@ -14,7 +10,7 @@ export class MenuItem {
   parentId: number;
   parentName: string;
   validUrl: string;
-  items: MenuItem[];
+  items: MenuItem[] = [];
 }
 
 export class NapUserInfoModel {

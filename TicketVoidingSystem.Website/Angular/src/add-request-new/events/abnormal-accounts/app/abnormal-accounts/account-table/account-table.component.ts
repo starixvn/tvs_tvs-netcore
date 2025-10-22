@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import * as _ from 'lodash';
+import lodashOrderBy from 'lodash/orderBy';
+import uniqBy from 'lodash/uniqBy';
 import { SortingComponent } from '../../../../../../utility/components/sorting/sorting.component';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
@@ -104,7 +105,7 @@ export class AccountTableComponent {
   sorting(isDesc: boolean, orderBy: string, componentId: number) {
     this.addRequestStore.changeBlockingUiStatus(true);
     this.sortingComponents.filter(x => x.id !== componentId).forEach(x => x.isDesc = null);
-    this.accountWinlostModels = _.orderBy(_.uniqBy(this.accountWinlostModels, x => x.custId), [orderBy], [isDesc ? 'desc' : 'asc']);
+    this.accountWinlostModels = lodashOrderBy(uniqBy(this.accountWinlostModels, x => x.custId), [orderBy], [isDesc ? 'desc' : 'asc']);
     this.addRequestStore.changeBlockingUiStatus(false);
   }
 

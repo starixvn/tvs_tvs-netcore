@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ItemsSelect } from '../items-select';
+import { ItemsSelectService } from '../items-select.service';
 
 @Component({
   standalone: true,
@@ -16,6 +17,7 @@ export class TreeViewComponent {
   @Input() isDisabled: boolean;
   lastItem: ItemsSelect;
   isShiftKey: boolean;
+  private readonly itemsSelectService = inject(ItemsSelectService);
   
   keyDownEvent() {
     this.isShiftKey = true;
@@ -47,5 +49,8 @@ export class TreeViewComponent {
     for (let i = start; i <= end; i++) {
       this.items[i].checked = item.checked;
     }
+  }
+  checkChilds(item: ItemsSelect){
+    this.itemsSelectService.checkChilds(item);
   }
 }

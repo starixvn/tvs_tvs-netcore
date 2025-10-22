@@ -1,5 +1,4 @@
-
-import { RequestDetailViewModel } from "../../../edit-request/app/request.model";
+import { RequestDetailViewModel } from "../../../add-request-new/models/request-detail.model";
 import { AffectedLicensee } from '../../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { PagingModel } from "../../../utility/components/paging/paging.model";
 import { Message } from "../../../utility/components/template-message/messages/message";

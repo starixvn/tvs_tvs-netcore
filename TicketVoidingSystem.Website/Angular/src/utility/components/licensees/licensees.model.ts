@@ -6,31 +6,6 @@ export class GroupLicenseeModel {
     this.isChecked = isChecked;
     this.groupLicensees = (groupLicensees || []).map(x => new GroupLicensee(x.groupName, x.licensees, isChecked));
   }
-
-  changeCheckAllLicensee() {
-    this.groupLicensees.forEach(group => {
-      group.isChecked = this.isChecked;
-      group.checkedGroup();
-    });
-  }
-
-  changeCheckGroupToModel() {
-    this.isChecked = this.groupLicensees.every(group => group.isChecked);
-  }
-
-  getCheckedLicensees(): Licensee[] {
-    return this.groupLicensees.flatMap(group => group.licensees.filter(licensee => licensee.isChecked));
-  }
-
-  checkLicenseesByName(selectedLicenseeNames: string[]) {
-    this.groupLicensees.forEach(x => {
-      x.licensees.forEach(y => {
-        y.isChecked = selectedLicenseeNames?.includes(y.name);
-      });
-      x.isChecked = x.licensees.every(y => y.isChecked);
-    });
-    this.isChecked = this.groupLicensees.every(x => x.isChecked);
-  }
 }
 
 export class Licensee {
@@ -56,13 +31,5 @@ export class GroupLicensee {
     this.isChecked = isChecked;
     this.groupName = groupName;
     this.licensees = licensees.map(x => new Licensee(x.id, x.name, isChecked));
-  }
-
-  checkedGroup() {
-    this.licensees.forEach(item => {item.isChecked = this.isChecked});
-  }
-
-  checkedLicensee() {
-    this.isChecked = this.licensees.every(item => item.isChecked);
   }
 }

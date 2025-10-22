@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Subscription, timer } from 'rxjs';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { TemplateMessageComponent } from '../../../utility/components/template-message/template-message/template-message.component';
 import { MessageAreaComponent } from '../message-area/message-area.component';
 import { CommonPrimitiveProperty } from '../models/common-primitive-property.model';

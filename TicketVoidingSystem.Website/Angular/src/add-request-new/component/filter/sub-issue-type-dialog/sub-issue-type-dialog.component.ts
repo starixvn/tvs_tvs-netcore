@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import cloneDeep from 'lodash/cloneDeep';
-import { AddRequestApiService } from '../../../services/add-request-api.service';
 import { BlockUiDirective } from '../../../../utility/components/block-ui/block-ui.directive';
 import { SubIssueTypeGroup } from '../../../../utility/constants/config';
 import { StaticService } from '../../../../utility/services/static.service';
 import { GetSubIssueTypeNoteQuery, SaveSubIssueTypeNoteQuery } from '../../../models/sub-type-note.model';
+import { AddRequestApiService } from '../../../services/add-request-api.service';
 import { SubIssueTypeDialogModel } from './sub-issue-type-dialog.model';
 import { Button, Category, GroupButton } from './sub-issue-type-json.model';
 import SubIssueTypeDangerAcceptedConfig from './sub-type-danger-accepted.json';
@@ -90,20 +90,19 @@ export class SubIssueTypeDialogComponent implements OnChanges, OnInit {
 
   private getSubIssueTypeWrongScoreConfig(): Category[] {
     const subIssueTypeWrongScoreConfig = cloneDeep(SubIssueTypeWrongScoreConfig);
-    const mainCategoryName = "Main Event";
+    const relatedCategoryName = "Related Event";
     if (this.isMainEvent) {
-      const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName === mainCategoryName);
-      mainEventSubIssueTypes[0].groups = this.isCheckedWrongScoreOnwards
-        ? SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeOnWards(x))
-        : SubIssueTypeWrongScoreConfig[0].groups.filter(x => this.isHasSubTypeNoOnWards(x))
+      const mainEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== relatedCategoryName);
+      mainEventSubIssueTypes.forEach(category => {
+        category.groups = this.isCheckedWrongScoreOnwards
+          ? category.groups.filter(x => this.isHasSubTypeOnWards(x))
+          : category.groups.filter(x => this.isHasSubTypeNoOnWards(x))
+      })
 
       return mainEventSubIssueTypes;
     }
 
-    const relatedEventSubIssueTypes = subIssueTypeWrongScoreConfig.filter(x => x.categoryName !== mainCategoryName);
-    relatedEventSubIssueTypes[0].isCollapse = false;
-
-    return relatedEventSubIssueTypes;
+    return subIssueTypeWrongScoreConfig.filter(x => x.categoryName === relatedCategoryName);
   }
 
   public isDangerAccepted(): boolean {

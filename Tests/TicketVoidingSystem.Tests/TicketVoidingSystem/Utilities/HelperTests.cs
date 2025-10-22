@@ -46,6 +46,15 @@ public class HelperTests : IClassFixture<AppSettingFixture>, IClassFixture<Remot
     }
 
     [Fact]
+    public void GetUnionTransIdString_InputIsNullOrNotItem_ReturnEmpty()
+    {
+        var resultTestCaseNull = Helper.GetUnionTransIdString(null);
+        var resultTestCaseEmpty = Helper.GetUnionTransIdString([]);
+        Assert.Equal(string.Empty, resultTestCaseNull);
+        Assert.Equal(string.Empty, resultTestCaseEmpty);
+    }
+
+    [Fact]
     public void GetUnionTransIdString_Return_IntersectTransIdString()
     {
         var testCase1 = new List<string>

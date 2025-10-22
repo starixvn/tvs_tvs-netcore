@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { LicenseeAffectedListComponent } from '../../../utility/components/licensee-affected-list/licensee-affected-list.component';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
@@ -14,7 +14,6 @@ import { TicketsService } from '../services/tickets.service';
 import { VoidPageCommonService } from '../services/void-page-common.service';
 import { TicketsListComponent } from '../tickets-list/tickets-list.component';
 import { VoidArchivedTicketModel } from './models/void-archived-ticket.model';
-import { TemplateMessageService } from './services/template-message.service';
 import { VoidPageService } from './services/void-page.service';
 
 @Component({
@@ -24,7 +23,7 @@ import { VoidPageService } from './services/void-page.service';
   styleUrl: './void-archived-ticket.component.scss',
   imports: [CommonModule, LicenseeAffectedListComponent, TicketsListComponent, MessageAreaComponent,
     PasswordAreaComponent, TooltipComponent],
-  providers: [VoidPageService, TemplateMessageService]
+  providers: [VoidPageService]
 })
 export class VoidArchivedTicketComponent implements OnInit {
   @Input('requestDetail') requestDetail: RequestDetailViewModel;
@@ -48,7 +47,7 @@ export class VoidArchivedTicketComponent implements OnInit {
     this.primitiveProperty.isBlockUI = true;
     this.primitiveProperty.userName = document.body.getAttribute('user-name');
     this.issueTypes = await this.voidPageService.getIssueTypes();
-    this.voidPageItem = await this.voidPageService.getBasicVoidPageItemsData(this.issueTypes, this.requestDetail, this.primitiveProperty);
+    this.voidPageItem = await this.voidPageService.getBasicVoidPageItemsData(this.issueTypes, this.requestDetail);
     this.primitiveProperty.isLoadedBasicData = true;
     this.primitiveProperty.isBlockUI = false;
 

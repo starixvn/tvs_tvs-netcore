@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
-import _ from 'lodash';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import clone from 'lodash/clone';
+import { RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { IssueTypesModel, SubIssueType } from '../../../../utility/models/issue-type.model';
 import { CommonService } from '../../../../utility/services/common.service';
 import { StaticService } from '../../../../utility/services/static.service';
@@ -43,7 +43,7 @@ export class VoidPageService {
       element.templateValue = this.templateMessageService.getTemplateValue(element, requestDetail);
       element.voidReason = await this.commonService.getVoidedReason(element.subIssueType.subIssueTypeId, element.matchModel.sportType);
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
-      element.licenseeAffectedList = _.clone(element.licenseeAffectedList);
+      element.licenseeAffectedList = clone(element.licenseeAffectedList);
     }
   }
 

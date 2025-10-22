@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { RequestDetailViewModel } from '../../edit-request/app/request.model';
+import { RequestDetailViewModel } from '../../add-request-new/models/request-detail.model';
 import { Result } from '../../utility/models/result';
 import { HttpService } from '../../utility/services/http.service';
 import { GetTicketsQuery } from './models/get-tickets.query';

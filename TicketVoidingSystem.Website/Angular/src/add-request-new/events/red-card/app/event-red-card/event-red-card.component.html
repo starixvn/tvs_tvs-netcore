@@ -33,7 +33,7 @@
     <button [disabled]="filter.isVoided" type="submit" class="btn btn-primary btn-sm"
     (click)="handleSearchEvent()">Search</button>
   </div>
-  
+
   <info-site-db-down [infoSiteDBDownModel]="primitiveProps.infoSiteDBDownModel">
   </info-site-db-down>
   @if (primitiveProps.isShowLogInfoMainMatch) {
@@ -93,7 +93,12 @@
     [model]="addChildMatchModel">
   </add-child-match>
 
-  <confirm-add-request [isOpen]="confirmRedCard.isOpen" [model]="confirmRedCard" [issueTypes]="issueTypes" [voidActions]="filter.actions"
+  <confirm-add-request
+    [isOpen]="confirmRedCard.isOpen"
+    [issueTypeId]="filter.issueTypeId"
+    [model]="confirmRedCard"
+    [issueTypes]="issueTypes"
+    [voidActions]="filter.actions"
     [selectedVoidAction]="filter.action" [selectedSubIssueType]="issueTypes.subIssueId"
     [siteDBDownInfoJson]="primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson"
     (clickOk)="onClickConfirmSaveRequest()" (clickCancel)="onClickCancel()">

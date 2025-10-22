@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { RequestDetailViewModel } from '../../../../edit-request/app/request.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -8,9 +7,9 @@ import { VoidWrongMarketOfferedModel } from '../models/void-wrong-market-offered
 
 @Injectable()
 export class TemplateMessageService {
-  templateService = inject(TemplateService);
+  private readonly templateService = inject(TemplateService);
 
-  public getTemplateValue(voidPageItem: VoidWrongMarketOfferedModel, requestDetail: RequestDetailViewModel): TemplateValue {
+  public getTemplateValue(voidPageItem: VoidWrongMarketOfferedModel): TemplateValue {
     const templateValue = voidPageItem.matchModel ? this.templateService.initializeTemplateValue(voidPageItem.matchModel) : new TemplateValue();
     templateValue.groupPHAffected = voidPageItem.voidTicketsMini.groupPHAffected;
     templateValue.checkSettled = voidPageItem.voidTicketsMini.isHasSettledTicket;

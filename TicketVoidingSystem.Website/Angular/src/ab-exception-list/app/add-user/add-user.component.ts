@@ -8,6 +8,7 @@ import { AppStore } from '../app.store';
 import { UserService } from '../services/user.service';
 import { ValidationService } from '../services/validation.service';
 import { AddUserModel } from './add-user.model';
+import { UserNameService } from '../../../utility/components/user-names/user-name.service';
 
 @Component({
   standalone: true,
@@ -26,7 +27,8 @@ export class AddUserComponent implements OnChanges {
   validationService = inject(ValidationService);
   userService = inject(UserService);
   abWhiteListStore = inject(AppStore);
-
+  userNameService = inject(UserNameService);
+  
   async ngOnChanges(changes: SimpleChanges) {
     if (changes['model']) {
       this.selectedSubType = [];
@@ -36,7 +38,7 @@ export class AddUserComponent implements OnChanges {
 
   async clickSave() {
     this.abWhiteListStore.changeBlockingUiStatus(true);
-    const usernames = this.usernamesComponent.groupUsername.getAllValue();
+    const usernames = this.userNameService.getAllValue(this.usernamesComponent.groupUsername);
     const isValidUserNames = await this.validationService.validateUsernames(usernames, this.usernamesComponent);
     if (isValidUserNames) {
       this.model.isOpen = false;
@@ -51,9 +53,8 @@ export class AddUserComponent implements OnChanges {
 
   async afterFocusOutBetIds(): Promise<void> {
     this.abWhiteListStore.changeBlockingUiStatus(true);
-    const usernames = this.usernamesComponent.groupUsername.getAllValue();
+    const usernames = this.userNameService.getAllValue(this.usernamesComponent.groupUsername);
     await this.validationService.validateUsernames(usernames, this.usernamesComponent);
     this.abWhiteListStore.changeBlockingUiStatus(false);
   }
-
 }

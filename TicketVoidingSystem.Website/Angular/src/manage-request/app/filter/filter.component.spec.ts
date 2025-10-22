@@ -9,6 +9,7 @@ import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { FilterComponent } from './filter.component';
 import { FilterModel } from './filter.model';
+import { FilterService } from './filter.service';
 
 class Helper {
   static readonly fakeDate = '2020-11-09 12:08:49.737';
@@ -219,6 +220,7 @@ describe('FilterComponent', () => {
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
     component.issueTypeSelectList = Helper.fakeIssueTypeSelectList;
     component.createdBySelectList = Helper.fakeCreatedBySelectList;
+    component.products = FilterService.initMultiSelectProduct();
 
     // Action
     component.initDefaultFilter();
@@ -236,13 +238,17 @@ describe('FilterComponent', () => {
     const element = document.createElement('body');
     element.setAttribute('id', 'body');
     element.setAttribute('old-site-root-url', '/');
-    window.open = jest.fn();
+    const mockAssign = jest.fn();
+    Object.defineProperty(window, 'location', {
+      value: { assign: mockAssign },
+      writable: true
+    });
 
     // Action
     component.newRequest();
 
     // Assert
-    expect(window.open).toHaveBeenCalledTimes(1);
+    expect(mockAssign).toHaveBeenCalledTimes(1);
   });
 
   it('#modelChange should emit with expected FilterModel when call #updateModel', async () => {

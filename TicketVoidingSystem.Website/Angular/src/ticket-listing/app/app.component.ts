@@ -31,6 +31,7 @@ import { SummaryComponent } from './summary/summary.component';
 import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
 import { TicketsModel } from './tickets/ticket.model';
 import { TicketsComponent } from './tickets/tickets.component';
+import { SummaryService } from './summary/summary.service';
 
 @Component({
   standalone: true,
@@ -77,6 +78,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   signalRService = inject(SignalRService);
   blockUIService = inject(BlockUiService);
   commonService = inject(CommonService);
+  summaryService = inject(SummaryService);
+
   public async ngOnInit() {
     this.tooltip.element = this.element;
     await this.signalRService.initializeConnection();
@@ -125,7 +128,7 @@ export class AppComponent implements OnInit, AfterViewInit {
     const items = this.commonQuery.groupBy.toString() === '0'
       ? summaryItemViewModel.groupByLicensees : summaryItemViewModel.groupByBetTypes;
     items.forEach(item => {
-      this.summaryItems.push(new SummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, item.items, '', item.specialPlatform));
+      this.summaryItems.push(this.summaryService.initSummaryItem(item.name, item.total, item.isChinaView, item.licenseeName, item.betTypes, item.items, '', item.specialPlatform));
     });
   }
 

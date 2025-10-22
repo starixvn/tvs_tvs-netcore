@@ -7,7 +7,7 @@
         <div class="dropdown-header" *ngIf="multipleSelect.showHeader">
             <label class="d-flex">
                 <input class="me-1" type="checkbox" [(ngModel)]="multipleSelect.isCheckAll" [disabled]="multipleSelect.isDisabled"
-                    (ngModelChange)="multipleSelect.checkAllItems(multipleSelect.isCheckAll);changeItems();" />
+                    (ngModelChange)="checkAllItems();changeItems();" />
                 {{multipleSelect.checkAllCheckBoxText}}
             </label>
             <i class="fa" [ngClass]="{'fa-angle-up': expanded, 'fa-angle-down': !expanded}" (click)="toggle()"></i>

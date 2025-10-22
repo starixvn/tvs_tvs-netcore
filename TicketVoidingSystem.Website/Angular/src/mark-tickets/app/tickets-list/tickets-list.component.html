@@ -34,7 +34,7 @@
                                   'icon-checkbox-none':model.iconCheckBox == 0,
                                   'icon-checkbox-any':model.iconCheckBox == 1,
                                   'icon-checkbox-all':model.iconCheckBox == 2}"
-                  (click)="model.checkGroups();changeTickets();">
+                  (click)="checkGroups();changeTickets();">
                 </span>
                 <span class="icon-arrow-white-down" (click)="showListCheckGroup()"></span>
               </div>
@@ -83,7 +83,7 @@
                 <div>
               <input type="checkbox" [(ngModel)]="group.isCheckAll" (ngModelChange)="group.checkAllTickets();
                                                     model.changeIconCheckBox();
-                                                    model.getUncheckedTicketListFromGroup(group);
+                                                    getUncheckedTicketListFromGroup(group);
                                                     changeTickets()" [disabled]="group.isDisabled" />
                   </div>
                 </td>
@@ -98,7 +98,7 @@
                     <div>
               <input type="checkbox" [(ngModel)]="ticket.isChecked" (change)="group.changeTicketChecked(ticket);
                                              model.changeIconCheckBox();
-                                             model.getUncheckedTicketList(ticket);
+                                             getUncheckedTicketList(ticket);
                                              changeTickets()" [disabled]="ticket.isDisable" />
                       </div>
                     </td>
@@ -166,14 +166,14 @@
           </div>
         }
         <div class="pt-3">
-          @if (model.getNumberOfTickets() > 0) {
+          @if (getNumberOfTickets() > 0) {
             <button class="btn btn-sm btn-primary"
               (click)="markSelectedTicketsOnPage()" [disabled]="!dataPermission.isHostMarkTickets">
-              {{getStatus}} selected tickets ({{model.getNumberOfCheckedTickets()}}/{{model.getNumberOfTickets()}}) on current
+              {{getStatus}} selected tickets ({{model.getNumberOfCheckedTickets()}}/{{getNumberOfTickets()}}) on current
               page
             </button>
           }
-          @if (model.totalItems > model.getNumberOfTickets()) {
+          @if (model.totalItems > getNumberOfTickets()) {
             <button class="btn btn-sm btn-primary"
               (click)="markSelectedTicketsAllPage()" [disabled]="!dataPermission.isHostMarkTickets">
               {{getStatus}} selected tickets ({{model.checkedTotalItems}}/{{model.totalItems}}) on all page

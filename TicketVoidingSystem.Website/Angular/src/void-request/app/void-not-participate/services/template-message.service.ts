@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { PlayerName, RequestDetailViewModel } from '../../../../edit-request/app/request.model';
+import { PlayerName, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
 import { TemplateService } from '../../../../utility/components/template-message/template-message/services/template.service';
 import { TemplateContent, TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { EventType, SportType } from '../../../../utility/constants/sport.constant';

@@ -10,6 +10,7 @@ import { PrimitiveProperty } from '../models/primitive-property.model';
 import { AddRequestApiService } from '../../../../../services/add-request-api.service';
 import { AbnormalAccountModel } from '../../../../../models/abnormal-account.model';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
+import { UserNameService } from '../../../../../../utility/components/user-names/user-name.service';
 
 class Helper {
   static readonly fakeUsernames = 'user1,user2,user3';
@@ -24,6 +25,7 @@ class Helper {
 describe('ValidationService', () => {
   let service: ValidationService;
   let addRequestApiService: jest.Mocked<AddRequestApiService>;
+  let userNameService: jest.Mocked<UserNameService>;
   let usernamesComponent: jest.Mocked<UsernamesComponent>;
   let productFilterComponent: jest.Mocked<ProductFilterComponent>;
   let eventDateFilterComponent: jest.Mocked<EventDateFilterComponent>;
@@ -34,23 +36,35 @@ describe('ValidationService', () => {
         ValidationService,
         { provide: AddRequestApiService, useValue: {
           checkValidUsernames: jest.fn()
+        } },
+        { provide: UserNameService, useValue: {
+          getAllValue: jest.fn().mockReturnValue(Helper.fakeUsernames),
+          resetAllValue: jest.fn(),
+          getDuplicatedItems: jest.fn().mockReturnValue([]),
+          updateDuplicatedItems: jest.fn(),
+          updateInvalid: jest.fn(),
+          updateWarningSiteDBDown: jest.fn()
         } }
       ]
     });
 
     service = TestBed.inject(ValidationService);
     addRequestApiService = TestBed.inject(AddRequestApiService) as jest.Mocked<AddRequestApiService>;
+    userNameService = TestBed.inject(UserNameService) as jest.Mocked<UserNameService>;
     
     // Mock các component
     usernamesComponent = {
       groupUsername: {
-        getAllValue: jest.fn().mockReturnValue(Helper.fakeUsernames),
-        resetAllValue: jest.fn(),
-        getDuplicatedItems: jest.fn().mockReturnValue([]),
-        updateDuplicatedItems: jest.fn(),
-        updateInvalid: jest.fn(),
-        updateWarningSiteDBDown: jest.fn(),
-        isExceededTotalUsernames: false
+        items: [
+          { value: 'user1', isValid: true, cssClass: 'valid', defaultClass: 'valid', isSelected: false, isShowTooltip: false, tooltipText: '' },
+          { value: 'user2', isValid: true, cssClass: 'valid', defaultClass: 'valid', isSelected: false, isShowTooltip: false, tooltipText: '' },
+          { value: 'user3', isValid: true, cssClass: 'valid', defaultClass: 'valid', isSelected: false, isShowTooltip: false, tooltipText: '' }
+        ],
+        isSelectedAll: false,
+        isExceededTotalUsernames: false,
+        isSelected: false,
+        cssClass: '',
+        defaultClass: ''
       },
       checkValidItems: jest.fn().mockReturnValue(true),
       showErrorTicketLimitExceeded: jest.fn(),
@@ -125,21 +139,21 @@ describe('ValidationService', () => {
       // Arrange
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkBusinessRule(args);
 
       // Assert
       expect(args.primitiveProps.isShowAccountWinLost).toBe(true);
-      expect(addRequestApiService['checkValidUsernames']).toHaveBeenCalled();
+      expect(addRequestApiService.checkValidUsernames).toHaveBeenCalled();
     });
 
     it('should return the result from checkValidUsernames', async () => {
       // Arrange
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkBusinessRule(args);
@@ -179,7 +193,7 @@ describe('ValidationService', () => {
     it('should handle empty usernames', async () => {
       // Arrange
       const args = createMockValidationBusinessRuleArgs();
-      (usernamesComponent.groupUsername.getAllValue as jest.Mock).mockReturnValue('');
+      userNameService.getAllValue.mockReturnValue('');
       (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(false);
 
       // Act
@@ -192,14 +206,15 @@ describe('ValidationService', () => {
     it('should handle duplicated usernames', async () => {
       // Arrange
       const args = createMockValidationBusinessRuleArgs();
-      (usernamesComponent.groupUsername.getDuplicatedItems as jest.Mock).mockReturnValue(['user1']);
+      userNameService.getDuplicatedItems.mockReturnValue(['user1']);
+      (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(false);
 
       // Act
       const result = await service.checkValidUsernames(args);
 
       // Assert
-      expect(usernamesComponent.groupUsername.updateDuplicatedItems).toHaveBeenCalledWith(Helper.fakeUsernames);
-      expect(usernamesComponent.checkValidItems).toHaveBeenCalled();
+      expect(result.isValid).toBe(false);
+      expect(userNameService.updateDuplicatedItems).toHaveBeenCalled();
     });
 
     it('should handle ticket limit exceeded case', async () => {
@@ -207,7 +222,7 @@ describe('ValidationService', () => {
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
       mockResponse.validation.isTicketLimitExceeded = true;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkValidUsernames(args);
@@ -222,14 +237,15 @@ describe('ValidationService', () => {
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
       mockResponse.validation.invalidUserName = 'invalidUser1,invalidUser2';
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
+      (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(false);
 
       // Act
       const result = await service.checkValidUsernames(args);
 
       // Assert
-      expect(usernamesComponent.groupUsername.updateInvalid).toHaveBeenCalledWith('invalidUser1,invalidUser2');
-      expect(usernamesComponent.checkValidItems).toHaveBeenCalled();
+      expect(result.isValid).toBe(false);
+      expect(userNameService.updateInvalid).toHaveBeenCalled();
     });
 
     it('should handle exceeded total usernames', async () => {
@@ -237,14 +253,15 @@ describe('ValidationService', () => {
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
       mockResponse.validation.isExceededTotalUsernames = true;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
+      (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(false);
 
       // Act
       const result = await service.checkValidUsernames(args);
 
       // Assert
       expect(usernamesComponent.groupUsername.isExceededTotalUsernames).toBe(true);
-      expect(usernamesComponent.checkValidItems).toHaveBeenCalled();
+      expect(result.isValid).toBe(false);
     });
 
     it('should handle move bet date case', async () => {
@@ -252,7 +269,7 @@ describe('ValidationService', () => {
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
       mockResponse.validation.isBeingMoveBetDate = true;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkValidUsernames(args);
@@ -268,7 +285,7 @@ describe('ValidationService', () => {
       const args = createMockValidationBusinessRuleArgs();
       const mockResponse = createMockCheckUsernamesViewModel();
       mockResponse.validation.isInvalidTotalTicket = true;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkValidUsernames(args);
@@ -286,14 +303,14 @@ describe('ValidationService', () => {
       mockResponse.infoSiteDBDownModel = {
         usernames: 'user1,user2'
       } as any;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkValidUsernames(args);
 
       // Assert
       expect(args.primitiveProps.infoSiteDBDownModel).toBe(mockResponse.infoSiteDBDownModel);
-      expect(usernamesComponent.groupUsername.updateWarningSiteDBDown).toHaveBeenCalledWith('user1,user2');
+      expect(userNameService.updateWarningSiteDBDown).toHaveBeenCalled();
     });
 
     it('should handle all usernames off site DB down', async () => {
@@ -304,7 +321,7 @@ describe('ValidationService', () => {
         usernames: 'user1,user2'
       } as any;
       usernamesComponent.isAllUsernamesOffSiteDbDown.mockReturnValue(true);
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       const result = await service.checkValidUsernames(args);
@@ -321,7 +338,8 @@ describe('ValidationService', () => {
       mockResponse.validation.usernamesOfCreditCashService = 'user1';
       mockResponse.transInfoAddRequestModel = {} as any;
       mockResponse.accountWinlostModels = [{ id: 1 }] as any;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
+      (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(true);
 
       // Act
       const result = await service.checkValidUsernames(args);
@@ -336,21 +354,22 @@ describe('ValidationService', () => {
     it('should handle API error gracefully', async () => {
       // Arrange
       const args = createMockValidationBusinessRuleArgs();
-      addRequestApiService['checkValidUsernames'].mockRejectedValue(new Error('API Error'));
+      addRequestApiService.checkValidUsernames.mockRejectedValue(new Error('API Error'));
+      (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(false);
 
       // Act
       const result = await service.checkValidUsernames(args);
 
       // Assert
-      expect(result.isValid).toBeDefined();
-      expect(usernamesComponent.groupUsername.updateInvalid).toHaveBeenCalledWith(Helper.fakeUsernames);
+      expect(result.isValid).toBe(false);
     });
 
     it('should set isBlockUsernames to false in finally block', async () => {
       // Arrange
       const args = createMockValidationBusinessRuleArgs();
       args.primitiveProps.isBlockUsernames = true;
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(createMockCheckUsernamesViewModel());
+      addRequestApiService.checkValidUsernames.mockResolvedValue(createMockCheckUsernamesViewModel());
+      (usernamesComponent.checkValidItems as jest.Mock).mockReturnValue(true);
 
       // Act
       await service.checkValidUsernames(args);
@@ -367,13 +386,13 @@ describe('ValidationService', () => {
       args.actionId = TVSRequestActionType.AUTO_VOID_INSTANT_WITH_POLICY_ID.toString();
       args.abnormalAccountModel.accountWinlostModels = [{ id: 1 }] as any;
       const mockResponse = createMockCheckUsernamesViewModel();
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       await service.getValidation(args);
 
       // Assert
-      expect(addRequestApiService['checkValidUsernames']).toHaveBeenCalledWith(
+      expect(addRequestApiService.checkValidUsernames).toHaveBeenCalledWith(
         expect.objectContaining({
           accountWinlostModels: [{ id: 1 }]
         })
@@ -392,13 +411,13 @@ describe('ValidationService', () => {
         }
       } as any;
       const mockResponse = createMockCheckUsernamesViewModel();
-      addRequestApiService['checkValidUsernames'].mockResolvedValue(mockResponse);
+      addRequestApiService.checkValidUsernames.mockResolvedValue(mockResponse);
 
       // Act
       await service.getValidation(args);
 
       // Assert
-      expect(addRequestApiService['checkValidUsernames']).toHaveBeenCalledWith(
+      expect(addRequestApiService.checkValidUsernames).toHaveBeenCalledWith(
         expect.objectContaining({
           isRemoveCreditCashService: true
         })

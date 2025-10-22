@@ -1,5 +1,5 @@
 import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import * as _ from 'lodash';
+import clone from 'lodash/clone';
 import moment from 'moment-timezone';
 import { LogInfoMessageComponent } from '../../../../../../utility/components/log-info-detail/log-info-message/log-info-message.component';
 import { ModalService } from '../../../../../../utility/components/modal/modal.service';
@@ -68,7 +68,7 @@ export class LogInfoOtherIssuesComponent implements OnInit {
     this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
     this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
     this.affectedTicketsModel.isOpen = true;
-    this.affectedTicketsModel = _.clone(this.affectedTicketsModel);
+    this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 
   private updateBetTypeCountModel() {

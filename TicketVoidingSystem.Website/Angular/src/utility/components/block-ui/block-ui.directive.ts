@@ -18,7 +18,7 @@ export class BlockUiDirective implements OnChanges {
     }
   }
 
-  openBlock() {
+  private openBlock() {
     if (this.isBlock) {
       this.blockUiComponent = this.viewContainerRef.createComponent(BlockUiComponent);
       this.elRef.nativeElement.appendChild(this.blockUiComponent.location.nativeElement);

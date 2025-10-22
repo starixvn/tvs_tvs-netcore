@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectMixtureItem } from '../ng-select-mixture-item.model';
+import { NgSelectMixtureService } from '../ng-select-mixture.service';
 
 @Component({
   standalone: true,
@@ -17,6 +18,8 @@ export class NgSelectTreeViewComponent {
   @Output() emitSingleEvent = new EventEmitter<NgSelectMixtureItem>();
   @Output() emitChildEvent = new EventEmitter<string>();
 
+  private readonly ngSelectMixtureService = inject(NgSelectMixtureService);
+  
   public handleClickSingleItem(item: NgSelectMixtureItem) {
     item.checked = true;
     this.unCheckOtherItem(item);
@@ -29,14 +32,18 @@ export class NgSelectTreeViewComponent {
 
   public handleClickChildItem() {
     this.emitChildEvent.emit();
-    this.items?.filter(x => x.isSingleSelect()).forEach(x => x.checked = false);
+    this.items?.filter(x => this.ngSelectMixtureService.isSingleSelect(x.items, x.parentId)).forEach(x => x.checked = false);
   }
 
   public checkFromChildEvent(item: NgSelectMixtureItem) {
-    item.checkFromChild();
+    this.ngSelectMixtureService.checkFromChild(item);
   }
 
   public isHaveCheckBox(item: NgSelectMixtureItem) {
     return item.items.length > 0 || item.parentId < 0;
+  }
+
+  checkChild(item: NgSelectMixtureItem) {
+    this.ngSelectMixtureService.checkChild(item);
   }
 }

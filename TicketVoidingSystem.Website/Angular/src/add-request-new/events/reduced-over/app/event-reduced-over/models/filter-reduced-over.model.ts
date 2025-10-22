@@ -1,4 +1,4 @@
-import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { NgSelectMixtureModel } from '../../../../../../utility/components/ng-select-mixture/ng-select-mixture.model';
 
 export class FilterReducedOverModel {

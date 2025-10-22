@@ -3,7 +3,7 @@ import { Component, ElementRef, EventEmitter, inject, Input, OnChanges, OnInit, 
 import { FormsModule } from '@angular/forms';
 import { LicenseesComponent } from '../../../../../../utility/components/licensees/licensees.component';
 import { GroupLicensee, GroupLicenseeModel, Licensee } from '../../../../../../utility/components/licensees/licensees.model';
-import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
 import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
 import { TooltipComponent } from '../../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';

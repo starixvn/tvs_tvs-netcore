@@ -20,12 +20,6 @@ export class GroupBetTypeVirtualSport {
         this.betTypes = betTypes;
         this.result = new Result();
         this.checked = betTypes?.length > 0;
-        this.changeAll();
-    }
-
-    changeAll() {
-        this.betTypes.forEach(item => {
-            item.checked = this.checked;
-        });
+        this.betTypes.forEach(item => item.checked = this.checked);
     }
 }

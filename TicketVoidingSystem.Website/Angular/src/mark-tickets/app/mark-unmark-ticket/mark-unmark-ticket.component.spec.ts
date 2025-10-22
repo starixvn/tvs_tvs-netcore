@@ -17,6 +17,7 @@ import { AllMarkedTicketModel } from './all-marked-ticket-list/all-marked-ticket
 import { FilterTicketsComponent } from './filter-tickets/filter-tickets.component';
 import { FilterSearchBy } from './filter-tickets/filter.model';
 import { MarkUnmarkTicketComponent } from './mark-unmark-ticket.component';
+import { TicketsListService } from '../tickets-list/tickets-list.service';
 
 class Helper {
   static readonly fakeResultUpdateMarkedTicket = {
@@ -58,7 +59,8 @@ describe('MarkUnmarkTicketComponent', () => {
   let appService: AppService;
   let commonService: CommonService;
   let modalService: ModalService;
-
+  let ticketsListService: TicketsListService;
+  
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
@@ -74,6 +76,7 @@ describe('MarkUnmarkTicketComponent', () => {
     appService = fixture.debugElement.injector.get(AppService);
     commonService = fixture.debugElement.injector.get(CommonService);
     modalService = fixture.debugElement.injector.get(ModalService);
+    ticketsListService = fixture.debugElement.injector.get(TicketsListService);
     component = fixture.componentInstance;
   });
 
@@ -138,7 +141,7 @@ describe('MarkUnmarkTicketComponent', () => {
       } as TicketsModel;
       appService.getTickets = jest.fn().mockImplementation(() => Promise.resolve(fakeTicketsModel));
       component.ticketsModel = new TicketsModel();
-      component.ticketsModel.initData = jest.fn();
+      ticketsListService.initData = jest.fn();
       const mockUpdateInvalidItems = jest.fn();
       const mockUpdateMoved = jest.fn();
       component.filterTickets = {
@@ -220,7 +223,7 @@ describe('MarkUnmarkTicketComponent', () => {
       appService.getTicketsDetail = jest.fn().mockImplementation(() => Promise.resolve(fakeTicketsModel));
       commonService.getMatch = jest.fn().mockImplementation(() => Promise.resolve(new MatchModel()));
       component.pagingOfAllMarked = new PagingModel();
-      component.ticketsModel.initData = jest.fn();
+      ticketsListService.initData = jest.fn();
 
       await component.getDetailTickets(ticketDetailId);
 

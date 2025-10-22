@@ -3,14 +3,13 @@ import { CommonGroupTicketsModel } from '../../../utility/models/common.group-ti
 import { TicketModel } from './ticket.model';
 
 export class GroupModel extends CommonGroupTicketsModel<TicketModel> {
-
   constructor(
     name: string,
     tickets: Array<TicketModel>,
     displayTotalTickets: number) {
     super();
     this.mapTickets(tickets);
-    this.setValue(name);
+    this.setCommonValue(name);
     this.displayTotalTickets = displayTotalTickets;
   }
 
@@ -20,10 +19,6 @@ export class GroupModel extends CommonGroupTicketsModel<TicketModel> {
       const ticket = new TicketModel(item);
       this.tickets.push(ticket);
     });
-  }
-
-  setValue(name: string) {
-    this.setCommonValue(name);
   }
 
   getEnableSingleTickets(): string[] {

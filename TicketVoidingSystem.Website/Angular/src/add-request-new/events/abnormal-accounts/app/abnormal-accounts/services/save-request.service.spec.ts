@@ -29,48 +29,22 @@ describe('SaveRequestService', () => {
       changeBlockingUiStatus: jest.fn(),
       changeSavingRequestStatus: jest.fn()
     } as unknown as AddRequestStore,
-    primitiveProps: {
-      validAccountWinlostModels: [],
-      transInfoAddRequestModel: null,
-      numberOfTicketsExistedInRequest: 0,
-      isCancelValidate: false,
-      usernamesOfCreditCashService: '',
-      isBlockUsernames: false,
-      isShowError: false,
-      isBeingMoveBetDate: false,
-      isInvalidTotalTicket: false,
-      isShowAccountWinLost: false,
-      permission: null,
-      minDate: null,
-      isCheckedShowAdjustAccount: false
-    } as PrimitiveProperty,
+    primitiveProps: {} as PrimitiveProperty,
     filter: {
-      isVoided: false,
       action: '1',
       issueTypeId: '1',
       subIssueTypeId: '1',
-      isTest: false,
-      isAbnormal: false,
       actions: []
     } as FilterModel,
     usernamesComponent: {
       triggerFocusOutUsernames: jest.fn()
     } as unknown as UsernamesComponent,
     confirmAddRequest: {
-      isOpen: false,
-      requestId: 0,
-      requestedBy: '',
-      isEditingByAnotherUser: false,
-      isHasWarningTakenNote: false,
-      isHasWarningAbnormalAccount: false,
       numberOfTicketsExistedInRequest: 0,
       allUsernames: '',
       usernamesOfCreditCashService: '',
       extraWarningModel: null,
       userId: 0,
-      isHasSettledTicket: false,
-      isHasWarningTicket: false,
-      isShowSubIssueType: false,
       issueTypeName: '',
       subIssueTypeName: '',
       actionName: ''
@@ -377,12 +351,146 @@ describe('SaveRequestService', () => {
     });
   });
 
+  describe('getUsernamesForSaveRequest', () => {
+    it('should return original usernames when no credit cash service usernames and no site DB down usernames', () => {
+      const originalUsernames = 'user1,user2,user3';
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: '',
+          checkboxState: {}
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+      const siteDBDownUserNames = '';
+
+      const result = service['getUsernamesForSaveRequest'](originalUsernames, confirmComponent, siteDBDownUserNames);
+
+      expect(result).toBe('user1,user2,user3');
+    });
+
+    it('should filter out credit cash service usernames when checkbox is checked', () => {
+      const originalUsernames = 'user1,user2,user3';
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user2',
+          checkboxState: { [2]: true }
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+      const siteDBDownUserNames = '';
+
+      const result = service['getUsernamesForSaveRequest'](originalUsernames, confirmComponent, siteDBDownUserNames);
+
+      expect(result).toBe('user1,user3');
+    });
+
+    it('should filter out site DB down usernames', () => {
+      const originalUsernames = 'user1,user2,user3';
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: '',
+          checkboxState: {}
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+      const siteDBDownUserNames = 'user1';
+
+      const result = service['getUsernamesForSaveRequest'](originalUsernames, confirmComponent, siteDBDownUserNames);
+
+      expect(result).toBe('user2,user3');
+    });
+
+    it('should filter out both credit cash service and site DB down usernames', () => {
+      const originalUsernames = 'user1,user2,user3,user4';
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user2',
+          checkboxState: { [2]: true }
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+      const siteDBDownUserNames = 'user3';
+
+      const result = service['getUsernamesForSaveRequest'](originalUsernames, confirmComponent, siteDBDownUserNames);
+
+      expect(result).toBe('user1,user4');
+    });
+
+    it('should not filter credit cash service usernames when checkbox is not checked', () => {
+      const originalUsernames = 'user1,user2,user3';
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: 'user2',
+          checkboxState: { [2]: false }
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+      const siteDBDownUserNames = '';
+
+      const result = service['getUsernamesForSaveRequest'](originalUsernames, confirmComponent, siteDBDownUserNames);
+
+      expect(result).toBe('user1,user2,user3');
+    });
+
+    it('should handle empty usernames', () => {
+      const originalUsernames = '';
+      const confirmComponent = {
+        model: {
+          usernamesOfCreditCashService: '',
+          checkboxState: {}
+        }
+      } as unknown as ConfirmAbnormalAccountComponent;
+      const siteDBDownUserNames = '';
+
+      const result = service['getUsernamesForSaveRequest'](originalUsernames, confirmComponent, siteDBDownUserNames);
+
+      expect(result).toBe('');
+    });
+  });
+
   describe('createAbnormalAccountModel', () => {
     it('should create abnormal account model with correct values', () => {
       const result = service['createAbnormalAccountModel'](mockSaveRequestArg);
 
       expect(result.usernames).toBe('usernames');
       expect(result.accountWinlostModels).toEqual([]);
+    });
+
+    it('should call getUsernamesForSaveRequest with correct parameters', () => {
+      const getUsernamesSpy = jest.spyOn(service as any, 'getUsernamesForSaveRequest').mockReturnValue('filtered,usernames');
+      const getAccountWinlostSpy = jest.spyOn(service as any, 'getAccountWinlostModelsForSaveRequest').mockReturnValue([]);
+
+      service['createAbnormalAccountModel'](mockSaveRequestArg);
+
+      expect(getUsernamesSpy).toHaveBeenCalledWith(
+        mockSaveRequestArg.abnormalAccountModel.usernames,
+        mockSaveRequestArg.confirmAddRequestComponent,
+        mockSaveRequestArg.primitiveProps.infoSiteDBDownModel?.usernames
+      );
+      expect(getAccountWinlostSpy).toHaveBeenCalledWith(
+        mockSaveRequestArg.filter.action,
+        mockSaveRequestArg.abnormalAccountModel.accountWinlostModels,
+        mockSaveRequestArg.confirmAddRequestComponent
+      );
+    });
+
+    it('should return cloned abnormal account model with filtered usernames and account winlost models', () => {
+      const mockAccountWinlostModels = [
+        { custId: 1, username: 'user1' },
+        { custId: 2, username: 'user2' }
+      ] as AccountWinlostModel[];
+
+      const argsWithAccountModels = {
+        ...mockSaveRequestArg,
+        abnormalAccountModel: {
+          usernames: 'user1,user2,user3',
+          accountWinlostModels: mockAccountWinlostModels
+        } as AbnormalAccountModel
+      };
+
+      jest.spyOn(service as any, 'getUsernamesForSaveRequest').mockReturnValue('filtered,usernames');
+      jest.spyOn(service as any, 'getAccountWinlostModelsForSaveRequest').mockReturnValue(mockAccountWinlostModels);
+
+      const result = service['createAbnormalAccountModel'](argsWithAccountModels);
+
+      expect(result.usernames).toBe('filtered,usernames');
+      expect(result.accountWinlostModels).toEqual(mockAccountWinlostModels);
+      expect(result).not.toBe(argsWithAccountModels.abnormalAccountModel); // Should be cloned
     });
   });
 });

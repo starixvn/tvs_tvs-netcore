@@ -3,6 +3,7 @@ import { EventLeagueComponent } from '../../../../../utility/components/event-le
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AffectedTicketService } from '../../../../component/affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../../../component/filter/filter.model';
 import { OthersModel } from '../../../../component/others/others.model';
 import { NotParticipateModel } from '../../../../models/event-not-participate.model';
@@ -71,7 +72,8 @@ describe('EventNotParticipateComponent', () => {
         LogInfoService,
         SaveRequestService,
         FilterNotParticipateService,
-        AddRequestStore
+        AddRequestStore,
+        AffectedTicketService
       ]
     }).compileComponents();
 

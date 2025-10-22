@@ -3,6 +3,7 @@ import { OddsInfo } from '../../../../../utility/components/advanced-mode/advanc
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { MatchModel } from '../../../../../utility/models/match.model';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
+import { AffectedTicketService } from '../../../../component/affected-ticket/affected-ticket.service';
 import { FilterModel } from '../../../../component/filter/filter.model';
 import { OthersModel } from '../../../../component/others/others.model';
 import { ReducedOverModel } from '../../../../models/event-reduced-over.model';
@@ -70,7 +71,8 @@ describe('EventReducedOverComponent', () => {
         LogInfoService,
         SaveRequestService,
         FilterReducedOverService,
-        AddRequestStore
+        AddRequestStore,
+        AffectedTicketService
       ]
     }).compileComponents();
 

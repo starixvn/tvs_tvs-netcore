@@ -1,8 +1,10 @@
-import _ from 'lodash';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../edit-request/app/request.model';
+import { TestBed } from '@angular/core/testing';
+import clone from 'lodash/clone';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../add-request-new/models/request-detail.model';
 import { PagingConstant, PagingModel } from '../../../utility/components/paging/paging.model';
 import { Message } from '../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../utility/components/template-message/template-message/template.model';
+import { GroupService } from '../../../utility/components/tickets/group.service';
 import { SubIssueType } from '../../../utility/models/issue-type.model';
 import { MatchModel } from '../../../utility/models/match.model';
 import { VoidedReason } from '../../../utility/models/reason.model';
@@ -12,7 +14,6 @@ import { GetTicketsQuery } from '../models/get-tickets.query';
 import { VoidPageCommonItem } from '../models/void-page-common-item.model';
 import { TicketsModel } from '../tickets-list/tickets.model';
 import { TicketsService } from './tickets.service';
-import { TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly fakeResultError: Result<null> = {
@@ -73,7 +74,8 @@ describe('TicketsService', () => {
     TestBed.configureTestingModule({
       providers: [
         TicketsService,
-        { provide: AppService, useValue: { getTicketsMini: jest.fn(), exportExcel: jest.fn(), getTickets: jest.fn() } }
+        { provide: AppService, useValue: { getTicketsMini: jest.fn(), exportExcel: jest.fn(), getTickets: jest.fn() } },
+        { provide: GroupService, useValue: {} }
       ]
     });
     appService = TestBed.inject(AppService) as jest.Mocked<AppService>;
@@ -104,7 +106,7 @@ describe('TicketsService', () => {
   });
 
   it('#loadVoidTicketsFullOnFirstTime should update pageSize to 1', async () => {
-    const voidMatch = _.clone(Helper.fakeVoidPageItem);
+    const voidMatch = clone(Helper.fakeVoidPageItem);
     ticketsService.initTicketQuery = jest.fn();
     ticketsService['getVoidTicketsFull'] = jest.fn();
 
@@ -115,7 +117,7 @@ describe('TicketsService', () => {
   });
 
   it('#loadVoidTicketsFullOnPagingChange should call #initTicketQuery', async () => {
-    const item = _.clone(Helper.fakeVoidPageItem);
+    const item = clone(Helper.fakeVoidPageItem);
     ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
     ticketsService['getVoidTicketsFull'] = jest.fn();
 
@@ -126,7 +128,7 @@ describe('TicketsService', () => {
   });
 
   it('#exportTicketsAsExcelFile should return expected model', async () => {
-    const voidMatch = _.clone(Helper.fakeVoidPageItem);
+    const voidMatch = clone(Helper.fakeVoidPageItem);
     appService.exportExcel = jest.fn();
     ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
 
@@ -137,7 +139,7 @@ describe('TicketsService', () => {
   });
 
   it('#getVoidTicketsFull should update expected model', async () => {
-    const voidMatch = _.clone(Helper.fakeVoidPageItem);
+    const voidMatch = clone(Helper.fakeVoidPageItem);
     appService.getTickets = jest.fn().mockImplementation(() => new TicketsModel());
     ticketsService.initTicketQuery = jest.fn().mockImplementation(() => new GetTicketsQuery());
     await ticketsService['getVoidTicketsFull'](voidMatch, null);

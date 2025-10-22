@@ -12,7 +12,7 @@ import { PermissionAddRequest } from '../../../../../models/permission-add-reque
 import { TicketStatus } from '../../../../../../utility/constants/config';
 import { SortingComponent } from '../../../../../../utility/components/sorting/sorting.component';
 import { EventEmitter, QueryList } from '@angular/core';
-import _ from 'lodash';
+import lodashOrderBy from 'lodash/orderBy';
 import { CheckUsernamesViewModel } from '../models/check-username.model';
 
 class Helper {
@@ -197,7 +197,7 @@ describe('AccountTableComponent', () => {
 
     // Assert
     expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(true);
-    expect(component.accountWinlostModels).toEqual(_.orderBy([account1, account2], [orderBy], ['desc']));
+    expect(component.accountWinlostModels).toEqual(lodashOrderBy([account1, account2], [orderBy], ['desc']));
     expect(addRequestStore.changeBlockingUiStatus).toHaveBeenCalledWith(false);
     expect(sortingComponent2.isDesc).toBeNull();
   });

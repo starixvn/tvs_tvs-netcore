@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Input, OnChanges, OnInit, SimpleChange } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import _ from 'lodash';
+import clone from 'lodash/clone';
 import { ModalType } from '../../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../../utility/components/modal/modal.service';
 import { AppApiService } from '../../app-api.service';
@@ -38,7 +38,7 @@ export class AfterVoidStatusComponent implements OnInit, OnChanges {
   }
 
   private assignData(): void { // NOSONAR
-    this.tmpModel = _.clone(this.model);
+    this.tmpModel = clone(this.model);
     this.tmpModel.isRunExternalService = this.tmpModel.isRunExternalService ? this.tmpModel.isRunExternalService : 'null';
     this.tmpModel.isSentBatchMessage = this.tmpModel.isSentBatchMessage ? this.tmpModel.isSentBatchMessage : 'null';
     this.tmpModel.isSentMessageToAdminSite = this.tmpModel.isSentMessageToAdminSite ? this.tmpModel.isSentMessageToAdminSite : 'null';
