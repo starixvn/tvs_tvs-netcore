@@ -15,4 +15,8 @@ public class OddsInfoViewModel
     public string PlayNamesChineseTraditional { get; set; }
 
     public string PlayNamesChineseSimplified { get; set; }
+
+    public string OddsInfo { get; set; }
+
+    public string Performance { get; set; }
 }

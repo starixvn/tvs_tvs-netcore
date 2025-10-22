@@ -13,14 +13,13 @@ namespace TicketVoidingSystem.Tests.ManageRequest.Handlers.AddRequest;
 public class GetChildMatchesHandlerTests
 {
     private readonly GetChildMatchesHandler handler;
-    private readonly MatchService matchService;
     private readonly IDynamicRepository repository;
 
     public GetChildMatchesHandlerTests()
     {
         repository = Substitute.For<IDynamicRepository>();
-        matchService = Substitute.For<MatchService>();
-        handler = new GetChildMatchesHandler(repository, matchService);
+        var matchService1 = Substitute.For<MatchService>();
+        handler = new GetChildMatchesHandler(repository, matchService1);
     }
 
     [Fact]

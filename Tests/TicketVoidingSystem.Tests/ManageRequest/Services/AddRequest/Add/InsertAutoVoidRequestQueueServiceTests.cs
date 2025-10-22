@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NSubstitute;
+﻿using NSubstitute;
 using TicketVoidingSystem.ManageRequest.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.Add;
@@ -28,7 +27,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs([1]);
 
         // Act
-        _ = service.Execute(4, actionId, new List<int>());
+        _ = service.Execute(4, actionId, []);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -41,7 +40,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs([1]);
 
         // Act
-        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, new List<int>());
+        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, []);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -54,7 +53,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         repository.ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>()).ReturnsForAnyArgs([1]);
 
         // Act
-        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, new List<int>());
+        _ = service.Execute(4, ActionVoidRequestConstant.AutoVoidAllInstantId, []);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -70,7 +69,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         const int requestId = 123;
 
         // Act
-        _ = service.Execute(requestId, actionId, new List<int>());
+        _ = service.Execute(requestId, actionId, []);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());
@@ -84,7 +83,7 @@ public class InsertAutoVoidRequestQueueServiceTests : IClassFixture<AppSettingFi
         const int requestId = 123;
 
         // Act
-        _ = service.Execute(requestId, actionId, new List<int>());
+        _ = service.Execute(requestId, actionId, []);
 
         // Assert
         repository.Received().ExecuteAsync(Arg.Any<InsertAutoVoidRequestQueueCommand>());

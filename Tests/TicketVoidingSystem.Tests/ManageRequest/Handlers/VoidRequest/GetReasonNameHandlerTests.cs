@@ -38,7 +38,7 @@ public class GetReasonNameHandlerTests
         var betListService = Substitute.For<BetListService>();
         var reason = new VoidedReason { ReasonEnglish = "@@", ReasonChineseSimplified = "@@1" };
         repository.GetAsync<VoidedReason>(Arg.Any<GetReasonNameCriteria>()).ReturnsForAnyArgs(reason);
-        betListService.GetSportTypeName(default, default).ReturnsForAnyArgs("456");
+        betListService.GetSportTypeName(0, null).ReturnsForAnyArgs("456");
         var handler = new GetReasonNameHandler(repository, betListService);
 
         // Act

@@ -60,7 +60,7 @@ export class LoadDataService {
 
     primitiveProperty.isRunningSubscriptionCallback = true;
     primitiveProperty.isBlockUI = true;
-    if (primitiveProperty.isLoadedUnderneathData && messageAreaComponents.every(x => this.isValidTemplcateMessage(x.templateMessageComponent))) {
+    if (primitiveProperty.isLoadedUnderneathData && messageAreaComponents.every(x => this.isValidTemplateMessage(x.templateMessageComponent))) {
       const voidPageItemsHaveTickets = voidPageItems.filter(item => item.voidTicketsMini.total > 0);
       const messageAreaHaveTickets = messageAreaComponents.filter(item => item.totalVoidTickets > 0);
       await this.submitVoidService.submitVoid(messageAreaHaveTickets, voidPageItemsHaveTickets, primitiveProperty);
@@ -116,7 +116,7 @@ export class LoadDataService {
     voidPageItem.isShowTemplateMessage = currentIsShowTemplateMessage;
   }
 
-  private isValidTemplcateMessage(templateMessageViewChilds: TemplateMessageComponent): boolean {
-    return templateMessageViewChilds ? templateMessageViewChilds.initialize : true; // undefined when all tickets has been voided
+  private isValidTemplateMessage(templateMessageViewChild: TemplateMessageComponent): boolean {
+    return templateMessageViewChild ? templateMessageViewChild.initialize : true; // undefined when all tickets has been voided
   }
 }

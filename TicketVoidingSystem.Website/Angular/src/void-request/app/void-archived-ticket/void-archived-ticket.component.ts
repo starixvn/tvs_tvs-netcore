@@ -71,10 +71,6 @@ export class VoidArchivedTicketComponent implements OnInit {
     this.voidPageCommonService.onClickShowTemplateMessage(voidPageItem, this.primitiveProperty, this.requestDetail, this.afterLoadUnderneathDataSubscription);
   }
 
-  onClickCopyLicenseesToClipboard(text: string): void {
-    this.voidPageCommonService.onClickCopyLicenseesToClipboard(text);
-  }
-
   onClickVoidAllMatches(): void {
     this.voidPageCommonService.onClickVoidAllMatches([this.voidPageItem], [this.messageAreaComponent], this.afterLoadUnderneathDataSubscription, this.primitiveProperty, this.tooltip);
   }

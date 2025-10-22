@@ -21,7 +21,7 @@ public class GetLicenseesHandlerTest
             new() { Id = "2", Name = "BBB" }
         };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<Licensee>(default, default).ReturnsForAnyArgs(licensees);
+        repository.FetchAsync<Licensee>(null, null).ReturnsForAnyArgs(licensees);
         var handler = new GetLicenseesHandler(repository);
 
         // Act

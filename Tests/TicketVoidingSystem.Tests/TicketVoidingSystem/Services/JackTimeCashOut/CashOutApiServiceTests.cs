@@ -13,14 +13,13 @@ namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Services.JackTimeCashOut
 public class CashOutApiServiceTests
 {
     private readonly CashOutHttpClientService cashOutHttpClientService;
-    private readonly LoggingService loggingService;
     private readonly CashOutApiServiceImp service;
 
     public CashOutApiServiceTests()
     {
         cashOutHttpClientService = Substitute.For<CashOutHttpClientService>();
-        loggingService = Substitute.For<LoggingService>();
-        service = new CashOutApiServiceImp(cashOutHttpClientService, loggingService);
+        Substitute.For<LoggingService>();
+        service = new CashOutApiServiceImp(cashOutHttpClientService);
     }
 
     [Fact]

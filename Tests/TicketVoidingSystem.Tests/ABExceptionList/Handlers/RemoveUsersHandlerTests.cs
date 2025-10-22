@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.ABExceptionList.Criteria;
@@ -20,7 +21,7 @@ public class RemoveUsersHandlerTests
         var handler = new RemoveUsersHandler(repository, sessionService);
 
         // Act
-        _ = await handler.Handle(request, default);
+        _ = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         await repository.Received(1).ExecuteAsync(Arg.Any<RemoveUsersCommand>());

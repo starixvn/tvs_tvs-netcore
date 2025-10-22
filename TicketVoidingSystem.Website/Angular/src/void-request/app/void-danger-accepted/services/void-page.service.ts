@@ -59,7 +59,7 @@ export class VoidPageService {
   }
 
   private updateLogIfWrongScore(logInfoList: GetLogInfoModel[], requestDetail: RequestDetailViewModel, voidMatches: VoidMatch[]): void {
-    if(!StaticService.isWrongScore(requestDetail.request.issueTypeId.toString())) {
+    if (!StaticService.isWrongScore(requestDetail.request.issueTypeId.toString())) {
       return;
     }
 
@@ -89,28 +89,6 @@ export class VoidPageService {
       element.licenseeAffectedList = element.voidTicketsMini.licenseeAffectedList;
       element.licenseeAffectedList = clone(element.licenseeAffectedList);
     }
-  }
-
-  public toggleTicketsArea(currentVoidMatch: VoidMatch, allVoidMatches: VoidMatch[]): void {
-    const currentIsShowTicketFull = currentVoidMatch.isShowTicketFull;
-    const currentIsShowTemplateMessage = currentVoidMatch.isShowTemplateMessage;
-    allVoidMatches.forEach(item => {
-      item.isShowTemplateMessage = false;
-      item.isShowTicketFull = false;
-    });
-    currentVoidMatch.isShowTicketFull = !currentIsShowTicketFull;
-    currentVoidMatch.isShowTemplateMessage = currentIsShowTemplateMessage;
-  }
-
-  public toggleTemplateMessageArea(currentVoidMatch: VoidMatch, allVoidMatches: VoidMatch[]): void {
-    const currentIsShowTemplateMessage = currentVoidMatch.isShowTemplateMessage;
-    const currentIsShowTicketFull = currentVoidMatch.isShowTicketFull;
-    allVoidMatches.forEach(item => {
-      item.isShowTemplateMessage = false;
-      item.isShowTicketFull = false;
-    });
-    currentVoidMatch.isShowTicketFull = currentIsShowTicketFull;
-    currentVoidMatch.isShowTemplateMessage = !currentIsShowTemplateMessage;
   }
 
   private async getAllLogInfo(requestDetail: RequestDetailViewModel, primitiveProperty: PrimitiveProperty): Promise<GetLogInfoModel[]> {

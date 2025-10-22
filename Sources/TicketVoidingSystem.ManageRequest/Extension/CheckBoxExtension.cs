@@ -8,7 +8,7 @@ public static class CheckBoxExtension
 
     public static bool IsDisable(this GetTicketModel item, VoidPermission permission, int issueTypeId)
     {
-        var betTypesSaba = new List<int> { 228, 229 };
+        int[] betTypesSaba = [228, 229];
         if (DefaultDisable(item, permission))
         {
             return true;

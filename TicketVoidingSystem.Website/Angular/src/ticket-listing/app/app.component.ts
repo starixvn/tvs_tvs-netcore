@@ -32,6 +32,7 @@ import { SummaryItem, SummaryItemViewModel } from './summary/summary.model';
 import { TicketsModel } from './tickets/ticket.model';
 import { TicketsComponent } from './tickets/tickets.component';
 import { SummaryService } from './summary/summary.service';
+import { FilterService } from './filter/filter.service';
 
 @Component({
   standalone: true,
@@ -40,7 +41,7 @@ import { SummaryService } from './summary/summary.service';
   styleUrls: ['./app.component.scss'],
   imports: [MenuBarComponent, CommonModule, RouterModule, SummaryComponent, FilterComponent, TicketsComponent,
     MessagesResponseComponent, NotificationComponent, MatchDetailComponent, TooltipComponent],
-  providers: [ClipboardService]
+  providers: [ClipboardService, FilterService ]
 })
 export class AppComponent implements OnInit, AfterViewInit {
   title = 'Home / Ticket Listing';

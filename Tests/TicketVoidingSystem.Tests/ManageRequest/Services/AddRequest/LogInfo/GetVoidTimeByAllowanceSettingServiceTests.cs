@@ -45,7 +45,7 @@ public class GetVoidTimeByAllowanceSettingServiceTests
             },
         };
 
-        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(null).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
         service = new GetVoidTimeByAllowanceSettingServiceImp(onlineServerRepository);
 
         // Act
@@ -85,7 +85,7 @@ public class GetVoidTimeByAllowanceSettingServiceTests
             },
         };
 
-        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(null).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
         service = new GetVoidTimeByAllowanceSettingServiceImp(onlineServerRepository);
 
         // Act
@@ -125,7 +125,7 @@ public class GetVoidTimeByAllowanceSettingServiceTests
             },
         };
 
-        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        onlineServerRepository.FetchAsync<VoidTimeByAllowanceSetting>(null).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
         service = new GetVoidTimeByAllowanceSettingServiceImp(onlineServerRepository);
 
         // Act

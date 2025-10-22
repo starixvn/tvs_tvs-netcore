@@ -27,18 +27,10 @@ export class VoidPageCommonService {
 
   private readonly observableTimer = timer(0, 100);
 
-  public showWarningExportExcel() {
-    this.popupService.showWarningExportExcel();
-  }
-
-  public async isRequestModified(requestId: number, currentModifiedDate: Date): Promise<boolean> {
-    return this.checkRequestService.isRequestModified(requestId, currentModifiedDate);
-  }
-
   async exportTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel) {
     const maxPagingItems = 100000;
     if (voidPageItem.pagingVoidTickets.total > maxPagingItems) {
-      this.showWarningExportExcel();
+      this.popupService.showWarningExportExcel();
     } else {
       await this.ticketsService.exportTicketsAsExcelFile(voidPageItem, requestDetail);
     }
@@ -46,11 +38,6 @@ export class VoidPageCommonService {
 
   async onClickShowVoidTickets(voidPageItem: VoidPageCommonItem, requestDetail: RequestDetailViewModel, primitiveProperty: CommonPrimitiveProperty, allVoidPageItems?: VoidPageCommonItem[]): Promise<void> {
     this.loadDataService.onClickShowVoidTickets(voidPageItem, requestDetail, primitiveProperty, allVoidPageItems);
-  }
-
-  async checkLoadedFullDataBeforeVoid(voidPageItems: VoidPageCommonItem[], messageAreaComponents: MessageAreaComponent[], primitiveProperty: CommonPrimitiveProperty,
-    afterLoadUnderneathDataSubscription: Subscription): Promise<void> {
-    this.loadDataService.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
   }
 
   async onClickShowTemplateMessage(voidPageItem: VoidPageCommonItem, primitiveProperty: CommonPrimitiveProperty, requestDetail: RequestDetailViewModel,
@@ -79,7 +66,7 @@ export class VoidPageCommonService {
     }
 
     afterLoadUnderneathDataSubscription = this.observableTimer.subscribe(async () => {
-      await this.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
+      this.loadDataService.checkLoadedFullDataBeforeVoid(voidPageItems, messageAreaComponents, primitiveProperty, afterLoadUnderneathDataSubscription);
     });
   }
 

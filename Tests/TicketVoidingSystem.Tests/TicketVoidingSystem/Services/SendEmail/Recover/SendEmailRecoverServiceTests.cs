@@ -35,7 +35,7 @@ public class SendEmailRecoverServiceTests
         var service = new SendEmailRecoverServiceImp(sitesEmailService, recoverEmailContentService, emailSimpleService);
 
         // Act
-        await service.SendEmail(default, tickets);
+        await service.SendEmail(null, tickets);
 
         // Assert
         sitesEmailService.Received(1).GetSiteByName(sites, StringResource.CsdRecovery);

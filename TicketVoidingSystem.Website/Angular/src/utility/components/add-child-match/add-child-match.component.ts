@@ -43,15 +43,6 @@ export class AddChildMatchComponent implements OnChanges {
     }
   }
 
-  isMatchExisted(matches: ChildMatchModel[], matchId: number): boolean {
-    const childMatch = matches.find(x => x.matchId === matchId);
-
-    if (childMatch) {
-      return true;
-    }
-    return false;
-  }
-
   saveSelectedRelatedEvents(): void {
     this.selectedEventsChange.emit(this.tempRelatedEvents.filter(x => x.isChecked));
     this.closeChildMatchModal();

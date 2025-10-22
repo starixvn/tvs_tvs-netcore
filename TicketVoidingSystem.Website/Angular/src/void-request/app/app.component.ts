@@ -47,10 +47,6 @@ export class AppComponent implements OnInit {
     await this.signalRService.initializeConnection();
   }
 
-  updateBlockUI(isBlock: boolean): void {
-    this.isBlockUI = isBlock;
-  }
-
   isValidRequest(): boolean {
     return this.isReadyRender && StaticService.isVoidAction(this.requestDetail.request.actionId);
   }

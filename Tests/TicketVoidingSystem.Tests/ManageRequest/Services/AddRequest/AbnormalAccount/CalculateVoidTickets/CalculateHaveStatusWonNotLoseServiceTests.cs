@@ -1,7 +1,7 @@
-﻿using NSubstitute;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Models;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalAccount.CalculateVoidTickets;
@@ -13,7 +13,6 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
 {
     private readonly CombineVoidTicketsService combineVoidTicketsService = Substitute.For<CombineVoidTicketsService>();
 
-    // private readonly EstimateVoidWonTicketsService estimateVoidWonTicketsService = Substitute.For<EstimateVoidWonTicketsService>();
     private CalculateHaveStatusWonNotLoseServiceImp service;
 
     [Fact]
@@ -26,7 +25,7 @@ public class CalculateHaveStatusWonNotLoseServiceTests : IClassFixture<AppSettin
             new() { CustId = 1, AdjustVoidLimit = 40 },
             new() { CustId = 2 }
         };
-        var ticketStatusIds = new List<int> { 1 };
+        int[] ticketStatusIds = [1];
         var groupTickets = new Dictionary<(int CustId, int StatusId), OrderedTickets>
         {
             {

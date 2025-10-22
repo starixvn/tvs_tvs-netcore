@@ -1,4 +1,3 @@
-import '../../../utility/extensions/string.extension';
 import { CommonGroupTicketsModel } from '../../../utility/models/common.group-tickets.model';
 import { TicketModel } from './ticket.model';
 

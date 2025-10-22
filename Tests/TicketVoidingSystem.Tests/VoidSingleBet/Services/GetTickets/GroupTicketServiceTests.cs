@@ -34,7 +34,7 @@ public class GroupTicketServiceTests
         var query = new GetTicketsQuery();
         var expected = new List<Group<GetTicketModel>>();
         pagingService.Paging(data, query.PageIndex, query.PageSize).ReturnsForAnyArgs(new List<GetTicketModel>());
-        var service = new GroupTicketServiceImp(pagingService, default, default);
+        var service = new GroupTicketServiceImp(pagingService, null, null);
 
         // Act
         var actual = service.CreateGroupsGetTicketModel(data, query);
@@ -83,7 +83,7 @@ public class GroupTicketServiceTests
         };
         pagingService.Paging(data, query.PageIndex, query.PageSize).ReturnsForAnyArgs(tickets);
         pagingService.Groups(singleTickets, ticket => ticket.GroupName).ReturnsForAnyArgs(singleTicketGroups);
-        var service = new GroupTicketServiceImp(pagingService, default, default);
+        var service = new GroupTicketServiceImp(pagingService, null, null);
 
         // Act
         var actual = service.CreateGroupsGetTicketModel(data, query);
@@ -105,7 +105,7 @@ public class GroupTicketServiceTests
         permissionService.GetUserPermission().ReturnsForAnyArgs(new UserPermission());
         mapTicketService.MapToTicketViewModel(Arg.Any<GetTicketModel>(), match, Arg.Any<UserPermission>())
             .ReturnsForAnyArgs(tickets);
-        var service = new GroupTicketServiceImp(default, mapTicketService, permissionService);
+        var service = new GroupTicketServiceImp(null, mapTicketService, permissionService);
 
         // Act
         var actual = await service.CreateGroupTicketViewModel(group, match);

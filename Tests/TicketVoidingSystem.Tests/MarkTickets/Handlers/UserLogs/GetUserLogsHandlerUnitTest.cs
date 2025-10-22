@@ -26,8 +26,8 @@ public class GetUserLogsHandlerUnitTest
         };
 
         var userLogsService = Substitute.For<UserLogsService>();
-        userLogsService.GetUserLogs(default).ReturnsForAnyArgs(new List<GetUserLogModel>());
-        userLogsService.CreateUserLogViewModels(default).ReturnsForAnyArgs(uerLogViewModels);
+        userLogsService.GetUserLogs(null).ReturnsForAnyArgs(new List<GetUserLogModel>());
+        userLogsService.CreateUserLogViewModels(null).ReturnsForAnyArgs(uerLogViewModels);
         var pagingService = Substitute.For<PagingService>();
         pagingService.Paging(uerLogViewModels, request.PageIndex, request.PageSize).ReturnsForAnyArgs(uerLogViewModels);
         var handler = new GetUserLogsHandler(userLogsService, pagingService);

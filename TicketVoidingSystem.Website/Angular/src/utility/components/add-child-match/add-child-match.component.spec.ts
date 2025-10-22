@@ -90,18 +90,7 @@ describe('AddChildMatchComponent', () => {
     component.handleCheckBox();
     expect(component.isCheckedAll).toBeTruthy();
   });
-
-  it('should check if match exists', () => {
-    // Arrange
-    const matches = Helper.fakeChildMatchModel;
-    const existingMatchId = 1;
-    const nonExistingMatchId = 999;
-
-    // Act & Assert
-    expect(component.isMatchExisted(matches, existingMatchId)).toBeTruthy();
-    expect(component.isMatchExisted(matches, nonExistingMatchId)).toBeFalsy();
-  });
-
+  
   it('should save selected related events and close modal', () => {
     // Arrange
     const selectedEvents = Helper.fakeChildMatchModel;

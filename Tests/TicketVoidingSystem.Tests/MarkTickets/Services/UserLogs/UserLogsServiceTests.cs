@@ -24,7 +24,7 @@ public class UserLogsServiceTests
         var query = new GetUserLogsQuery { LogDateTo = new DateTime(2023, 1, 1), LogDateFrom = new DateTime(2023, 1, 1) };
         var expected = new List<GetUserLogModel> { new() { TransIds = new List<string> { "100001", "100002", "100003" } } };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<GetUserLogModel>(default).ReturnsForAnyArgs(expected);
+        repository.FetchAsync<GetUserLogModel>(null).ReturnsForAnyArgs(expected);
         var service = new UserLogsServiceImp(TestSetup.CreateMapper(), repository, null);
 
         // Act
@@ -69,7 +69,7 @@ public class UserLogsServiceTests
         var mapper = Substitute.For<IMapper>();
         var repository = Substitute.For<IDynamicRepository>();
         var mapUserLogsService = Substitute.For<MapUserLogsService>();
-        mapUserLogsService.MapToUserLogViewModels(default, default).ReturnsForAnyArgs(viewModel);
+        mapUserLogsService.MapToUserLogViewModels(null, null).ReturnsForAnyArgs(viewModel);
         repository.FetchMultipleAsync<TicketInfo, TicketInfo>(new GetUserLogTicketInfoCriteria())
             .ReturnsForAnyArgs((userLogTicketInfo.SingleTickets, userLogTicketInfo.ParlayTickets));
         var service = new UserLogsServiceImp(mapper, repository, mapUserLogsService);

@@ -47,18 +47,19 @@ public class VoidEmailContentServiceImp(
         var mailRecord = templateEmailService.Create(mailVoidModelClone, site, subject);
 
         return mailRecord.MailRecord;
-
     }
 
     private async Task<IList<Group<TicketEmailViewModel>>> AssignGroupTickets(MailVoidViewModel mailVoidViewModel, IEnumerable<TicketEmailModel> tickets, bool isFromAfterVoidService)
     {
         var groups = new List<Group<TicketEmailViewModel>>();
-        var issueTypesHasCancelCO = new List<int>
-        {
+        int[] issueTypesHasCancelCO =
+        [
             IssueTypeConstant.DangerAccepted, IssueTypeConstant.RedCard, IssueTypeConstant.WrongScore,
-            IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError, IssueTypeConstant.WrongOddsSportsBook
-        };
-        if (issueTypesHasCancelCO.Exists(x => x == mailVoidViewModel.IssueTypeId))
+            IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError,
+            IssueTypeConstant.WrongOddsSportsBook
+        ];
+
+        if (issueTypesHasCancelCO.Contains(mailVoidViewModel.IssueTypeId))
         {
             var voidTickets = tickets.Where(x => !x.IsCancelCashOut).ToList();
             var cancelCashOutTickets = tickets.Where(x => x.IsCancelCashOut).ToList();
@@ -84,7 +85,7 @@ public class VoidEmailContentServiceImp(
         return groups;
     }
 
-    private async Task AddTicketToGroup(ICollection<Group<TicketEmailViewModel>> groups, IEnumerable<TicketEmailModel> tickets, Match match, 
+    private async Task AddTicketToGroup(ICollection<Group<TicketEmailViewModel>> groups, IEnumerable<TicketEmailModel> tickets, Match match,
     bool isFromAfterVoidService, string groupName)
     {
         var groupVoidTicket = new Group<TicketEmailViewModel>

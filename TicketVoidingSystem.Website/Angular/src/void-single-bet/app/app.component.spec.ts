@@ -19,7 +19,8 @@ import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { FilterComponent } from './filter/filter.component';
 import { FilterParams, GetTicketsQuery } from './models/query.model';
-import { TicketsService } from '../../utility/components/tickets/tickets.service';
+import { FilterService } from './filter/filter.service';
+import { TicketModel } from '../../void-request/app/tickets-list/ticket.model';
 
 class Helper {
   static readonly fakeMatchModel = {
@@ -122,7 +123,7 @@ describe('AppComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ TestingModule, ToastrModule.forRoot(), BrowserAnimationsModule,
         FilterComponent, ConfirmationComponent, AppComponent ],
-      providers: [ AppService, BlockUiService, ModalService, SignalRService, PasswordService, TemplateService, TicketsService]
+      providers: [ AppService, BlockUiService, ModalService, SignalRService, PasswordService, TemplateService, FilterService]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AppComponent);
@@ -158,6 +159,11 @@ describe('AppComponent', () => {
     confirmationComponent = TestBed.createComponent(ConfirmationComponent).componentInstance;
     component.filterComponent = filterComponent;
     component.confirmationComponent = confirmationComponent;
+    
+    // Mock messagesComponent
+    component.messagesComponent = {
+      checkValidation: jest.fn().mockReturnValue(true)
+    } as any;
     component.isShowTickets = false;
     component.isShowLogInfoOnly = false;
     component.ticketsModel = Helper.fakeTicketsModel;
@@ -239,7 +245,8 @@ describe('AppComponent', () => {
       const query = Helper.fakeGetTicketsQuery;
       component.matchViewModel = Helper.fakeMatchModel;
       component.ticketsModel = Helper.fakeTicketsModel;
-      const groupModel = {name: 'Test Group', tickets: [{
+      const groupModel = {name: 'Test Group', tickets: []} as GroupModel;
+      groupModel.tickets = [{
         no: 1,
         betId: '123',
         value: '123',
@@ -262,7 +269,7 @@ describe('AppComponent', () => {
         mainTransId: '123',
         isMarked: false,
         siteDbGroupId: 1
-      }]} as GroupModel;
+      }] as TicketModel[];
       component.ticketsModel.groups = [groupModel];
       await component.searchTickets(query);
       expect(appService.getTickets).toHaveBeenCalledWith(query);
@@ -287,9 +294,6 @@ describe('AppComponent', () => {
 
   describe('voidTickets', () => {
     it('should void tickets and handle results', async () => {
-      component.ticketsService.getTicketEnable = jest.fn().mockReturnValue([]);
-      component.ticketsService.getTicketSold = jest.fn().mockReturnValue([]);
-      component.ticketsService.getTicketCricket = jest.fn().mockReturnValue([]);
       await component.voidTickets();
       expect(appService.voidTickets).toHaveBeenCalled();
       expect(blockUIService.stop).toHaveBeenCalled();
@@ -399,14 +403,12 @@ describe('AppComponent', () => {
 
   describe('checkValidation', () => {
     it('should return false when no tickets are selected', () => {
-      component.ticketsService.getTicketEnable = jest.fn().mockReturnValue([]);
       const result = component.checkValidation();
       expect(result).toBeFalsy();
     });
 
     it('should return false when messages validation fails', () => {
       const mockTicket = { betId: '123' } as unknown as BetID;
-      component.ticketsService.getTicketEnable = jest.fn().mockReturnValue([mockTicket]);
       jest.spyOn(component.messagesComponent, 'checkValidation').mockReturnValue(false);
       const result = component.checkValidation();
       expect(result).toBeFalsy();
@@ -414,7 +416,7 @@ describe('AppComponent', () => {
 
     it('should return false when confirmation validation fails', () => {
       const mockTicket = { betId: '123' } as unknown as BetID;
-      component.ticketsService.getTicketEnable = jest.fn().mockReturnValue([mockTicket]);
+
       jest.spyOn(component.messagesComponent, 'checkValidation').mockReturnValue(true);
       jest.spyOn(component.confirmationComponent, 'checkValidation').mockReturnValue(false);
       const result = component.checkValidation();
@@ -423,10 +425,13 @@ describe('AppComponent', () => {
 
     it('should return true when all validations pass', () => {
       const mockTicket = { betId: '123' } as unknown as BetID;
-      component.ticketsService.getTicketEnable = jest.fn().mockReturnValue([mockTicket]);
       jest.spyOn(component.messagesComponent, 'checkValidation').mockReturnValue(true);
       jest.spyOn(component.confirmationComponent, 'checkValidation').mockReturnValue(true);
       jest.spyOn(component, 'checkFilterBeforeVoid').mockReturnValue(true);
+      
+      // Mock ticketsService to return some tickets
+      jest.spyOn(component.ticketsService, 'getTicketEnable').mockReturnValue([mockTicket]);
+      
       const result = component.checkValidation();
       expect(result).toBeTruthy();
     });

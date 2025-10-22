@@ -20,7 +20,7 @@ public class GetSelectionTypesHandlerTests
             new()
         };
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<SelectionTypeModel>(default, default).ReturnsForAnyArgs(models);
+        repository.FetchAsync<SelectionTypeModel>(null, null).ReturnsForAnyArgs(models);
         var handler = new GetSelectionTypesHandler(repository);
 
         // Act

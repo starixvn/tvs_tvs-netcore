@@ -25,7 +25,7 @@ public class NetPositionForCricketServiceTests
     public async Task Update_CallUpdateNetPositionSuccessful_ReturnEmptyWarningCricket()
     {
         // Arrange
-        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(true);
+        netPositionService.UpdateNetPosition(null, null).ReturnsForAnyArgs(true);
         var tickets = new List<BetId> { new() { TransId = "1" } };
         var query = new VoidTicketsQuery { Tickets = tickets };
 
@@ -49,7 +49,7 @@ public class NetPositionForCricketServiceTests
             Tickets = tickets
         };
         var expectedTickets = new List<BetId> { new() { TransId = "1" }, new() { TransId = "2" } };
-        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
+        netPositionService.UpdateNetPosition(null, null).ReturnsForAnyArgs(false);
 
         // Act
         var (WarningCricket, TicketsAfterUpdateNp) = await service.Update(query);
@@ -67,7 +67,7 @@ public class NetPositionForCricketServiceTests
         {
             Validation = new VoidTicketValidation()
         };
-        netPositionService.UpdateNetPosition(default, default).ReturnsForAnyArgs(false);
+        netPositionService.UpdateNetPosition(null, null).ReturnsForAnyArgs(false);
 
         // Act
         await service.Rollback(voidResult);

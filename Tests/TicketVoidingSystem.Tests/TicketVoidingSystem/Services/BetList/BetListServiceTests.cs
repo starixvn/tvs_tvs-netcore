@@ -2,7 +2,6 @@
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Templates;
 using Fanex.BetList.Core.TicketHelper;
-using FizzWare.NBuilder;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Services;
@@ -74,7 +73,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = "handicap";
-        remotingRefWrapperService.GetBetType(default, default).ReturnsForAnyArgs(expected);
+        remotingRefWrapperService.GetBetType(null, null).ReturnsForAnyArgs(expected);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
@@ -180,7 +179,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetBetTypeName_HasRefNo_ReturnName(int betId, string betTypeIdByRef)
     {
         // Arrange
-        remotingRefWrapperService.GetParentIdByBetTypeId(default).ReturnsForAnyArgs(betTypeIdByRef);
+        remotingRefWrapperService.GetParentIdByBetTypeId(null).ReturnsForAnyArgs(betTypeIdByRef);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
@@ -194,7 +193,10 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     public void GetStatus_ReturnStatus()
     {
         // Arrange
-        var ticket = Builder<Ticket>.CreateNew().Build();
+        var ticket = new Ticket
+        {
+            Status = "status1"
+        };
         const string expected = "<div class=\"status\">status1</div>";
         var ticketHelper = new TicketHelper
         {
@@ -205,7 +207,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         service = new BetListServiceImp(null, null);
 
         // Act
-        var actual = service.GetStatus(ticket, ticketHelper, null, false);
+        var actual = service.GetStatus(ticket, ticketHelper, [], false);
 
         // Assert
         Assert.Equal(expected, actual);
@@ -218,8 +220,8 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var comboNames = new[] { "1", "" };
-        var ticket = Builder<Ticket>.CreateNew().With(x => x.BetCheck = betCheck).Build();
-        remotingRefWrapperService.GetComboParlayName(default, default, default, default).ReturnsForAnyArgs(comboNames);
+        var ticket = new Ticket{ BetCheck = betCheck};
+        remotingRefWrapperService.GetComboParlayName(null, null, 0, 0).ReturnsForAnyArgs(comboNames);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
@@ -234,7 +236,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var comboNames = new[] { "1", "" };
-        remotingRefWrapperService.GetComboParlayName(default, default, default, default).ReturnsForAnyArgs(comboNames);
+        remotingRefWrapperService.GetComboParlayName(null, null, 0, 0).ReturnsForAnyArgs(comboNames);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act
@@ -249,7 +251,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         const string expected = "AAA";
-        remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs(expected);
+        remotingRefWrapperService.GetSportName(null, null).ReturnsForAnyArgs(expected);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 
         // Act

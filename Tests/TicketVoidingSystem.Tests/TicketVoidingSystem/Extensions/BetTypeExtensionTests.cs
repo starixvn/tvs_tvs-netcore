@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
-using TicketVoidingSystem.Models;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketVoidingSystem.Extensions;
@@ -47,36 +44,6 @@ public class BetTypeExtensionTests
 
         // Assert
         Assert.Equal(expected, result);
-    }
-
-    [Fact]
-    public void ToXml_ReturnsExpectedXmlString()
-    {
-        // Arrange
-        var betTypes = new List<BetTypeXml>
-        {
-            new()
-            {
-                Id = 1, BetTeam = "TeamA", Set = "1", Game = "2", Value = "3", ValueHdp1 = "4", ValueHdp2 = "5",
-                Goal = "6", BetOption = "OptionA", OddsSpread = "7", OddsId = "8", Transdesc = "Description"
-            },
-            new()
-            {
-                Id = 2, BetTeam = "TeamB", Set = "1", Game = "2", Value = "3", ValueHdp1 = "4", ValueHdp2 = "5",
-                Goal = "6", BetOption = "OptionB", OddsSpread = "7", OddsId = "8", Transdesc = "Description"
-            }
-        };
-
-        var expectedXml = "<BetTypes>" +
-                          $"{Environment.NewLine}<BetType Id=\"1\" BetTeam=\"TeamA\" Set=\"1\" Game=\"2\" Value=\"3\" ValueHdp1=\"4\" ValueHdp2=\"5\" Goal=\"6\" BetOption=\"OptionA\" OddsSpread=\"7\" OddsId=\"8\" Transdesc=\"Description\" VirtualHead=\"All\" />" +
-                          $"{Environment.NewLine}<BetType Id=\"2\" BetTeam=\"TeamB\" Set=\"1\" Game=\"2\" Value=\"3\" ValueHdp1=\"4\" ValueHdp2=\"5\" Goal=\"6\" BetOption=\"OptionB\" OddsSpread=\"7\" OddsId=\"8\" Transdesc=\"Description\" VirtualHead=\"All\" />" +
-                          $"{Environment.NewLine}</BetTypes>";
-
-        // Act
-        var result = betTypes.ToXml();
-
-        // Assert
-        Assert.Equal(expectedXml, result);
     }
 
     [Fact]

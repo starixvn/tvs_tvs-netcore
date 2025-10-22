@@ -34,6 +34,6 @@ public class GetTicketsMiniHandlerTests
         await getTicketsService.Received().GetTickets(Arg.Any<GetTicketsMiniRequest>());
         await checkPermissionOnRequestService.Received().GetVoidPermission();
         await ticketsViewModelService.Received().UpdateViewModel(Arg.Any<TicketsViewModel>(), Arg.Any<IEnumerable<GetTicketModel>>(),
-              default, Arg.Any<VoidPermission>(), Arg.Any<int?>());
+              0, Arg.Any<VoidPermission>(), Arg.Any<int?>());
     }
 }

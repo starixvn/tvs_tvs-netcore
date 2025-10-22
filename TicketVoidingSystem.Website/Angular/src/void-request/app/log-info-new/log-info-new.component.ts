@@ -44,10 +44,6 @@ export class LogInfoNewComponent {
     return StaticService.isShowCountInfo(cashOutCount, settleCount, instantlySettleCount);
   }
 
-  displayTransId(ticketCount: number, transId: string): string {
-    return ticketCount === 0 ? '-' : transId;
-  }
-
   countInfoContent(cashOutCount: number, settleCount: number, instantlySettleCount: number) {
     return StaticService.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
   }

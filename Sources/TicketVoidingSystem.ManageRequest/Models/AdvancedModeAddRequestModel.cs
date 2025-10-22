@@ -64,4 +64,6 @@ public class BetTeamAddRequestResult
     public string FirstValue { get; set; }
 
     public string SecondValue { get; set; }
+
+    public string Performance { get; set; }
 }

@@ -23,7 +23,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatch_HasRequestIsGetMatchInfoCriteriarepositoryHasGetAsync()
+    public void GetMatch_HasRequestIsGetMatchInfoCriteriaRepositoryHasGetAsync()
     {
         // Arrange
         var query = new GetMatchInfoCriteria();
@@ -36,7 +36,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrencyrepositoryHasGetAsync()
+    public void GetMatchVoidByCurrencyRepositoryHasGetAsync()
     {
         // Arrange
         // Act
@@ -47,7 +47,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasInputIsGetMatchIdrepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasInputIsGetMatchIdRepositoryHasGetAsync()
     {
         // Arrange
         // Act
@@ -58,7 +58,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatch_HasRequestIsIdrepositoryHasGetAsync()
+    public void GetMatch_HasRequestIsIdRepositoryHasGetAsync()
     {
         // Arrange
         const int query = 1;
@@ -71,7 +71,7 @@ public class MatchServiceTests
     }
 
     [Fact]
-    public void GetMatchVoidByCurrency_HasRequestIsCriteriarepositoryHasGetAsync()
+    public void GetMatchVoidByCurrency_HasRequestIsCriteriaRepositoryHasGetAsync()
     {
         // Arrange
         var query = new GetMatchInfoVoidByCurrencyCriteria();
@@ -132,9 +132,9 @@ public class MatchServiceTests
     {
         // Arrange
         var query = new Match();
-        remotingRefWrapperService.GetTeamName(default, default, default).ReturnsForAnyArgs("TeamName");
-        remotingRefWrapperService.GetLeagueName(default, default, default).ReturnsForAnyArgs("LeagueName");
-        remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs("SportName");
+        remotingRefWrapperService.GetTeamName(0, null, null).ReturnsForAnyArgs("TeamName");
+        remotingRefWrapperService.GetLeagueName(0, null, null).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetSportName(null, null).ReturnsForAnyArgs("SportName");
 
         var expected = new Match
         {
@@ -173,9 +173,9 @@ public class MatchServiceTests
     {
         // Arrange
         var query = new Match { IsOutright = true, IsNeutral = true };
-        remotingRefWrapperService.GetTeamName(1, default, default).ReturnsForAnyArgs("TeamName");
-        remotingRefWrapperService.GetLeagueName(1, default, default).ReturnsForAnyArgs("LeagueName");
-        remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs("SportName");
+        remotingRefWrapperService.GetTeamName(1, null, null).ReturnsForAnyArgs("TeamName");
+        remotingRefWrapperService.GetLeagueName(1, null, null).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetSportName(null, null).ReturnsForAnyArgs("SportName");
 
         var expected = new Match
         {
@@ -221,10 +221,10 @@ public class MatchServiceTests
     {
         // Arrange
         var query = new Match { SportType = sportType };
-        remotingRefWrapperService.GetTeamName(1, default, default).ReturnsForAnyArgs("TeamName");
-        remotingRefWrapperService.GetLeagueName(1, default, default).ReturnsForAnyArgs("LeagueName");
-        remotingRefWrapperService.GetSportName(default, default).ReturnsForAnyArgs("SportName");
-        remotingRefWrapperService.GetBFName(default).ReturnsForAnyArgs("BFName");
+        remotingRefWrapperService.GetTeamName(1, null, null).ReturnsForAnyArgs("TeamName");
+        remotingRefWrapperService.GetLeagueName(1, null, null).ReturnsForAnyArgs("LeagueName");
+        remotingRefWrapperService.GetSportName(null, null).ReturnsForAnyArgs("SportName");
+        remotingRefWrapperService.GetBFName(0).ReturnsForAnyArgs("BFName");
         // Act
         var actual = service.UpdateMatchInfoFromRemotingRef(query);
 

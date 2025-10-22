@@ -39,7 +39,7 @@ public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassF
             }
         };
 
-        repository.FetchAsync<BetTypeModel>(default).ReturnsForAnyArgs(betTypes);
+        repository.FetchAsync<BetTypeModel>(null).ReturnsForAnyArgs(betTypes);
 
         // Act
         var result = await service.GetBetTypes(criteria);
@@ -59,15 +59,15 @@ public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassF
             Mode = 1
         };
         repository.FetchAsync<int>(Arg.Is<GetBetTypesHaveTicketsCriteria>(c => c.SiteDbGroupId == 1))
-            .Returns(new List<int> { 1, 2, 3 });
+            .Returns([1, 2, 3]);
         repository.FetchAsync<int>(Arg.Is<GetBetTypesHaveTicketsCriteria>(c => c.SiteDbGroupId == 2))
-            .Returns(new List<int> { 3, 4, 5 });
+            .Returns([3, 4, 5]);
 
         // Act
         var result = await service.GetBetTypesHaveTickets(query);
 
         // Assert
-        Assert.Equal(new List<int> { 1, 2, 3, 4, 5 }, result);
+        Assert.Equal([1, 2, 3, 4, 5], result);
     }
 
     [Fact]
@@ -81,13 +81,13 @@ public class BetTypesRepositoryTests : IClassFixture<AppSettingFixture>, IClassF
         };
 
         repository.FetchAsync<int>(Arg.Is<GetBetTypesHaveTicketsCriteria>(c => c.SiteDbGroupId == 1))
-            .Returns(new List<int> { 1, 2, 3 });
+            .Returns([1, 2, 3]);
 
         // Act
         var result = await service.GetBetTypesHaveTickets(query);
 
         // Assert
-        Assert.Equal(new List<int> { 1, 2, 3 }, result);
+        Assert.Equal([1, 2, 3], result);
     }
 
     [Fact]

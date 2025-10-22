@@ -15,7 +15,8 @@ import { FilterEvent } from './filter.model';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { AppComponent } from '../app.component';
-import { BallSequences } from '../../../utility/models/ball-sequences';
+import { FilterService } from './filter.service';
+import { StaticService } from '../../../utility/services/static.service';
 
 class Helper {
   static readonly mockLicensees = [
@@ -48,7 +49,12 @@ class Helper {
         blueHighlight: false
       }],
       isChecked: false,
-      isShow: true
+      isShow: true,
+      changeCheckedGroupToBetType: () => {},
+      changeCheckedBetTypeToGroup: () => {},
+      getCheckedBetTypes: () => [1],
+      getValueCheckedBetTypes: () => ['1'],
+      hasBetType: () => true
     }],
     isChecked: false,
     result: {
@@ -56,8 +62,23 @@ class Helper {
       errorMsg: '',
       isSuccessful: true,
       data: null
-    }
-  } as GroupBetTypesModel;
+    },
+    changeCheckedModelToGroup: () => {},
+    changeCheckedGroupToModel: () => {},
+    getCheckedBetTypes: () => [1],
+    getValueCheckedBetTypes: () => '1',
+    getAllBetType: () => [{
+      id: 1,
+      name: 'Test Bet Type',
+      liveIndicator: false,
+      type: 1,
+      value: '1',
+      isChecked: false,
+      redHighlight: false,
+      blueHighlight: false
+    }],
+    hasBetType: () => true
+  } as unknown as GroupBetTypesModel;
 
   static readonly mockMatch = {
     matchCode: 'TEST123',
@@ -99,6 +120,7 @@ describe('FilterComponent', () => {
   let fixture: ComponentFixture<FilterComponent>;
   let appService: AppService;
   let commonService: CommonService;
+  let filterService: FilterService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -106,23 +128,28 @@ describe('FilterComponent', () => {
         TestingModule
       ],
       providers: [
-        {
-          provide: AppService, useValue: {
-            getLicensees: jest.fn().mockResolvedValue(Helper.mockLicensees),
-            getMatchInfo: jest.fn().mockResolvedValue(Helper.mockMatch),
-            getSelectionTypes: jest.fn().mockResolvedValue([])
-          }
-        },
-        {
-          provide: CommonService, useValue: {
-            getBetTypes: jest.fn().mockResolvedValue(Helper.mockBetTypes),
-            getGroupBetTypes: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes),
-            getBetTypesVirtualSports: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes)
-          }
-        },
-        { provide: BlockUiService, useValue: { start: jest.fn(), stop: jest.fn() } },
-        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') } },
-        { provide: AppComponent, useValue: {} }
+        { provide: AppService, useValue: { 
+          getLicensees: jest.fn().mockResolvedValue(Helper.mockLicensees),
+          getMatchInfo: jest.fn().mockResolvedValue(Helper.mockMatch),
+          getSelectionTypes: jest.fn().mockResolvedValue([])
+        }},
+        { provide: CommonService, useValue: {
+          getBetTypes: jest.fn().mockResolvedValue(Helper.mockBetTypes),
+          getGroupBetTypes: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes),
+          getBetTypesVirtualSports: jest.fn().mockResolvedValue(Helper.mockGroupBetTypes)
+        }},
+        { provide: BlockUiService, useValue: { start: jest.fn(), stop: jest.fn() }},
+        { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }},
+        { provide: AppComponent, useValue: {}},
+        { provide: FilterService, useValue: {
+          invalidProduct: jest.fn().mockReturnValue(false),
+          isNumber: jest.fn().mockReturnValue(true),
+          isSelectionNotValid: jest.fn().mockReturnValue(false),
+          getSelectionSubParlays: jest.fn().mockReturnValue(''),
+          enableBetTypesAndAdvancedMode: jest.fn(),
+          checkAndDisabledAllBetTypes: jest.fn(),
+          checkAndDisabledAllGroupBetTypes: jest.fn()
+        }}
       ]
     }).compileComponents();
 
@@ -130,6 +157,14 @@ describe('FilterComponent', () => {
     component = fixture.componentInstance;
     appService = TestBed.inject(AppService);
     commonService = TestBed.inject(CommonService);
+    filterService = TestBed.inject(FilterService);
+
+    // Mock StaticService methods
+    jest.spyOn(StaticService, 'isNumber').mockReturnValue(true);
+    jest.spyOn(StaticService, 'isFromTimeSameOrBeforeToTime').mockReturnValue(true);
+    
+    // Reset all mocks before each test
+    jest.clearAllMocks();
 
     // Initialize searchEvent
     component.searchEvent = new EventEmitter<FilterEvent>();
@@ -170,19 +205,40 @@ describe('FilterComponent', () => {
       validate: jest.fn().mockReturnValue(true),
       getBetTypeModels: jest.fn().mockReturnValue([])
     } as unknown as AdvancedModeComponent;
-    component.groupBetTypes = Helper.mockGroupBetTypes;
+    component.groupBetTypes = {
+      groupBetTypes: [{
+        groupName: 'Test Group',
+        betTypes: [{
+          id: 1,
+          name: 'Test Bet Type',
+          liveIndicator: false,
+          type: 1,
+          value: '1',
+          isChecked: false,
+          redHighlight: false,
+          blueHighlight: false
+        }],
+        isChecked: false,
+        isShow: true
+      }],
+      isChecked: false,
+      getValueCheckedBetTypes: jest.fn().mockReturnValue('1')
+    } as unknown as GroupBetTypesModel;
+    
+    // Mock the groupBetTypesService.getValueCheckedBetTypes method
+    jest.spyOn(component['groupBetTypesService'], 'getValueCheckedBetTypes').mockReturnValue('1');
     component.ballSequences = {
       value: [],
-      name: '',
+      name: 'All',
       items: [],
       isChecked: false
-    } as BallSequences;
+    };
     component.disabledTransDate = true;
     component.singleOrSubParlay = 'All';
     component.checkMatch = '';
     component.searchEvent = new EventEmitter<FilterEvent>();
     component.appComponent.logAccessAction = jest.fn();
-    jest.spyOn(component, 'validateProduct').mockReturnValue(true);
+    component['validateProduct'] = jest.fn().mockReturnValue(true);
     jest.spyOn(component, 'validateBetTypes').mockReturnValue(true);
 
     const searchEventSpy = jest.spyOn(component.searchEvent, 'emit');
@@ -196,6 +252,7 @@ describe('FilterComponent', () => {
     expect(emitArg.match).toBe(Helper.mockMatch);
     expect(emitArg.query.matchId).toBe(123);
     expect(emitArg.query.product).toBe(Product.SPORTS_BOOK);
+    expect(emitArg.query.betTypes).toBe('1');
     expect(emitArg.query.ballSequence).toBe('');
   });
 
@@ -203,7 +260,7 @@ describe('FilterComponent', () => {
     // Arrange
     component.matchId = '';
     jest.spyOn(component.searchEvent, 'emit');
-
+    
     // Mock tooltip
     component.tooltip = {
       display: jest.fn(),
@@ -270,27 +327,44 @@ describe('FilterComponent', () => {
     expect(component.selectedComboParlay).toContain('1');
   });
 
-  it('#getSelectionSubParlays should return empty string when not SubParlay', () => {
-    // Arrange
-    component.singleOrSubParlay = 'All';
-
-    // Act
-    const result = component['getSelectionSubParlays']('All');
-
-    // Assert
-    expect(result).toBe('');
-  });
-
-  it('#getSelectionSubParlays should return selected items when SubParlay', () => {
+  it('#getParams should call filterService.getSelectionSubParlays', () => {
     // Arrange
     component.singleOrSubParlay = 'SubParlay';
-    component.selectedComboParlay = ['1', '2'];
-
+    component.selectedComboParlay = ['1'];
+    component.matchId = '123';
+    component.match = Helper.mockMatch;
+    component.ballSequences = { value: [] } as any;
+    component.disabledTransDate = true;
+    component.isReSettled = false;
+    component.query.product = Product.SPORTS_BOOK;
+    component.groupBetTypes = {
+      groupBetTypes: [{
+        groupName: 'Test Group',
+        betTypes: [{
+          id: 1,
+          name: 'Test Bet Type',
+          liveIndicator: false,
+          type: 1,
+          value: '1',
+          isChecked: false,
+          redHighlight: false,
+          blueHighlight: false
+        }],
+        isChecked: false,
+        isShow: true
+      }],
+      isChecked: false,
+      getValueCheckedBetTypes: jest.fn().mockReturnValue('1')
+    } as any;
+    component.advancedModeComponent = {
+      getBetTypeModels: jest.fn().mockReturnValue([])
+    } as unknown as AdvancedModeComponent;
     // Act
-    const result = component['getSelectionSubParlays']('SubParlay');
+    const result = component.getParams();
 
     // Assert
-    expect(result).toBe('1,2');
+    expect(result.matchId).toBe(123);
+    expect(result.selectionSubParlays).toBe('1');
   });
 
   it('#validateBetTypes should validate bet types for SPORTS_BOOK', () => {
@@ -309,19 +383,32 @@ describe('FilterComponent', () => {
     expect(component.groupBetTypesComponent.validate).toHaveBeenCalled();
   });
 
-  it('#checkFilterParams should validate match ID', () => {
+  it('#checkFilterParams should validate match ID using filterService', () => {
     // Arrange
-    component.matchId = '';
-    component.tooltip = {
-      display: jest.fn()
-    } as unknown as Tooltip;
-
+    component.matchId = '123'; // Set valid matchId to reach isSelectionNotValid check
+    component.match = Helper.mockMatch; // Set valid match
+    component.tooltip = new Tooltip();
+    component.tooltip.display = jest.fn();
+    component.singleOrSubParlay = 'All';
+    component.selectedComboParlay = [];
+    component.disabledTransDate = true;
+    component.fromDate = '2024-01-01 10:00:00';
+    component.toDate = '2024-01-02 11:00:00';
+    component.query.product = Product.BET_BUILDER; // Set to non-SPORTS_BOOK to avoid advanced mode
+    component.advancedModeComponent = {
+      validate: jest.fn().mockReturnValue(true),
+      getBetTypeModels: jest.fn().mockReturnValue([])
+    } as unknown as AdvancedModeComponent;
+    // Mock the component's isSelectionNotValid method
+    jest.spyOn(component, 'isSelectionNotValid').mockReturnValue(true);
+    
     // Act
     const result = component.checkFilterParams();
 
     // Assert
     expect(result).toBe(false);
-    expect(component.tooltip.display).toHaveBeenCalledWith('match-id', expect.any(String));
+    expect(component.tooltip.display).toHaveBeenCalledWith('selection-dropdown-sub-parlay', expect.any(String));
+    expect(component.isSelectionNotValid).toHaveBeenCalled();
   });
 
   it('#isShowAdvancedMode should return true for SPORTS_BOOK', () => {
@@ -333,5 +420,96 @@ describe('FilterComponent', () => {
 
     // Assert
     expect(result).toBe(true);
+  });
+
+  it('#validateProduct should call filterService.invalidProduct', () => {
+    // Arrange
+    filterService.invalidProduct = jest.fn().mockReturnValue(true);
+
+    // Act
+    const result = component['validateProduct']();
+
+    // Assert
+    expect(result).toBe(true);
+  });
+
+  it('#validateProduct should return false when product is invalid', () => {
+    // Arrange
+    component.query.product = 0; // Set to invalid product
+    component.sportType = 100; // Set to invalid sport type
+    component.tooltip = new Tooltip();
+    component.tooltip.display = jest.fn();
+    
+    // Act
+    const result = component['validateProduct']();
+
+    // Assert
+    expect(result).toBe(false);
+    expect(component.tooltip.display).toHaveBeenCalledWith('match-id', expect.any(String));
+  });
+
+  it('#checkFilterParams should call filterService.isNumber', () => {
+    // Arrange
+    component.matchId = '123';
+    component.match = Helper.mockMatch;
+    component.tooltip = {
+      display: jest.fn()
+    } as unknown as Tooltip;
+    component.singleOrSubParlay = 'All';
+    component.selectedComboParlay = [];
+    component.disabledTransDate = true;
+    component.fromDate = '2024-01-01';
+    component.toDate = '2024-01-02';
+    component.advancedModeComponent = {
+      validate: jest.fn().mockReturnValue(true),
+      getBetTypeModels: jest.fn().mockReturnValue([])
+    } as unknown as AdvancedModeComponent;
+    component.query.product = Product.SPORTS_BOOK;
+    jest.spyOn(component, 'isNumber').mockReturnValue(true);
+
+    // Act
+    const result = component.checkFilterParams();
+
+    // Assert
+    expect(component.isNumber).toHaveBeenCalledWith('123');
+    expect(result).toBe(true);
+  });
+
+  it('#unCheckAffectedTickets should reset isReSettled and call handleBetTypesAndAdvancedMode', () => {
+    // Arrange
+    component.handleBetTypesAndAdvancedMode = jest.fn();
+
+    // Act
+    component.unCheckAffectedTickets();
+
+    // Assert
+    expect(component.isReSettled).toBe(false);
+    expect(component.handleBetTypesAndAdvancedMode).toHaveBeenCalled();
+  });
+
+  it('#handleBetTypesAndAdvancedMode should execute without errors', () => {
+    // Arrange
+    component.query.product = Product.SPORTS_BOOK;
+    component.isReSettled = false;
+    component.betTypesComponent = {
+      isDisabledAllBetTypes: false
+    } as any;
+    component.groupBetTypesComponent = {
+      isDisabledAllBetTypes: false
+    } as any;
+    component.betTypes = {
+      isChecked: false,
+      betTypes: [{ isChecked: false }]
+    } as any;
+    component.groupBetTypes = {
+      isChecked: false,
+      groupBetTypes: [{
+        isChecked: false,
+        betTypes: [{ isChecked: false }]
+      }]
+    } as any;
+
+    // Act & Assert - should not throw
+    expect(() => component.handleBetTypesAndAdvancedMode()).not.toThrow();
   });
 });

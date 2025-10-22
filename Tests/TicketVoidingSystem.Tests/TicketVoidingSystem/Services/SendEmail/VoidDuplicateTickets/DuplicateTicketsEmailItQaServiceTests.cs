@@ -42,7 +42,7 @@ public class DuplicateTicketsEmailItQaServiceTests
             new DuplicateTicketsEmailItQaServiceImp(sitesEmailService, emailSimpleService,
                 emailContentService);
         // Act
-        await service.Send(default, default, duplicateTickets);
+        await service.Send(null, null, duplicateTickets);
 
         // Assert
         sitesEmailService.Received(1).GetSiteByName(Arg.Any<IEnumerable<SiteEmail>>(), StringResource.ItQa);

@@ -14,7 +14,6 @@ import { MatchIdComponent } from './match-id.component';
 import { TestingModule } from '../../../../../utility/modules/testing.module';
 import { AdvancedModeComponent } from '../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.component';
 import { GroupBetTypesComponent } from '../../../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
-import '../../../../../utility/extensions/string.extension';
 import { LicenseesService } from '../../../../../utility/components/licensees/licensees.service';
 
 class Helper {

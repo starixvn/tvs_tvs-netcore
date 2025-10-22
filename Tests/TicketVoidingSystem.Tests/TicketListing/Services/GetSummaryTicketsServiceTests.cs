@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using FizzWare.NBuilder;
 using NSubstitute;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.TicketListing.Criteria;
@@ -26,12 +25,15 @@ public class GetSummaryTicketsServiceTests
             new() {LicenseeName = "AA", TotalTrans = 1, BetTypeId = 1, BetTypeName = "1"},
             new() {LicenseeName = "BB", TotalTrans = 2, BetTypeId = 1, BetTypeName = "1"}
         };
-        var query = Builder<GetSummaryQuery>.CreateNew().With(x => x.LicenseeId = licenseeId).Build();
+        var query = new GetSummaryQuery
+        {
+            LicenseeId = licenseeId
+        };
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var betListService = Substitute.For<BetListService>();
-        betListService.GetBetTypeName(default, default).Returns("HHH");
-        repository.FetchAsync<SummaryTicketModel>(default).ReturnsForAnyArgs(summaryTicketModels);
+        betListService.GetBetTypeName(0, 0).Returns("HHH");
+        repository.FetchAsync<SummaryTicketModel>(null).ReturnsForAnyArgs(summaryTicketModels);
         var service = new GetSummaryTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, betListService);
 
         // Act
@@ -47,12 +49,12 @@ public class GetSummaryTicketsServiceTests
     public async Task GetSummaryTickets_HaveNotAny_ReturnNewViewModel()
     {
         // Arrange
-        var query = Builder<GetSummaryQuery>.CreateNew().Build();
+        var query = new GetSummaryQuery();
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var betListService = Substitute.For<BetListService>();
-        betListService.GetBetTypeName(default, default).ReturnsForAnyArgs("HHH");
-        repository.FetchAsync<SummaryTicketModel>(default).ReturnsForAnyArgs((List<SummaryTicketModel>)null);
+        betListService.GetBetTypeName(0, 0).ReturnsForAnyArgs("HHH");
+        repository.FetchAsync<SummaryTicketModel>(null).ReturnsForAnyArgs((List<SummaryTicketModel>)null);
         var service = new GetSummaryTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, betListService);
 
         // Act

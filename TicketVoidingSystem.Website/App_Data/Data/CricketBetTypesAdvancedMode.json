@@ -7486,7 +7486,7 @@
         {
           "Name": "Player:",
           "Value": "All",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "PlayerAndOdds"
         }
       ],
       "Name": "",
@@ -7499,7 +7499,7 @@
         {
           "Name": "Player:",
           "Value": "All",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "PlayerAndOdds"
         }
       ],
       "Name": "",
@@ -7512,7 +7512,7 @@
         {
           "Name": "Player:",
           "Value": "All",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "PlayerAndOdds"
         }
       ],
       "Name": "",
@@ -7525,7 +7525,7 @@
         {
           "Name": "Player:",
           "Value": "All",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "PlayerAndOdds"
         }
       ],
       "Name": "",
@@ -7538,7 +7538,7 @@
         {
           "Name": "Player:",
           "Value": "All",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "PlayerAndOdds"
         }
       ],
       "Name": "",
@@ -7551,7 +7551,7 @@
         {
           "Name": "Player:",
           "Value": "All",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "PlayerAndOdds"
         }
       ],
       "Name": "",

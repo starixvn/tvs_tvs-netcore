@@ -21,8 +21,8 @@ public class GetIssueNameHandlerTests
         var repository = Substitute.For<IDynamicRepository>();
         var issueTypes = new List<IssueType> { new() { IssueTypeId = 1, IssueTypeName = "1234" } };
         var subIssueTypes = new List<SubIssueType> { new() { SubIssueTypeId = 1, IssueTypeId = 1 } };
-        repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>(), default).Returns(issueTypes);
-        repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>(), default).Returns(subIssueTypes);
+        repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>(), null).Returns(issueTypes);
+        repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>(), null).Returns(subIssueTypes);
 
         var handler = new GetIssueNameHandler(mapper, repository);
 
@@ -41,8 +41,8 @@ public class GetIssueNameHandlerTests
         var repository = Substitute.For<IDynamicRepository>();
         var issueTypes = new List<IssueType> { new() { IssueTypeId = 1, IssueTypeName = "1234" } };
         var subIssueTypes = new List<SubIssueType>();
-        repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>(), default).Returns(issueTypes);
-        repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>(), default).Returns(subIssueTypes);
+        repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>(), null).Returns(issueTypes);
+        repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>(), null).Returns(subIssueTypes);
 
         var handler = new GetIssueNameHandler(mapper, repository);
 

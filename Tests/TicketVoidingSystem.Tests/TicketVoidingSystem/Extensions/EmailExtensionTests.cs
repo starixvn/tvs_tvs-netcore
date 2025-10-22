@@ -132,7 +132,7 @@ public class EmailExtensionTests
     public void ToOperatorsXml_ReturnsEmptyString_WhenAgentIdsIsEmpty()
     {
         // Arrange
-        IEnumerable<int> agentIds = new List<int>();
+        int[] agentIds = [];
 
         // Act
         var result = agentIds.ToOperatorsXml();
@@ -145,7 +145,7 @@ public class EmailExtensionTests
     public void ToOperatorsXml_ReturnsXmlString_WhenAgentIdsHasValues()
     {
         // Arrange
-        IEnumerable<int> agentIds = new List<int> { 1, 2, 3 };
+        int[] agentIds = [1, 2, 3];
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("<Operator AgentId='1' />");
         stringBuilder.AppendLine("<Operator AgentId='2' />");

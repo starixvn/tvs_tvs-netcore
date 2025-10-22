@@ -109,21 +109,4 @@ describe('LogInfoNewComponent', () => {
     // Assert
     expect(actual).toBe('09:44:46.361 PM');
   });
-
-  it('#displayTransId should return 12312', async () => {
-    // Arrange & Action
-    const actual = component.displayTransId(1, '12312');
-
-    // Assert
-    expect(actual).toBe('12312');
-  });
-
-  it('#displayTransId should return -', async () => {
-    // Arrange & Action
-
-    const actual = component.displayTransId(0, '');
-
-    // Assert
-    expect(actual).toBe('-');
-  });
 });

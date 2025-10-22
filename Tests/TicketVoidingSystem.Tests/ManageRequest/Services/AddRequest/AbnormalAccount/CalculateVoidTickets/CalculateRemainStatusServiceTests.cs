@@ -19,7 +19,7 @@ public class CalculateRemainStatusServiceTests
             new() { CustId = 1, AdjustVoidLimit = 40 },
             new() { CustId = 2 }
         };
-        var ticketStatusIds = new List<int> { 1 };
+        int[] ticketStatusIds = [1];
         var groupTickets = new Dictionary<(int CustId, int StatusId), OrderedTickets>
         {
             {

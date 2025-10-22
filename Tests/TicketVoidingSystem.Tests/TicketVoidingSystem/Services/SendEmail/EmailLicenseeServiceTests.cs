@@ -56,7 +56,7 @@ public class EmailLicenseeServiceTests
         voidEmailContentService.Create(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.Csd, isFromAfterVoidService)
             .ReturnsForAnyArgs(new MailRecord());
-        mailResultService.CreateSuccess(Arg.Any<string>(), default, isFromAfterVoidService)
+        mailResultService.CreateSuccess(Arg.Any<string>(), null, isFromAfterVoidService)
             .ReturnsForAnyArgs(new Result());
         specialPlatformService.IsSiteSpecialPlatform(Arg.Any<Match>(), Arg.Any<SiteEmail>()).Returns(true);
         specialPlatformService.RemoveSabaInMessageContent(Arg.Any<Match>(), Arg.Any<Message>()).ReturnsForAnyArgs(new Message());
@@ -93,7 +93,7 @@ public class EmailLicenseeServiceTests
         voidEmailContentService.Create(Arg.Any<MailVoidViewModel>(), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.Csd, true)
             .ReturnsForAnyArgs(new MailRecord());
-        mailResultService.CreateSuccess(Arg.Any<string>(), default, true)
+        mailResultService.CreateSuccess(Arg.Any<string>(), null, true)
             .ReturnsForAnyArgs(new Result());
         mailResultService.CreateFail("1", true).ReturnsForAnyArgs(new Result());
         // Act

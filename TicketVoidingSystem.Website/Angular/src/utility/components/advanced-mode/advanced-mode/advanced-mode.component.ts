@@ -3,12 +3,9 @@ import { Component, ElementRef, inject, Input, OnChanges, SimpleChange, ViewEnca
 import { FormsModule } from '@angular/forms';
 import assignIn from 'lodash/assignIn';
 import groupBy from 'lodash/groupBy';
-import isEqual from 'lodash/isEqual';
-import uniqWith from 'lodash/uniqWith';
 import { TEXT} from '../../../../utility/constants/text';
 import { DecimalOnlyDirective, MultipleDecimalDirective, } from '../../../../utility/directives/numbers-only.directive';
 import { CommonService } from '../../../../utility/services/common.service';
-import { StaticService } from '../../../../utility/services/static.service';
 import { ItemsSelect } from '../../multiple-selection/items-select';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
 import { TooltipComponent } from '../../tooltip/tooltip.component';
@@ -29,6 +26,7 @@ import { ItemsSelectService } from '../../multiple-selection/items-select.servic
   templateUrl: './advanced-mode.component.html',
   styleUrls: ['./advanced-mode.component.scss'],
   imports: [TooltipComponent, FormsModule, CommonModule, DecimalOnlyDirective, MultipleDecimalDirective, MultipleSelectComponent],
+  providers: [AdvancedModeService],
   encapsulation: ViewEncapsulation.None
 })
 export class AdvancedModeComponent implements OnChanges {
@@ -47,6 +45,7 @@ export class AdvancedModeComponent implements OnChanges {
   inningList: MultipleSelection;
   betTypesMoreHDP = AdvancedModeConstants.BETTYPES_MORE_HDP;
   baseSpecialBetTypeCricket: Selection[] = [];
+  baseSpecialBetTypeBasketball: Selection[] = [];
   isShowAdvancedMode: boolean;
   isShowContent: boolean;
   isShowAllBetTypeMapRound: boolean;
@@ -55,7 +54,7 @@ export class AdvancedModeComponent implements OnChanges {
   isShowAllBetTypeGame: boolean;
   isShowAllBetTypeInning: boolean;
   tooltip = new Tooltip();
-  oddsInfo: OddsInfo[];
+  oddsInfo: OddsInfo[] = [];
 
   service = inject(AdvancedModeApiService);
   commonService = inject(CommonService);
@@ -102,16 +101,13 @@ export class AdvancedModeComponent implements OnChanges {
   public async getBetTeamAndRenderValue(matchId: string): Promise<void> {
     this.baseBetTeam = await this.service.getBetTeams();
     if (matchId) {
-      await this.getSpecialBetTeamCricket(matchId);
+      const allSpecialBetTypes = AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER + ',' + AdvancedModeConstants.BETTYPE_SPECIAL_BASKETBALL;
+      this.oddsInfo = await this.commonService.getOddsInfoSpecialBetTypes({ matchId: matchId, betTypes: allSpecialBetTypes });
+      this.updatePlayerCricket(this.oddsInfo);
+      this.updatePlayerBasketball(this.oddsInfo);
     }
     this.renderBetTeams(this.baseBetTeam);
     this.renderMapAndRound();
-  }
-
-  public async getSpecialBetTeamCricket(matchId: string): Promise<void> {
-    const data = await this.commonService.getOddsInfoSpecialBetTypes({matchId: matchId, betTypes: AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER});
-    this.updatePlayerCricket(data);
-    this.oddsInfo = data;
   }
 
   private changedBetTypes() {
@@ -155,14 +151,16 @@ export class AdvancedModeComponent implements OnChanges {
       }
       this.updateAllBetTypeSelection(betTeam);
     } else if (index !== -1) {
-        this.removeBetTypeName(betType.name, betTeam);
-        betTeam.checkedBetTypes.splice(index, 1);
-      }
+      this.advancedModeService.removeBetTypeName(betType.name, betTeam);
+      betTeam.checkedBetTypes.splice(index, 1);
+    }
 
     if (AdvancedModeConstants.BETTYPE_CRICKET_WITH_PLAYER.split(',').includes(betType.id.toString()) && betType.isChecked) {
       this.advancedModeService.resetChecked(betTeam);
-      this.renderSelectionCricketWithPlayer(betTeam, this.baseSpecialBetTypeCricket);
+      this.advancedModeService.renderSelectionWithPlayer(betTeam, this.baseSpecialBetTypeCricket, 'Player:');
     }
+
+    this.advancedModeService.renderSelectionBasketBallBetTypes(betTeam, this.baseSpecialBetTypeBasketball, betType);
   }
 
   private updateAllBetTypeSelection(betTeam: BetTeam) {
@@ -191,13 +189,6 @@ export class AdvancedModeComponent implements OnChanges {
     this.advancedModeService.controlIsChecked(betTeam);
   }
 
-  private removeBetTypeName(name: string, betTeam: BetTeam) {
-    const names = betTeam.name.split(', ');
-    const index = names.indexOf(name);
-    names.splice(index, 1);
-    betTeam.name = names.join(', ');
-  }
-
   async getPlayers() {
     if (this.getPlayerQuery !== undefined && this.getPlayerQuery.matchId !== '') {
       const data = await this.service.getPlayer(this.getPlayerQuery);
@@ -222,6 +213,8 @@ export class AdvancedModeComponent implements OnChanges {
     this.isShowContent = false;
     this.baseBetTeam = [];
     this.betTeams = [];
+    this.baseSpecialBetTypeCricket = [];
+    this.baseSpecialBetTypeBasketball = [];
   }
 
   validate(): boolean {
@@ -233,7 +226,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   private isValidInputWithToolTip(betTeamIndex: number, inputIndex: number, isMultiple: boolean, value: string): boolean {
-    if (value && !this.isValidInputDecimalValue(isMultiple, value)) {
+    if (value && !this.advancedModeService.isValidInputDecimalValue(isMultiple, value)) {
       if (!this.isShowContent) {
         this.showTooltipWhenCollapsed();
       } else {
@@ -248,12 +241,6 @@ export class AdvancedModeComponent implements OnChanges {
 
   private showTooltipWhenCollapsed() {
     this.tooltip.display('advanced-mode-collapsed', TEXT.THERE_ARE_INVALID_FIELDS);
-  }
-
-  private isValidInputDecimalValue(isMultiple: boolean, value: string): boolean {
-    return isMultiple
-      ? StaticService.isCorrectRegexMultipleDecimal(value)
-      : StaticService.isCorrectRegexSingleDecimal(value);
   }
 
   private checkMultiSelectionListBetTeam(betTeam: BetTeam): boolean {
@@ -344,7 +331,9 @@ export class AdvancedModeComponent implements OnChanges {
         oddsSpread: '',
         oddsId: '',
         transdesc: '',
-        virtualHead: ''
+        virtualHead: '',
+        performance: '',
+        playerAndOdds: ''
       };
       betTypes.push(betType);
     });
@@ -352,10 +341,21 @@ export class AdvancedModeComponent implements OnChanges {
     return betTypes;
   }
 
+  updateOtherSelection(betTeam: BetTeam, selection: Selection): void {
+    if (selection.name === 'Performance:') {
+      const allCheckedItems = this.multipleSelectionService.getValueItems(selection.multiSelection.multipleSelect);
+      const itemsSelectionOthers = this.advancedModeService.getItemsOtherSelection(this.oddsInfo, allCheckedItems);
+      const othersSelection = [] as Selection[];
+      othersSelection.push(this.advancedModeService.initSelection('Others', `${betTeam.betTypes}`, itemsSelectionOthers, true, null, false, false, false, false, false, false));
+      this.baseSpecialBetTypeBasketball = [...this.baseSpecialBetTypeBasketball.filter(x => x.value !== betTeam.betTypes || x.name !== 'Others'), ...othersSelection];
+      this.advancedModeService.renderSelectionWithPlayer(betTeam, othersSelection, 'Others:');
+    }
+  }
+
   updateByControlAllBetType(itemList: string[], type: string) {
-    const betteamOfType = this.betTeams.filter(x => x.multiSelectionList.some(y => y.type === type));
-    if (betteamOfType.length > 0) {
-      betteamOfType.forEach(item => {
+    const betTeamOfType = this.betTeams.filter(x => x.multiSelectionList.some(y => y.type === type));
+    if (betTeamOfType.length > 0) {
+      betTeamOfType.forEach(item => {
         this.advancedModeService.updateItemByControlAllBetType(item.multiSelectionList, itemList, type);
       });
     }
@@ -366,11 +366,7 @@ export class AdvancedModeComponent implements OnChanges {
   }
 
   isShowTextBox(betTeam: BetTeam) {
-    if (betTeam.inputs.length > 0) {
-      return true;
-    }
-
-    return false;
+    return betTeam.inputs.length > 0;
   }
 
   handleChangeFancyBetTypeCricket(betTeam: BetTeam): void {
@@ -389,7 +385,7 @@ export class AdvancedModeComponent implements OnChanges {
   private updatePlayerCricket(oddsInfo: OddsInfo[]): void {
     const groupBetTypes = groupBy(oddsInfo, 'betTypeId');
     for (const betTypeId in groupBetTypes) {
-      const items = this.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
+      const items = this.advancedModeService.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
       this.baseSpecialBetTypeCricket.push(this.advancedModeService.initSelection('', `${betTypeId}`, items, true, null, false, false, false, false, false, false));
     }
   }
@@ -414,25 +410,20 @@ export class AdvancedModeComponent implements OnChanges {
 
     return items;
   }
-
-  private renderSelectionCricketWithPlayer(betTeam: BetTeam, baseBetType: Selection[]): void {
-    const items: Selection[] = [];
-    baseBetType.forEach(x => {
-      if (betTeam.checkedBetTypes.includes(x.value)) {
-        items.push(...x.items);
+  private updatePlayerBasketball(oddsInfo: OddsInfo[]): void {
+    const groupBetTypes = groupBy(oddsInfo, 'betTypeId');
+    for (const betTypeId in groupBetTypes) {
+      const playerItems = this.advancedModeService.getItemsPlayerSelection(betTypeId, groupBetTypes[betTypeId]);
+      this.baseSpecialBetTypeBasketball.push(this.advancedModeService.initSelection('Player', `${betTypeId}`, playerItems, true, null, false, false, false, false, false, false));
+      if (AdvancedModeConstants.BETTYPE_POINTS_BASKETBALL.split(',').includes(betTypeId)) {
+        const pointsItems = this.advancedModeService.getItemsBetChoiceSelection(groupBetTypes[betTypeId]);
+        this.baseSpecialBetTypeBasketball.push(this.advancedModeService.initSelection('Points', `${betTypeId}`, pointsItems, true, null, false, false, false, false, false, false));
       }
-    });
-    const playerSelection = betTeam.selections.find(x => x.name === 'Player:');
-    if (playerSelection) {
-      playerSelection.items = betTeam.selections.find(x => x.name === 'Player:').items.filter(x => x.name === 'All');
-      playerSelection.items.push(...uniqWith(items, isEqual));
+      if (AdvancedModeConstants.BETTYPE_OTHERS_BASKETBALL.split(',').includes(betTypeId)) {
+        const pointsItems = this.advancedModeService.getItemsOtherSelection(groupBetTypes[betTypeId]);
+        this.baseSpecialBetTypeBasketball.push(this.advancedModeService.initSelection('Others', `${betTypeId}`, pointsItems, true, null, false, false, false, false, false, false));
+      }
     }
-    betTeam.selections.forEach(x => {
-      if (x.name === 'Player:') {
-        x.isMultiple = true;
-        x.multiSelection = this.advancedModeService.renderMultipleSelect(x);
-      }
-    });
   }
 
   isShowALLBetTypesSelection() {

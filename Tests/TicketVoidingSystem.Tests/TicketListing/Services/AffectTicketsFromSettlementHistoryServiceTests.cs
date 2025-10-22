@@ -18,7 +18,7 @@ public class AffectTicketsFromSettlementHistoryServiceTests
         // Arrange
         var expected = new List<BetId>();
         var repository = Substitute.For<IDynamicRepository>();
-        repository.FetchAsync<BetId>(default).ReturnsForAnyArgs(expected);
+        repository.FetchAsync<BetId>(null).ReturnsForAnyArgs(expected);
         var service = new AffectTicketsFromSettlementHistoryServiceImp(repository);
 
         // Act

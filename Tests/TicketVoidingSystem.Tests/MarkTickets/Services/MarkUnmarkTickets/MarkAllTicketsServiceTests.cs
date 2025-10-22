@@ -18,7 +18,7 @@ public class MarkAllTicketsServiceTests : IClassFixture<AppSettingFixture>, ICla
         // Arrange
         var repository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
-        repository.FetchAsync<Result>(default).ReturnsForAnyArgs(new List<Result> { new() });
+        repository.FetchAsync<Result>(null).ReturnsForAnyArgs(new List<Result> { new() });
         var service = new MarkAllTicketsServiceImp(repository, sessionService);
 
         // Act
@@ -35,7 +35,7 @@ public class MarkAllTicketsServiceTests : IClassFixture<AppSettingFixture>, ICla
         var failedResult = new Result { ErrorCode = 1, ErrorMsg = "Fail" };
         var repository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
-        repository.FetchAsync<Result>(default).ReturnsForAnyArgs(new List<Result> { failedResult });
+        repository.FetchAsync<Result>(null).ReturnsForAnyArgs(new List<Result> { failedResult });
         var service = new MarkAllTicketsServiceImp(repository, sessionService);
 
         // Act

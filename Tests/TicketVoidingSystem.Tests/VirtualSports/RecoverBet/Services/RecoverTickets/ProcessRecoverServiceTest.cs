@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NSubstitute;
@@ -55,8 +54,8 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 )
             };
 
-            recoverRacingService.Execute(default).ReturnsForAnyArgs(racingResults);
-            repository.RecoverNotRacingSports(default, default).ReturnsForAnyArgs(nonRacingResults);
+            recoverRacingService.Execute(null).ReturnsForAnyArgs(racingResults);
+            repository.RecoverNotRacingSports(null, null).ReturnsForAnyArgs(nonRacingResults);
 
             // Act
             var result = await processRecoverService.Execute(query);
@@ -87,7 +86,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 )
             };
 
-            recoverRacingService.Execute(default).ReturnsForAnyArgs(racingResults);
+            recoverRacingService.Execute(null).ReturnsForAnyArgs(racingResults);
 
             // Act
             var result = await processRecoverService.Execute(query);
@@ -118,7 +117,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 )
             };
 
-            repository.RecoverNotRacingSports(default, default).ReturnsForAnyArgs(nonRacingResults);
+            repository.RecoverNotRacingSports(null, null).ReturnsForAnyArgs(nonRacingResults);
 
             // Act
             var result = await processRecoverService.Execute(query);
@@ -149,7 +148,7 @@ namespace TicketVoidingSystem.Tests.VirtualSports.RecoverBet.Services.RecoverTic
                 )
             };
 
-            recoverRacingService.Execute(default).ReturnsForAnyArgs(racingResults);
+            recoverRacingService.Execute(null).ReturnsForAnyArgs(racingResults);
 
             // Act
             var result = await processRecoverService.Execute(query);

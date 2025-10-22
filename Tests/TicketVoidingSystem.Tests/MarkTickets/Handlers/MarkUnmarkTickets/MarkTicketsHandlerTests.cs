@@ -27,7 +27,7 @@ public class MarkTicketsHandlerTests
         };
         var expectedResult = new Result { ErrorCode = 0, ErrorMsg = "Mark tickets successfully!" };
         var markTicketsService = Substitute.For<MarkTicketsService>();
-        markTicketsService.Execute(default).ReturnsForAnyArgs(expectedResult);
+        markTicketsService.Execute(null).ReturnsForAnyArgs(expectedResult);
         var handler = new MarkTicketsHandler(markTicketsService);
 
         // Act

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.ABExceptionList.Handlers;
 using TicketVoidingSystem.Services;
@@ -21,7 +22,7 @@ public class GetPermissionHandlerTests
         var handler = new GetPermissionHandler(sessionService);
 
         // Act
-        var actualResult = await handler.Handle(request, default);
+        var actualResult = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         Assert.True(actualResult.ABExceptionListHost);

@@ -1,12 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import clone from 'lodash/clone';
-import cloneDeep from 'lodash/cloneDeep';
-import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
-import { WrongHdpModel } from '../../../../add-request-new/models/event-wrong-hdp.model';
-import { WrongOuModel } from '../../../../add-request-new/models/event-wrong-ou.model';
-import { GetLogInfoModel, GetLogInfoViewModel, Validation } from '../../../../add-request-new/models/get-log-info.model';
-import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
-import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
+import _ from 'lodash';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { Message } from '../../../../utility/components/template-message/messages/message';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
@@ -15,7 +8,6 @@ import { IssueType, IssueTypesModel, SubIssueType } from '../../../../utility/mo
 import { LogInfoDetail } from '../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../utility/models/match.model';
 import { VoidedReason } from '../../../../utility/models/reason.model';
-import { SqlResult } from '../../../../utility/models/result';
 import { CommonService } from '../../../../utility/services/common.service';
 import { GetTicketsQuery } from '../../models/get-tickets.query';
 import { PrimitiveProperty } from '../../models/primitive-property.model';
@@ -24,11 +16,17 @@ import { TicketsService } from '../../services/tickets.service';
 import { TicketsModel } from '../../tickets-list/tickets.model';
 import { TemplateMessageService } from './template-message.service';
 import { VoidPageService } from './void-page.service';
+import { RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { WrongHdpModel } from '../../../../add-request-new/models/event-wrong-hdp.model';
+import { WrongOuModel } from '../../../../add-request-new/models/event-wrong-ou.model';
+import { GetLogInfoModel, Validation, GetLogInfoViewModel } from '../../../../add-request-new/models/get-log-info.model';
+import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
 
 class Helper {
   static readonly fakeRequestId = 50121;
   static readonly fakeMatchId = 90000;
-  static readonly fakeVoidMatch: VoidMatch = {
+  static readonly fakeVoidMatch = {
     id: 1,
     subIssueType: new SubIssueType(),
     displayIssueTypeName: '',
@@ -44,28 +42,13 @@ class Helper {
     isBlockBetList: true,
     isShowTemplateMessage: true,
     templateMessage: new Message(),
-    isAllLiveTickets: false,
-    isCheckedEarlyEvent: false,
-    isMainMatch: false,
     isAllNonLiveTickets: true,
     licenseeAffectedList: [],
     detailViewModel: new RequestDetailViewModel()
-  };
-  static readonly fakeSqlResultError: SqlResult = {
-    errCode: 1,
-    errMsg: 'error',
-    isSuccessful: false,
-  };
-  static readonly fakeSqlResultSuccessful: SqlResult = {
-    errCode: 0,
-    errMsg: '',
-    isSuccessful: true,
-  };
-  static readonly fakeRequestDetailModel: RequestDetailModel = {
+  } as VoidMatch;
+  static readonly fakeRequestDetailModel = {
     actionId: 1,
     decidedBy: null,
-    isTest: false,
-    isVoided: false,
     issueTypeId: 11,
     mistakenBy: null,
     operators: [],
@@ -78,22 +61,13 @@ class Helper {
     userId: 0,
     requestId: 1,
     briefInfoNote: ''
-  };
+  } as RequestDetailModel;
   static readonly fakeRequestDetailViewModel: RequestDetailViewModel = {
     requestId: Helper.fakeRequestId,
     lastModifiedDate: null,
     request: Helper.fakeRequestDetailModel,
     event: null,
     playerNames: [],
-    wrongScoreModels: [],
-    dangerAcceptedModels: [],
-    redCardModels: [],
-    wrongHdpModels: [],
-    wrongOuModels: [],
-    wrongOddsModels: [],
-    reducedOverModels: [],
-    duplicateTicketsModel: null,
-    notParticipateModels: []
   };
 
   static readonly fakeIssueTypeList: IssueType[] = [
@@ -214,7 +188,7 @@ describe('VoidPageService', () => {
 
     // Action
     issueTypeIds.forEach(async issueTypeId => {
-      const fakeRequestDetailViewModel = cloneDeep(Helper.fakeRequestDetailViewModel);
+      const fakeRequestDetailViewModel = _.cloneDeep(Helper.fakeRequestDetailViewModel);
       fakeRequestDetailViewModel.request.issueTypeId = Number(issueTypeId);
       await voidPageService.loadUnderneathVoidMatchesData([Helper.fakeVoidMatch], fakeRequestDetailViewModel);
 
@@ -223,32 +197,6 @@ describe('VoidPageService', () => {
       expect(spyGetVoidTicketsMini).toHaveBeenCalledTimes(2);
       expect(templateMessageService.getTemplateValue).toHaveBeenCalledTimes(2);
     });
-  });
-
-  it('#toggleTicketsArea should update model', async () => {
-    // Arrange
-    const currentVoidMatch = clone(Helper.fakeVoidMatch);
-    const allVoidMatches = [clone(Helper.fakeVoidMatch)];
-
-    // Action
-    voidPageService.toggleTicketsArea(currentVoidMatch, allVoidMatches);
-
-    // Assert
-    expect(allVoidMatches[0].isShowTemplateMessage).toBe(false);
-    expect(allVoidMatches[0].isShowTicketFull).toBe(false);
-  });
-
-  it('#toggleTemplateMessageArea should update model', async () => {
-    // Arrange
-    const currentVoidMatch = clone(Helper.fakeVoidMatch);
-    const allVoidMatches = [clone(Helper.fakeVoidMatch)];
-
-    // Action
-    voidPageService.toggleTemplateMessageArea(currentVoidMatch, allVoidMatches);
-
-    // Assert
-    expect(allVoidMatches[0].isShowTemplateMessage).toBe(false);
-    expect(allVoidMatches[0].isShowTicketFull).toBe(false);
   });
 
   it('#getAllLogInfo should return expected model', async () => {

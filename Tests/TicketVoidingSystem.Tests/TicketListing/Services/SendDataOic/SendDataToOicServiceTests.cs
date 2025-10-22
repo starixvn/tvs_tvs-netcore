@@ -38,9 +38,9 @@ public class SendDataToOicServiceImpTest
         {
             new() { LicenseeName = "", BetTypeName = "" }
         };
-        getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new ExcelOicModel());
-        insertToAmendmentTableStage.Execute(default!, default!).ReturnsForAnyArgs(new List<LicenseeFile>());
-        callApiAmendmentStage.Execute(default!, default!, default!).ReturnsForAnyArgs(expected);
+        getTicketsService.GetTicketsForSendDataOic(null!, null!).ReturnsForAnyArgs(new ExcelOicModel());
+        insertToAmendmentTableStage.Execute(null!, null!).ReturnsForAnyArgs(new List<LicenseeFile>());
+        callApiAmendmentStage.Execute(null!, null!, default!).ReturnsForAnyArgs(expected);
         ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
 
         // Act
@@ -61,9 +61,9 @@ public class SendDataToOicServiceImpTest
             Message = ""
         };
         var queries = new List<SendFileQuery>();
-        getTicketsService.GetTicketsForSendDataOic(default!, default!).ReturnsForAnyArgs(new ExcelOicModel());
-        insertToAmendmentTableStage.Execute(default!, default!).ReturnsForAnyArgs(new List<LicenseeFile>());
-        callApiAmendmentStage.Execute(default!, default!, default!).ReturnsForAnyArgs(expected);
+        getTicketsService.GetTicketsForSendDataOic(null!, null!).ReturnsForAnyArgs(new ExcelOicModel());
+        insertToAmendmentTableStage.Execute(null!, null!).ReturnsForAnyArgs(new List<LicenseeFile>());
+        callApiAmendmentStage.Execute(null!, null!, default!).ReturnsForAnyArgs(expected);
         ConfigurationManager.AppSettings["EnvironmentName"] = "LOCAL";
 
         // Act

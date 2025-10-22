@@ -16,7 +16,7 @@ public class MarkAllTicketsHandlerTests
         // Arrange
         var expectedResult = new Result { ErrorCode = 0, ErrorMsg = "Unmark tickets successfully!" };
         var markAllTicketsService = Substitute.For<MarkAllTicketsService>();
-        markAllTicketsService.Execute(default).ReturnsForAnyArgs(expectedResult);
+        markAllTicketsService.Execute(null).ReturnsForAnyArgs(expectedResult);
         var handler = new MarkAllTicketsHandler(markAllTicketsService);
 
         // Act

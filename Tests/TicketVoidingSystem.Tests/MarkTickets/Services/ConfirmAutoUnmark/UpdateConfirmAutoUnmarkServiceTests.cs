@@ -56,9 +56,9 @@ public class UpdateConfirmAutoUnmarkServiceTests : IClassFixture<RemotingRefFixt
         var repository = Substitute.For<IDynamicRepository>();
         var sessionService = Substitute.For<SessionService>();
         var combineValidationService = Substitute.For<CombineValidationService>();
-        repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(default)
+        repository.FetchAsync<UpdateConfirmAutoUnmarkValidation>(null)
             .ReturnsForAnyArgs(new List<UpdateConfirmAutoUnmarkValidation>());
-        combineValidationService.CombineUpdateResult(default)
+        combineValidationService.CombineUpdateResult(null)
             .ReturnsForAnyArgs(new UpdateConfirmAutoUnmarkValidation());
         var service = new UpdateConfirmAutoUnmarkServiceImp(repository, sessionService, combineValidationService);
 

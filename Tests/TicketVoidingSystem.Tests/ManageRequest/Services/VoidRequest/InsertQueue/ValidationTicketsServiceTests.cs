@@ -62,7 +62,7 @@ public class ValidationTicketsServiceTests
         var tickets = new List<RequestDetailTicketModel> { new() };
         var repository = Substitute.For<IDynamicRepository>();
         var mapTicketsService = Substitute.For<MapTicketsService>();
-        mapTicketsService.SetVoidingTypeForTickets(default).ReturnsForAnyArgs(tickets);
+        mapTicketsService.SetVoidingTypeForTickets(null).ReturnsForAnyArgs(tickets);
         var service = new ValidationTicketsServiceImp(repository, mapTicketsService);
 
         // Act

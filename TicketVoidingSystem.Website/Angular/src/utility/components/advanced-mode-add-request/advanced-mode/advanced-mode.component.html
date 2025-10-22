@@ -42,7 +42,7 @@
                 <span class="me-1">{{selection.multiSelection.name}}:</span>
                 }
                 <multiple-select class="multiple-selection bet-team-{{betTeam.index}}-selection-{{selection.index}}"
-                  [multipleSelect]="selection.multiSelection.multipleSelect" (checkedItems)="changeFilter()">
+                  [multipleSelect]="selection.multiSelection.multipleSelect" (checkedItems)="changeFilter(); updateOtherSelection(betTeam, selection)">
                 </multiple-select>
               </div>
               }

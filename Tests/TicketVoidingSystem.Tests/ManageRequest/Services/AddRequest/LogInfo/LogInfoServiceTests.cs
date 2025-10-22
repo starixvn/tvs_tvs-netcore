@@ -79,11 +79,11 @@ public class LogInfoServiceTests : IClassFixture<AppSettingFixture>
                 VoidToTime = dateTime
             },
         };
-        getVoidTimeByAllowanceSettingService.Get(default).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
-        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(default)
+        getVoidTimeByAllowanceSettingService.Get(null).ReturnsForAnyArgs(voidTimeByAllowanceSetting);
+        repository.FetchMultipleAsync<Validation, TicketRequest, LogInfoDetail, TransInfoAddRequestModel, BetTypeTicketsInfo>(null)
             .ReturnsForAnyArgs((validations, ticketRequests, logInfos, transInfoAddRequestModels, betTypeCountModel));
         session.UserId.ReturnsForAnyArgs(userId);
-        mapper.Map<GetLogInfoCriteria>(default).ReturnsForAnyArgs(new GetLogInfoCriteria());
+        mapper.Map<GetLogInfoCriteria>(null).ReturnsForAnyArgs(new GetLogInfoCriteria());
 
         // Act
         var actual = await service.Get(request);

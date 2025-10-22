@@ -23,7 +23,7 @@ public class GetInfoTicketsForMessageImp(SpecialBetTypeContentService specialBet
 {
     public string GetSpecialBetTeam(int betTypeId, IEnumerable<GetTicketModel> allTickets)
     {
-        List<int> SpecialBetTypes = [BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder];
+        int[] SpecialBetTypes = [BetTypeConstant.OverUnder, BetTypeConstant.FirstHalfOverUnder];
         if (!SpecialBetTypes.Contains(betTypeId) && !IsGroupBetTypeHandicap(allTickets))
         {
             return string.Empty;

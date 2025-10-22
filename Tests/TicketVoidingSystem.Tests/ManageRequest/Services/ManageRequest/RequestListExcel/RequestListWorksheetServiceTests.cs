@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using NSubstitute;
 using OfficeOpenXml;
 using TicketVoidingSystem.ManageRequest.Models;
@@ -23,7 +24,7 @@ public class RequestListWorksheetServiceTests
     }
 
     [Fact]
-    public async void BindingContent_RendersDataAndAppliesStyleToWorksheet()
+    public async Task BindingContent_RendersDataAndAppliesStyleToWorksheet()
     {
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         var package = new ExcelPackage();

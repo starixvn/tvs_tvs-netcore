@@ -42,7 +42,7 @@ public class AfterVoidServiceTests
         var sendEmailService = Substitute.For<SendEmailService>();
         var notificationLetstalkService = Substitute.For<NotificationLetstalkService>();
         var loggingService = Substitute.For<LoggingService>();
-        sendEmailService.SendEmail(default, default).ReturnsForAnyArgs(new List<Result> { new() });
+        sendEmailService.SendEmail(null, null).ReturnsForAnyArgs(new List<Result> { new() });
         var service = new AfterVoidServiceImp(TestSetup.CreateMapper(), cashOutApiService, sendMessageByPlatformService,
             sendEmailService, notificationLetstalkService, loggingService);
 

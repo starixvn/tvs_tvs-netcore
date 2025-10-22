@@ -24,7 +24,7 @@ public static class SiteDbGroupConstant
     {
         var ignoreSiteDbList = !string.IsNullOrWhiteSpace(AppSettingService.AppSetting?.IgnoreSiteDb)
             ? AppSettingService.AppSetting.IgnoreSiteDb.Split(',').Select(int.Parse)
-            : new List<int>();
+            : [];
 
         ServerList = ignoreSiteDbList.Any() ? AllSiteDb.Where(site => ignoreSiteDbList.All(y => y != site.Id)).ToList() : AllSiteDb;
     }

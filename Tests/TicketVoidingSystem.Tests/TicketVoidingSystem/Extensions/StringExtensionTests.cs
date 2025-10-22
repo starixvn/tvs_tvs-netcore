@@ -41,8 +41,8 @@ public class StringExtensionTests
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(default, result.Name);
-        Assert.Equal(default, result.Age);
+        Assert.Equal(null, result.Name);
+        Assert.Equal(0, result.Age);
     }
 
     [Fact]

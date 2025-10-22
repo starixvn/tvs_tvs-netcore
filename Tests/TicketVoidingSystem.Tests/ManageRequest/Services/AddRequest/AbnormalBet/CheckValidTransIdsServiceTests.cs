@@ -8,7 +8,6 @@ using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.AbnormalBet.ExportExcel;
 using TicketVoidingSystem.ManageRequest.ViewModels;
-using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services.OnlineServerRepository;
 using Xunit;
 
@@ -279,11 +278,6 @@ public class CheckValidTransIdsServiceTests
             IsVoidAllArchivedTickets = false
         };
 
-        var onlineServers = new List<SiteDbGroupModel>
-        {
-            new() { Id = 1 },
-            new() { Id = 2 }
-        };
         var matchInfoAddRequests = new List<MatchInfoAddRequest> { new() { MatchId = 1 } };
         var validationAbnormalBets = new List<ValidationAbnormalBet> { new() { InvalidTransIds = "123" } };
         var transInfoAddRequests = new List<TransInfoAddRequestModel> { new() { RemoveTransIds = "123" } };

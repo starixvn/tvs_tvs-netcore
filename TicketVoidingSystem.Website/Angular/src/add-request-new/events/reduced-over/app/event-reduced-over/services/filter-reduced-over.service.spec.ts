@@ -48,7 +48,7 @@ class Helper {
     }
   ];
 
-  static readonly fakePlayers: OddsInfo[] = [
+  static readonly fakePlayers = [
     {
       betChoice: 'Test Choice',
       betTypeId: 1,
@@ -58,7 +58,7 @@ class Helper {
       playNamesChineseSimplified: '',
       playNamesChineseTraditional: ''
     }
-  ];
+  ] as OddsInfo[];
 }
 
 describe('FilterReducedOverService', () => {

@@ -18,7 +18,7 @@ public class GetSummaryHandlerTest
         var request = new GetSummaryRequest { Product = 1 };
         var viewModel = new GetSummaryViewModel();
         var summaryTicketsService = Substitute.For<GetSummaryTicketsService>();
-        summaryTicketsService.GetSummaryTickets(default!).ReturnsForAnyArgs(viewModel);
+        summaryTicketsService.GetSummaryTickets(null!).ReturnsForAnyArgs(viewModel);
         var handler = new GetSummaryHandler(summaryTicketsService);
 
         // Act

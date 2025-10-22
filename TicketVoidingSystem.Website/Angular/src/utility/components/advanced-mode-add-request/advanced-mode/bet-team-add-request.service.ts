@@ -154,6 +154,9 @@ export class BetTeamAddRequestService {
       case 'secondvalue':
         result.secondValue = value;
         break;
+      case 'performance':
+        result.performance = value;
+        break;
     }
   }
 

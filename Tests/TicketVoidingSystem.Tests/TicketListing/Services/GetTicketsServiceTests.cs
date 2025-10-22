@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using AutoMapper;
 using Fanex.Data.Repository;
-using FizzWare.NBuilder;
 using NSubstitute;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
@@ -18,11 +17,11 @@ public class GetTicketsServiceTests
     public async Task GetTickets_RepositoryHasCalled()
     {
         // Arrange
-        var query = Builder<GetTicketsDetailQuery>.CreateNew().Build();
+        var query = new GetTicketsDetailQuery();
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var mapTicketService = Substitute.For<MapTicketService>();
-        repository.FetchAsync<DetailTicketModel>(default).ReturnsForAnyArgs(new List<DetailTicketModel>());
+        repository.FetchAsync<DetailTicketModel>(null).ReturnsForAnyArgs(new List<DetailTicketModel>());
         var service = new GetTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, mapTicketService);
 
         // Act
@@ -38,11 +37,11 @@ public class GetTicketsServiceTests
     public async Task GetTicketsForExportExcel_RepositoryHasCalled()
     {
         // Arrange
-        var query = Builder<ExportExcelQuery>.CreateNew().Build();
+        var query = new ExportExcelQuery();
         var repository = Substitute.For<IDynamicRepository>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();
         var mapTicketService = Substitute.For<MapTicketService>();
-        repository.FetchAsync<DetailTicketModel>(default).ReturnsForAnyArgs(new List<DetailTicketModel>());
+        repository.FetchAsync<DetailTicketModel>(null).ReturnsForAnyArgs(new List<DetailTicketModel>());
         var service = new GetTicketsServiceImp(TestSetup.CreateMapper(), repository, affectTicketsFromSettlementHistoryService, mapTicketService);
 
         // Act
@@ -59,7 +58,7 @@ public class GetTicketsServiceTests
     public async Task GetTicketsForSendDataOic_RepositoryHasCalled()
     {
         // Arrange
-        var query = Builder<SendFileQuery>.CreateNew().Build();
+        var query = new SendFileQuery();
         var repository = Substitute.For<IDynamicRepository>();
         var mapper = Substitute.For<IMapper>();
         var affectTicketsFromSettlementHistoryService = Substitute.For<AffectTicketsFromSettlementHistoryService>();

@@ -37,15 +37,15 @@ public class GetTicketsHandlerTests
             };
         var getTicketsResult = new List<GetTicketModel>();
         getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
-        groupTicketService.CreateGroupsGetTicketModel(default, default).ReturnsForAnyArgs(listGroup);
+        groupTicketService.CreateGroupsGetTicketModel(null, null).ReturnsForAnyArgs(listGroup);
         var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(default, default);
-        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
+        await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(null, null);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(null, null, 0, 27);
         Assert.Empty(actual.Groups);
     }
 
@@ -58,15 +58,15 @@ public class GetTicketsHandlerTests
         var listGroup = new List<Group<GetTicketModel>> { new() { Tickets = new List<GetTicketModel> { new() } }, new() { Tickets = new List<GetTicketModel> { new() } } };
         var getTicketsResult = new List<GetTicketModel>();
         getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
-        groupTicketService.CreateGroupsGetTicketModel(default, default).ReturnsForAnyArgs(listGroup);
+        groupTicketService.CreateGroupsGetTicketModel(null, null).ReturnsForAnyArgs(listGroup);
         var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await groupTicketService.ReceivedWithAnyArgs(2).CreateGroupTicketViewModel(default, default);
-        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
+        await groupTicketService.ReceivedWithAnyArgs(2).CreateGroupTicketViewModel(null, null);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(null, null, 0, 27);
         Assert.Equal(2, actual.Groups.Count());
     }
 
@@ -85,8 +85,8 @@ public class GetTicketsHandlerTests
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(default, default);
-        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
+        await groupTicketService.ReceivedWithAnyArgs(0).CreateGroupTicketViewModel(null, null);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(null, null, 0, 27);
         Assert.Empty(actual.Groups);
     }
 
@@ -96,7 +96,7 @@ public class GetTicketsHandlerTests
         // Arrange
         InitGetTicketsHandlerTests();
         var request = new GetTicketsRequest { MatchId = 1 };
-        getTicketsService.GetTickets(request).ReturnsForAnyArgs(x => Task.FromException<IList<GetTicketModel>>(new System.Exception("Test exception")));
+        getTicketsService.GetTickets(request).ReturnsForAnyArgs(_ => Task.FromException<IList<GetTicketModel>>(new System.Exception("Test exception")));
         var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
 
         // Act & Assert
@@ -117,15 +117,15 @@ public class GetTicketsHandlerTests
         };
         var getTicketsResult = new List<GetTicketModel>();
         getTicketsService.GetTickets(request).ReturnsForAnyArgs(getTicketsResult);
-        groupTicketService.CreateGroupsGetTicketModel(default, default).ReturnsForAnyArgs(listGroup);
+        groupTicketService.CreateGroupsGetTicketModel(null, null).ReturnsForAnyArgs(listGroup);
         var handler = new GetTicketsHandler(getTicketsService, matchService, groupTicketService, updateListTicketsViewModelService);
 
         // Act
         var actual = await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        await groupTicketService.ReceivedWithAnyArgs(1).CreateGroupTicketViewModel(default, default);
-        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(default, default, default, 27);
+        await groupTicketService.ReceivedWithAnyArgs(1).CreateGroupTicketViewModel(null, null);
+        await updateListTicketsViewModelService.ReceivedWithAnyArgs(1).Update(null, null, 0, 27);
         Assert.Single(actual.Groups);
     }
 }

@@ -23,7 +23,7 @@ public class RecoverEmailContentServiceTests
         var expected = new MailRecord();
 
         // Act
-        var actual = service.Create(default, tickets, default, default);
+        var actual = service.Create(null, tickets, null, default);
 
         // Assert
         AssertExtension.Equal(expected, actual);

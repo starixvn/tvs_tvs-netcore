@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using NSubstitute;
 using TicketVoidingSystem.ABExceptionList.Criteria;
@@ -26,7 +27,7 @@ public class GetUsersHandlerTests
         var handler = new GetUsersHandler(getUsersService);
 
         // Act
-        var actualResult = await handler.Handle(request, default);
+        var actualResult = await handler.Handle(request, CancellationToken.None);
 
         // Assert
         await getUsersService.Received(1).GetUsers(Arg.Compat.Is<GetUsersRequest>(x => x.UserName == request.UserName));
