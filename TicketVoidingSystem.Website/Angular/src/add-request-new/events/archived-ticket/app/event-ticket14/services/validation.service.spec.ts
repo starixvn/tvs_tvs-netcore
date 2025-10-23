@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { BetIdsComponent } from '../../../../../../utility/components/bet-ids/bet-ids.component';
+import { GroupNumber, NumberItem } from '../../../../../../utility/components/bet-ids/bet-ids.model';
+import { NumberItemService } from '../../../../../../utility/components/bet-ids/number-item.service';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { PermissionAddRequest } from '../../../../../models/permission-add-request.model';
 import { AppService } from '../../app.service';
 import { CheckTickets14Result } from '../models/check-tickets14-result.model';
 import { ValidationService } from './validation.service';
-import { NumberItemService } from '../../../../../../utility/components/bet-ids/number-item.service';
-import { GroupNumber, NumberItem } from '../../../../../../utility/components/bet-ids/bet-ids.model';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -95,7 +95,7 @@ describe('ValidationService', () => {
       const mockValidationResult = {
         invalidTransIds: '123',
         unsupportedDateRangeTransIds: '456',
-        transInfoJson: '{}'
+        transInfoJson: '{}',
       } as CheckTickets14Result;
 
       jest.spyOn(eventTicket14ApiService, 'checkTickets14').mockResolvedValue(mockValidationResult);
