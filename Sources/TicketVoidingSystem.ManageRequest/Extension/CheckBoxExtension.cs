@@ -87,4 +87,9 @@ public static class CheckBoxExtension
     {
         return CheckStatus(item);
     }
+
+    public static bool IsCashOutTicket(this GetTicketModel item)
+    {
+        return item.BetdaqId == -2;
+    }
 }
