@@ -91,6 +91,7 @@ export class ValidationService {
     this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.differentLiveScoreTransIds, TEXT.INVALID_DIFFERENT_LIVE_SCORE);  // RemarkId = 8
     this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, model.abWhiteListTransIds, TEXT.INVALID_AB_WHITE_LIST_TICKETS);  // RemarkId = 9
     this.numberItemService.updateWarningSiteDBDown(betIdsComponent.groupNumber.items, model.transIdsOfSiteDBDown, TEXT.INVALID_SITE_DB_DOWN); // RemarkId = 10
+    this.numberItemService.updateMoved(betIdsComponent.groupNumber.items, model.balanceUpTransIds, TEXT.AFTER_BALANCE_UP_TICKETS); // RemarkId = 11
   }
 
   private checkCanAddSettledTickets(permission: PermissionAddRequest, actionId: string): boolean {
@@ -103,7 +104,7 @@ export class ValidationService {
 
   private checkCanShowButtonRemove(model: ValidationAbnormalBet, isHasPermissionAddSettledTicket: boolean, transIdsAreNotNumber: string): boolean { // NOSONAR
     if (model.invalidTransIds || (model.settledTransIds && !isHasPermissionAddSettledTicket) || model.unsupportedTransIds || model.existingReqTransIds
-      || model.nonLiveTransIds || model.differentLiveScoreTransIds || model.abWhiteListTransIds || transIdsAreNotNumber) {
+    || model.nonLiveTransIds || model.differentLiveScoreTransIds || model.abWhiteListTransIds || transIdsAreNotNumber || model.balanceUpTransIds) {
       return true;
     }
 
@@ -136,7 +137,10 @@ export class ValidationService {
     if (transIdsAreNotNumber) {
       transIds.push(transIdsAreNotNumber);
     }
-
+    if (model.balanceUpTransIds) {
+      transIds.push(model.balanceUpTransIds);
+    }
+    
     return transIds.join(',');
   }
 
@@ -146,5 +150,6 @@ export class ValidationService {
     args.primitiveProps.isShowButtonRemoveInvalid = this.checkCanShowButtonRemove(validationAbnormalBet, isHasPermissionAddSettledTicket, transIdsAreNotNumber);
     args.primitiveProps.invalidTransIds = this.getInvalidTransIds(validationAbnormalBet, isHasPermissionAddSettledTicket, transIdsAreNotNumber);
     args.primitiveProps.isAllUusTickets = validationAbnormalBet.isAllUusTickets;
+    args.primitiveProps.balanceUpTransIds = validationAbnormalBet.balanceUpTransIds;
   }
 }

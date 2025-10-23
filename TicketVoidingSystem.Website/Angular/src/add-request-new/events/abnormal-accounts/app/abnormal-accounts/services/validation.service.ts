@@ -8,6 +8,7 @@ import { CheckUsernamesViewModel, CheckValidUsernamesQuery } from '../models/che
 import { ValidationBusinessRuleArgs, ValidationBusinessRuleOutput } from '../models/validation.model';
 import { ProductFilterComponent } from '../product-filter/product-filter.component';
 import { UserNameService } from '../../../../../../utility/components/user-names/user-name.service';
+import { TEXT } from '../../../../../../utility/constants/text';
 
 @Injectable()
 export class ValidationService {
@@ -43,7 +44,7 @@ export class ValidationService {
 
       const viewModel = await this.getValidation(args);
 
-      return this.processValidationResults(args, viewModel, usernames);
+      return this.processValidationResults(args, viewModel);
 
     } catch {
       return { isValid: this.highlightInvalidUsernames(args.usernamesComponent, usernames) } as ValidationBusinessRuleOutput;
@@ -78,7 +79,7 @@ export class ValidationService {
     return null;
   }
 
-  private processValidationResults(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel, usernames: string): ValidationBusinessRuleOutput {
+  private processValidationResults(args: ValidationBusinessRuleArgs, viewModel: CheckUsernamesViewModel): ValidationBusinessRuleOutput {
     const siteDbDownResult = this.handleSiteDbDown(args, viewModel);
     if (siteDbDownResult) {
       return siteDbDownResult;
@@ -104,6 +105,10 @@ export class ValidationService {
     const moveBetResult = this.handleMoveBetDateOrInvalidTicket(args, viewModel);
     if (moveBetResult) {
       return moveBetResult;
+    }
+
+    if (viewModel.validation.usernamesOfBalanceUp) {
+      this.userNameService.updateMoved(args.usernamesComponent.groupUsername, viewModel.validation.usernamesOfBalanceUp, TEXT.AFTER_BALANCE_UP_TICKETS);
     }
 
     return {

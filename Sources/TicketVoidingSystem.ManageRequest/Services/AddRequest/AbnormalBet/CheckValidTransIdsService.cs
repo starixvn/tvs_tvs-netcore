@@ -117,7 +117,8 @@ public class CheckValidTransIdsServiceImp(
             DifferentLiveScoreTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.DifferentLiveScoreTransIds)),
             ABWhiteListTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.ABWhiteListTransIds)),
             IsHasWarningRemovedTickets = validationAbnormalBets.Any(x => x.IsHasWarningRemovedTickets),
-            TransIdsOfSiteDBDown = validationAbnormalBets.FirstOrDefault(x => x.TransIdsOfSiteDBDown != null)?.TransIdsOfSiteDBDown
+            TransIdsOfSiteDBDown = validationAbnormalBets.FirstOrDefault(x => x.TransIdsOfSiteDBDown != null)?.TransIdsOfSiteDBDown,
+            BalanceUpTransIds = Helper.GetUnionTransIdString(validationAbnormalBets.Select(x => x.BalanceUpTransIds))
         };
 
         return result;

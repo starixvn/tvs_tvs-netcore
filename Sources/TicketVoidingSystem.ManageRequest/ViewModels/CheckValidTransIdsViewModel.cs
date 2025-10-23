@@ -41,6 +41,8 @@ public class ValidationAbnormalBet
     public string ABWhiteListTransIds { get; set; }
 
     public bool IsHasWarningRemovedTickets { get; set; }
+
+    public string BalanceUpTransIds { get; set; }
 }
 
 public class SendLetsTalkModel

@@ -124,6 +124,7 @@ export class TEXT {
     static readonly INVALID_MATCH = 'Invalid match';
     static readonly INVALID_BET_ID = 'Invalid BetID.';
     static readonly INVALID_SITE_DB_DOWN = 'Ticket of siteDB down';
+    static readonly AFTER_BALANCE_UP_TICKETS = 'Being Balance Up';
     static readonly INVALID_USERNAME_SITE_DB_DOWN = 'Username has tickets of siteDB down';
     static readonly CONFIRM_CHECK_BY = 'Are you sure you want to verify request ';
     static readonly CONFIRM_UNCHECK_BY = 'Are you sure you want to unverify request ';

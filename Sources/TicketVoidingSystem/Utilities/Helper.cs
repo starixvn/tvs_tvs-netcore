@@ -39,7 +39,7 @@ public static class Helper
             result = result.Intersect(convertItems.ElementAt(i)).ToList();
         }
 
-        return string.Join(",", result);
+        return string.Join(",", result.Distinct());
     }
 
     public static string GetUnionTransIdString(IEnumerable<string> items, string separator = ",")

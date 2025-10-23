@@ -28,7 +28,8 @@ public class CheckTickets14HandlerTests
         {
             InvalidTransIds = "123",
             UnsupportedDateRangeTransIds = "456",
-            TransInfoJson = "12"
+            TransInfoJson = "12",
+            BalanceUpTransIds = "12"
         };
         repository.FetchAsync<CheckTickets14ViewModel>(Arg.Any<CheckTickets14Criteria>()).ReturnsForAnyArgs([viewModel]);
 

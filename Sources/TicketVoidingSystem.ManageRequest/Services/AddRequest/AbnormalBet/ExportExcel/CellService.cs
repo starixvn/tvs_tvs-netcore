@@ -52,7 +52,8 @@ public class CellServiceImp : CellService
             { $"Q2=\"{RemarkConstant.AbWhiteListTransIds}\"", Color.Red },
             { $"Q2=\"{RemarkConstant.MovedOrDuplicatedTicket}\"", Color.Orange },
             { $"Q2=\"{RemarkConstant.DifferentMatch}\"", Color.DeepSkyBlue },
-            { $"Q2=\"{RemarkConstant.TicketSiteDbDown}\"", Color.DeepSkyBlue }
+            { $"Q2=\"{RemarkConstant.TicketSiteDbDown}\"", Color.DeepSkyBlue },
+            { $"Q2=\"{RemarkConstant.BalanceUpTransIds}\"", Color.Orange }
         };
 
         foreach (var entry in conditionColorMap)
@@ -62,7 +63,7 @@ public class CellServiceImp : CellService
 
         var listRemarkHighlightColorRed = new List<string>
         {
-            RemarkConstant.InvalidTicket, RemarkConstant.SettledTicket,
+            RemarkConstant.InvalidTicket, RemarkConstant.SettledTicket, RemarkConstant.BalanceUpTransIds,
             RemarkConstant.UnsupportedTicket, RemarkConstant.ExistingOnOtherRequest, RemarkConstant.NonLiveTicket,
             RemarkConstant.DifferentLiveScore, RemarkConstant.AbWhiteListTransIds
         };

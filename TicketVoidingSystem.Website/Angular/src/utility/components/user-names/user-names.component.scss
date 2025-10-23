@@ -58,13 +58,13 @@
       box-shadow: none;
     }
   
-    .invalid-item-toolTip .tooltip-inner {
-      background-color: yellow;
-        color:red;
+    ::ng-deep .invalid-item-toolTip .tooltip-inner {
+      background-color: yellow !important;
+      color: red !important;
     }
   
-    .invalid-item-toolTip .arrow::before {
-      border-top-color: yellow;
+    ::ng-deep .invalid-item-toolTip .arrow::before {
+      border-top-color: yellow !important;
     }
   }
   

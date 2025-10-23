@@ -88,6 +88,15 @@ export class UserNameService {
     }
   }
 
+  updateMoved(groupUsername: GroupUsername, text: string, tooltipText?: string) {
+    if (text !== null) {
+      const movedItems = text.split(',');
+      groupUsername.items.forEach(item => {
+        this.setItemListValue(movedItems, item, CSSCLASS.MOVED, tooltipText);
+      });
+    }
+  }
+
   updateWarningSiteDBDown(groupUsername: GroupUsername, text: string) {
     if (text !== null) {
       const existedItems = text.split(',');

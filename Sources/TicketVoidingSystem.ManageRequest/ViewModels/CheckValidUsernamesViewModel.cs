@@ -31,6 +31,8 @@ public class ValidationInfo
     public string SiteDBDownUserNames { get; set; }
 
     public string SiteDBDownInfoJson { get; set; }
+
+    public string UsernamesOfBalanceUp { get; set; }
 }
 
 public class CheckUsernamesInDatabaseResult

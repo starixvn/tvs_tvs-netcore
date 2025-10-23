@@ -44,5 +44,6 @@ export class ValidationService {
   private highlightInvalidTransIds(validationResult: CheckTickets14Result, betIdsComponent: BetIdsComponent): void {
     this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.invalidTransIds, TEXT.INVALID_TICKETS);
     this.numberItemService.updateInvalidItems(betIdsComponent.groupNumber.items, validationResult.unsupportedDateRangeTransIds, TEXT.INVALID_UNSUPPORTED_DATE_RANGE_TICKETS);
+    this.numberItemService.updateMoved(betIdsComponent.groupNumber.items, validationResult.balanceUpTransIds, TEXT.AFTER_BALANCE_UP_TICKETS);
   }
 }
