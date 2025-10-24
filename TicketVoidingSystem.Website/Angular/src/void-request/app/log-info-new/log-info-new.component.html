@@ -43,7 +43,7 @@
     </div>
   }
   @if (!isSportTypeSoccer()) {
-    <ticket-count-other-sports [logInfoDetail]="logInfoDetail" [isVoided]="true">
+    <ticket-count-other-sports [logInfoDetail]="logInfoDetail" [isVoided]="true" [isShowWrongMarket]="isShowWrongMarket()">
     </ticket-count-other-sports>
   }
 </div>

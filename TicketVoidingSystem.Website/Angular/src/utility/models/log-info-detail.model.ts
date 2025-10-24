@@ -23,4 +23,6 @@ export class LogInfoDetail {
     actionType: string;
     isHasWarningRangeTime?: boolean;
     logInfoTicketsJson?: string;
+    wrongMarket?: string;
+    actualMarket?: string;
 }

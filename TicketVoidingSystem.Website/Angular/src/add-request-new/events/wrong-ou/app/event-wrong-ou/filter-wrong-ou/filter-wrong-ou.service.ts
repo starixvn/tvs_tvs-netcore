@@ -1,23 +1,24 @@
 import { Injectable } from '@angular/core';
 import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
-import { ItemsSelectService } from 'src/utility/components/multiple-selection/items-select.service';
-import { StaticService } from 'src/utility/services/static.service';
-import range from 'lodash/range';
+import { ItemsSelectService } from '../../../../../../utility/components/multiple-selection/items-select.service';
+import { StaticService } from '../../../../../../utility/services/static.service';
+import { AdvancedModeConstants } from '../../../../../../utility/components/advanced-mode/advanced-mode.constants';
 
 @Injectable()
 export class FilterWrongOuService {
-  getBetChoiceSelection(oddsInfo: OddsInfo[], betTypeId: number) {
+  getBetChoiceSelection(oddsInfo: OddsInfo[], betTypeId: number, selectedItems: string[] = []) {
     const betChoiceSelection = StaticService.initDefaultMultipleSelection('120px', 1);
     const oddsInfoItems = oddsInfo.filter(x => x.betTypeId === betTypeId);
     const uniqueBetChoices = [...new Set(oddsInfoItems.map(x => x.betChoice))];
     uniqueBetChoices.forEach(betChoice => {
-      betChoiceSelection.items.push(ItemsSelectService.initItemsSelect(0, betChoice, betChoice, true, true, true, []));
+      const isChecked = selectedItems.includes(betChoice);
+      betChoiceSelection.items.push(ItemsSelectService.initItemsSelect(0, betChoice, betChoice, isChecked, true, true, []));
     });
 
     return betChoiceSelection;
   }
 
-  isBetTypeHasBetChoiceSelection(betTypeId: number) {
-    return range(653, 675).includes(betTypeId) || range(685, 689).includes(betTypeId);
+  isBetTypeHasBetChoiceSelection(betTypeId: string) {
+    return AdvancedModeConstants.BETTYPE_BASKETBALL_SELECT_BETCHOICE.split(',').includes(betTypeId);
   }
 }

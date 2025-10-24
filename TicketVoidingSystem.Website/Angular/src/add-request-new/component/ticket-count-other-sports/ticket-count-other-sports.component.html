@@ -9,5 +9,9 @@
       @if(!isVoided){
         <span class="ticket-details" (click)="clickOpenTicketDetails()">Details</span>
       }
-    </ng-container>       
+      @if (isShowWrongMarket) {
+        <br /><span>Wrong Market: <strong>{{logInfoDetail.wrongMarket}}</strong></span>
+        <br /><span>Actual Market: <strong>{{logInfoDetail.actualMarket}}</strong></span>
+      }
+    </ng-container>
 </div>

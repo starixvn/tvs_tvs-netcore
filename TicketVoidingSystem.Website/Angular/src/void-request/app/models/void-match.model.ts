@@ -9,8 +9,6 @@ export class VoidMatch extends VoidPageCommonItem {
   isAllLiveTickets: boolean;
   isAllNonLiveTickets: boolean;
   isCheckedEarlyEvent: boolean;
-  wrongMarket?: string;
-  actualMarket?: string;
   hdpValue?: string;
   isCheckedVar?: boolean;
   isMainMatch: boolean;

@@ -33,6 +33,7 @@ import { LogInfoService } from './services/log-info.service';
 import { RelatedEventService } from './services/related-event.service';
 import { SaveRequestService } from './services/save-request.service';
 import { ValidationService } from './services/validation.service';
+import { FilterWrongOuService } from './filter-wrong-ou/filter-wrong-ou.service';
 
 @Component({
   selector: 'event-wrong-ou',
@@ -41,7 +42,7 @@ import { ValidationService } from './services/validation.service';
   standalone: true,
   imports: [FormsModule, TooltipComponent, EventLeagueComponent, BlockUiDirective, AddChildMatchComponent,
     LogInfoWrongOuComponent, OnlyNumberDirective, InfoSiteDBDownComponent, ConfirmAddRequestComponent],
-  providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService]
+  providers: [EventWrongOuService, LogInfoService, RelatedEventService, SaveRequestService, ValidationService, FilterWrongOuService]
 })
 export class EventWrongOuComponent implements OnInit {
   @Input() isEdit: boolean;
@@ -96,6 +97,7 @@ export class EventWrongOuComponent implements OnInit {
     if (this.isEdit) {
       this.eventWrongOuService.assignModelsToEvents(this.allSelectedEvents, this.wrongOuModels);
       this.mainEvent = this.allSelectedEvents.find(x => x.isMainMatch);
+      
       this.relatedEvents = await this.relatedEventService.getChildMatches(this.createGetChildMatchesQuery());
       this.primitiveProps.isShowRelatedEvents = true;
     } else {

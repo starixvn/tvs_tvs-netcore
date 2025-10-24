@@ -13,6 +13,7 @@ import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 export class TicketCountOtherSportsComponent {
   @Input() isVoided: boolean;
   @Input() logInfoDetail: LogInfoDetail;
+  @Input() isShowWrongMarket = false;
   @Output() openTicketDetails = new EventEmitter<number>();
 
   public clickOpenTicketDetails(){
