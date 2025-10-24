@@ -258,10 +258,10 @@ export class AdvancedModeService {
     }
     this.updateForPenaltyShootoutCombo376(result, id);
     this.updateForBetTypesCricketWithFancy(result, id);
-    this.updateForBetTypesCricketWithBallDelivery(betTeam.items, result, id);
-    this.updateBetTypesCricketOverXBallYExactRuns(betTeam.items, result, id);
+    this.updateForBetTypesCricketWithBallDelivery(betTeam.inputs, result, id);
+    this.updateBetTypesCricketOverXBallYExactRuns(betTeam.inputs, result, id);
     this.updateForBetType9089(betTeam, result, id);
-    this.updateForBetTypesCricketWithOverWicket(betTeam.items, result, id);
+    this.updateForBetTypesCricketWithOverWicket(betTeam.inputs, result, id);
     this.updateForBetTypesWithRuns(betTeam.selections, result, id);
 
     return result;

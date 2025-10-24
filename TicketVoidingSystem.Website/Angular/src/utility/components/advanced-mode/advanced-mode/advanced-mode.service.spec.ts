@@ -3,7 +3,6 @@ import { AdvancedModeService } from './advanced-mode.service';
 import { BetTeam, Selection, Item, MultiSelection, BetTeamResult } from './advanced-mode.model';
 import { AdvancedModeConstants } from '../advanced-mode.constants';
 import { MultipleSelection } from '../../multiple-selection/multiple-selection.model';
-import { ItemsSelect } from '../../multiple-selection/items-select';
 import { ItemsSelectService } from '../../multiple-selection/items-select.service';
 
 class Helper {
