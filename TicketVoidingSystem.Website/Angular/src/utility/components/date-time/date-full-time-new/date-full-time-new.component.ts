@@ -50,6 +50,7 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
   private readonly ALLOWED_TIME_FORMATS = [
     'h:mm:ss.SSS A',
     'h:mm:ss A',
+    'hh:mm:ss A',
     'HH:mm:ss'
   ];
   private readonly element = inject(ElementRef);
@@ -100,15 +101,20 @@ export class DateFullTimeNewComponent implements OnInit, OnChanges, ControlValue
 
   isTimeValid() {
     const timeMoment = moment(this.time.trim(), this.timeFormat, true);
-    if (!timeMoment.isValid()) {
-      return false;
+
+    return timeMoment.isValid()
+  }
+
+  updateTime(newTime: string) {
+    if (this.isPasteCorrectTime(newTime)) {
+      this.time = moment(newTime.trim(), this.ALLOWED_TIME_FORMATS, true).format(this.timeFormat);
+      this.onChangeModel();
     }
-    return true;
   }
 
   onChangeTime(newTime: string) {
-    if (this.isPasteTimeEvent && this.isPasteCorrectTime(newTime)) {
-      this.time = moment(newTime.trim(), this.ALLOWED_TIME_FORMATS, true).format(this.timeFormat);
+    if (this.isPasteTimeEvent) {
+      this.updateTime(newTime);
     }
     this.isPasteTimeEvent = false;
   }
