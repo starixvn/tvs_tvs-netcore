@@ -7,13 +7,12 @@ import isNull from 'lodash/isNull';
 import isUndefined from 'lodash/isUndefined';
 import orderBy from 'lodash/orderBy';
 import uniqBy from 'lodash/uniqBy';
-import moment from 'moment-timezone';
 import { Subscription } from 'rxjs';
 import { BlockUiDirective } from '../../../../../utility/components/block-ui/block-ui.directive';
 import { EventLeagueComponent } from '../../../../../utility/components/event-league/event-league.component';
 import { TooltipComponent } from '../../../../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../../../../utility/components/tooltip/tooltip.model';
-import { DateTimeFormat, TVSRequestFilterBy } from '../../../../../utility/constants/config';
+import { TVSRequestFilterBy } from '../../../../../utility/constants/config';
 import { TEXT } from '../../../../../utility/constants/text';
 import { LogInfoDetail } from '../../../../../utility/models/log-info-detail.model';
 import { MatchModel } from '../../../../../utility/models/match.model';
@@ -54,7 +53,7 @@ import { WrongScoreInfoComponent } from './wrong-score-info/wrong-score-info.com
   selector: 'event-wrong-score',
   templateUrl: './event-wrong-score.component.html',
   styleUrls: ['./event-wrong-score.component.scss'],
-  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent, 
+  imports: [EventLeagueComponent, TvDetectionComponent, FilterWrongScoreComponent, WrongScoreInfoComponent, ConfirmWrongScoreComponent,
     CommonModule, FormsModule, TooltipComponent, BlockUiDirective, MainLogInfoComponent, RelatedEventsComponent, InfoSiteDBDownComponent],
   providers: [CreateMapService,  EventWrongScoreService, LogInfoService, SaveRequestService, ValidationService, WrongScoreService,
     RelatedEventService, EditRequestService, TvDetectionService]
@@ -101,7 +100,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   private readonly editRequestService = inject(EditRequestService);
   private readonly eventWrongScoreService = inject(EventWrongScoreService);
   private readonly createMapService = inject(CreateMapService);
-  
+
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -180,7 +179,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
   }
 
   actualTimeChange(actualTime: string) {
-    this.filterWrongScoreComponent.fromTimeComponent.time = moment(actualTime, DateTimeFormat.SIMPLE_TIME_FORMAT).format(DateTimeFormat.TIME_FORMAT);
+    this.filterWrongScoreComponent.fromTimeComponent.updateTime(actualTime);
     this.resetData();
     this.addRequestStore.changeSavingRequestStatus(true);
   }
@@ -251,7 +250,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
       wrongScoreModels: this.wrongScoreModels,
       infoSiteDBDownModel: this.primitiveProps.infoSiteDBDownModel
     };
-    
+
     this.eventWrongScoreService.updateInfoConfirm(this.confirmWrongScoreModel, updateInfoArgs);
     this.confirmWrongScoreModel = clone(this.confirmWrongScoreModel);
   }
@@ -278,7 +277,7 @@ export class EventWrongScoreComponent implements OnInit, OnChanges, AfterViewIni
     args.tvDetectionModel = this.tvDetectionModel;
     args.isVoided = this.isVoided;
     args.isMarkTicketSiteDbDown = this.confirmWrongScoreModel.isMarkTicketSiteDbDown;
-    
+
     return args;
   }
 

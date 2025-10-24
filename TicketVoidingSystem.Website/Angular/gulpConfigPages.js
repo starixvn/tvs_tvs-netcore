@@ -376,7 +376,7 @@ const configPages = [
   //archivedTicket,
   //dangerAccepted,
   //redCard,
-  //wrongScore,
+  wrongScore,
   //technicalError,
   // wrongHdp,
   // wrongOu,
@@ -388,7 +388,7 @@ const configPages = [
   //abnormalAccounts,
   //otherIssues,
   //notParticipate,
-  abnormalBet,
+  //abnormalBet,
   //duplicateTickets,
   //recoverTicket
   //reducedOver
