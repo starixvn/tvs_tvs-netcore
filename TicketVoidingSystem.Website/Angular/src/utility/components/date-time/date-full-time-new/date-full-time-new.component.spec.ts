@@ -94,6 +94,7 @@ describe('DateFullTimeNewComponent', () => {
     // Arrange
     const validTime = '10:30:00';
     component.isPasteTimeEvent = true;
+    component.onChangeModel = jest.fn();
 
     // Act
     component.onChangeTime(validTime);
