@@ -6,11 +6,14 @@ import { DateTimeFormat } from '../../../../../../utility/constants/config';
 import { TEXT } from '../../../../../../utility/constants/text';
 import { TestingModule } from '../../../../../../utility/modules/testing.module';
 import { StaticService } from '../../../../../../utility/services/static.service';
+import { CommonService } from '../../../../../../utility/services/common.service';
+import { MultipleSelectionService } from '../../../../../../utility/components/multiple-selection/multiple-selection.service';
 import { FilterModel } from '../../../../../component/filter/filter.model';
 import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
 import { FilterBetType } from '../../../../../events/wrong-hdp/app/event-wrong-hdp/models/filter-with-hdp.model';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { ValidationService } from '../services/validation.service';
+import { FilterWrongOuService } from './filter-wrong-ou.service';
 import { FilterWrongOuComponent } from './filter-wrong-ou.component';
 
 class Helper {
@@ -42,21 +45,21 @@ describe('FilterWrongOuComponent', () => {
   let component: FilterWrongOuComponent;
   let fixture: ComponentFixture<FilterWrongOuComponent>;
   let validationService: ValidationService;
-  let staticService: StaticService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestingModule],
       providers: [
         ValidationService,
-        StaticService,
-        HdpFilterBetTypeService
+        HdpFilterBetTypeService,
+        FilterWrongOuService,
+        CommonService,
+        MultipleSelectionService
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(FilterWrongOuComponent);
     validationService = fixture.debugElement.injector.get(ValidationService);
-    staticService = fixture.debugElement.injector.get(StaticService);
     component = fixture.componentInstance;
 
     // Set default input values

@@ -24,6 +24,7 @@ import { EventWrongOuService } from './event-wrong-ou.service';
 import { LogInfoService } from './log-info.service';
 import { SaveRequestService } from './save-request.service';
 import { ValidationService } from './validation.service';
+import { FilterWrongOuService } from '../filter-wrong-ou/filter-wrong-ou.service';
 
 describe('SaveRequestService', () => {
   let service: SaveRequestService;
@@ -62,7 +63,8 @@ describe('SaveRequestService', () => {
         HttpService,
         EventWrongOuService,
         AddRequestService,
-        StaticService
+        StaticService,
+        FilterWrongOuService
       ]
     });
 
