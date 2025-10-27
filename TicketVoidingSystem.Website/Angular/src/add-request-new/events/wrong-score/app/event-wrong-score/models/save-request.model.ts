@@ -4,7 +4,6 @@ import { TvDetectionModel } from "../../../../../component/tv-detection/tv-detec
 import { ValidationBusinessRuleArgs } from "./validation.model";
 
 export class SaveRequestArg extends ValidationBusinessRuleArgs {
-  isVoided: boolean;
   others: OthersModel;
   issueTypes: IssueTypes;
   tvDetectionModel: TvDetectionModel;
