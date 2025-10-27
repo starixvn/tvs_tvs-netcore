@@ -372,11 +372,11 @@ const configPages = [
   voidSingleBet,
   //voidRequest,
   //manageRequest,
-  voidByBetId
+  //voidByBetId
   //archivedTicket,
   //dangerAccepted,
   //redCard,
-  wrongScore,
+  //wrongScore,
   //technicalError,
   // wrongHdp,
   // wrongOu,
