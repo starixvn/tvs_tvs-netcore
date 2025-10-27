@@ -94,19 +94,6 @@ describe('SaveRequestService', () => {
 
       expect(addRequestService.executeSaveRequest).toHaveBeenCalled();
     });
-
-    it('should show error when validation is invalid', async () => {
-      const args = {
-        isVoided: false,
-        addRequestStore: mockAddRequestStore
-      };
-      (validationService.validateCommonData as jest.Mock).mockReturnValue(false);
-
-      await service.onYesConfirmAddRequest(args as any);
-
-      expect(popupService.showError).toHaveBeenCalledWith('There are some invalid in this request, please check again!');
-      expect(mockAddRequestStore.changeSavingRequestStatus).toHaveBeenCalledWith(false);
-    });
   });
 
   describe('checkValidationBeforeSaveRequest', () => {

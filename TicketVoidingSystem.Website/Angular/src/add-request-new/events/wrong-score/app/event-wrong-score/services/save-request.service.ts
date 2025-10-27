@@ -21,7 +21,7 @@ export class SaveRequestService {
 
   async onYesConfirmAddRequest(args: SaveRequestArg): Promise<void> {
     // validate again
-    const validation = args.isVoided ? { isValid: true } as ValidationBusinessRuleOutput : await this.checkValidationBeforeSaveRequest(args as ValidationBusinessRuleArgs);
+    const validation = args.filter.isVoided ? { isValid: true } as ValidationBusinessRuleOutput : await this.checkValidationBeforeSaveRequest(args as ValidationBusinessRuleArgs);
     if (validation.isValid) {
       await this.saveRequest(args);
     } else {
