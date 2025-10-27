@@ -40,14 +40,19 @@ public class InsertQueueServiceImp(
             return null;
         }
 
-        var firstParlayTickets = mergeTicketsForInsertQueue.FirstOrDefault(x => x.VoidingTypeId is VoidingTypeConstant.Parlay)?.TransId;
-        var firstSingleTableTickets = mergeTicketsForInsertQueue.FirstOrDefault(x => x.VoidingTypeId is not VoidingTypeConstant.Parlay)?.TransId;
+        var firstParlayTickets = mergeTicketsForInsertQueue.FirstOrDefault(x => IsVoidingTypeParlay(x.VoidingTypeId))?.TransId;
+        var firstSingleTableTickets = mergeTicketsForInsertQueue.FirstOrDefault(x => !IsVoidingTypeParlay(x.VoidingTypeId))?.TransId;
 
         return JsonSerializer.Serialize(new
         {
             SingleTransIds = firstSingleTableTickets is not null ? firstSingleTableTickets.ToString() : "",
             ParlayTransIds = firstParlayTickets is not null ? firstParlayTickets.ToString() : ""
         });
+    }
+
+    private static bool IsVoidingTypeParlay(int voidingTypeId)
+    {
+        return voidingTypeId is VoidingTypeConstant.Parlay or VoidingTypeConstant.HybridParlay;
     }
 
     private async Task UpdateStatusRequest(int requestId, IEnumerable<int> serverInsertQueue)

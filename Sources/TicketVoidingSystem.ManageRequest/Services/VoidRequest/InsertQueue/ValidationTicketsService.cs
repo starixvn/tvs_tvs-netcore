@@ -28,9 +28,10 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
         var validationTickets = new CheckTicketValidationOutput
         {
             VoidSingleTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.SingleTickets, query.RequestId, query.IssueTypeId),
-            VoidParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets, query.RequestId, query.IssueTypeId),
+            VoidParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets.Where(x => !x.IsHybrid), query.RequestId, query.IssueTypeId),
             VoidCricketTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CricketTickets, query.RequestId, query.IssueTypeId),
-            CancelCOTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId)
+            CancelCOTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId),
+            VoidHybridParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets.Where(x => x.IsHybrid), query.RequestId, query.IssueTypeId)
         };
         var ticketsInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
 
@@ -57,6 +58,7 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
         var cancelCOTickets = results.Where(x => x.ValidationType == 7);
         var voidSingleTickets14 = results.Where(x => x.ValidationType == 8);
         var voidParlayTickets14 = results.Where(x => x.ValidationType == 9);
+        var voidHybridParlayTickets = results.Where(x => x.VoidingTypeId == 10);
 
         var validationTickets = new CheckTicketValidationOutput
         {
@@ -65,7 +67,8 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
             VoidCricketTickets = voidCricketTickets,
             CancelCOTickets = cancelCOTickets,
             VoidSingleTickets14 = voidSingleTickets14,
-            VoidParlayTickets14 = voidParlayTickets14
+            VoidParlayTickets14 = voidParlayTickets14,
+            VoidHybridParlayTickets = voidHybridParlayTickets
         };
 
         var ticketsInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
