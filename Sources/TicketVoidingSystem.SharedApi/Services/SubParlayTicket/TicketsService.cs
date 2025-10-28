@@ -18,6 +18,8 @@ public interface TicketsService
 
     IList<TicketViewModel> GetTickets(IList<TicketModel> tickets);
 
+    IList<TicketViewModel> GetHybridTickets(IList<TicketModel> tickets, string transdesc);
+
     string[] GetComboName(QueryComboParlay query);
 }
 
@@ -59,7 +61,23 @@ public class TicketsServiceImp(
         return ticketViewModels;
     }
 
-    private string GetChoice(TicketModel item)
+    public IList<TicketViewModel> GetHybridTickets(IList<TicketModel> tickets, string transdesc)
+    {
+        var ticketHelper = new TicketHelper { IsShowOddsWithChoice = true };
+        var detailTickets = tickets
+            .Select(ITicket (t) => SetValue(t))
+            .ToList();
+
+        return new List<TicketViewModel>
+        {
+            new()
+            {
+                Choice = betListService.BuildChoiceHybridParlay(ticketHelper, detailTickets, transdesc, false)
+            }
+        };
+    }
+
+    private string GetChoice(TicketModel item, bool isHybrid = false)
     {
         var ticket = SetValue(item);
         var ticketHelper = new TicketHelper { IsShowOddsWithChoice = true };
@@ -90,7 +108,9 @@ public class TicketsServiceImp(
             BetCheck = item.BetCheck,
             TransDesc = item.TransDesc,
             ShowTime = item.ShowTime,
-            TransDate = item.TransDate
+            TransDate = item.TransDate,
+            Status = "lose",
+            EventDate = item.EventDate
         };
     }
 

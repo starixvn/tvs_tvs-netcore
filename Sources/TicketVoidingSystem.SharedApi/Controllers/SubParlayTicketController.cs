@@ -16,5 +16,8 @@ public class SubParlayTicketController(IMediator mediator) : ControllerBase
     public async Task<IActionResult> GetComboParlay(GetComboParlayRequest request) => Ok(await mediator.Send(request));
 
     [HttpPost]
+    public async Task<IActionResult> GetHybridParlay(GetHybridParlayRequest request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
     public async Task<IActionResult> GetSelectionsSMP(GetSelectionsSMPRequest request) => Ok(await mediator.Send(request));
 }

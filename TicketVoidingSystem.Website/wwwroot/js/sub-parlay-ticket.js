@@ -229,6 +229,62 @@ var mainTicketParlay = {
                 Helper.enableInput();
             }
         });
+    },
+
+    getHybridTickets: function (transId, transIndex, refNo, custId, transDesc) {
+        var param = {
+            RefNo: refNo,
+            TransDesc: transDesc
+        };
+
+        var subTicket = $(`#divEvent_${refNo}${transIndex}`);
+
+        if (subTicket.html() !== '') {
+            var display = subTicket.css('display');
+            if (display === 'block') {
+                subTicket.hide();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').show();
+            } else {
+                subTicket.show();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').hide();
+            }
+
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "api/SubParlayTicket/GetHybridParlay",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(param),
+            beforeSend: function () {
+                Helper.disableInput();
+            },
+            success: function (rs) {
+                var arrChoice = [];
+                for (var i = 0; i < rs.length; i++) {
+                    var row = rs[i];
+                    if (row.subTransId === "") {
+                        arrChoice.push('<div>' + row.choice + '</div>');
+                    }
+                    else {
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
+                    }
+                }
+
+                $(`#divEvent_${refNo}${transIndex}`).html(arrChoice.join('')).show();
+                $(`#combinationOfferName_${refNo}${transIndex}`).find('div').hide();
+            },
+            error: function () {
+            },
+            complete: function (e) {
+                if (parseInt(e.status) === 403) {
+                    Helper.showMsgBox('You are not authorized on this function.');
+                }
+                Helper.enableInput();
+            }
+        });
     }
 };
 
@@ -257,6 +313,12 @@ function showNewCombMP(subTransId, transIndex, refNo, handicap1, handicap2, betc
     else {
         mainTicketParlay.getSubTicketAndComboParlay(subTransId, transIndex, refNo, handicap1, handicap2, betcheck, betteam);
     }
+}
+
+function showBetBuilderPlus(transId, transIndex, refNo, custId, transDesc) {
+    const json = JSON.stringify(transDesc);
+    console.log(json);
+    mainTicketParlay.getHybridTickets(transId, transIndex, refNo, custId, json);
 }
 
 var Helper = {

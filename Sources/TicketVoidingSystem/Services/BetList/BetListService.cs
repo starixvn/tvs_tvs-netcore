@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Fanex.BetList.Core.Builder;
+using Fanex.BetList.Core.Builder.HybridParlayBuilder;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Factories;
 using Fanex.BetList.Core.Templates;
@@ -17,6 +18,8 @@ public interface BetListService
     Choice_Template BuildChoiceBlock(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
 
     string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
+
+    string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, string transdesc, bool isShowScoreMap);
 
     string BuildChoiceExcel(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
 
@@ -67,6 +70,8 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         }
     }
 
+    private static HyBridParlayBuilder HybridParlayBuilder => new();
+
     private static BetListExcelBuilder ExcelBuilder
     {
         get
@@ -84,6 +89,11 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
     public string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap)
     {
         return Builder.BuildChoice(ticket, ticketHelper, ticketData, isShowScoreMap);
+    }
+
+    public string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, string transdesc, bool isShowScoreMap)
+    {
+        return HybridParlayBuilder.Build(ticketHelper, detailsTickets, transdesc, isShowScoreMap);
     }
 
     public string BuildChoiceExcel(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap)

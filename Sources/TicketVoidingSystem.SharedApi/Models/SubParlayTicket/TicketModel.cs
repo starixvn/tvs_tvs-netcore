@@ -22,6 +22,10 @@ public class TicketModel
 
     public byte StatusId { get; set; }
 
+    public string Status { get; set; }
+
+    public DateTime EventDate { get; set; }
+
     public short LiveHomeScore { get; set; }
 
     public short LiveAwayScore { get; set; }
