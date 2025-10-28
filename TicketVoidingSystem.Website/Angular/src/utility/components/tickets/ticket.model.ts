@@ -22,6 +22,8 @@
     mainTransId: string;
     isMarked: boolean;
     siteDbGroupId: number;
+    isHybrid: boolean;
+    subTransId: string;
 
     constructor(item = null) {
         for (const key in item) {

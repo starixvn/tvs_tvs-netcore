@@ -93,7 +93,7 @@
                       </div>
                     </td>
                     <td><div>{{ticket.no}}</div></td>
-                    <td><div [class.betIdBorder]="ticket.isMarked === true" [innerHTML]="ticket.betId | sanitizeHtml"></div></td>
+                    <td><div [class.betIdBorder]="ticket.isMarked === true" [innerHTML]="(ticket.betId + (ticket.isHybrid ? '<br>SubId: (' + ticket.subTransId + ')' : '')) | sanitizeHtml"></div></td>
                     <td><div>{{ticket.transDate}}</div></td>
                     <td><div [innerHTML]="ticket.member | sanitizeHtml" title="{{ticket.member}}"></div></td>
                     <td><div [innerHTML]="ticket.betType | sanitizeHtml"></div></td>

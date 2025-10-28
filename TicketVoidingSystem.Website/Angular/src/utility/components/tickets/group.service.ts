@@ -37,6 +37,7 @@ export class GroupService {
   getTicketCricket(tickets: TicketModel[]): BetID[] {
     return tickets.filter(ticket => ticket.isChecked && ticket.isCricket).map(ticket => {
       return {
+        isHybrid: ticket.isHybrid,
         transId: ticket.value,
         siteDbGroupId: ticket.siteDbGroupId
       } as BetID;
@@ -46,6 +47,7 @@ export class GroupService {
   getTickets(tickets: TicketModel[]): BetID[] {
     return tickets.map(ticket => {
       return {
+        isHybrid: ticket.isHybrid,
         transId: ticket.value,
         siteDbGroupId: ticket.siteDbGroupId
       } as BetID;
@@ -55,6 +57,7 @@ export class GroupService {
   getEnableTickets(tickets: TicketModel[]): BetID[] {
     return tickets.filter(ticket => ticket.isChecked && !ticket.isDisable).map(ticket => {
       return {
+        isHybrid: ticket.isHybrid,
         transId: ticket.value,
         siteDbGroupId: ticket.siteDbGroupId
       } as BetID;

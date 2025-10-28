@@ -46,6 +46,8 @@ public class VoidTicketsCriteria : CriteriaBase
 
     public bool IsCheckTime { get; set; }
 
+    public bool IsCalledJackTimeHybridParlay { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

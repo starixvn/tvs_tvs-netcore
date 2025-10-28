@@ -119,6 +119,67 @@ var subTicketParlay = {
                 Helper.enableInput();
             }
         });
+    },
+
+    getHybridTickets: function (subTransId, transIndex, refNo, custId, transDesc) {
+        var param = {
+            RefNo: refNo,
+            TransDesc: transDesc
+        };
+
+        var subTicket = $(`#divEvent_${subTransId}`);
+
+        if (subTicket.html() !== '') {
+            var display = subTicket.css('display');
+            if (display === 'block') {
+                subTicket.hide();
+                $(`#dvFavorite_${subTransId}`).show();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').show();
+            } else {
+                subTicket.show();
+                $(`#dvFavorite_${subTransId}`).hide();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
+            }
+
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "api/SubParlayTicket/GetHybridParlay",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(param),
+            beforeSend: function () {
+                Helper.disableInput();
+            },
+            success: function (rs) {
+                var arrChoice = [];
+                for (var i = 0; i < rs.length; i++) {
+                    var row = rs[i];
+                    if (row.subTransId === "") {
+                        arrChoice.push('<div>' + row.choice + '</div>');
+                    }
+                    else if (BigInt(subTransId) === BigInt(row.subTransId)) {
+                        arrChoice.push('<div class="line"><div class="selected">' + row.choice + '</div></div>');
+                    } else {
+                        arrChoice.push('<div class="line">' + row.choice + '</div>');
+                    }
+                }
+
+                $(`#divEvent_${subTransId}`).html(arrChoice.join('')).show();
+                $(`#dvFavorite_${subTransId}`).hide();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
+            },
+            error: function () {
+            },
+            complete: function (e) {
+                if (parseInt(e.status) === 403) {
+                    Helper.showMsgBox('You are not authorized on this function.');
+                }
+                Helper.enableInput();
+            }
+        });
     }
 };
 
@@ -317,8 +378,12 @@ function showNewCombMP(subTransId, transIndex, refNo, handicap1, handicap2, betc
 
 function showBetBuilderPlus(transId, transIndex, refNo, custId, transDesc) {
     const json = JSON.stringify(transDesc);
-    console.log(json);
-    mainTicketParlay.getHybridTickets(transId, transIndex, refNo, custId, json);
+    if (transId > 0) {
+        subTicketParlay.getHybridTickets(transId, transIndex, refNo, custId, json);
+    }
+    else {
+        mainTicketParlay.getHybridTickets(transId, transIndex, refNo, custId, json);
+    }
 }
 
 var Helper = {

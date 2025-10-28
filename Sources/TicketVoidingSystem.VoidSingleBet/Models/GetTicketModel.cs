@@ -70,6 +70,8 @@ public class GetTicketModel
 
     public bool IsMixParlay { get; set; }
 
+    public bool IsHybrid { get; set; }
+
     public string SubStatus { get; set; }
 
     public long SubTransId { get; set; }

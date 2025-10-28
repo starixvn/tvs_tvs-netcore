@@ -19,7 +19,10 @@ public class AppSettingModel
     public string EnvironmentName { get; init; }
 
     public string IgnoreSiteDb { get; init; }
+
     public string JackTimeCashOutUrl { get; init; }
+
+    public string JackTimeHybridParlayUrl { get; init; }
 
     public FanexMailService FanexMailService { get; init; }
 

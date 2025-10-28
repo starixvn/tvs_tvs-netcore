@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 
 namespace TicketVoidingSystem.Services;
 
@@ -43,6 +43,7 @@ public static class AppSettingService
             OWPUrl = configuration.GetValue<string>(nameof(AppSettingModel.OWPUrl)),
             EnvironmentName = configuration.GetValue<string>(nameof(AppSettingModel.EnvironmentName)),
             JackTimeCashOutUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeCashOutUrl)),
+            JackTimeHybridParlayUrl = configuration.GetValue<string>(nameof(AppSettingModel.JackTimeHybridParlayUrl)),
             LinkedLogUrl = configuration.GetValue<string>(nameof(AppSettingModel.LinkedLogUrl)),
             FanexMailService = new FanexMailService
             {
