@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
-using TicketVoidingSystem.Models.JackTimeHybridParlay;
+using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.Services;
 

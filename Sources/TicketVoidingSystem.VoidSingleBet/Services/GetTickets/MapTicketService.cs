@@ -57,7 +57,6 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         viewModel.SubTransId = item.SubTransId.ToString();
         viewModel.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
         viewModel.Currency = item.CurrencyName;
-        viewModel.IsHybrid = true;
 
         viewModel.SiteDbGroupId = item.SiteDbGroupId;
         return viewModel;
@@ -106,7 +105,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
     private string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, GetTicketModel item)
     {
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        if (!item.IsMixParlay || !item.IsHybrid)
+        if (!item.IsMixParlay)
         {
             return mainChoice;
         }

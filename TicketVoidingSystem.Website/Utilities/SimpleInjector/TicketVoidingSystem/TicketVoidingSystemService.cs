@@ -4,6 +4,7 @@ using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.Services.Excel;
 using TicketVoidingSystem.Services.JackTimeCashOut;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.Letstalk;
 using TicketVoidingSystem.Services.Letstalk.GroupAbnormalBetRequest;
 using TicketVoidingSystem.Services.Letstalk.GroupTicketListing;
@@ -53,6 +54,10 @@ public static class TicketVoidingSystemService
 
         //NetPosition
         services.AddScoped<NetPositionService, NetPositionServiceImp>();
+
+        //Hybrid Parlay
+        services.AddTransient<JackTimeHybridParlayService, JackTimeHybridParlayServiceImp>();
+        services.AddTransient<HybridParlayTicketService, HybridParlayTicketServiceImp>();
 
         //Send Email
         services.AddSingleton<SubjectLabelsService, SubjectVoidImp>();
