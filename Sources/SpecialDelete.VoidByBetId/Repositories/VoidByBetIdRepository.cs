@@ -13,7 +13,7 @@ public interface VoidByBetIdRepository
 {
     Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query);
 
-    Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
+    Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay);
 }
 
 public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
@@ -34,9 +34,9 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
+    public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
     {
-        var criteria = CreateVoidTicketsCriteria(query);
+        var criteria = CreateVoidTicketsCriteria(query, isCalledJackTimeHybridParlay);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
@@ -95,7 +95,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
         return (int)(matchIds.Count() == 1 ? matchIds.First() : 0)!;
     }
 
-    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
+    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
     {
         return new VoidTicketsCriteria
         {
@@ -106,6 +106,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
             ReasonSC = query.ReasonSC,
             Ip = sessionService.GetClientIp(),
             AbnormalBetType = query.AbnormalBetType,
+            IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay
         };
     }
 }

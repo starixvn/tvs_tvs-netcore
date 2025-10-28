@@ -16,11 +16,16 @@ public interface HybridParlayTicketService
 public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHybridParlayService, OnlineServerRepository.OnlineServerRepository onlineServerRepository, LoggingService loggingService)
     : HybridParlayTicketService
 {
-    public async Task<bool> Execute(IEnumerable<BetId> hybridParlayBetIds, bool isVoid)
+    public async Task<bool> Execute(IEnumerable<BetId> hybridParlayTickets, bool isVoid)
     {
         try
         {
-            var hybridParlayTransIds = string.Join(",", hybridParlayBetIds.Select(x => x.TransId));
+            if (!hybridParlayTickets.Any())
+            {
+                return false;
+            }
+
+            var hybridParlayTransIds = string.Join(",", hybridParlayTickets.Select(x => x.TransId));
             var ticketsDetail = await GetTicketsDetail(hybridParlayTransIds);
             var request = CreateRequest(ticketsDetail);
             return await jackTimeHybridParlayService.Execute(request, isVoid);
@@ -31,6 +36,7 @@ public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHy
             return false;
         }
     }
+
 
     public async Task<IEnumerable<HybridParlayTicketModel>> GetTicketsDetail(string transIds)
     {

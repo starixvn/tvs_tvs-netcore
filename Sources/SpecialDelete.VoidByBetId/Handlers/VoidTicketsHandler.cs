@@ -5,6 +5,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.NetPosition;
 using TicketVoidingSystem.Utilities;
 
@@ -18,7 +19,8 @@ public class VoidTicketsHandler(
     LoggingService loggingService,
     ResultCacheService resultCacheService,
     CashOutApiService cashOutApiService,
-    AfterVoidService afterVoidService)
+    AfterVoidService afterVoidService,
+    HybridParlayTicketService hybridParlayTicketService)
     : IRequestHandler<VoidTicketsRequest, List<Result>>
 {
     public async Task<List<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
@@ -32,6 +34,7 @@ public class VoidTicketsHandler(
         await resultCacheService.SetVoidResultsCache(request.Guid, results);
 
         var warningCrickets = string.Empty;
+        var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(request.Tickets.Union(request.TransIdCrickets).Where(t => t.IsHybrid), true);
         var callNetPosition = await netPositionService.UpdateNetPosition(request.TransIdCrickets, NetPositionConstant.ActionVoid);
         if (!callNetPosition)
         {
@@ -45,7 +48,7 @@ public class VoidTicketsHandler(
         }
         else
         {
-            results = await ResultsVoidTicket(request, warningCrickets);
+            results = await ResultsVoidTicket(request, warningCrickets, isCalledJackTimeHybridParlay);
         }
 
         await resultCacheService.SetVoidResultsCache(request.Guid, results);
@@ -53,10 +56,10 @@ public class VoidTicketsHandler(
         return results;
     }
 
-    private async Task<List<Result>> ResultsVoidTicket(VoidTicketsQuery query, string warningCrickets)
+    private async Task<List<Result>> ResultsVoidTicket(VoidTicketsQuery query, string warningCrickets, bool isCalledJackTimeHybridParlay)
     {
         var results = new List<Result>();
-        var model = await handleService.VoidTickets(query);
+        var model = await handleService.VoidTickets(query, isCalledJackTimeHybridParlay);
         results.AddRange(await HandlerVoidedTickets(query, model, warningCrickets));
         results.AddRange(await CheckVoidTicketsFail(model));
 

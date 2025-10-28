@@ -8,7 +8,7 @@ namespace SpecialDelete.VoidByBetId.Services.VoidTickets;
 
 public interface HandleService
 {
-    Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
+    Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay);
 
     IEnumerable<Result> CreateWarningMessage(string warningCrickets);
 }
@@ -18,12 +18,12 @@ public class HandleServiceImp(
     LoggingService loggingService)
     : HandleService
 {
-    public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
+    public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
     {
         VoidTicketsModel model;
         try
         {
-            model = await repository.VoidTickets(query);
+            model = await repository.VoidTickets(query, isCalledJackTimeHybridParlay);
         }
         catch (Exception exception)
         {

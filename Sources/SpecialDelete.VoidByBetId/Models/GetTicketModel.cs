@@ -52,6 +52,8 @@ public class GetTicketModel
     public DateTime EndTime { get; set; }
     public int SiteDbGroupId { get; set; }
     public bool SecAcceptFlag { get; set; }
+    public string SubTransId { get; set; }
+    public bool IsHybrid { get; set; }
 }
 
 public class GetTicketValidation

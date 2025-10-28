@@ -43,4 +43,8 @@ public class TicketViewModel
     public string SecondAcceptFlag { get; set; } = "";
 
     public long BetdaqId { get; set; }
+    
+    public string SubTransId { get; set; }
+
+    public bool IsHybrid { get; set; }
 }
