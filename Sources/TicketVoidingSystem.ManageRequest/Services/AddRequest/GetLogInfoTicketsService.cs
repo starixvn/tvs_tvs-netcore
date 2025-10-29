@@ -72,7 +72,7 @@ public class GetLogInfoTicketsServiceImp(
                 totalSingle++;
             }
 
-            if (!hasSettled && ticket.IsSettledTicket())
+            if (!hasSettled && ticket.IsSettledTicket() && !ticket.IsCashOutTicket())
             {
                 hasSettled = true;
             }
