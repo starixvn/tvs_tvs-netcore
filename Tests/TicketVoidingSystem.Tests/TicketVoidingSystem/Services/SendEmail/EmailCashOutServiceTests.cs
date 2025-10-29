@@ -2,9 +2,11 @@
 using Fanex.MailDeliver.MailClient.Model;
 using NSubstitute;
 using TicketVoidingSystem.Models.SendEmail;
+using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services.SendEmail;
 using TicketVoidingSystem.Services.SendEmail.Void;
+using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.Utilities;
 using Xunit;
 
@@ -16,13 +18,15 @@ public class EmailCashOutServiceTests
     private readonly EmailCashOutServiceImp service;
     private readonly SitesEmailService sitesEmailService;
     private readonly VoidEmailContentService voidEmailContentService;
+    private readonly SpecialPlatformService specialPlatformService;
 
     public EmailCashOutServiceTests()
     {
         sitesEmailService = Substitute.For<SitesEmailService>();
         emailSimpleService = Substitute.For<EmailSimpleService>();
         voidEmailContentService = Substitute.For<VoidEmailContentService>();
-        service = new EmailCashOutServiceImp(sitesEmailService, emailSimpleService, voidEmailContentService);
+        specialPlatformService = Substitute.For<SpecialPlatformService>();
+        service = new EmailCashOutServiceImp(sitesEmailService, emailSimpleService, voidEmailContentService, specialPlatformService);
     }
 
     [Fact]
@@ -38,6 +42,7 @@ public class EmailCashOutServiceTests
         voidEmailContentService.Create(MessagePackCloner.Clone(mailVoidViewModel), Arg.Any<SiteEmail>(),
                 Arg.Any<IEnumerable<TicketEmailModel>>(), EmailGroup.CashOut, true)
             .ReturnsForAnyArgs(new MailRecord());
+        specialPlatformService.RemoveCheckStatement(Arg.Any<Message>()).ReturnsForAnyArgs(new Message());
 
         // Act
         _ = service.Send(mailVoidViewModel, sites, tickets, true);
