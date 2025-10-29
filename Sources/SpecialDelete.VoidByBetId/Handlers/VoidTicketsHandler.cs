@@ -34,7 +34,8 @@ public class VoidTicketsHandler(
         await resultCacheService.SetVoidResultsCache(request.Guid, results);
 
         var warningCrickets = string.Empty;
-        var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(request.Tickets.Union(request.TransIdCrickets).Where(t => t.IsHybrid), true);
+        var isCalledJackTimeHybridParlay = await hybridParlayTicketService
+            .Execute(request.Tickets.Union(request.TransIdCrickets).Where(t => t.IsHybrid), HybridParlayType.VoidMain);
         var callNetPosition = await netPositionService.UpdateNetPosition(request.TransIdCrickets, NetPositionConstant.ActionVoid);
         if (!callNetPosition)
         {

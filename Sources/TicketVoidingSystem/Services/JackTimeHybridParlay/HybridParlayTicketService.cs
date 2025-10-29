@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.JackTimeHybridParlay;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.JackTimeHybridParlay;
@@ -10,13 +11,17 @@ namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
 public interface HybridParlayTicketService
 {
-    Task<bool> Execute(IEnumerable<BetId> hybridParlayBetIds, bool isVoid);
+    Task<bool> Execute(IEnumerable<BetId> hybridParlayBetIds, HybridParlayType type);
 }
 
-public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHybridParlayService, OnlineServerRepository.OnlineServerRepository onlineServerRepository, LoggingService loggingService)
+public class HybridParlayTicketServiceImp(
+    JackTimeHybridParlayService jackTimeHybridParlayService,
+    OnlineServerRepository.OnlineServerRepository onlineServerRepository,
+    LoggingService loggingService,
+    LegOddsService legOddsService)
     : HybridParlayTicketService
 {
-    public async Task<bool> Execute(IEnumerable<BetId> hybridParlayTickets, bool isVoid)
+    public async Task<bool> Execute(IEnumerable<BetId> hybridParlayTickets, HybridParlayType type)
     {
         try
         {
@@ -28,12 +33,27 @@ public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHy
             var hybridParlayTransIds = string.Join(",", hybridParlayTickets.Select(x => x.TransId));
             var ticketsDetail = await GetTicketsDetail(hybridParlayTransIds);
             var request = CreateRequest(ticketsDetail);
-            return await jackTimeHybridParlayService.Execute(request, isVoid);
+            var logDate = DateTimeOffset.Now.DateTime;
+            var isCalled = await jackTimeHybridParlayService.Execute(request, type);
+            if (IsNotUpdateLegOdds(type))
+            {
+                return true; // No need to call leg odds service for voiding or recovering main bets & don't care status call JackTime
+            }
+
+            if (isCalled)
+            {
+                var mainTransIds = string.Join(",", ticketsDetail.Select(x => x.MainTransId));
+                var result = await legOddsService.Execute(ticketsDetail.First().SubMatchId, mainTransIds, logDate);
+
+                return result.IsSuccessful;
+            }
+
+            return false;
         }
         catch (Exception e)
         {
             await loggingService.ErrorAsync($"{nameof(HybridParlayTicketService)}.{nameof(Execute)} Error", e);
-            return false;
+            return IsNotUpdateLegOdds(type);
         }
     }
 
@@ -63,5 +83,10 @@ public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHy
         {
             VoidBetInfos = voidBetInfos
         };
+    }
+
+    public static bool IsNotUpdateLegOdds(HybridParlayType type)
+    {
+        return type is HybridParlayType.VoidMain or HybridParlayType.RecoverMain;
     }
 }

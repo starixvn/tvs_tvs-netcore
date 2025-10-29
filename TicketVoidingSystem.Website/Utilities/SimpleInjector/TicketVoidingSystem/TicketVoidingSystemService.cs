@@ -58,6 +58,7 @@ public static class TicketVoidingSystemService
         //Hybrid Parlay
         services.AddTransient<JackTimeHybridParlayService, JackTimeHybridParlayServiceImp>();
         services.AddTransient<HybridParlayTicketService, HybridParlayTicketServiceImp>();
+        services.AddTransient<LegOddsService, LegOddsServiceImp>();
 
         //Send Email
         services.AddSingleton<SubjectLabelsService, SubjectVoidImp>();

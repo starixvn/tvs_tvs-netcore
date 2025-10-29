@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using Polly;
@@ -12,28 +13,29 @@ namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
 public interface LegOddsService
 {
-    Task<bool> Execute(int matchId, string mainTransId, DateTime triggerTime);
+    Task<Result> Execute(int matchId, string mainTransId, DateTime triggerTime);
 }
 
-public class LegOddsServiceImp(DynamicRepository repository, LoggingService loggingService)
+public class LegOddsServiceImp(IDynamicRepository repository, LoggingService loggingService)
     : LegOddsService
 {
-    public async Task<bool> Execute(int matchId, string transIds, DateTime LogDate)
+    public async Task<Result> Execute(int matchId, string transIds, DateTime LogDate)
     {
         try
         {
             var legOdds = await RetryForGetLegOdds(matchId, transIds, LogDate);
             if (legOdds.Any())
             {
-                return true;
+                return await UpdateLegOdds(legOdds);
             }
 
-            return false;
+            return BuildErrorResult("Cannot get legOdds. Please try again!");
         }
         catch (Exception e)
         {
             await loggingService.ErrorAsync(e.Message, e);
-            return false;
+
+            return BuildErrorResult(e.Message);
         }
     }
 
@@ -67,13 +69,22 @@ public class LegOddsServiceImp(DynamicRepository repository, LoggingService logg
         return await repository.FetchAsync<LegOddsModel>(criteria);
     }
 
-    public async Task<Result> UpdateLegOdds(int matchId, string transIds, DateTime LogDate)
+    public async Task<Result> UpdateLegOdds(IEnumerable<LegOddsModel> legOdds)
     {
         var criteria = new HybridParlayUpdateLegOddsCriteria
         {
-            LegOddsJson = ""
+            LegOddsJson = JsonSerializer.Serialize(legOdds)
         };
 
         return await repository.GetAsync<Result>(criteria);
+    }
+
+    public static Result BuildErrorResult(string errorMsg)
+    {
+        return new Result
+        {
+            ErrorMsg = errorMsg,
+            ErrorCode = 1
+        };
     }
 }

@@ -16,7 +16,7 @@ public class HybridParlayVoidBetInfo
 public class BetModel
 {
     public string TransId { get; set; }
-    public string CustId { get; set; }
+    public int CustId { get; set; }
 }
 
 public class LegModel
@@ -32,6 +32,6 @@ public class WayModel
 
 public class MarketModel
 {
-    public string MatchId { get; set; }
+    public int MatchId { get; set; }
     public string MarketId { get; set; }
 }
