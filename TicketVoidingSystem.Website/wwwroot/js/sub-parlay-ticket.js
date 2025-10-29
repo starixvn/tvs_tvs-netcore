@@ -124,7 +124,8 @@ var subTicketParlay = {
     getHybridTickets: function (subTransId, transIndex, refNo, custId, transDesc) {
         var param = {
             RefNo: refNo,
-            TransDesc: transDesc
+            TransDesc: transDesc,
+            subTransId: subTransId
         };
 
         var subTicket = $(`#divEvent_${subTransId}`);
@@ -154,20 +155,9 @@ var subTicketParlay = {
                 Helper.disableInput();
             },
             success: function (rs) {
-                var arrChoice = [];
-                for (var i = 0; i < rs.length; i++) {
-                    var row = rs[i];
-                    if (row.subTransId === "") {
-                        arrChoice.push('<div>' + row.choice + '</div>');
-                    }
-                    else if (BigInt(subTransId) === BigInt(row.subTransId)) {
-                        arrChoice.push('<div class="line"><div class="selected">' + row.choice + '</div></div>');
-                    } else {
-                        arrChoice.push('<div class="line">' + row.choice + '</div>');
-                    }
-                }
+                var arrChoice = rs[0].choice;
 
-                $(`#divEvent_${subTransId}`).html(arrChoice.join('')).show();
+                $(`#divEvent_${subTransId}`).html(arrChoice).show();
                 $(`#dvFavorite_${subTransId}`).hide();
                 $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
             },
@@ -330,7 +320,7 @@ var mainTicketParlay = {
                         arrChoice.push('<div>' + row.choice + '</div>');
                     }
                     else {
-                        arrChoice.push('<div class="line">' + row.choice + '</div>');
+                        arrChoice.push(row.choice);
                     }
                 }
 

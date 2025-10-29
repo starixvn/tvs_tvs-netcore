@@ -37,7 +37,6 @@ public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHy
         }
     }
 
-
     public async Task<IEnumerable<HybridParlayTicketModel>> GetTicketsDetail(string transIds)
     {
         var criteria = new HybridParlayTicketCriteria()

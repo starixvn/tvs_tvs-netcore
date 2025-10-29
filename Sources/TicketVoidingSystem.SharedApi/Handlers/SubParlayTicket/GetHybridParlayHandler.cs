@@ -18,6 +18,6 @@ public class GetHybridParlayHandler(TicketsService ticketsService, IMapper mappe
     {
         var tickets = await ticketsService.GetTickets(message.RefNo);
 
-        return ticketsService.GetHybridTickets(tickets, message.Transdesc);
+        return ticketsService.GetHybridTickets(tickets, message.Transdesc, message.SubTransId);
     }
 }
