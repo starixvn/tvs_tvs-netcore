@@ -55,7 +55,7 @@ export class VoidPageService {
       } as BasicRequestInfo;
     }
 
-    if (StaticService.isTechnicalError(requestDetail.request.issueTypeId)) {
+    if (StaticService.isTechnicalError(requestDetail.request.issueTypeId) || StaticService.isSecondTeamBatting(requestDetail.request.issueTypeId)) {
       return {
         id: 1,
         matchId: requestDetail.technicalErrorModel.matchId,
@@ -144,6 +144,10 @@ export class VoidPageService {
     if (StaticService.isReducedOver(requestDetail.request.issueTypeId) ||
       StaticService.isAbandoned(requestDetail.request.issueTypeId)) {
       query.reducedOverModels = MappingModelStaticService.buildReducedOverGetLogInfoModel(requestDetail.reducedOverModels);
+    }
+
+    if (StaticService.isSecondTeamBatting(requestDetail.request.issueTypeId)) {
+      query.secondTeamBattingModel = MappingModelStaticService.buildTechnicalErrorGetLogInfoModel(requestDetail.technicalErrorModel);
     }
 
     const viewModel = await this.commonService.getLogInfo(query);

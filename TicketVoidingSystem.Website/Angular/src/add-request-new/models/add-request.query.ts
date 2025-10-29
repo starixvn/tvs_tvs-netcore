@@ -72,6 +72,7 @@ export class AddRequestQuery {
   otherIssuesInfo: OtherIssuesModel;
   technicalErrorInfo: TechnicalErrorModel;
   matchEarlyCompletedInfo: OtherIssuesModel;
+  secondTeamBattingInfo: TechnicalErrorModel;
 
   transInfoJson: string;
   unMarkTransIds: string;
@@ -110,4 +111,5 @@ export class GetLogInfoQuery {
   otherIssuesModel?: OtherIssuesGetLogInfoQuery;
   technicalErrorModel?: TechnicalErrorGetLogInfoQuery;
   matchEarlyCompletedModel?: OtherIssuesGetLogInfoQuery;
+  secondTeamBattingModel?: TechnicalErrorGetLogInfoQuery;
 }

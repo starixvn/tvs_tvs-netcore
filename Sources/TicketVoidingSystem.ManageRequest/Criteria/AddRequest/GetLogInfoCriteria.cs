@@ -50,6 +50,8 @@ public class GetLogInfoCriteria : OnlineServerCriteriaBase
     public string OtherIssuesInfo { get; set; }
 
     public string? MatchEarlyCompletedInfo { get; set; }
+    
+    public string? SecondTeamBattingInfo { get; set; }
 
     public string OnlineServerId { get; set; }
 

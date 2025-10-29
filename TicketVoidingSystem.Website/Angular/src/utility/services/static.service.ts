@@ -50,11 +50,17 @@ export class StaticService {
       isWrongMarketOffered: StaticService.isWrongMarketOffered(issueTypeId),
       isOtherIssues: StaticService.isOtherIssues(issueTypeId),
       isTechnicalError: StaticService.isTechnicalError(issueTypeId),
-      isMatchEarlyCompleted: StaticService.isMatchEarlyCompleted(issueTypeId)
+      isMatchEarlyCompleted: StaticService.isMatchEarlyCompleted(issueTypeId),
+      isSecondTeamBatting: StaticService.isSecondTeamBatting(issueTypeId)
     }
 
     return result;
   }
+
+  static isSecondTeamBatting(issueTypeId: string | number): boolean {
+    return issueTypeId?.toString() === IssueTypeConstant.SECOND_TEAM_BATTING;
+  }
+
   static isAbnormalBet(issueTypeId: string | number): boolean {
     return issueTypeId?.toString() === IssueTypeConstant.ABNORMAL_BET;
   }
@@ -219,7 +225,7 @@ export class StaticService {
       return requestDetail.wrongOfferedNameModel.subIssueTypeId;
     } else if (this.isOtherIssues(requestDetail.request.issueTypeId) || this.isMatchEarlyCompleted(requestDetail.request.issueTypeId)) {
       return requestDetail.otherIssuesModel.subIssueTypeId;
-    } else if (this.isTechnicalError(requestDetail.request.issueTypeId)) {
+    } else if (this.isTechnicalError(requestDetail.request.issueTypeId) || this.isSecondTeamBatting(requestDetail.request.issueTypeId)) {
       return requestDetail.technicalErrorModel.subIssueTypeId;
     } else {
       return requestDetail.event.subIssueTypeId;
@@ -296,7 +302,8 @@ export class StaticService {
       IssueTypeConstant.WRONG_SCORE,
       IssueTypeConstant.WRONG_MARKET_OFFERED,
       IssueTypeConstant.TECHNICAL_ERROR,
-      IssueTypeConstant.MATCH_EARLY_COMPLETED
+      IssueTypeConstant.MATCH_EARLY_COMPLETED,
+      IssueTypeConstant.SECOND_TEAM_BATTING
     ];
 
     return issueTypeHaveCancelCashOutTicket.includes(issueTypeId?.toString());

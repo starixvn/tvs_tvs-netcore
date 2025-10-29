@@ -20,7 +20,8 @@ export type CheckIssueTypeObjectType = {
   isRecoverTicket: boolean,
   isWrongOfferedName: boolean,
   isOtherIssues: boolean,
-  isWrongMarketOffered: boolean
+  isWrongMarketOffered: boolean,
   isTechnicalError: boolean,
-  isMatchEarlyCompleted: boolean
+  isMatchEarlyCompleted: boolean,
+  isSecondTeamBatting: boolean
 }

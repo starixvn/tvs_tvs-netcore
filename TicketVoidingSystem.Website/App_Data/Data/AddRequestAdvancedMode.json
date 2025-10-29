@@ -27312,6 +27312,45 @@
         }
       ],
       "Type": 1,
+      "BetTypes": "9559"
+    },
+    {
+      "Selections": [
+        {
+          "Items": [
+            {
+              "Name": "All",
+              "Value": "All"
+            },
+            {
+              "Name": "Yes",
+              "Value": "y"
+            },
+            {
+              "Name": "No",
+              "Value": "n"
+            }
+          ],
+          "Name": "Yes/No",
+          "Value": "All",
+          "XmlAttribute": "Team"
+        }
+      ],
+      "Inputs": [
+        {
+          "Name": "Value",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "FirstValue"
+        },
+        {
+          "Name": "Wicket",
+          "Value": "",
+          "IsMultiple": true,
+          "XmlAttribute": "_XXX"
+        }
+      ],
+      "Type": 1,
       "BetTypes": "9560"
     },
     {

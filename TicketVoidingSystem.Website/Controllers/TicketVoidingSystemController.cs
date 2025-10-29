@@ -353,4 +353,15 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
         ViewBag.IssueTypeId = IssueTypeConstant.Abandoned;
         return View("~/wwwroot/dist/ticket-voiding-system/reduced-over/index.cshtml");
     }
+
+    [HttpGet]
+    [Route("Add")]
+    [Route("Add/Index")]
+    [Route("Edit/{id}")]
+    [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.SecondTeamBatting, Policy = Constant.Policy.Read)]
+    public ActionResult SecondTeamBatting(int id)
+    {
+        ViewBag.IssueTypeId = IssueTypeConstant.SecondTeamBatting;
+        return View("~/wwwroot/dist/ticket-voiding-system/technical-error/index.cshtml");
+    }
 }

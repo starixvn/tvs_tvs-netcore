@@ -55,6 +55,7 @@ export class EventBaseService {
     [IssueTypeConstant.ABNORMAL_BET]: (model: RequestModel): AbnormalBetModel => model.abnormalBetModel,
     [IssueTypeConstant.DUPLICATE_TICKETS]: (model: RequestModel): DuplicateTicketsModel => model.duplicateTicketsModel,
     [IssueTypeConstant.RECOVER_TICKET]: (model: RequestModel): RecoverTicketModel => model.recoverTicketModel,
+    [IssueTypeConstant.SECOND_TEAM_BATTING]: (model: RequestModel): TechnicalErrorModel => model.technicalErrorModel
   };
 
   backToAccessDeniedPage() {

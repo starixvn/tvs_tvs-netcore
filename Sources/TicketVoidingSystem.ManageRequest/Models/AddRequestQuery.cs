@@ -83,4 +83,6 @@ public class AddRequestQuery
     public OtherIssuesViewModel? OtherIssuesInfo { get; set; }
 
     public OtherIssuesViewModel? MatchEarlyCompletedInfo { get; set; }
+
+    public TechnicalErrorViewModel? SecondTeamBattingInfo { get; set; }
 }

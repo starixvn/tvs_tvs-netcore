@@ -131,6 +131,11 @@ public static class IssueTypeFunctionKeysConstant
                     {
                         FunctionKey = SpecialDeleteFunctionKeys.MatchEarlyCompleted,
                         IssueType = new IssueType { IssueTypeId = IssueTypeConstant.MatchEarlyCompleted, IssueTypeName = "Match Early Completed" }
+                    },
+                    new()
+                    {
+                        FunctionKey = SpecialDeleteFunctionKeys.SecondTeamBatting,
+                        IssueType = new IssueType { IssueTypeId = IssueTypeConstant.SecondTeamBatting, IssueTypeName = "Second Team Batting" }
                     }
                 };
 

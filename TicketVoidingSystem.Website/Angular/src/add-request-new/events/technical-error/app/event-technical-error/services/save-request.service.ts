@@ -89,11 +89,20 @@ export class SaveRequestService {
     query.remark = argTechnicalError.others.remark;
 
     if (!argTechnicalError.filter.isVoided) {
-      query.technicalErrorInfo = this.eventTechnicalErrorService.getTechnicalErrorModel(Number(argTechnicalError.filter.subIssueTypeId), argTechnicalError.logInfoEvent);
+      this.updateModelInfoAddRequestQuery(argTechnicalError, query);
       query.siteDBDownInfoJson = argTechnicalError.confirmAddRequest.isMarkTicketSiteDbDown
         ? argTechnicalError.primitiveProps.infoSiteDBDownModel?.siteDBDownInfoJson : null;
     }
 
     return query;
+  }
+
+  private updateModelInfoAddRequestQuery(argTechnicalError: SaveRequestArg, query: AddRequestQuery): void {
+    if(StaticService.isSecondTeamBatting(argTechnicalError.filter.issueTypeId)) {
+      query.secondTeamBattingInfo = this.eventTechnicalErrorService.getTechnicalErrorModel(Number(argTechnicalError.filter.subIssueTypeId), argTechnicalError.logInfoEvent);
+    }
+    else {
+      query.technicalErrorInfo = this.eventTechnicalErrorService.getTechnicalErrorModel(Number(argTechnicalError.filter.subIssueTypeId), argTechnicalError.logInfoEvent);
+    }
   }
 }

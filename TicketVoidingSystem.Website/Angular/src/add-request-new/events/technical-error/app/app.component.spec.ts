@@ -58,6 +58,7 @@ describe('AppComponent', () => {
     });
 
     it('should set issueTypeId to TECHNICAL_ERROR constant', () => {
+      component.ngOnInit();
       expect(component.issueTypeId).toBe(IssueTypeConstant.TECHNICAL_ERROR);
       expect(component.issueTypeId).toBe('24');
     });

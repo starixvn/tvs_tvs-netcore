@@ -46,6 +46,7 @@ public class EditRequestCommand : NonQueryCommand
     public string WrongOfferedNameInfo { get; set; }
     public string OtherIssuesInfo { get; set; }
     public string? MatchEarlyCompletedInfo { get; set; }
+    public string? SecondTeamBattingInfo { get; set; }
 
     public override string GetSettingKey() => "TicketVoiding_Request_Update";
 

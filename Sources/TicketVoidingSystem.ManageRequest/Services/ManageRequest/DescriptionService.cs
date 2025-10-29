@@ -37,7 +37,8 @@ public class DescriptionServiceImp(DescriptionElementService elementService) : D
                 {IssueTypeConstant.WrongOddsSportsBook, BuildVoidTimeMatchLeague},
                 {IssueTypeConstant.WrongOfferedName, BuildMatchLeague},
                 {IssueTypeConstant.OtherIssues, BuildMatchLeague},
-                {IssueTypeConstant.MatchEarlyCompleted, BuildMatchLeague}
+                {IssueTypeConstant.MatchEarlyCompleted, BuildMatchLeague},
+                {IssueTypeConstant.SecondTeamBatting, BuildMatchLeague}
             };
 
         matchingFunctions.TryGetValue(item.IssueTypeId, out var function);

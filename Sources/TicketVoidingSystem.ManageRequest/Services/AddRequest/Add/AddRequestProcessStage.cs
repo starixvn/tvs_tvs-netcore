@@ -76,6 +76,7 @@ public class AddRequestProcessStageImp( // NOSONAR
         command.WrongOfferedNameInfo = query.WrongOfferedNameInfo?.ToEventWrongOfferedNameXml();
         command.OtherIssuesInfo = query.OtherIssuesInfo?.ToEventOtherIssuesXml();
         command.MatchEarlyCompletedInfo = query.MatchEarlyCompletedInfo?.ToEventMatchEarlyCompletedXml();
+        command.SecondTeamBattingInfo = query.SecondTeamBattingInfo?.ToEventTechnicalErrorXml();
 
         await repository.ExecuteAsync(command);
         if (query.IssueTypeId.IsAbnormalAccount() && query.ActionId is ActionVoidRequestConstant.AutoVoidAllInstantWithPolicyId)
@@ -113,6 +114,7 @@ public class AddRequestProcessStageImp( // NOSONAR
             IssueTypeConstant.WrongOfferedName => query.WrongOfferedNameInfo?.MatchId.ToString(),
             IssueTypeConstant.OtherIssues => query.OtherIssuesInfo?.MatchId.ToString(),
             IssueTypeConstant.MatchEarlyCompleted => query.MatchEarlyCompletedInfo?.MatchId.ToString(),
+            IssueTypeConstant.SecondTeamBatting => query.SecondTeamBattingInfo?.MatchId.ToString(),
             _ => string.Empty
         };
     }

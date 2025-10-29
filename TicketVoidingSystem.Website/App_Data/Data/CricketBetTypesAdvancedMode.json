@@ -4844,13 +4844,15 @@
         {
           "Name": "Over/Wicket:",
           "Value": "",
-          "XmlAttribute": "Set"
+          "XmlAttribute": "Set",
+          "IsMultiple": true
         },
         {
           "Flag": true,
           "Name": "Yes/No value:",
           "Value": "",
-          "XmlAttribute": "Value"
+          "XmlAttribute": "Value",
+          "IsMultiple": true
         },
         {
           "Name": "Virtual Head:",

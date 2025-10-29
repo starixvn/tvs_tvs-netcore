@@ -86,7 +86,8 @@ public class RequestExtraInfoXmlServiceImp : RequestExtraInfoXmlService
 
     private bool IsIssueTypesHaveExtraInfoJsonFormat(int issueTypeId)
     {
-        var issueTypesHasJsonFormat = new[] { IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError, IssueTypeConstant.MatchEarlyCompleted };
+        var issueTypesHasJsonFormat = new[] { IssueTypeConstant.WrongMarketOffered, IssueTypeConstant.TechnicalError,
+        IssueTypeConstant.MatchEarlyCompleted, IssueTypeConstant.SecondTeamBatting };
         return issueTypesHasJsonFormat.Contains(issueTypeId);
     }
 

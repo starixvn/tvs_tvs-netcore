@@ -24,6 +24,7 @@ public class GetLogInfoQuery
     public TechnicalErrorViewModel? TechnicalErrorModel { get; set; }
     public OtherIssuesViewModel? OtherIssuesModel { get; set; }
     public OtherIssuesViewModel? MatchEarlyCompletedModel { get; set; }
+    public TechnicalErrorViewModel? SecondTeamBattingModel { get; set; }
     public bool? IsShowLogOnly { get; set; }
     public DateTime? KickOffTime { get; set; }
 }
