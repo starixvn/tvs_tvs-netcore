@@ -266,6 +266,18 @@
         {
           "Name": "ODIN GAMING",
           "Value": "105"
+        },
+        {
+          "Name": "BGaming",
+          "Value": "114"
+        },
+        {
+          "Name": "GEMINI",
+          "Value": "115"
+        },
+        {
+          "Name": "Vertex Play",
+          "Value": "116"
         }
       ]
     },
