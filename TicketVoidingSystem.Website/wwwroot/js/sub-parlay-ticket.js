@@ -160,6 +160,8 @@ var subTicketParlay = {
                 $(`#divEvent_${subTransId}`).html(arrChoice).show();
                 $(`#dvFavorite_${subTransId}`).hide();
                 $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
+                $('.hybrid-parlay-match-ticket-list .list-builder').addClass('list-builder-bg-none');
+                $(`.${subTransId}`).css('background-color', '#EDFCFF');
             },
             error: function () {
             },

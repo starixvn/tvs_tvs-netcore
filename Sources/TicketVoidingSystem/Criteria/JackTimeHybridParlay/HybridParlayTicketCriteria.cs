@@ -1,7 +1,7 @@
 ﻿using TicketVoidingSystem.Criteria.OnlineServer;
 using TicketVoidingSystem.Utilities;
 
-namespace TicketVoidingSystem.Criteria;
+namespace TicketVoidingSystem.Criteria.JackTimeHybridParlay;
 
 public class HybridParlayTicketCriteria : OnlineServerCriteriaBase
 {

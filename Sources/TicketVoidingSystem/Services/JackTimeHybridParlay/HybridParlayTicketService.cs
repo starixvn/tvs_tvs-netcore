@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TicketVoidingSystem.Criteria;
+using TicketVoidingSystem.Criteria.JackTimeHybridParlay;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.JackTimeHybridParlay;
 
@@ -39,7 +39,7 @@ public class HybridParlayTicketServiceImp(JackTimeHybridParlayService jackTimeHy
 
     public async Task<IEnumerable<HybridParlayTicketModel>> GetTicketsDetail(string transIds)
     {
-        var criteria = new HybridParlayTicketCriteria()
+        var criteria = new HybridParlayTicketCriteria
         {
             TransIds = transIds
         };
