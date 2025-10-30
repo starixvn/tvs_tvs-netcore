@@ -9,4 +9,5 @@ public class HybridParlayTicketModel
     public string SubBetTeam { get; set; }
     public string SubBetTypeId { get; set; }
     public string SubHdp1 { get; set; }
+    public string Transdesc { get; set; }
 }

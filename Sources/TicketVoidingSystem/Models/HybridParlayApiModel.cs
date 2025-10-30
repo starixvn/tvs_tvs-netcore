@@ -10,6 +10,7 @@ public class HybridParlayApiModel
 
 public class HybridParlayVoidBetInfo
 {
+    public string TransactionId { get; set; }
     public BetModel Bet { get; set; }
     public IEnumerable<LegModel> Legs { get; set; }
 }

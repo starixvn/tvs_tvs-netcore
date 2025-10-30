@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.JackTimeHybridParlay;
@@ -71,6 +72,7 @@ public class HybridParlayTicketServiceImp(
     {
         var voidBetInfos = ticketsDetail.GroupBy(ticket => ticket.MainTransId).Select(group => new HybridParlayVoidBetInfo
         {
+            TransactionId = GetTransactionId(group.First().Transdesc),
             Bet = { TransId = group.Key },
             Legs = group.Select(item => new LegModel
             {
@@ -86,8 +88,14 @@ public class HybridParlayTicketServiceImp(
         };
     }
 
-    public static bool IsNotUpdateLegOdds(HybridParlayType type)
+    private static bool IsNotUpdateLegOdds(HybridParlayType type)
     {
         return type is HybridParlayType.VoidMain or HybridParlayType.RecoverMain;
+    }
+
+    private static string GetTransactionId(string transdesc)
+    {
+        using var doc = JsonDocument.Parse(transdesc);
+        return doc.RootElement.GetProperty("id").GetString();
     }
 }
