@@ -365,18 +365,18 @@ const reducedOver = {
 
 const configPages = [
   //homePage,
- // manageVoidServices,
+  //anageVoidServices,
   //abExceptionList,
   //markTickets,
   //ticketListing,
-  //voidSingleBet,
+  voidSingleBet,
   //voidRequest,
   //manageRequest,
   //voidByBetId
   //archivedTicket,
   //dangerAccepted,
   //redCard,
-  wrongScore,
+  //wrongScore,
   //technicalError,
   // wrongHdp,
   // wrongOu,

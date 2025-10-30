@@ -35,6 +35,8 @@ public interface SpecialPlatformService
     bool IsSiteJollySportsPlatform(SiteEmail site);
 
     string GetTitleForMailRecord(SiteEmail site);
+
+    Message RemoveCheckStatement(Message message);
 }
 
 public class SpecialPlatformServiceImp : SpecialPlatformService
@@ -71,6 +73,17 @@ public class SpecialPlatformServiceImp : SpecialPlatformService
         outputMessage.ContentChineseSimplified = ProcessLeagueNameReplacement(match.OriginLeagueNameSimplified, outputMessage.ContentChineseSimplified);
         outputMessage.ContentChineseTraditional = ProcessLeagueNameReplacement(match.OriginLeagueNameTraditional, outputMessage.ContentChineseTraditional);
         outputMessage.ContentNewChineseSimplified = ProcessLeagueNameReplacement(match.OriginLeagueNameNewSimplified, outputMessage.ContentNewChineseSimplified);
+
+        return outputMessage;
+    }
+
+    public Message RemoveCheckStatement(Message message)
+    {
+        var outputMessage = MessagePackCloner.Clone(message);
+        outputMessage.ContentEnglish = outputMessage.ContentEnglish.Replace(CheckStatementConstant.msgEnglish, "", StringComparison.InvariantCultureIgnoreCase);
+        outputMessage.ContentChineseSimplified = outputMessage.ContentChineseSimplified.Replace(CheckStatementConstant.msgChineseSimplified, "", StringComparison.InvariantCultureIgnoreCase);
+        outputMessage.ContentChineseTraditional = outputMessage.ContentChineseTraditional.Replace(CheckStatementConstant.msgChineseTraditional, "", StringComparison.InvariantCultureIgnoreCase);
+        outputMessage.ContentNewChineseSimplified = outputMessage.ContentNewChineseSimplified.Replace(CheckStatementConstant.msgChineseNewSimplified, "", StringComparison.InvariantCultureIgnoreCase);
 
         return outputMessage;
     }

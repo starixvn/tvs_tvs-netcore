@@ -41,4 +41,6 @@ public class TicketViewModel
     public bool IsMarked { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public long BetdaqId { get; set; }
 }

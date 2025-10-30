@@ -29,6 +29,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         viewModel.MainTransId = item.MainTransId.ToString();
         viewModel.IsCricket = item.IsCricket;
         viewModel.IsMarked = item.IsMarked;
+        viewModel.BetdaqId = item.BetdaqId;
 
         return viewModel;
     }

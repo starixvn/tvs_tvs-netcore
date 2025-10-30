@@ -41,4 +41,6 @@ public class TicketViewModel
     public string Score { get; set; }
 
     public string SecondAcceptFlag { get; set; } = "";
+
+    public long BetdaqId { get; set; }
 }

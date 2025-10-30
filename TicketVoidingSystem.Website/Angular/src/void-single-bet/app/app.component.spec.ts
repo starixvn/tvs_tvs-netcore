@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { TicketModel } from 'src/utility/components/tickets/ticket.model';
 import { BlockUiService } from '../../utility/components/block-ui/block-ui.service';
 import { ConfirmationComponent } from '../../utility/components/confirmation/confirmation.component';
 import { ModalService } from '../../utility/components/modal/modal.service';
@@ -18,9 +19,8 @@ import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppComponent } from './app.component';
 import { AppService } from './app.service';
 import { FilterComponent } from './filter/filter.component';
-import { FilterParams, GetTicketsQuery } from './models/query.model';
 import { FilterService } from './filter/filter.service';
-import { TicketModel } from '../../void-request/app/tickets-list/ticket.model';
+import { FilterParams, GetTicketsQuery } from './models/query.model';
 
 class Helper {
   static readonly fakeMatchModel = {

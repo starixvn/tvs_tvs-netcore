@@ -60,7 +60,7 @@ public class TicketsViewModelServiceImp(
     private static void UpdateVariableForTemplateMessage(TicketsViewModel model,
         IEnumerable<GetTicketModel> voidTickets)
     {
-        model.IsHasSettledTicket = voidTickets.Any(x => x.IsSettledTicket());
+        model.IsHasSettledTicket = voidTickets.Any(x => x.IsSettledTicket() && !x.IsCashOutTicket());
         model.IsAllLiveTickets = voidTickets.All(x => x.IsLiveIndicator);
         model.IsAllNonLiveTickets = voidTickets.All(x => !x.IsLiveIndicator);
     }
