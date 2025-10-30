@@ -108,6 +108,8 @@ public class GetTicketModel
     public int SiteDbGroupId { get; set; }
 
     public decimal MasterOdds { get; set; }
+
+    public bool IsHybrid { get; set; }
 }
 
 public class GetTicketValidationModel : Result

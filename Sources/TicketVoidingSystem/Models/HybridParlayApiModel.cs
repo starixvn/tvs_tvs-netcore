@@ -4,6 +4,7 @@ namespace TicketVoidingSystem.Models;
 
 public class HybridParlayApiModel
 {
+    public string TransactionId { get; set; }
     public IEnumerable<HybridParlayVoidBetInfo> VoidBetInfos { get; set; }
 }
 
@@ -21,17 +22,7 @@ public class BetModel
 
 public class LegModel
 {
-    public WayModel Way { get; set; }
-    public MarketModel Market { get; set; }
-}
-
-public class WayModel
-{
-    public string Id { get; set; }
-}
-
-public class MarketModel
-{
+    public string WayId { get; set; }
     public int MatchId { get; set; }
     public string MarketId { get; set; }
 }

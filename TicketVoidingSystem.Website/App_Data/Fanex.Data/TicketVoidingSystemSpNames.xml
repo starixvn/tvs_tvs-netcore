@@ -29,6 +29,11 @@
         <Setting Key="TicketVoiding_Email_OperatorInfo_Select" SpName="TicketVoiding_Email_OperatorInfo_Select" DbName="DBCUST.SiteConfig.wsv_nap" TimeOut="600" />
         <Setting Key="SpecialDelete_MailingList_Select" SpName="SpecialDelete_MailingList_Select" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_UserActionLog_Update" SpName="TicketVoiding_UserActionLog_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="NAP_Admin_HybridParlay_LegOddsUpd" SpName="NAP_Admin_HybridParlay_LegOddsUpd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600">
+            <Mapping DataField="ErrCode" ObjectProperty="ErrorCode" />
+            <Mapping DataField="ErrMsg" ObjectProperty="ErrorMsg" />
+        </Setting>
+        <Setting Key="NAP_Admin_HybridParlayLog_Sel" SpName="NAP_Admin_HybridParlayLog_Sel" DbName="DBLOG.bodb_CustomerLog.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />

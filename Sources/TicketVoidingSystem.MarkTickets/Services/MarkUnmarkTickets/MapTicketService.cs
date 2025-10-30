@@ -55,7 +55,7 @@ public class MapTicketServiceImp(IMapper mapper, BetListService betListService, 
             ticket.Odds = ticketDetail.Odds.DefaultText();
             ticket.Stake = ticketDetail.Stake.StakeText();
             ticket.Status = ticketDetail.Status.DefaultText();
-            ticket.Choice = ticketDetail.Choice.ChoiceSubParlay(item.IsMixParlay);
+            ticket.Choice = ticketDetail.Choice.ChoiceSubParlay(item.IsMixParlay, item.IsHybrid);
             tickets.Add(ticket);
         }
 

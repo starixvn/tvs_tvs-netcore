@@ -74,8 +74,9 @@ public class HybridParlayTicketServiceImp(
             Bet = { TransId = group.Key },
             Legs = group.Select(item => new LegModel
             {
-                Way = { Id = item.SubBetTeam },
-                Market = { MatchId = item.SubMatchId, MarketId = $"{item.SubMatchId}_{item.SubBetTypeId}_{item.SubHdp1}" }
+                WayId = item.SubBetTeam,
+                MatchId = item.SubMatchId,
+                MarketId = $"{item.SubMatchId}_{item.SubBetTypeId}_{item.SubHdp1}"
             })
         });
 

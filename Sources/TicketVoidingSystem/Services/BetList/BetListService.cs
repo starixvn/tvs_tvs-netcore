@@ -88,7 +88,10 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
 
     public string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap)
     {
-        return Builder.BuildChoice(ticket, ticketHelper, ticketData, isShowScoreMap);
+        var choiceBlock = BuildChoiceBlock(ticket, ticketHelper, ticketData, isShowScoreMap);
+        choiceBlock.betTeamClassName += " bet-team-choice";
+
+        return choiceBlock;
     }
 
     public string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, string transdesc, bool isShowScoreMap)
@@ -165,6 +168,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         {
             ticketCopy.RefNo = null;
         }
+
         return builder.GetBetTypeName(ticketCopy, ticketHelper);
     }
 

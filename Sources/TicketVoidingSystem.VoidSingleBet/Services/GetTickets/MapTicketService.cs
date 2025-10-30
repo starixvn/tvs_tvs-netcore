@@ -66,7 +66,6 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
     {
         var viewModel = MapToTicketViewModel(item, match);
         viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "x" : string.Empty;
-
         var excelTicket = mapper.Map<ExcelTicketModel>(viewModel);
         excelTicket.BetId = viewModel.BetId.LineBreak();
         excelTicket.Member = viewModel.Member.LineBreak();
@@ -74,8 +73,8 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         excelTicket.Stake = viewModel.Stake.StakeText();
         excelTicket.Status = viewModel.Status.DefaultText();
         excelTicket.Sa = item.SecAcceptFlag ? "√" : string.Empty;
-        excelTicket.Choice = viewModel.Choice.ChoiceSubParlay(item.IsMixParlay);
-
+        excelTicket.Choice = viewModel.Choice.ChoiceSubParlay(item.IsMixParlay, item.IsHybrid);
+        excelTicket.BetType = viewModel.BetType.Replace("<sup>", "").Replace("</sup>", "");
         return excelTicket;
     }
 
@@ -117,7 +116,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
     {
         SetValueSubTicket(ticket, item);
         var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
-        var subChoice = $"<div class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
+        var subChoice = $"<div {(item.IsHybrid ? "" : "hidden")} class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
         var choice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
         return choice + $"<div id='divEvent_{item.SubTransId}'></div>";
     }
