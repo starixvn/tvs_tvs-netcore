@@ -71,16 +71,22 @@ public class HybridParlayTicketServiceImp(
     private static HybridParlayApiModel CreateRequest(IEnumerable<HybridParlayTicketModel> ticketsDetail)
     {
         var groups = ticketsDetail.GroupBy(ticket => ticket.MainTransId);
-        var voidBetInfos = groups.Select(group => new HybridParlayVoidBetInfo
+        var voidBetInfos = groups.Select(group =>
         {
-            TransactionId = GetTransactionId(group.First().Transdesc),
-            Bet = { TransId = group.Key },
-            Legs = group.Select(item => new LegModel
+            var mainTransId = group.Key;
+            var firstItem = group.First();
+            return new HybridParlayVoidBetInfo
             {
-                WayId = item.SubBetTeam,
-                MatchId = item.SubMatchId,
-                MarketId = $"{item.SubMatchId}_{item.SubBetTypeId}_{item.SubHdp1}"
-            })
+                TransactionId = GetTransactionId(firstItem.Transdesc),
+                TransId = firstItem.MainTransId,
+                CustId = firstItem.CustId,
+                Legs = group.Select(item => new LegModel
+                {
+                    WayId = item.SubBetTeam,
+                    MatchId = item.SubMatchId,
+                    MarketId = $"{item.SubMatchId}_{item.SubBetTypeId}_{item.SubHdp1}"
+                })
+            };
         });
 
         return new HybridParlayApiModel

@@ -29,4 +29,6 @@ public class GetSubTicket : GetMainTicket
     public int SubSportType { get; set; }
 
     public bool SubLiveIndicator { get; set; }
+
+    public decimal FinalOdds { get; set; }
 }

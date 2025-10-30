@@ -33,7 +33,8 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
         ticketViewModel.BetType = betListService.GetBetTypeName(ticket);
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         SetValueSubTicket(ticket, item);
-        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoice = $"<div {(item.IsHybrid ? "" : "hidden")} class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
         var choice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
         ticketViewModel.Choice = choice + $"<div id='divEvent_{item.SubTransId}'></div>";
         ticketViewModel.IsDisable = isOnlyReadPermission || item.Status.IsVoided();
