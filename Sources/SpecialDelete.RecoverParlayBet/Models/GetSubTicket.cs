@@ -2,8 +2,6 @@
 
 public class GetSubTicket : GetMainTicket
 {
-    public long SubTransId { get; set; }
-
     public decimal SubOdds { get; set; }
 
     public string SubBetCheck { get; set; }

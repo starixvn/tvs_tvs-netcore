@@ -65,7 +65,8 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
             TransId = item.SubTransId,
             TransDate = item.TransDate,
             ActualStake = item.ActualStake,
-            ExtraInfo = item.ExtraInfo
+            ExtraInfo = item.ExtraInfo,
+            OddsSpread = item.OddsSpread
         };
     }
 

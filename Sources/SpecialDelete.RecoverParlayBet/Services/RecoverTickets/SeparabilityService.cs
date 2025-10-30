@@ -5,6 +5,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.Utilities;
 
@@ -21,13 +22,15 @@ public class RecoverSubTicketsServiceImp(
     SessionService sessionService,
     Repository repository,
     SendMessageService sendMessageService,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    HybridParlayTicketService hybridParlayTicketService)
     : SeparabilityService<RecoverSubTicketModel, RecoverSubTicketsQuery>
 {
     public async Task<(RecoverValidationModel Validation, IEnumerable<RecoverSubTicketModel> Tickets)> RecoverTickets(RecoverSubTicketsQuery query)
     {
         try
         {
+            await hybridParlayTicketService.Execute(query.Tickets.Where(t => t.IsHybrid), HybridParlayType.RecoverSub);
             var criteria = new RecoverSubTicketsCriteria
             {
                 UserId = sessionService.UserId,
@@ -90,13 +93,15 @@ public class RecoverMainTicketsServiceImp(
     SessionService sessionService,
     Repository repository,
     SendMessageService sendMessageService,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    HybridParlayTicketService hybridParlayTicketService)
     : SeparabilityService<RecoverMainTicketModel, RecoverMainTicketsQuery>
 {
     public async Task<(RecoverValidationModel Validation, IEnumerable<RecoverMainTicketModel> Tickets)> RecoverTickets(RecoverMainTicketsQuery query)
     {
         try
         {
+            await hybridParlayTicketService.Execute(query.Tickets.Where(t => t.IsHybrid), HybridParlayType.RecoverMain);
             var criteria = new RecoverMainTicketsCriteria
             {
                 UserId = sessionService.UserId,

@@ -25,6 +25,10 @@ public class TicketViewModel
     public bool IsDisable { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public bool IsHybrid { get; set; }
+
+    public long SubTransId { get; set; }
 }
 
 public class MailTicketViewModel : TicketViewModel
