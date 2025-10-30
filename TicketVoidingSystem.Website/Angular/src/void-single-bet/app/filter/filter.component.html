@@ -42,8 +42,8 @@
               }
           </div>
         </div>
-        <div class="d-flex flex-sm-wrap line-2 mt-1">
-          <div class="time-type align-items-center d-flex me-3 mt-2">
+        <div class="d-flex flex-sm-wrap line-2">
+          <div class="time-type align-items-center d-flex me-3">
             <div class="form-check me-3">
               <input class="form-check-input" type="checkbox" value="" id="flexCheckTime" [(ngModel)]="isCheckTime">
               <label class="form-check-label fw-bold" for="flexCheckTime">
@@ -73,21 +73,27 @@
             [(ngModel)]="toDateTime">
             </date-full-time-new>
           </div>
-          <div class="d-flex align-items-center">
-            <label class="me-2">{{bet.name}}</label>
-            @for (item of bet.items; track item) {
-              <div class="form-check align-items-center me-2 mt-2">
-                <input type="radio" class="form-check-input" name="bet" [attr.value]="item" [attr.disabled]="null" [checked]="item === bet.value"
-                (change)="changeControlBet(item)">
-                <label class="form-check-label" name="bet">{{item}}</label>
-              </div>
-            }
-            @if (isShowSelectionSubParlay()) {
+          <div class="bet-selection me-3">
+            <div class="form-check bet-builder">
+              <input class="form-check-input bet-builder-checkbox" type="checkbox" value="" id="flexCheckBetBuilder" [(ngModel)]="isCheckBetBuilder" 
+                     [disabled]="bet.value !== ''" (ngModelChange)="changeBetBuilder()">
+              <label class="form-check-label" for="flexCheckBetBuilder"> Only Bet Builder+ </label>
+            </div>
+            
+            <div class="d-flex align-items-center">
+              <label class="me-2">{{bet.name}}</label>
+              @for (item of bet.items; track item) {
+                <div class="form-check align-items-center me-2 bet-item">
+                  <input type="radio" class="form-check-input" name="bet" [attr.value]="item" [disabled]="isCheckBetBuilder" [checked]="item === bet.value"
+                  (click)="changeControlBet(item)">
+                  <label class="form-check-label" name="bet" (click)="changeControlBet(item)">{{item}}</label>
+                </div>
+              }
               <label class="d-flex filter-selection-sub-parlay m-0">
                 <span class="col-form-label-sm mx-2">Selection</span>
               <ng-select class="selection-dropdown-sub-parlay ms-1" [items]="comboParlay" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
                 [clearable]="false" [(ngModel)]="selectedComboParlay" bindValue="value"
-                [disabled]="false" groupBy="group" [selectableGroup]="true" style="width: 130px"
+                [disabled]="isDisabledSelectionSubParlay()" groupBy="group" [selectableGroup]="true" style="width: 130px"
                 [selectableGroupAsModel]="false" [searchable]="false" placeholder="Select an option">
                 <ng-template ng-optgroup-tmp let-item="item" let-item$="item$" let-index="index">
                   <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected" /> {{item.group}}
@@ -104,10 +110,10 @@
                 </ng-template>
               </ng-select>
             </label>
-            }
+            </div>
           </div>
         </div>
-        <div class="d-flex flex-sm-wrap line-3 mt-2">
+        <div class="d-flex flex-sm-wrap line-3 mt-1">
           <div class="d-flex me-3">
             <label class="col-form-label col-form-label-sm me-2">Ticket Type</label>
             <ng-select [items]="ticketType.items" bindLabel="name" bindValue="value" [(ngModel)]="ticketType.value" 

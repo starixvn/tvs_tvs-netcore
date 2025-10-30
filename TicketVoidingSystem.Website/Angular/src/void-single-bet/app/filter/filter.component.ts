@@ -90,6 +90,7 @@ export class FilterComponent implements OnInit {
   comboParlay: Selection[] = [];
   selectedComboParlay: string[] = [];
   isCheckTime = true;
+  isCheckBetBuilder = false;
   private readonly BET_ITEM_SUB_PARLAY = 'Sub Parlay';
 
   element = inject(ElementRef);
@@ -238,8 +239,18 @@ export class FilterComponent implements OnInit {
   }
 
   changeControlBet(value: string) {
+    if (this.bet.value === value) {
+      this.bet.value = '';
+      return;
+    }
+    
     this.bet.value = value;
-    if (value !== 'Single') {
+    this.isCheckBetBuilder = false;
+    this.resetSelection();
+  }
+
+  resetSelection() {
+    if (this.isCheckBetBuilder || this.bet.value !== 'Single') {
       this.searchParlay = true;
       this.ticketType.value = '0';
       this.settledType.value = 'All';
@@ -247,6 +258,13 @@ export class FilterComponent implements OnInit {
     } else {
       this.searchParlay = false;
     }
+  }
+
+  changeBetBuilder() {
+    if (this.isCheckBetBuilder) {
+      this.bet.value = '';
+    }
+    this.resetSelection();
   }
 
   async blurMatchId() {
@@ -337,10 +355,15 @@ export class FilterComponent implements OnInit {
     if (!this.filterService.isTransDateValidity(this.fromTimeComponent, this.toTimeComponent, this.fromDateTime, this.toDateTime, this.tooltip)) {
       return false;
     }
-    if (this.filterService.isSelectionNotValid(this.bet.value, this.selectedComboParlay)) {
+    if (this.filterService.isSelectionNotValid(this.bet.value, this.selectedComboParlay, this.isCheckBetBuilder)) {
       this.tooltip.display('selection-dropdown-sub-parlay', TEXT.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
+    if (!this.isCheckBetBuilder && this.bet.value === '') {
+      this.tooltip.display('bet-builder-checkbox', TEXT.SELECT_AT_LEAST_ONE_OPTION);
+      return false;
+    }
+    
     return this.groupBetTypesComponent.validate() && this.advancedModeComponent.validate();
   }
 
@@ -361,13 +384,13 @@ export class FilterComponent implements OnInit {
       ticketType: this.ticketType.value,
       settledType: this.settledType.value,
       betTypes: betTypes,
-      bet: this.bet.value,
+      bet: this.isCheckBetBuilder ? 'Bet Builder+' : this.bet.value,
       match: null,
       pageIndex: PagingConstant.INDEX_ZERO,
       pageSize: PagingConstant.SIZE_DEFAULT,
       invalidTransDate: invalidTransDate,
       timeType: this.timeType,
-      selectionSubParlays: this.filterService.getSelectionSubParlays(this.bet.value, this.selectedComboParlay),
+      selectionSubParlays: this.filterService.getSelectionSubParlays(this.bet.value, this.selectedComboParlay, this.isCheckBetBuilder),
       isCheckTime: this.isCheckTime
     };
   }
@@ -399,7 +422,7 @@ export class FilterComponent implements OnInit {
     return StaticService.isCorrectFormatMultipleDecimal(value, elementClass, this.tooltip, 'Invalid Odds!');
   }
 
-  isShowSelectionSubParlay(): boolean {
-    return this.bet.value === this.BET_ITEM_SUB_PARLAY;
+  isDisabledSelectionSubParlay(): boolean {
+    return this.bet.value !== this.BET_ITEM_SUB_PARLAY && !this.isCheckBetBuilder;
   }
 }
