@@ -46,8 +46,9 @@ var recoverParlayService = {
     },
 
     searchSubParlay: function () {
+        var betType = $('#bet-builder-plus').is(':checked') ? 'Bet Builder+' : $('#bet-type').val();
         var param = {
-            betType: $('#bet-type').val(),
+            betType: betType,
             matchId: $('#matchId').val(),
             transIds: recoverParlayService.getBetIds()
         };

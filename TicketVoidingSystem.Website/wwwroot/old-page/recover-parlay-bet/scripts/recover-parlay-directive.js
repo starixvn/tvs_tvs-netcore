@@ -13,6 +13,10 @@ var recoverParlayDirective = {
             recoverParlayDirective.handleByTicketType();
         });
 
+        $('#bet-builder-plus').on('change', function () {
+            recoverParlayDirective.handleBetBuilderChange();
+        });
+
         $("#matchId").on("blur", function (event) {
             recoverParlayDirective.checkMatchId(event);
         });
@@ -50,9 +54,30 @@ var recoverParlayDirective = {
 
     handleByTicketType: function () {
         var ticketType = $('input[name=ticket-type]:checked').val();
-        ticketType === 'sub' ? $('#matchId').prop('disabled', false) : $('#matchId').prop('disabled', true);
+        if(ticketType === 'sub'){
+            $('#matchId').prop('disabled', false);
+            // Show Bet Builder+ only when Sub is selected
+            $('#bet-builder-plus').closest('.filter-cell').show();
+            // Default: enable BetType, disable Bet Builder+
+            $('#bet-builder-plus').prop('disabled', false).prop('checked', false);
+        }else{
+            $('#matchId').prop('disabled', true);
+            $('#bet-builder-plus').prop('disabled', true);
+            // Hide Bet Builder+ when Main is selected
+            $('#bet-builder-plus').closest('.filter-cell').hide();
+            $('#bet-builder-plus').prop('checked', false);
+            $('.bet-type').prop('disabled', false);
+        }
         $('#report-content').hide();
         recoverParlayDirective.clearInput();
+    },
+
+    handleBetBuilderChange: function () {
+        if ($('#bet-builder-plus').is(':checked')) {
+            $('.bet-type').prop('disabled', true);
+        } else {
+            $('.bet-type').prop('disabled', false);
+        }
     },
 
     clearInput: function () {
