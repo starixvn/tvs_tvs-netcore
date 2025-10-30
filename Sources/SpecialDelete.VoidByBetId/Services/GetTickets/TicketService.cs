@@ -46,6 +46,7 @@ public class TicketServiceImp(
         ticket.IsMarked = item.IsMarked;
         ticket.Currency = item.CurrencyName;
         ticket.SubTransId = item.SubTransId;
+        ticket.IsHybrid = item.IsHybrid;
         ticket.SecondAcceptFlag = item.SecAcceptFlag ? "<i class=\"fa-solid fa-check\"></i>" : string.Empty;
 
         return ticket;

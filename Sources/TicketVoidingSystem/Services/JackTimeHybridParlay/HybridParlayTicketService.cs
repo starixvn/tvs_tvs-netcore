@@ -70,7 +70,8 @@ public class HybridParlayTicketServiceImp(
 
     private static HybridParlayApiModel CreateRequest(IEnumerable<HybridParlayTicketModel> ticketsDetail)
     {
-        var voidBetInfos = ticketsDetail.GroupBy(ticket => ticket.MainTransId).Select(group => new HybridParlayVoidBetInfo
+        var groups = ticketsDetail.GroupBy(ticket => ticket.MainTransId);
+        var voidBetInfos = groups.Select(group => new HybridParlayVoidBetInfo
         {
             TransactionId = GetTransactionId(group.First().Transdesc),
             Bet = { TransId = group.Key },

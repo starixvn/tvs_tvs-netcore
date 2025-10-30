@@ -31,13 +31,9 @@ public class VoidTicketsHandler(
     private async Task<IEnumerable<Result>> HandleWhenRequestValid(VoidTicketsQuery query)
     {
         var results = new List<Result>();
-        var isCalledJackTimeHybridParlay = false;
-        var hybridParlayTickets = query.Tickets.Union(query.TransIdCrickets).Where(t => t.IsHybrid);
         await resultCacheService.SetVoidResultsCache(query.Guid, results);
-        if (hybridParlayTickets.Any())
-        {
-            isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(hybridParlayTickets, HybridParlayType.VoidSub);
-        }
+        var isCalledJackTimeHybridParlay = await hybridParlayTicketService
+            .Execute(query.Tickets.Union(query.TransIdCrickets).Where(t => t.IsHybrid), HybridParlayType.VoidSub);
         var updateNpResult = await netPositionForCricketService.Update(query);
         if (!updateNpResult.TicketsAfterUpdateNp.Any())
         {
