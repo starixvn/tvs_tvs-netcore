@@ -13,7 +13,7 @@ public interface VoidByBetIdRepository
 {
     Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query);
 
-    Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay);
+    Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
 }
 
 public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
@@ -34,9 +34,9 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
         return BuildResultGetTickets(ticketsInAllServers, validationInAllServers);
     }
 
-    public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
+    public async Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query)
     {
-        var criteria = CreateVoidTicketsCriteria(query, isCalledJackTimeHybridParlay);
+        var criteria = CreateVoidTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
             var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
@@ -95,7 +95,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
         return (int)(matchIds.Count() == 1 ? matchIds.First() : 0)!;
     }
 
-    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
+    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
     {
         return new VoidTicketsCriteria
         {
@@ -105,8 +105,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
             Ip = sessionService.GetClientIp(),
-            AbnormalBetType = query.AbnormalBetType,
-            IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay
+            AbnormalBetType = query.AbnormalBetType
         };
     }
 }

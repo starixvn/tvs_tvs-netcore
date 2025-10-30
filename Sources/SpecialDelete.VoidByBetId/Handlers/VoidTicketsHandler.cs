@@ -34,7 +34,7 @@ public class VoidTicketsHandler(
         await resultCacheService.SetVoidResultsCache(request.Guid, results);
 
         var warningCrickets = string.Empty;
-        var isCalledJackTimeHybridParlay = await hybridParlayTicketService
+        await hybridParlayTicketService
             .Execute(request.Tickets.Union(request.TransIdCrickets).Where(t => t.IsHybrid), HybridParlayType.VoidMain);
         var callNetPosition = await netPositionService.UpdateNetPosition(request.TransIdCrickets, NetPositionConstant.ActionVoid);
         if (!callNetPosition)
@@ -49,7 +49,7 @@ public class VoidTicketsHandler(
         }
         else
         {
-            results = await ResultsVoidTicket(request, warningCrickets, isCalledJackTimeHybridParlay);
+            results = await ResultsVoidTicket(request, warningCrickets);
         }
 
         await resultCacheService.SetVoidResultsCache(request.Guid, results);
@@ -57,10 +57,10 @@ public class VoidTicketsHandler(
         return results;
     }
 
-    private async Task<List<Result>> ResultsVoidTicket(VoidTicketsQuery query, string warningCrickets, bool isCalledJackTimeHybridParlay)
+    private async Task<List<Result>> ResultsVoidTicket(VoidTicketsQuery query, string warningCrickets)
     {
         var results = new List<Result>();
-        var model = await handleService.VoidTickets(query, isCalledJackTimeHybridParlay);
+        var model = await handleService.VoidTickets(query);
         results.AddRange(await HandlerVoidedTickets(query, model, warningCrickets));
         results.AddRange(await CheckVoidTicketsFail(model));
 

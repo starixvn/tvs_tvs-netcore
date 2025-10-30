@@ -110,6 +110,8 @@ public class GetTicketModel
     public decimal MasterOdds { get; set; }
 
     public bool IsHybrid { get; set; }
+
+    public decimal FinalOdds { get; set; }
 }
 
 public class GetTicketValidationModel : Result

@@ -106,7 +106,8 @@
                       <div>{{ticket.no}}</div>
                     </td>
                     <td>
-                      <div><span [class.betIdBorder]="isBorder" [innerHTML]="ticket.betId | sanitizeHtml"></span></div>
+                      <div [class.betIdBorder]="isBorder"
+                      [innerHTML]="(ticket.betId + (ticket.betId !== ticket.subTransId ? '<br>SubId: ' + ticket.subTransId : '')) | sanitizeHtml"></div>
                     </td>
                     <td>
                       <div>{{ticket.transDate}}</div>

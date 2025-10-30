@@ -37,4 +37,8 @@ public class TicketViewModel
     public bool IsCricket { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public string SubTransId { get; set; }
+
+    public bool IsHybrid { get; set; }
 }
