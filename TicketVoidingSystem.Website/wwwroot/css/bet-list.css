@@ -569,3 +569,12 @@ div.match {
 .list-builder-bg-none {
     background: none !important;
 }
+
+.sub-odds {
+    color: #003399;
+    font-weight: bold;
+}
+
+.sub-odds .label {
+    color: #01122B;
+}

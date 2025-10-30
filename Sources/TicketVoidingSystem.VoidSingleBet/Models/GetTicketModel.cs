@@ -109,4 +109,6 @@ public class GetTicketModel
     public int SpecialPlatform { get; set; }
 
     public decimal MasterOdds { get; set; }
+
+    public decimal FinalOdds { get; set; }
 }

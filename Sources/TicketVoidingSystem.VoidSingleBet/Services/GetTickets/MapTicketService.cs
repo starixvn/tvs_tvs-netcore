@@ -57,7 +57,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         viewModel.SubTransId = item.SubTransId.ToString();
         viewModel.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
         viewModel.Currency = item.CurrencyName;
-
+        viewModel.IsHybrid = item.IsHybrid;
         viewModel.SiteDbGroupId = item.SiteDbGroupId;
         return viewModel;
     }
@@ -116,7 +116,8 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
     private string SetValueChoice(ITicket ticket, ITicketHelper ticketHelper, GetTicketModel item, string mainChoice)
     {
         SetValueSubTicket(ticket, item);
-        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoice = $"<div class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
         var choice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
         return choice + $"<div id='divEvent_{item.SubTransId}'></div>";
     }
