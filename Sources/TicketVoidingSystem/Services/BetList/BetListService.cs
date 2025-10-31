@@ -9,6 +9,7 @@ using Fanex.BetList.Core.TicketHelper;
 using HtmlAgilityPack;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.BetList;
@@ -19,7 +20,7 @@ public interface BetListService
 
     string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
 
-    string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, string transdesc, bool isShowScoreMap);
+    string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, HybridParlayChoiceModel model, bool isShowScoreMap);
 
     string BuildChoiceExcel(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
 
@@ -94,9 +95,9 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         return choiceBlock;
     }
 
-    public string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, string transdesc, bool isShowScoreMap)
+    public string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, HybridParlayChoiceModel model, bool isShowScoreMap)
     {
-        return HybridParlayBuilder.Build(ticketHelper, detailsTickets, transdesc, isShowScoreMap);
+        return HybridParlayBuilder.Build(ticketHelper, detailsTickets, model.Transdesc, model.Hdp1, model.Hdp2, model.BetCheck, model.BetTeam, model.Currency, model.Stake, isShowScoreMap);
     }
 
     public string BuildChoiceExcel(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap)

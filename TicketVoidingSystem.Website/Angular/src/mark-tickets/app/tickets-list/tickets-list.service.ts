@@ -71,7 +71,7 @@ export class TicketsListService {
             transId: ticket.value,
             matchId: null,
             siteDbGroupId: ticket.siteDbGroupId
-          });
+          } as BetID);
         }
       });
     });
@@ -87,7 +87,7 @@ export class TicketsListService {
           transId: ticket.value,
           matchId: null,
           siteDbGroupId: ticket.siteDbGroupId
-        });
+        } as BetID);
       });
     });
     return result;

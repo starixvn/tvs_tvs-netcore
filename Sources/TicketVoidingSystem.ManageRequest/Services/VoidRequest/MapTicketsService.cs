@@ -55,6 +55,8 @@ public class MapTicketsServiceImp(BetListCoreService betListCoreService) : MapTi
         ticket.IsCancelCashOut = item.IsCancelCashOut;
         ticket.GroupName = item.GroupName;
         ticket.IsChecked = item.IsChecked;
+        ticket.SubTransId = item.SubTransId.ToString();
+        ticket.IsHybrid = item.IsHybrid;
 
         return ticket;
     }

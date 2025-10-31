@@ -23,7 +23,7 @@ public class DisplayedTicketServiceImp<T>(BetListParlayService<T> betListParlayS
         ticket.Status = item.Status;
         ticket.SiteDbGroupId = item.SiteDbGroupId;
         ticket.IsHybrid = item.IsHybrid;
-        ticket.SubTransId = item.SubTransId;
+        ticket.SubTransId = item.SubTransId.ToString();
 
         return ticket;
     }

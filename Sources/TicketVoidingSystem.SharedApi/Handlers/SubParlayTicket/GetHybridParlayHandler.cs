@@ -2,13 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using TicketVoidingSystem.SharedApi.Models.SubParlayTicket;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 using TicketVoidingSystem.SharedApi.Services.SubParlayTicket;
 using TicketVoidingSystem.SharedApi.ViewModels.SubParlayTicket;
 
 namespace TicketVoidingSystem.SharedApi.Handlers.SubParlayTicket;
 
-public class GetHybridParlayRequest : QueryHybridParlay, IRequest<IList<TicketViewModel>>;
+public class GetHybridParlayRequest : HybridParlayChoiceModel, IRequest<IList<TicketViewModel>>;
 
 public class GetHybridParlayHandler(TicketsService ticketsService)
     : IRequestHandler<GetHybridParlayRequest, IList<TicketViewModel>>
@@ -17,6 +17,6 @@ public class GetHybridParlayHandler(TicketsService ticketsService)
     {
         var tickets = await ticketsService.GetTickets(message.RefNo);
 
-        return ticketsService.GetHybridTickets(tickets, message.Transdesc, message.SubTransId);
+        return ticketsService.GetHybridTickets(tickets, message);
     }
 }

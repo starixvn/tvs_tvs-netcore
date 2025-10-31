@@ -10,6 +10,8 @@ export class LogModel {
   ftScore: string;
   singleTickets: string[];
   parlayTickets: string[];
+  hybridParlayTickets: string[];
+  count: number;
   doneBy: string;
   childMatchId?:  number;
 }

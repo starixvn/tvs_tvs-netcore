@@ -83,4 +83,5 @@ public class TicketEmailModel : EmailSupport, SendMessageDbModel
     public DateTime? WinLostDate { get; set; }
     public string ZzzWinlost { get; set; }
     public int SiteDbGroupId { get; set; }
+    public bool IsHybrid { get; set; }
 }

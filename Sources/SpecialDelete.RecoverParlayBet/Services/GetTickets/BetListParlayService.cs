@@ -1,8 +1,8 @@
-﻿using Fanex.BetList.Core.Entities;
+﻿using System.Globalization;
+using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using SpecialDelete.RecoverParlayBet.Models;
 using SpecialDelete.RecoverParlayBet.ViewModels;
-using System.Globalization;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services.BetList;
 
@@ -120,7 +120,8 @@ public class BetListMainParlayServiceImp<T>(BetListService betListService) : Bet
             TransId = item.RefNo,
             RefNo = item.RefNo.ToString(CultureInfo.InvariantCulture),
             ActualStake = item.ActualStake,
-            ExtraInfo = item.ExtraInfo
+            ExtraInfo = item.ExtraInfo,
+            OddsSpread = item.OddsSpread
         };
 
         return ticket;

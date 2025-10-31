@@ -14,6 +14,10 @@ public class RecoverSubTicketsCriteria : CriteriaBase
 
     public long MatchId { get; set; }
 
+    public bool IsCalledJackTimeHybridParlay { get; set; }
+
+    public string BetType { get; set; }
+
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

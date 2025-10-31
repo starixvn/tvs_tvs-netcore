@@ -4,4 +4,5 @@ export class BetID {
   siteDbGroupId: number;
   matchId: number;
   isHybrid: boolean;
+  subBetType: number;
 }

@@ -17,17 +17,16 @@ import { GroupBetTypesService } from "../../../utility/components/advanced-mode/
 export class FilterService {
     private readonly BET_ITEM_SUB_PARLAY = 'Sub Parlay';
     private readonly FROM_DATE_TIME_CLASS = 'from-date-time';
-    private readonly BET_BUILDER = 'Bet Builder+';
 
     private readonly groupBetTypesService = inject(GroupBetTypesService);
     
-    getSelectionSubParlays(bet: string, selectedComboParlay: string[], isCheckBetBuilder: boolean) {
-        return bet !== this.BET_ITEM_SUB_PARLAY && !isCheckBetBuilder ? "" : selectedComboParlay.join(',');
+    getSelectionSubParlays(bet: string, selectedComboParlay: string[]) {
+        return bet !== this.BET_ITEM_SUB_PARLAY ? "" : selectedComboParlay.join(',');
     }
 
-    isSelectionNotValid(bet: string, selectedComboParlay: string[], isCheckBetBuilder: boolean) {
-        const selectionSubParlays = this.getSelectionSubParlays(bet, selectedComboParlay, isCheckBetBuilder);
-        return (bet === this.BET_ITEM_SUB_PARLAY || isCheckBetBuilder) && (!selectionSubParlays || selectionSubParlays === "");
+    isSelectionNotValid(bet: string, selectedComboParlay: string[]) {
+        const selectionSubParlays = this.getSelectionSubParlays(bet, selectedComboParlay);
+        return bet === this.BET_ITEM_SUB_PARLAY && (!selectionSubParlays || selectionSubParlays === "");
     }
 
     isTransDateValidity(fromTimeComponent: DateFullTimeNewComponent, toTimeComponent: DateFullTimeNewComponent, fromDateTime: string, toDateTime: string, tooltip: Tooltip): boolean {

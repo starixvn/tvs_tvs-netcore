@@ -52,7 +52,8 @@ public class InsertQueueServiceImp(
 
     private static bool IsVoidingTypeParlay(int voidingTypeId)
     {
-        return voidingTypeId is VoidingTypeConstant.Parlay or VoidingTypeConstant.HybridParlay;
+        int[] voidingTypeParlay = [VoidingTypeConstant.Parlay, VoidingTypeConstant.HybridParlay, VoidingTypeConstant.SubHybridParlay, VoidingTypeConstant.HybridParlay14];
+        return voidingTypeParlay.Contains(voidingTypeId);
     }
 
     private async Task UpdateStatusRequest(int requestId, IEnumerable<int> serverInsertQueue)

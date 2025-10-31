@@ -367,12 +367,12 @@ const configPages = [
   //homePage,
   //anageVoidServices,
   //abExceptionList,
-  //markTickets,
+  markTickets,
   //ticketListing,
   //voidSingleBet,
-  //voidRequest,
+  voidRequest,
   //manageRequest,
-  voidByBetId
+  //voidByBetId
   //archivedTicket,
   //dangerAccepted,
   //redCard,

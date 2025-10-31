@@ -28,7 +28,7 @@ public class TicketViewModel
 
     public bool IsHybrid { get; set; }
 
-    public long SubTransId { get; set; }
+    public string SubTransId { get; set; }
 }
 
 public class MailTicketViewModel : TicketViewModel

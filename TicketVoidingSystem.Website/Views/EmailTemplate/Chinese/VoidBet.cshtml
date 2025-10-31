@@ -189,6 +189,10 @@
                             </td>
                             <td align="Center">
                                 @ticket.BetId
+                                @if (ticket.IsHybrid && ticket.BetId != ticket.SubTransId)
+                                {
+                                    <span><br>SubId: @ticket.SubTransId</span>
+                                }
                             </td>
                             <td align="Center">
                                 @ticket.TransDate

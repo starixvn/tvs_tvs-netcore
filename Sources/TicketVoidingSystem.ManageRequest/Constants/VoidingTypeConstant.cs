@@ -29,7 +29,11 @@ public static class VoidingTypeConstant
     //// for Main + Sub parlay 14
     public const byte RecoverParlay14 = 16;
 
+    // HybridParlay
+
     public const byte HybridParlay = 18;
 
-    public const byte RecoverHybridParlay = 19;
+    public const byte SubHybridParlay = 20;
+
+    public const byte HybridParlay14 = 22;
 }

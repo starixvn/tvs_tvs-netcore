@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Fanex.Logging;
 using TicketVoidingSystem.Constants;
-using TicketVoidingSystem.Models;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 
 namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
@@ -74,8 +74,8 @@ public class JackTimeHybridParlayServiceImp : JackTimeHybridParlayService
     {
         return type switch
         {
-            HybridParlayType.VoidSub => "VoidLegs",
-            HybridParlayType.RecoverSub => "UndoVoidLegs",
+            HybridParlayType.VoidSub => "api/jacktime-cash-out/void-legs",
+            HybridParlayType.RecoverSub => "api/jacktime-cash-out/unvoid-legs",
             _ => string.Empty
         };
     }

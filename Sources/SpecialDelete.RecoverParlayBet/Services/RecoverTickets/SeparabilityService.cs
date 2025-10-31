@@ -30,12 +30,15 @@ public class RecoverSubTicketsServiceImp(
     {
         try
         {
-            await hybridParlayTicketService.Execute(query.Tickets.Where(t => t.IsHybrid), HybridParlayType.RecoverSub);
+            var isCalledJackTimeHybridParlay = await hybridParlayTicketService
+                .Execute(query.Tickets.Where(t => t.IsHybrid), HybridParlayType.RecoverSub);
             var criteria = new RecoverSubTicketsCriteria
             {
                 UserId = sessionService.UserId,
                 MatchId = query.MatchId,
-                Ip = sessionService.GetClientIp()
+                IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay,
+                Ip = sessionService.GetClientIp(),
+                BetType = query.BetType,
             };
             var tasks = SiteDbGroupConstant.ServerList.Select(server =>
             {

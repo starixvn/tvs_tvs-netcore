@@ -25,6 +25,10 @@ public class GetUserLogViewModel
 
     public IEnumerable<string> ParlayTickets { get; set; }
 
+    public IEnumerable<string> HybridParlayTickets { get; set; }
+
+    public int Count { get; set; }
+
     public string DoneBy { get; set; }
 
     public DateTime KickOffTime { get; set; }

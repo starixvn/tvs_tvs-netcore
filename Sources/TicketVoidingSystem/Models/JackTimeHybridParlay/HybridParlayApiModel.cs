@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TicketVoidingSystem.Models;
+namespace TicketVoidingSystem.Models.JackTimeHybridParlay;
 
 public class HybridParlayApiModel
 {

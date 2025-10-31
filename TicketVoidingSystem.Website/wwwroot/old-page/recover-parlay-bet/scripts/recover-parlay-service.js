@@ -46,9 +46,8 @@ var recoverParlayService = {
     },
 
     searchSubParlay: function () {
-        var betType = $('#bet-builder-plus').is(':checked') ? 'Bet Builder+' : $('#bet-type').val();
         var param = {
-            betType: betType,
+            betType: $('#bet-type').val(),
             matchId: $('#matchId').val(),
             transIds: recoverParlayService.getBetIds()
         };
@@ -190,6 +189,7 @@ var recoverParlayService = {
                     },
                     { Name: "No", Value: currentRow.No, CssClass: "NoColumn" },
                     { Name: "BetId", Value: currentRow.BetId },
+                        Name: "BetId", Value: `${currentRow.BetId}${currentRow.IsHybrid && currentRow.BetId !== currentRow.SubTransId ? `<div>SubId:<br/>${currentRow.SubTransId}</div>` : ''}`
                     { Name: "Member", Value: currentRow.Player },
                     { Name: "TransDate", Value: currentRow.TransDate },
                     { Name: "BetType", Value: currentRow.BetType },
@@ -225,7 +225,8 @@ var recoverParlayService = {
         var transIds = NapTicketControl.Helper.getSubTicketsChecked("checkBoxItem").split(',');
         var params = {
             Tickets: recoverParlayService.tickets.filter(x => transIds.includes(x.TransId)),
-            MatchId: $('#matchId').val()
+            MatchId: $('#matchId').val(),
+            betType: $('#bet-type').val()
         };
         $.ajax({
             type: "POST",

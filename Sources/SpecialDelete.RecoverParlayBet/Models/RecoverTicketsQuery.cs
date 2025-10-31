@@ -10,4 +10,6 @@ public class RecoverMainTicketsQuery
 public class RecoverSubTicketsQuery : RecoverMainTicketsQuery
 {
     public int MatchId { get; set; }
+
+    public string BetType { get; set; }
 }

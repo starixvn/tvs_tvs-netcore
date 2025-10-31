@@ -97,6 +97,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         ticket.RefCode = 0;
         ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
         ticket.IsLive = item.IsLiveIndicator;
+        ticket.Currency = item.CurrencyName;
 
         return ticket;
     }

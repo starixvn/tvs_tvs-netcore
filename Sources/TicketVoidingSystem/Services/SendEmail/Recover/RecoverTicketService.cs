@@ -21,6 +21,8 @@ public class RecoverTicketServiceImp(BetListCoreService betListService) : Recove
         ticket.TransDate = item.TransDate.ToString(FormatKey.LongDateFormatTimeWithSlash);
         ticket.WinLost = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
         ticket.Score = betListService.GetScoreBetListUi(item.SportType, item.IsLiveIndicator, item.LiveHomeScore, item.LiveAwayScore);
+        ticket.SubTransId = item.SubTransId.ToString();
+        ticket.IsHybrid = item.IsHybrid;
 
         return ticket;
     }

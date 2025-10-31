@@ -27,6 +27,8 @@ public class TicketServiceImp(BetListCoreService betListCoreService) : TicketSer
         ticket.DepositName = item.UserName2;
         ticket.BetFrom = Helper.GetBetFrom(item.BetFrom);
         ticket.Stake = ticket.Stake.Replace("Rebate", "(Rebate)");
+        ticket.IsHybrid = item.IsHybrid;
+        ticket.SubTransId = item.SubTransId.ToString();
 
         return ticket;
     }

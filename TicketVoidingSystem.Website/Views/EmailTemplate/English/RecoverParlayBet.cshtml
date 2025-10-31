@@ -58,43 +58,47 @@
                     <tr>
                         <td>
                             @group.Name
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
                     foreach (var transaction in group.Tickets)
                     {
                         var backgroundColor = transaction.No % 2 == 0 ? "#E4F2FD" : "#FFFFFF";
                         <tr valign="Middle" style="background-color: @backgroundColor; height: 25px;">
                             <td align="Center">
                                 @transaction.No
-                        </td>
-                        <td align="Center">
-                            @transaction.BetId
-                    </td>
-                    <td align="Left">
-                        @transaction.Player
-                </td>
-                <td align="Center">
-                    @transaction.TransDate
-            </td>
-            <td align="Right">
-                @transaction.Odds
-        </td>
-        <td align="Right">
-            @transaction.Stake
-    </td>
-    <td align="Right">
-        @transaction.WinLost
-</td>
-<td align="Center">
-    @transaction.Status
-</td>
-<td align="Right">
-    @transaction.Choice
-</td>
-<td align="Center">
-    @transaction.BetFrom
-</td>
-</tr>
+                            </td>
+                            <td align="Center">
+                                @transaction.BetId
+                                @if (transaction.IsHybrid && transaction.BetId != transaction.SubTransId)
+                                {
+                                    <span><br>SubId: @transaction.SubTransId</span>
+                                }
+                            </td>
+                            <td align="Left">
+                                @transaction.Player
+                            </td>
+                            <td align="Center">
+                                @transaction.TransDate
+                            </td>
+                            <td align="Right">
+                                @transaction.Odds
+                            </td>
+                            <td align="Right">
+                                @transaction.Stake
+                            </td>
+                            <td align="Right">
+                                @transaction.WinLost
+                            </td>
+                            <td align="Center">
+                                @transaction.Status
+                            </td>
+                            <td align="Right">
+                                @transaction.Choice
+                            </td>
+                            <td align="Center">
+                                @transaction.BetFrom
+                            </td>
+                        </tr>
                     }
                 }
             </table>

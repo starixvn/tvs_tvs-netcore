@@ -125,12 +125,19 @@ var subTicketMP = {
             }
         });
     },
-    
-    getHybridTickets: function (subTransId, transIndex, refNo, custId, transDesc) {
+
+    getHybridTickets: function (subTransId, transIndex, refNo, custId, transDesc, handicap1, handicap2, betcheck, betteam, currency, stake) {
         var param = {
             RefNo: refNo,
             TransDesc: transDesc,
-            subTransId: subTransId
+            subTransId: subTransId,
+            hdp1: handicap1,
+            hdp2: handicap2,
+            betCheck: betcheck,
+            betTeam: betteam,
+            custId: custId,
+            currency: currency,
+            stake: stake
         };
 
         var subTicket = $(`#divEvent_${subTransId}`);
@@ -192,9 +199,9 @@ function showNewCombMP(subTransId, transIndex, refNo, handicap1, handicap2, betc
     subTicketMP.getSubTicketAndComboParlay(subTransId, transIndex, refNo, handicap1, handicap2, betcheck, betteam);
 }
 
-function showBetBuilderPlus(transId, transIndex, refNo, custId, transDesc) {
-    const json = JSON.stringify(transDesc);
-    subTicketMP.getHybridTickets(transId, transIndex, refNo, custId, json)
+function showBetBuilderPlus(transId, transIndex, refNo, custId, transDesc, handicap1, handicap2, betcheck, betteam, currency, stake) {
+    const transDescJson = JSON.stringify(transDesc);
+    subTicketMP.getHybridTickets(transId, transIndex, refNo, custId, transDescJson, handicap1, handicap2, betcheck, betteam, currency, stake);
 }
 
 function showSingleMatchParlayDetail(transId, cusId, status, index) {

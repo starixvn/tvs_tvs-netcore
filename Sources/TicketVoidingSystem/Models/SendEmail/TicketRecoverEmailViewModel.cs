@@ -35,4 +35,8 @@ public class TicketRecoverEmailViewModel
     public int SiteDbGroupId { get; set; }
 
     public string BetFrom { get; set; }
+
+    public bool IsHybrid { get; set; }
+
+    public string SubTransId { get; set; }
 }
