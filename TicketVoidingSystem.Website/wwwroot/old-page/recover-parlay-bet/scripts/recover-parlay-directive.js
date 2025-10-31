@@ -17,6 +17,12 @@ var recoverParlayDirective = {
             recoverParlayDirective.handleBetBuilderChange();
         });
 
+        $(document).on('change', 'select[name="bet-type"], #bet-type, .bet-type', function () {
+            if (!$(this).prop('disabled')) {
+                recoverParlayDirective.clearClassOfInputTransId();
+            }
+        });
+
         $("#matchId").on("blur", function (event) {
             recoverParlayDirective.checkMatchId(event);
         });
@@ -78,8 +84,17 @@ var recoverParlayDirective = {
         } else {
             $('.bet-type').prop('disabled', false);
         }
+        recoverParlayDirective.clearClassOfInputTransId();
     },
 
+    
+    clearClassOfInputTransId: function () {
+        $('#txtTransId').removeClass("text-number-invalid");
+        $('#txtTransId').addClass("text-number");
+        $('.item-number .value-number-invalid').removeClass("value-number-invalid").addClass("value-number");
+    },
+
+    
     clearInput: function () {
         $(':input[type=text]').val('');
         $('.item-number').remove();
