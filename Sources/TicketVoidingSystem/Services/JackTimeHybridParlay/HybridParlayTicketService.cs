@@ -74,7 +74,6 @@ public class HybridParlayTicketServiceImp(
         var groups = ticketsDetail.GroupBy(ticket => ticket.MainTransId);
         var voidBetInfos = groups.Select(group =>
         {
-            var mainTransId = group.Key;
             var firstItem = group.First();
             return new HybridParlayVoidBetInfo
             {

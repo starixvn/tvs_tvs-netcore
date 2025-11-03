@@ -188,8 +188,7 @@ var recoverParlayService = {
                         IsDisable: currentRow.IsDisable
                     },
                     { Name: "No", Value: currentRow.No, CssClass: "NoColumn" },
-                    { Name: "BetId", Value: currentRow.BetId },
-                        Name: "BetId", Value: `${currentRow.BetId}${currentRow.IsHybrid && currentRow.BetId !== currentRow.SubTransId ? `<div>SubId:<br/>${currentRow.SubTransId}</div>` : ''}`
+                    { Name: "BetId", Value: `${currentRow.BetId}${currentRow.IsHybrid && currentRow.BetId !== currentRow.SubTransId ? `<div>SubId:<br/>${currentRow.SubTransId}</div>` : ''}` },
                     { Name: "Member", Value: currentRow.Player },
                     { Name: "TransDate", Value: currentRow.TransDate },
                     { Name: "BetType", Value: currentRow.BetType },
