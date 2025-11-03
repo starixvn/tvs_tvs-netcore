@@ -153,22 +153,26 @@ export class RequestDescriptionService {
   }
 
   private generateOddsContentWrongHdp(requestInfo: RequestInfoForCopy): string {
+    const favoriteValue = requestInfo.favoriteValue?.replace(/&/g, ', ');
+    const actualMarket = requestInfo.actualMarket?.replace(/&/g, ', ');
     if(requestInfo.filterFavoriteType === 'h'){
-      return `Wrong Home: ${requestInfo.favoriteValue}\nCorrect Home: ${requestInfo.actualMarket}\n`;
+      return `Wrong Home: ${favoriteValue}\nCorrect Home: ${actualMarket}\n`;
     }
-    return `Wrong Away: ${requestInfo.favoriteValue}\nCorrect Away: ${requestInfo.actualMarket}\n`;
+    return `Wrong Away: ${favoriteValue}\nCorrect Away: ${actualMarket}\n`;
   }
 
   private generateOddsContentHdpVirtualHeadReverse(requestInfo: RequestInfoForCopy): string {
     const subTypeHdpAway = [SubIssueTypeConstant.AWAY_VIRTUAL_HEAD_REVERSED_HDP, SubIssueTypeConstant.AWAY_VIRTUAL_HEAD_REVERSED_1ST_HDP];
-
+    const hdpValue = requestInfo.hdpValue?.replace(/&/g, ', ');
     const firstTeamName = subTypeHdpAway.includes(requestInfo.subIssueTypeId) ? requestInfo.awayName : requestInfo.homeName;
     const secondTeamName = subTypeHdpAway.includes(requestInfo.subIssueTypeId) ? requestInfo.homeName : requestInfo.awayName;
-    return `Wrong: ${firstTeamName} ${requestInfo.hdpValue}\nCorrect: ${secondTeamName} ${requestInfo.hdpValue}\n`;
+    return `Wrong: ${firstTeamName} ${hdpValue}\nCorrect: ${secondTeamName} ${hdpValue}\n`;
   }
 
   private generateOddsContentWrongOu(requestInfo: RequestInfoForCopy): string {
-    return `Wrong: ${requestInfo.wrongMarket}\nCorrect: ${requestInfo.actualMarket}\n`;
+    const wrongMarket = requestInfo.wrongMarket?.replace(/&/g, ', ');
+    const actualMarket = requestInfo.actualMarket?.replace(/&/g, ', ');
+    return `Wrong: ${wrongMarket}\nCorrect: ${actualMarket}\n`;
   }
 
   private isShowLiveScores(requestInfo: RequestInfoForCopy): boolean {

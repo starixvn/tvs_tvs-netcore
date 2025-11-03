@@ -76,9 +76,9 @@ export class TemplateMessageService {
 
     templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
     templateValue.score = this.getLiveScoreForTemplateMessage(voidMatch.logInfoDetail.scoreNormalTicket, voidMatch.logInfoDetail.scoreOfMatch);
-    templateValue.wrongMarket = wrongHdpModel.homeFavorite ?? wrongHdpModel.awayFavorite;
-    templateValue.actualMarket = wrongHdpModel.actualMarket;
-    templateValue.hdpValue = wrongHdpModel.hdpValue;
+    templateValue.wrongMarket = (wrongHdpModel.homeFavorite ?? wrongHdpModel.awayFavorite)?.replace(/&/g, ', ');
+    templateValue.actualMarket = wrongHdpModel.actualMarket?.replace(/&/g, ', ');
+    templateValue.hdpValue = wrongHdpModel.hdpValue?.replace(/&/g, ', ');
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.isCheckedSpecialBetType = StaticService.isWrongHDP(issueTypeId) && voidMatch.voidTicketsMini.betTypes !== Handicap;
     templateValue.betTypeNameReplaceMessage = voidMatch.voidTicketsMini.betTypeNameReplaceMessage;
@@ -90,8 +90,8 @@ export class TemplateMessageService {
     const OverUnder = "3";
     templateValue.eventType = voidMatch.isAllLiveTickets ? EventType.LIVE : null;
     templateValue.score = first(liveScoreList).replace(/ /g, '');
-    templateValue.wrongMarket = wrongOuModel.wrongMarket;
-    templateValue.actualMarket = wrongOuModel.actualMarket;
+    templateValue.wrongMarket = wrongOuModel.wrongMarket.replace(/&/g, ', ');
+    templateValue.actualMarket = wrongOuModel.actualMarket.replace(/&/g, ', ');
     templateValue.groupPHAffected = voidMatch.voidTicketsMini.groupPHAffected;
     templateValue.isCheckedSpecialBetType = StaticService.isWrongOU(issueTypeId) && voidMatch.voidTicketsMini.betTypes !== OverUnder;
     templateValue.betTypeNameReplaceMessage = voidMatch.voidTicketsMini.betTypeNameReplaceMessage;
