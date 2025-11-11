@@ -37,9 +37,9 @@ export class VoidPageService {
       voidMatchInfo.displayIssueTypeName = this.getDisplayIssueTypeName(requestDetail.request.issueTypeId, voidMatchInfo.subIssueType, issueTypes);
       voidMatchInfo.matchModel = await this.commonService.getMatch(element.matchId);
       voidMatchInfo.logInfoDetail = logInfoList.find(x => x.logInfoDetail.matchId === element.matchId).logInfoDetail;
-      voidMatchInfo.logInfoDetail.wrongMarket = element.wrongMarket;
-      voidMatchInfo.logInfoDetail.actualMarket = element.actualMarket;
-      voidMatchInfo.hdpValue = element.hdpValue;
+      voidMatchInfo.logInfoDetail.wrongMarket = element.wrongMarket?.replace(/&/g, ', ');
+      voidMatchInfo.logInfoDetail.actualMarket = element.actualMarket?.replace(/&/g, ', ');
+      voidMatchInfo.hdpValue = element.hdpValue?.replace(/&/g, ', ');
       voidMatchInfo.isCheckedVar = element.isCheckedVar;
       voidMatchInfo.isMainMatch = element.isMainMatch;
       voidMatchInfo.filterFavoriteType = element.filterFavoriteType;
