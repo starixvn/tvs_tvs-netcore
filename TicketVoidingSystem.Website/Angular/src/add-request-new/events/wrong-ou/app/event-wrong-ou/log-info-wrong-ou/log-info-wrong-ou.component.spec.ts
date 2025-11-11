@@ -20,6 +20,7 @@ import { EventWrongOuService } from '../services/event-wrong-ou.service';
 import { LogInfoService } from '../services/log-info.service';
 import { ValidationService } from '../services/validation.service';
 import { LogInfoWrongOuComponent } from './log-info-wrong-ou.component';
+import { FilterWrongOuService } from '../filter-wrong-ou/filter-wrong-ou.service';
 
 class Helper {
   static readonly fakeRequestId = 1212;
@@ -61,7 +62,6 @@ class Helper {
 describe('LogInfoWrongOuComponent', () => {
   let component: LogInfoWrongOuComponent;
   let fixture: ComponentFixture<LogInfoWrongOuComponent>;
-  let validationService: ValidationService;
   let logInfoService: LogInfoService;
   let eventWrongOuService: EventWrongOuService;
   let addRequestStore: AddRequestStore;
@@ -83,12 +83,12 @@ describe('LogInfoWrongOuComponent', () => {
         ModalService,
         AddRequestApiService,
         AffectedTicketService,
-        LogAnalysisService
+        LogAnalysisService,
+        FilterWrongOuService
       ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(LogInfoWrongOuComponent);
-    validationService = fixture.debugElement.injector.get(ValidationService);
     logInfoService = fixture.debugElement.injector.get(LogInfoService);
     eventWrongOuService = fixture.debugElement.injector.get(EventWrongOuService);
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);

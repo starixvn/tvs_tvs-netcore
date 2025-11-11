@@ -1,5 +1,5 @@
 
-import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import isNull from 'lodash/isNull';
 import isUndefined from 'lodash/isUndefined';
@@ -15,13 +15,21 @@ import { HdpFilterBetTypeComponent } from '../../../../../component/hdp-filter-b
 import { HdpFilterBetTypeService } from '../../../../../component/hdp-filter-bet-type/hdp-filter-bet-type.service';
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { ValidationService } from '../services/validation.service';
+import { OddsInfo } from '../../../../../../utility/components/advanced-mode/advanced-mode/advanced-mode.model';
+import { CommonService } from '../../../../../../utility/services/common.service';
+import { AdvancedModeConstants } from '../../../../../../utility/components/advanced-mode/advanced-mode.constants';
+import { SportType } from '../../../../../../utility/constants/sport.constant';
+import { FilterWrongOuService } from './filter-wrong-ou.service';
+import { MultipleSelection } from '../../../../../../utility/components/multiple-selection/multiple-selection.model';
+import { MultipleSelectionComponent } from '../../../../../../utility/components/multiple-selection/multiple-selection.component';
+import { MultipleSelectionService } from '../../../../../../utility/components/multiple-selection/multiple-selection.service';
 
 @Component({
   selector: 'filter-wrong-ou',
   templateUrl: './filter-wrong-ou.component.html',
   styleUrls: ['./filter-wrong-ou.component.scss'],
   standalone: true,
-  imports: [DateFullTimeNewComponent, FormsModule, TooltipComponent, HdpFilterBetTypeComponent],
+  imports: [DateFullTimeNewComponent, FormsModule, TooltipComponent, HdpFilterBetTypeComponent, MultipleSelectionComponent],
   providers: [HdpFilterBetTypeService]
 })
 export class FilterWrongOuComponent {
@@ -39,11 +47,29 @@ export class FilterWrongOuComponent {
   @ViewChild('fromTimeComponent') fromTimeComponent: DateFullTimeNewComponent;
   @ViewChild('toTimeComponent') toTimeComponent: DateFullTimeNewComponent;
   tooltip = new Tooltip();
+  oddsInfo: OddsInfo[] = [];
+  wrongMarketSelections = new MultipleSelection();
+
   private readonly element = inject(ElementRef);
   private readonly validationService = inject(ValidationService);
+  private readonly commonService = inject(CommonService);
+  private readonly filterWrongOuService = inject(FilterWrongOuService);
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
 
   constructor() {
     this.tooltip.element = this.element;
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    if (this.sportTypeId !== SportType.BASKETBALL) {
+      return;
+    }
+    if (changes['matchId']) {
+      this.oddsInfo = await this.commonService.getOddsInfoSpecialBetTypes({ matchId: this.matchId.toString(), betTypes: AdvancedModeConstants.BETTYPE_SPECIAL_BASKETBALL });
+    }
+    if (changes['filterWrongOuModel'] && this.filterWrongOuModel.wrongMarket && this.isBetTypeHasBetChoiceSelection()) {
+      this.wrongMarketSelections = this.filterWrongOuService.getBetChoiceSelection(this.oddsInfo, Number(this.filterWrongOuModel.filterBetType.filterBetTypeId), this.filterWrongOuModel.wrongMarket.split('&'));
+    }
   }
 
   public changeFilterBy(): void {
@@ -54,7 +80,27 @@ export class FilterWrongOuComponent {
     }
   }
 
+  isBetTypeHasBetChoiceSelection() {
+    return this.filterWrongOuService.isBetTypeHasBetChoiceSelection(this.filterWrongOuModel.filterBetType.filterBetTypeId);
+  }
+
+  updateWrongMarketSelections() {
+    if (this.isBetTypeHasBetChoiceSelection()) {
+      this.wrongMarketSelections = this.filterWrongOuService.getBetChoiceSelection(this.oddsInfo, Number(this.filterWrongOuModel.filterBetType.filterBetTypeId));
+      this.filterWrongOuModel.wrongMarket = this.getSelectedWrongMarketItems().join('&');
+    }
+  }
+
   public changeFilter(): void {
+    this.changeFilterEvent.emit();
+  }
+
+  public getSelectedWrongMarketItems(): string[] {
+    return this.multipleSelectionService.getValueCheckedItemsList(this.wrongMarketSelections.items);
+  }
+
+  public onWrongMarketSelectionChange(selectedItems: string[]): void {
+    this.filterWrongOuModel.wrongMarket = selectedItems.join('&');
     this.changeFilterEvent.emit();
   }
 
@@ -104,7 +150,7 @@ export class FilterWrongOuComponent {
     this.refreshEvent.emit();
   }
 
-  isShowFilterBetType(){
+  isShowFilterBetType() {
     return StaticService.isWrongOU(this.filter.issueTypeId);
   }
 }

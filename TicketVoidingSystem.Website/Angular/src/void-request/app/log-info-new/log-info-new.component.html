@@ -46,4 +46,8 @@
     <ticket-count-other-sports [logInfoDetail]="logInfoDetail" [isVoided]="true">
     </ticket-count-other-sports>
   }
+  @if (isShowWrongMarket()) {
+    <span>Wrong Market: <strong>{{logInfoDetail.wrongMarket}}</strong></span><br/>
+    <span>Actual Market: <strong>{{logInfoDetail.actualMarket}}</strong></span>
+  }
 </div>

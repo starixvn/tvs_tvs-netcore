@@ -20,7 +20,7 @@
 </div>
 @if(isShowFilterBetType()){
   <hdp-filter-bet-type [sportTypeId]="sportTypeId" [issueTypeId]="filter.issueTypeId"
-    [filterBetType]="filterWrongOuModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter()">
+    [filterBetType]="filterWrongOuModel.filterBetType" [isDisabled]="isDisabled" (changeEvent)="changeFilter(); updateWrongMarketSelections()">
   </hdp-filter-bet-type>
 }
 <div class="d-flex">
@@ -28,9 +28,17 @@
     <div class="d-flex">
       <div class="wrong-market me-3">
         <label class="col-form-label-sm me-2">Wrong Market</label>
-        <input [(ngModel)]="filterWrongOuModel.wrongMarket" [disabled]="isDisabled" placeholder="Ex: 0.75&1&1.25"
+        @if(isBetTypeHasBetChoiceSelection()){
+          <multiple-selection class="custom-sm" [isDisabled]="isDisabled" [multipleSelect]="wrongMarketSelections" [selectedItems]="getSelectedWrongMarketItems()" 
+            (checkedItems)="onWrongMarketSelectionChange($event)">
+          </multiple-selection>
+        }
+        @if(!isBetTypeHasBetChoiceSelection()){
+          <input [(ngModel)]="filterWrongOuModel.wrongMarket" [disabled]="isDisabled" placeholder="Ex: 0.75&1&1.25"
           (change)="changeFilter();isCorrectFormatHdp(filterWrongOuModel.wrongMarket, 'wrong-market-input')" type="text"
           class="wrong-market-input form-control form-control-sm" />
+        }
+        
       </div>
       <div class="actual-market me-2">
         <label class="col-form-label-sm me-2">Actual Market</label>

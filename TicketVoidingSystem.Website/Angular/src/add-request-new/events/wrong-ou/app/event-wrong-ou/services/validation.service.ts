@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import moment from 'moment-timezone';
 import { EventLeagueComponent } from '../../../../../../utility/components/event-league/event-league.component';
 import { Tooltip } from '../../../../../../utility/components/tooltip/tooltip.model';
@@ -9,6 +9,7 @@ import { LogInfoWrongOuComponent } from '../log-info-wrong-ou/log-info-wrong-ou.
 import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
+import { FilterWrongOuService } from '../filter-wrong-ou/filter-wrong-ou.service';
 
 @Injectable()
 export class ValidationService {
@@ -16,6 +17,8 @@ export class ValidationService {
   private readonly INPUT_WRONG_MARKET_CLASS = 'wrong-market-input';
   private readonly INPUT_ACTUAL_MARKET_CLASS = 'actual-market-input';
 
+  private readonly filterWrongOuService = inject(FilterWrongOuService);
+  
   public validateCommonData(eventLeagueComponent: EventLeagueComponent, logInfoComponents: LogInfoWrongOuComponent[]): boolean {
     if (!eventLeagueComponent.isMatchIdValid()) {
       return false;
@@ -73,12 +76,15 @@ export class ValidationService {
       return false;
     }
 
-    if (!StaticService.isCorrectFormatMultipleDecimal(filterWrongOuModel.wrongMarket, this.INPUT_WRONG_MARKET_CLASS, tooltip, TEXT.INVALID_OU)) {
+    if(!this.filterWrongOuService.isBetTypeHasBetChoiceSelection(filterWrongOuModel.filterBetType.filterBetTypeId)
+    && !StaticService.isCorrectFormatMultipleDecimal(filterWrongOuModel.wrongMarket, this.INPUT_WRONG_MARKET_CLASS, tooltip, TEXT.INVALID_OU)) {
       return false;
     }
 
     return true;
   }
+
+  
 
   public checkCanShowConfirmationWrongOu(saveRequestArg: SaveRequestArg): boolean {
     const isHasWarningTicket = saveRequestArg.allEvents.some(x => x.messageValidationLogInfo?.some(y => !y.isError));

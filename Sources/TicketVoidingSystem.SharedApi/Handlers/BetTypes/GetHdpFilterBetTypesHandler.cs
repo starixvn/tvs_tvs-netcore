@@ -30,6 +30,7 @@ public class GetHdpFilterBetTypesHandler(RemotingRefWrapperService remotingRefWr
                 x.Name = remotingRefWrapperService.GetDisplayedBetTypeName(betType);
                 return x;
             })
+            .OrderBy(x => x.Name)
             .ToList();
 
         return await Task.FromResult(filterSport);

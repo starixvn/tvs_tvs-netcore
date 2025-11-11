@@ -37,18 +37,6 @@
       </div>
       @if (isWrongHdp() || isWrong1stHdp() || isWrongOu() || isWrong1stOu() || isWrongOdds() || isWrongScore()) {
       <div class="ms-3">
-        @if (item.wrongMarket) {
-        <div class="wrong-market d-flex mb-3">
-          <label for="wrongMarket" class="col-form-label col-form-label-sm me-2">Wrong Market</label>
-          <div class="form-control form-control-sm">{{item.wrongMarket}}</div>
-        </div>
-        }
-        @if (item.actualMarket) {
-        <div class="actual-market d-flex">
-          <label for="actualMarket" class="col-form-label col-form-label-sm me-2">Actual Market</label>
-          <div class="form-control form-control-sm">{{item.actualMarket}}</div>
-        </div>
-        }
         @if (item.hdpValue) {
         <div class="hdp-value d-flex">
           <label for="HdpValue" class="col-form-label col-form-label-sm me-2">HDP Value</label>

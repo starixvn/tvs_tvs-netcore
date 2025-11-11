@@ -10,6 +10,7 @@ import { FilterWrongOuModel } from '../models/filter-wrong-ou.model';
 import { LogInfoWrongOu } from '../models/log-info-wrong-ou.model';
 import { SaveRequestArg } from '../models/save-request-arg.model';
 import { ValidationService } from './validation.service';
+import { FilterWrongOuService } from '../filter-wrong-ou/filter-wrong-ou.service';
 
 describe('ValidationService', () => {
   let service: ValidationService;
@@ -18,7 +19,7 @@ describe('ValidationService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [TestingModule],
-      providers: [ValidationService]
+      providers: [ValidationService, FilterWrongOuService]
     });
 
     service = TestBed.inject(ValidationService);
@@ -26,6 +27,7 @@ describe('ValidationService', () => {
     // Mock document.getElementById
     mockBodyElement = document.createElement('div');
     mockBodyElement.setAttribute('user-id', '2');
+    mockBodyElement.id = 'body';
     document.body.appendChild(mockBodyElement);
     jest.spyOn(document, 'getElementById').mockImplementation((id) => {
       if (id === 'body') {
@@ -36,7 +38,9 @@ describe('ValidationService', () => {
   });
 
   afterEach(() => {
-    document.body.removeChild(mockBodyElement);
+    if (mockBodyElement && document.body.contains(mockBodyElement)) {
+      document.body.removeChild(mockBodyElement);
+    }
     jest.restoreAllMocks();
   });
 

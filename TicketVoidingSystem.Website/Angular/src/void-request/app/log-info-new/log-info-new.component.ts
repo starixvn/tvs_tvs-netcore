@@ -48,6 +48,10 @@ export class LogInfoNewComponent {
     return StaticService.countInfoContent(cashOutCount, settleCount, instantlySettleCount);
   }
 
+  isShowWrongMarket(): boolean {
+    return StaticService.isWrongOU(this.issueTypeId);
+  }
+
   getHighlightMinTimeClass(minTime?: Date): string {
     if (minTime && this.logInfoDetail.highlightAcceptType) {
       switch (this.logInfoDetail.highlightAcceptType) {

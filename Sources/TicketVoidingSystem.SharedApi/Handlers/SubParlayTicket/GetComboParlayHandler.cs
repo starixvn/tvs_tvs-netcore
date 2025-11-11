@@ -32,7 +32,7 @@ public class GetComboParlayHandler(TicketsService ticketsService)
 
     private string GetComboAndStake(QueryComboParlay query, IEnumerable<TicketModel> data)
     {
-        var tickets = data.Where(m => m.Stake > 0).ToList();
+        var orderedTickets = data.Where(m => m.Stake > 0).OrderBy(x => x.MatchId).ToList();
         var comboName = ticketsService.GetComboName(query);
         if (comboName == null || !comboName.Any())
         {
@@ -43,8 +43,8 @@ public class GetComboParlayHandler(TicketsService ticketsService)
         for (var i = 0; i < comboName.Length; i++)
         {
             var comboNameHtml = $"<span class='combo-name'>{comboName[i]}</span>";
-            var stake = tickets.ElementAtOrDefault(i) != null
-                ? $"<span class='combo-stake'> x {tickets.ElementAtOrDefault(i).Stake:G29}</span>"
+            var stake = orderedTickets.ElementAtOrDefault(i) != null
+                ? $"<span class='combo-stake'> x {orderedTickets.ElementAtOrDefault(i).Stake:G29}</span>"
                 : "";
             result.Append($"<div>{comboNameHtml}{stake}</div>");
         }
