@@ -202,4 +202,85 @@ public class IssueTypeExtensionTests
         // Assert
         Assert.Equal(result, actual);
     }
+
+    [Theory]
+    [InlineData(20, true)]
+    [InlineData(1, false)]
+    public void IsDuplicateTickets_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.IsDuplicateTickets();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
+
+    [Theory]
+    [InlineData(22, true)]
+    [InlineData(1, false)]
+    public void RecoverTicket_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.RecoverTicket();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
+
+    [Theory]
+    [InlineData(12, true)]
+    [InlineData(1, false)]
+    public void IsWrongMarketOffered_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.IsWrongMarketOffered();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
+
+    [Theory]
+    [InlineData(24, true)]
+    [InlineData(1, false)]
+    public void IsTechnicalError_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.IsTechnicalError();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
+
+    [Theory]
+    [InlineData(28, true)]
+    [InlineData(1, false)]
+    public void IsSecondTeamBatting_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.IsSecondTeamBatting();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
+
+    [Theory]
+    [InlineData(1, true)]
+    [InlineData(10, true)]
+    [InlineData(3, true)]
+    [InlineData(11, false)]
+    [InlineData(20, false)]
+    public void IsIssueTypeHasAllowanceSetting_ValidParams_ReturnResult(int issueTypeId, bool result)
+    {
+        // Arrange
+        // Act
+        var actual = issueTypeId.IsIssueTypeHasAllowanceSetting();
+
+        // Assert
+        Assert.Equal(result, actual);
+    }
 }

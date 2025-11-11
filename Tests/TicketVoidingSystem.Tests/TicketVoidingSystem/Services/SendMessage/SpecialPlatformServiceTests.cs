@@ -342,4 +342,198 @@ public class SpecialPlatformServiceTests : IClassFixture<AppSettingFixture>
         // Assert
         Assert.Equal(expected, actual);
     }
+
+    [Fact]
+    public void GetTitleForMailRecord_siteIsNotJollySports_ReturnExpected()
+    {
+        // Arrange
+        var site = new SiteEmail
+        {
+            SpecialPlatform = 0
+        };
+        const string expected = "沙巴体育通知 | Saba Sports Notice";
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.GetTitleForMailRecord(site);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void IsSiteJollySportsPlatform_SiteIsNull_ReturnFalse()
+    {
+        // Arrange
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.IsSiteJollySportsPlatform(null);
+
+        // Assert
+        Assert.False(actual);
+    }
+
+    [Theory]
+    [InlineData(3, "Pe4", "MP")]
+    [InlineData(3, "a", "a")]
+    public void GetCurrencyNameOfSpecialPlatformTicket_JollySportsCv_ReturnExpected(int specialPlatform, string currencyName, string expected)
+    {
+        // Arrange
+        var ticket = new TicketEmailModel
+        {
+            SpecialPlatform = specialPlatform,
+            CurrencyName = currencyName
+        };
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.GetCurrencyNameOfSpecialPlatformTicket(ticket);
+
+        // Assert
+        AssertExtension.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void RemoveCheckStatement_MessageContainsCheckStatement_RemoveAllCheckStatements()
+    {
+        // Arrange
+        var message = new Message
+        {
+            ContentEnglish = "Kindly double check your statement again. Test content",
+            ContentChineseSimplified = "请重新检查您的帐目. 测试内容",
+            ContentChineseTraditional = "請重新檢查您的帳目. 測試內容",
+            ContentNewChineseSimplified = "请重新检查您的帐目. 测试内容"
+        };
+        var messageExpected = new Message
+        {
+            ContentEnglish = "Test content",
+            ContentChineseSimplified = "测试内容",
+            ContentChineseTraditional = "測試內容",
+            ContentNewChineseSimplified = "测试内容"
+        };
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.RemoveCheckStatement(message);
+
+        // Assert
+        AssertExtension.Equal(messageExpected, actual);
+    }
+
+    [Fact]
+    public void RemoveCheckStatement_MessageNotContainsCheckStatement_ReturnOriginalMessage()
+    {
+        // Arrange
+        var message = new Message
+        {
+            ContentEnglish = "Test content",
+            ContentChineseSimplified = "测试内容",
+            ContentChineseTraditional = "測試內容",
+            ContentNewChineseSimplified = "测试内容"
+        };
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.RemoveCheckStatement(message);
+
+        // Assert
+        AssertExtension.Equal(message, actual);
+    }
+
+    [Fact]
+    public void RemoveCheckStatement_MessageContainsCheckStatementCaseInsensitive_RemoveCheckStatements()
+    {
+        // Arrange
+        var message = new Message
+        {
+            ContentEnglish = "KINDLY DOUBLE CHECK YOUR STATEMENT AGAIN. Test content",
+            ContentChineseSimplified = "请重新检查您的帐目. 测试内容",
+            ContentChineseTraditional = "請重新檢查您的帳目. 測試內容",
+            ContentNewChineseSimplified = "请重新检查您的帐目. 测试内容"
+        };
+        var messageExpected = new Message
+        {
+            ContentEnglish = "Test content",
+            ContentChineseSimplified = "测试内容",
+            ContentChineseTraditional = "測試內容",
+            ContentNewChineseSimplified = "测试内容"
+        };
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.RemoveCheckStatement(message);
+
+        // Assert
+        AssertExtension.Equal(messageExpected, actual);
+    }
+
+    [Fact]
+    public void RemoveSabaInMessageContent_OriginalLeagueNameIsEmpty_ReturnOriginalMessage()
+    {
+        // Arrange
+        var message = new Message
+        {
+            ContentEnglish = "Saba 123 456",
+            ContentChineseSimplified = "沙巴123456",
+            ContentChineseTraditional = "沙巴123456",
+            ContentNewChineseSimplified = "沙巴123456"
+        };
+        var match = new Match
+        {
+            OriginLeagueName = "",
+            OriginLeagueNameSimplified = "",
+            OriginLeagueNameTraditional = "",
+            OriginLeagueNameNewSimplified = ""
+        };
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.RemoveSabaInMessageContent(match, message);
+
+        // Assert
+        AssertExtension.Equal(message, actual);
+    }
+
+    [Fact]
+    public void RemoveSabaInMessageContent_OriginalLeagueNameIsNull_ReturnOriginalMessage()
+    {
+        // Arrange
+        var message = new Message
+        {
+            ContentEnglish = "Saba 123 456",
+            ContentChineseSimplified = "沙巴123456",
+            ContentChineseTraditional = "沙巴123456",
+            ContentNewChineseSimplified = "沙巴123456"
+        };
+        var match = new Match
+        {
+            OriginLeagueName = null,
+            OriginLeagueNameSimplified = null,
+            OriginLeagueNameTraditional = null,
+            OriginLeagueNameNewSimplified = null
+        };
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var actual = service.RemoveSabaInMessageContent(match, message);
+
+        // Assert
+        AssertExtension.Equal(message, actual);
+    }
+
+    [Fact]
+    public void GroupTicketSaba_EmptyList_ReturnEmptyLists()
+    {
+        // Arrange
+        var tickets = new List<TicketEmailModel>();
+        var service = new SpecialPlatformServiceImp();
+
+        // Act
+        var (normalTickets, specialPlatformTickets) = service.GroupTicketSaba(tickets);
+
+        // Assert
+        Assert.Empty(normalTickets);
+        Assert.Empty(specialPlatformTickets);
+    }
 }
