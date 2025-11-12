@@ -46,7 +46,7 @@ public class VoidTicketsServiceTests
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
-        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
+        hybridParlayTicketService.Execute(Arg.Any<string>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
             Arg.Any<int>()).ReturnsForAnyArgs(true);
         var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService, hybridParlayTicketService);
 
@@ -88,7 +88,7 @@ public class VoidTicketsServiceTests
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
-        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
+        hybridParlayTicketService.Execute(Arg.Any<string>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
             Arg.Any<int>()).ReturnsForAnyArgs(true);
         var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService, hybridParlayTicketService);
         var combineValidation = new VoidTicketValidation
@@ -131,7 +131,7 @@ public class VoidTicketsServiceTests
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
         var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
-        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
+        hybridParlayTicketService.Execute(Arg.Any<string>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
             Arg.Any<int>()).ReturnsForAnyArgs(true);
         var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService, hybridParlayTicketService);
 

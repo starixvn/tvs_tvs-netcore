@@ -44,14 +44,15 @@ public class VoidByBetIdRepositoryImp(
         var criteria = CreateVoidTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any())
+            var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+            if (!ticketsInServer.Any())
             {
                 return Task.FromResult((Enumerable.Empty<VoidTicketValidation>(), Enumerable.Empty<TicketEmailModel>()));
             }
-            hybridParlayTicketService.Execute(ticketsInSiteDb.Where(t => t.IsHybrid), HybridParlayType.VoidMain, HybridParlayTicketType.Main, server.Id);
+            var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.TransId));
+            hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.VoidMain, HybridParlayTicketType.Main, server.Id);
 
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            criteria.TransIds = Helper.JoinBetIdList(ticketsInServer);
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
         });

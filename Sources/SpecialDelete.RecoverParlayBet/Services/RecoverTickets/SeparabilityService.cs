@@ -33,8 +33,8 @@ public class RecoverSubTicketsServiceImp(
             var tasks = SiteDbGroupConstant.ServerList.Select(async server =>
             {
                 var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
-                var isCalledJackTimeHybridParlay = await hybridParlayTicketService
-                    .Execute(ticketsInServer.Where(t => t.IsHybrid), HybridParlayType.RecoverSub, HybridParlayTicketType.Sub, server.Id);
+                var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.SubTransId));
+                var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.RecoverSub, HybridParlayTicketType.Sub, server.Id);
                 var criteria = CreateRecoverSubTicketsCriteria(query, isCalledJackTimeHybridParlay, server.Id, ticketsInServer);
 
                 return await repository.RecoverTickets<RecoverSubTicketModel>(criteria);
@@ -124,10 +124,12 @@ public class RecoverMainTicketsServiceImp(
             };
             var tasks = SiteDbGroupConstant.ServerList.Select(server =>
             {
-                hybridParlayTicketService.Execute(query.Tickets.Where(t => t.IsHybrid), HybridParlayType.RecoverMain, HybridParlayTicketType.Main, server.Id);
+                var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+                var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.TransId));
+                hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.RecoverMain, HybridParlayTicketType.Main, server.Id);
 
                 criteria.SiteDbGroupId = server.Id;
-                criteria.TransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId));
+                criteria.TransIds = string.Join(",", ticketsInServer.Select(x => x.TransId));
                 return repository.RecoverTickets<RecoverMainTicketModel>(criteria);
             });
 

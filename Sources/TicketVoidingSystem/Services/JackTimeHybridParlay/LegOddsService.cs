@@ -13,7 +13,7 @@ namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
 public interface LegOddsService
 {
-    Task<bool> Execute(int matchId, string transIds, DateTime logDate, int siteDbGroupId);
+    Task<bool> Execute(int matchId, DateTime logDate, int siteDbGroupId, IEnumerable<LegOddsModel> ticketsWaitToUpdateOdds);
 }
 
 public class LegOddsServiceImp(
@@ -22,11 +22,11 @@ public class LegOddsServiceImp(
     SessionService sessionService)
     : LegOddsService
 {
-    public async Task<bool> Execute(int matchId, string transIds, DateTime logDate, int siteDbGroupId)
+    public async Task<bool> Execute(int matchId, DateTime logDate, int siteDbGroupId, IEnumerable<LegOddsModel> ticketsWaitToUpdateOdds)
     {
         try
         {
-            var legOdds = await RetryForGetLegOdds(matchId, transIds, logDate);
+            var legOdds = await RetryForGetLegOdds(matchId, logDate, ticketsWaitToUpdateOdds);
             if (legOdds.Any())
             {
                 return await UpdateLegOdds(legOdds, siteDbGroupId);
@@ -42,33 +42,41 @@ public class LegOddsServiceImp(
         }
     }
 
-    public async Task<IEnumerable<LegOddsModel>> RetryForGetLegOdds(int matchId, string transIds, DateTime logDate)
+    public async Task<IEnumerable<LegOddsModel>> RetryForGetLegOdds(int matchId, DateTime logDate, IEnumerable<LegOddsModel> ticketsWaitToUpdateOdds)
     {
-        const byte retryCount = 5;
+        const byte retryCount = 10;
         const byte retryTimes = 3;
         var legOdds = Enumerable.Empty<LegOddsModel>();
+        var expectedTransIds = ticketsWaitToUpdateOdds.Select(t => t.TransId).Distinct().ToHashSet();
         await Policy
-            .HandleResult<bool>(c => !c)
+            .HandleResult<bool>(success => !success)
             .WaitAndRetryAsync(retryCount,
                 _ => TimeSpan.FromSeconds(retryTimes))
             .ExecuteAsync(async () =>
             {
-                legOdds = await GetLegOdds(matchId, transIds, logDate);
-                return legOdds.Any();
+                legOdds = await GetLegOdds(matchId, logDate, ticketsWaitToUpdateOdds);
+
+                var receivedTransIds = legOdds
+                    .Select(o => o.TransId)
+                    .Distinct()
+                    .ToHashSet();
+
+                var allMatched = expectedTransIds.All(id => receivedTransIds.Contains(id));
+                return allMatched;
             });
 
         return legOdds;
     }
 
-    public async Task<IEnumerable<LegOddsModel>> GetLegOdds(int matchId, string transIds, DateTime logDate)
+    public async Task<IEnumerable<LegOddsModel>> GetLegOdds(int matchId, DateTime logDate, IEnumerable<LegOddsModel> ticketsWaitToUpdateOdds)
     {
         var criteria = new HybridParlayGetLegOddsCriteria
         {
             MatchId = matchId,
-            TransIds = transIds,
+            TransIds = string.Join(",", ticketsWaitToUpdateOdds.Select(x => x.TransId)),
             LogDate = logDate
         };
-        LogService.InfoAsync("Retry for get odds:" + JsonSerializer.Serialize(criteria));
+        await LogService.InfoAsync("Retry for get odds:" + JsonSerializer.Serialize(criteria));
 
         return await repository.FetchAsync<LegOddsModel>(criteria);
     }

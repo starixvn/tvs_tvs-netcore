@@ -54,13 +54,13 @@ public class VoidTicketsServiceImp(
         var tasks = serversWithTickets.Select(async serverGroup =>
         {
             var serverId = serverGroup.Key;
-            var ticketsInSiteDb = serverGroup.ToList();
-            var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(ticketsInSiteDb.Where(t => t.IsHybrid),
-                HybridParlayType.VoidSub, HybridParlayTicketType.Sub, serverId);
+            var ticketsInServer = serverGroup.ToList();
+            var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.TransId));
+            var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.VoidSub, HybridParlayTicketType.Sub, serverId);
 
             criteria.IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay;
             criteria.SiteDbGroupId = serverId;
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            criteria.TransIds = Helper.JoinBetIdList(ticketsInServer);
 
             return await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
         });

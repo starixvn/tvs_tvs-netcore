@@ -85,7 +85,7 @@ public class VoidTicketsHandlerTests
         afterVoidService.ExecuteWhenVoidFailed(null)
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 1 } });
         var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
-        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(), Arg.Any<int>())
+        hybridParlayTicketService.Execute(Arg.Any<string>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(), Arg.Any<int>())
             .ReturnsForAnyArgs(Task.FromResult(false));
         voidTicketsService.VoidBet(Arg.Any<VoidTicketsQuery>()).Returns(new VoidTicketsModel());
         var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, voidTicketsService, afterVoidService);
