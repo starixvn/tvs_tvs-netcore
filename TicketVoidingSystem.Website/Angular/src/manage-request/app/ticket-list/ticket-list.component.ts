@@ -9,6 +9,7 @@ import { TicketListModal } from './ticket-list.modal';
   standalone: true,
   selector: 'ticket-list',
   templateUrl: './ticket-list.component.html',
+  styleUrls: ['./ticket-list.component.scss'],
   imports: [RequestInfoComponent, BlockUiDirective]
 })
 export class TicketListComponent implements OnChanges {
