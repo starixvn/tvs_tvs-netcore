@@ -47,7 +47,7 @@ public class ConvertBetListForExcelServiceImp(IDynamicRepository repository) : C
     public string BetIdToText(TicketViewModel ticket)
     {
         return ticket.BetId != ticket.SubTransId && ticket.IsHybrid ?
-         $"{ticket.BetId}\nSubId:\n{ticket.SubTransId}" : ticket.BetId.ToString();
+         $"{ticket.BetId}\nSubId:\n{ticket.SubTransId}" : ticket.BetId;
     }
 
     private static string GetChoiceRefund(HtmlDocument doc, string html, string choice)
