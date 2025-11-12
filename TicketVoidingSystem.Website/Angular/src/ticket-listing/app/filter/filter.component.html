@@ -42,7 +42,7 @@
           </label>
         }
       </div>
-      @if (query.product === 0) {
+      @if (query.product === 0 || query.product === 5) {
         <div class="d-flex align-items-center me-4">
           <label class="col-form-label col-form-label-sm me-2">Event Type</label>
           <ng-select [items]="eventType.items" bindLabel="name" bindValue="value" [(ngModel)]="query.eventType"

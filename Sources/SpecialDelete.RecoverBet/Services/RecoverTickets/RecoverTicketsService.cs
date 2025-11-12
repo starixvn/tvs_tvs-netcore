@@ -12,7 +12,7 @@ public interface IRecoverTicketsService
 {
     Task<RecoverTicketsModel> RecoverTickets(IEnumerable<BetId> tickets, IEnumerable<BetId> cricketTickets);
 
-    void RemoveMessage(RecoverTicketsModel model);
+    Task RemoveMessage(RecoverTicketsModel model);
 
     Task SendEmail(List<RecoverTicketModel> tickets, string negativeBalanceUsers);
 
@@ -49,12 +49,12 @@ public class RecoverTicketsService(
         }
     }
 
-    public void RemoveMessage(RecoverTicketsModel model)
+    public async Task RemoveMessage(RecoverTicketsModel model)
     {
         var transIds = string.Join(",", model.Tickets.Select(x => x.TransId));
         var userId = sessionService.UserId;
-        sendMessageService.RemoveMessage(userId, $"{transIds}");
-        sendMessageService.DeleteTransaction(model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), MatchId = x.MatchId }));
+        await sendMessageService.RemoveMessage(userId, $"{transIds}");
+        await sendMessageService.DeleteTransaction(model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), MatchId = x.MatchId }));
     }
 
     public async Task SendEmail(List<RecoverTicketModel> tickets, string negativeBalanceUsers)

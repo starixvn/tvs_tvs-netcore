@@ -18,7 +18,7 @@ var recoverParlayService = {
         return betIds;
     },
 
-    checkMatchId: function (event) {
+    checkMatchId: function () {
         var matchId = $('#matchId').val();
         if (!matchId) {
             return true;
@@ -39,6 +39,10 @@ var recoverParlayService = {
             data: JSON.stringify(param),
             success: function (match) {
                 result = match !== null;
+            },
+            error: function () {
+                result = false;
+                $('#msg').html(tooltip.show('matchId', messages.invalidCheckMatch)).show();
             }
         });
 

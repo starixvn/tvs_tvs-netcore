@@ -114,6 +114,12 @@ public class ConvertRequestsServiceImp(IDynamicRepository repository) : ConvertR
             return $"Mix Parlay: {nodesParlay[0].InnerText}";
         }
 
+        var nodesBetBuilderPlus = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-bet-builder-plus']");
+        if (nodesBetBuilderPlus != null)
+        {
+            return $"Bet Builder+: {nodesBetBuilderPlus[0].InnerText}";
+        }
+
         var nodesSystemParlay = doc.DocumentNode.SelectNodes("//*[@class='text-primary total-system-parlay']");
 
         return nodesSystemParlay != null ? $"System Parlay: {nodesSystemParlay[0].InnerText}" : string.Empty;

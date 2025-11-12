@@ -219,7 +219,7 @@ public class HtmlExtensionTests
     {
         // Arrange
         // Act
-        var result = ((string)null).ChoiceSubParlay(true);
+        var result = ((string)null).ChoiceSubParlay(true, false);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -232,7 +232,7 @@ public class HtmlExtensionTests
         var html = string.Empty;
 
         // Act
-        var result = html.ChoiceSubParlay(true);
+        var result = html.ChoiceSubParlay(true, false);
 
         // Assert
         Assert.Equal(string.Empty, result);
@@ -242,11 +242,11 @@ public class HtmlExtensionTests
     public void ChoiceSubParlay_HtmlHasOfferNameIsNull_ReturnsChoice()
     {
         // Arrange
-        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><br><div class='bettype'><a>Choice 1</a><br>><span>Handicap 1</span>(+5.00)</ div >";
+        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='sub-odds'></div><br><div class='bettype'><a>Choice 1</a><br>><span class='bet-team-choice'>Handicap 1</span>(+5.00)</ div >";
         const string expected = "Choice 1\nHandicap 1\nChoice 1>Handicap 1(+5.00)\n10.00\n(+5.00)Choice 1>Handicap 1(+5.00)";
 
         // Act
-        var result = html.ChoiceSubParlay(true);
+        var result = html.ChoiceSubParlay(true, false);
 
         // Assert
         Assert.Equal(expected, result);
@@ -256,11 +256,11 @@ public class HtmlExtensionTests
     public void ChoiceSubParlay_HtmlHasOfferNameNameIsNotNull_ReturnsOfferNameList()
     {
         // Arrange
-        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><br><div class='offer-name-list'><div class='bettype'><a>Choice 1</a><br>><span>Handicap 1</span>(+5.00)</ div ></ div >";
+        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='sub-odds'></div><br><div class='offer-name-list'><div class='bettype'><a>Choice 1</a><br>><span class='bet-team-choice'>Handicap 1</span>(+5.00)</ div ></ div >";
         const string expected = "Choice 1\nChoice 1>Handicap 1(+5.00)\nHandicap 1\nChoice 1>Handicap 1(+5.00)\n10.00\n(+5.00)Choice 1>Handicap 1(+5.00)";
 
         // Act
-        var result = html.ChoiceSubParlay(true);
+        var result = html.ChoiceSubParlay(true, false);
 
         // Assert
         Assert.Equal(expected, result);
@@ -270,11 +270,11 @@ public class HtmlExtensionTests
     public void ChoiceSubParlay_HtmlContainsExcludingChoices_ReturnsHasSecondLine()
     {
         // Arrange
-        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='bettype'>Bettype 1</ div ><br><div class='offer-name-list'><div class='excluding-choices'><a>Choice 1</a><br>><span>Handicap 1<br>Handicap 2</span></ div ></ div >";
+        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='bettype'>Bettype 1</ div ><div class='sub-odds'></div><br><div class='offer-name-list'><div class='excluding-choices'><a>Choice 1</a><br>><span class='bet-team-choice'>Handicap 1<br>Handicap 2</span></ div ></ div >";
         const string expected = "Handicap 1\nChoice 1>Handicap 1Handicap 2\nBettype 1Choice 1>Handicap 1Handicap 2\n10.00\n(+5.00)Bettype 1Choice 1>Handicap 1Handicap 2";
 
         // Act
-        var result = html.ChoiceSubParlay(false);
+        var result = html.ChoiceSubParlay(false, false);
 
         // Assert
         Assert.Equal(expected, result);
@@ -284,11 +284,11 @@ public class HtmlExtensionTests
     public void ChoiceSubParlay_HtmlContainsCashOutFromNo_ReturnsHasSecondLine()
     {
         // Arrange
-        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='bettype'><div class='bettype-description'>Bettype 1</ div ></ div ><br><div class='offer-name-list'><div class='Cash Out from No'><a>Choice 1</a><br>><span>Handicap 1<br>Handicap 2</span></ div ></ div >";
+        const string html = "<div class='match'>10.00</div><br><div class='league'>(+5.00)</ div ><div class='bettype'><div class='bettype-description'>Bettype 1</ div ></ div ><div class='sub-odds'></div><br><div class='offer-name-list'><div class='Cash Out from No'><a>Choice 1</a><br>><span class='bet-team-choice'>Handicap 1<br>Handicap 2</span></ div ></ div >";
         const string expected = "Handicap 1\nHandicap 2\nBettype 1Choice 1>Handicap 1Handicap 2\nBettype 1Choice 1>Handicap 1Handicap 2\n10.00\n(+5.00)Bettype 1Choice 1>Handicap 1Handicap 2";
 
         // Act
-        var result = html.ChoiceSubParlay(false);
+        var result = html.ChoiceSubParlay(false, false);
 
         // Assert
         Assert.Equal(expected, result);

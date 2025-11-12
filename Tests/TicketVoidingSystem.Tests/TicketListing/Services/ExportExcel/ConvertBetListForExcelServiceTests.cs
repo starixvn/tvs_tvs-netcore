@@ -127,6 +127,7 @@ public class ChoiceTestCase : IEnumerable<object[]>
     private static readonly ChoiceModel BetType = new()
     {
         Html = "<div class='bettype-description'>13-Fold (1 Bet)</div>" +
+               "<span class='bet-team-choice'>Over 3 @ 1.82</span>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
         Expected = $"Over 3 @ 1.82{Environment.NewLine}Over 3 @ 1.82{Environment.NewLine}13-Fold (1 Bet)"
     };
@@ -134,8 +135,9 @@ public class ChoiceTestCase : IEnumerable<object[]>
     private static readonly ChoiceModel BetTypeHaveNotDescription = new()
     {
         Html = "<div><span class='bettype-description'></span></div>" +
+               "<span class='bet-team-choice'>Over 3 @ 1.82</span>" +
                "<div class='bettype'><span class='favorite'>Over<span class=''> 3<span class='odds'> @ 1.82</span></span></span></div>",
-        Expected = "Over 3 @ 1.82"
+        Expected = $"Over 3 @ 1.82{Environment.NewLine}Over 3 @ 1.82"
     };
 
     private static readonly ChoiceModel ChoiceHaveHaveRefund = new()

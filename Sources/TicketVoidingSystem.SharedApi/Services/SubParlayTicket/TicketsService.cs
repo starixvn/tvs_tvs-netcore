@@ -79,7 +79,7 @@ public class TicketsServiceImp(
         };
     }
 
-    private string GetChoice(TicketModel item, bool isHybrid = false)
+    private string GetChoice(TicketModel item)
     {
         var ticket = SetValue(item);
         var ticketHelper = new TicketHelper { IsShowOddsWithChoice = true };

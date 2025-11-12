@@ -53,7 +53,7 @@ class Helper {
         totalItems: 1
     };
 
-    static readonly fakeLogsModel: LogsModel = {
+    static readonly fakeLogsModel = {
         logList: [
             {
                 action: 'Unmark',
@@ -71,7 +71,7 @@ class Helper {
             }
         ],
         totalLogs: 1
-    };
+    } as LogsModel;
 
     static readonly fakeResultMarkTicketModel: ResultMarkTicketModel = {
         isSuccessful: true,

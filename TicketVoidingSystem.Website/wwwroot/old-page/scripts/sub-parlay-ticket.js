@@ -154,6 +154,7 @@ var subTicketMP = {
                 $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
             }
 
+            $("#ticketInfo").fanexGrid('resizeGrid');
             return;
         }
 
@@ -174,6 +175,7 @@ var subTicketMP = {
                 $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
                 $('.hybrid-parlay-match-ticket-list .list-builder').addClass('list-builder-bg-none');
                 $(`.${subTransId}`).css('background-color', '#EDFCFF');
+                $("#ticketInfo").fanexGrid('resizeGrid');
             },
             error: function () {
             },

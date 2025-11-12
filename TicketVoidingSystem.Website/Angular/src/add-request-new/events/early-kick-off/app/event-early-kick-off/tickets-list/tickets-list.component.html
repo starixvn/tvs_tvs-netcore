@@ -89,8 +89,8 @@
           <td>
             <div>{{ticket.no}}</div>
           </td>
-          <td>
-            <div [class.betIdBorder]="ticket.isMarked" [innerHTML]="ticket.betId | sanitizeHtml"></div>
+          <td>    
+            <div [class.betIdBorder]="ticket.isMarked" [innerHTML]="(ticket.betId + (ticket.betId !== ticket.subTransId && ticket.isHybrid ? '<br>SubId: ' + ticket.subTransId : '')) | sanitizeHtml"></div>
           </td>
           <td>
             <div>{{ticket.transDate}}</div>

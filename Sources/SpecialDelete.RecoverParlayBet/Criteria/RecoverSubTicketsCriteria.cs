@@ -8,6 +8,8 @@ public class RecoverSubTicketsCriteria : CriteriaBase
 {
     public string MainTransIds { get; set; }
 
+    public string SubTransIdsHP { get; set; }
+
     public int UserId { get; set; }
 
     public string Ip { get; set; }

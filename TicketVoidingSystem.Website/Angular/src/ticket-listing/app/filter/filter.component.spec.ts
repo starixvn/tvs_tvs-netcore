@@ -118,7 +118,6 @@ class Helper {
 describe('FilterComponent', () => {
   let component: FilterComponent;
   let fixture: ComponentFixture<FilterComponent>;
-  let appService: AppService;
   let commonService: CommonService;
   let filterService: FilterService;
 
@@ -142,10 +141,18 @@ describe('FilterComponent', () => {
         { provide: ElementRef, useValue: { nativeElement: document.createElement('div') }},
         { provide: AppComponent, useValue: {}},
         { provide: FilterService, useValue: {
+          getLicenseeSelectList: jest.fn().mockResolvedValue([
+            { id: 0, name: 'All' },
+            { id: -1, name: 'Credit' },
+            ...Helper.mockLicensees.map(l => ({ id: l.id, name: l.name, group: 'Licensee' }))
+          ]),
           invalidProduct: jest.fn().mockReturnValue(false),
-          isNumber: jest.fn().mockReturnValue(true),
+          invalidMatch: jest.fn().mockReturnValue(false),
+          isSportsBookOrHybridParlay: jest.fn((product: number) => product === Product.SPORTS_BOOK || product === Product.HYBRID_PARLAY),
+          isBetBuilder: jest.fn((product: number) => product === Product.BET_BUILDER),
           isSelectionNotValid: jest.fn().mockReturnValue(false),
           getSelectionSubParlays: jest.fn().mockReturnValue(''),
+          isShowCheckboxAffected: jest.fn().mockReturnValue(false),
           enableBetTypesAndAdvancedMode: jest.fn(),
           checkAndDisabledAllBetTypes: jest.fn(),
           checkAndDisabledAllGroupBetTypes: jest.fn()
@@ -155,7 +162,6 @@ describe('FilterComponent', () => {
 
     fixture = TestBed.createComponent(FilterComponent);
     component = fixture.componentInstance;
-    appService = TestBed.inject(AppService);
     commonService = TestBed.inject(CommonService);
     filterService = TestBed.inject(FilterService);
 
@@ -182,7 +188,7 @@ describe('FilterComponent', () => {
     await component.ngOnInit();
 
     // Assert
-    expect(appService.getLicensees).toHaveBeenCalled();
+    expect(filterService.getLicenseeSelectList).toHaveBeenCalled();
     expect(component.licenseeSelectList.length).toBeGreaterThan(0);
     expect(component.query.groupBy).toBe(0);
     expect(component.query.ticketType).toBe(0);
@@ -264,15 +270,31 @@ describe('FilterComponent', () => {
     // Mock tooltip
     component.tooltip = {
       display: jest.fn(),
-      hide: jest.fn()
+      hide: jest.fn(),
+      element: { nativeElement: { scrollIntoView: jest.fn() } }
     } as any;
+    component.betTypesComponent = {
+      validate: jest.fn().mockReturnValue(true)
+    } as any;
+    component.betTypes = {
+      betTypes: []
+    } as any;
+    // Mock invalidMatch to actually call tooltip.display like the real implementation
+    filterService.invalidMatch = jest.fn((matchId: string, match: any, tooltip: any) => {
+      if (matchId === '' || matchId === undefined) {
+        tooltip.display('match-id', 'Required Match ID');
+        return true;
+      }
+      return false;
+    });
 
     // Act
     component.search();
 
     // Assert
     expect(component.searchEvent.emit).not.toHaveBeenCalled();
-    expect(component.tooltip.display).toHaveBeenCalled();
+    expect(filterService.invalidMatch).toHaveBeenCalledWith('', component.match, component.tooltip);
+    expect(component.tooltip.display).toHaveBeenCalledWith('match-id', expect.any(String));
   });
 
   it('#changeProduct should handle product change correctly', async () => {
@@ -359,12 +381,17 @@ describe('FilterComponent', () => {
     component.advancedModeComponent = {
       getBetTypeModels: jest.fn().mockReturnValue([])
     } as unknown as AdvancedModeComponent;
+    jest.spyOn(component['groupBetTypesService'], 'getValueCheckedBetTypes').mockReturnValue('1');
+    filterService.getSelectionSubParlays = jest.fn((bet: string, selectedComboParlay: string[]) => {
+      return bet !== "SubParlay" ? "" : selectedComboParlay.join(',');
+    });
     // Act
     const result = component.getParams();
 
     // Assert
     expect(result.matchId).toBe(123);
     expect(result.selectionSubParlays).toBe('1');
+    expect(filterService.getSelectionSubParlays).toHaveBeenCalledWith('SubParlay', ['1']);
   });
 
   it('#validateBetTypes should validate bet types for SPORTS_BOOK', () => {
@@ -389,8 +416,9 @@ describe('FilterComponent', () => {
     component.match = Helper.mockMatch; // Set valid match
     component.tooltip = new Tooltip();
     component.tooltip.display = jest.fn();
-    component.singleOrSubParlay = 'All';
-    component.selectedComboParlay = [];
+    component.tooltip.element = { nativeElement: { scrollIntoView: jest.fn() } } as any;
+    component.singleOrSubParlay = 'SubParlay'; // Set to SubParlay to trigger isSelectionNotValid
+    component.selectedComboParlay = []; // Empty to make it invalid
     component.disabledTransDate = true;
     component.fromDate = '2024-01-01 10:00:00';
     component.toDate = '2024-01-02 11:00:00';
@@ -399,8 +427,7 @@ describe('FilterComponent', () => {
       validate: jest.fn().mockReturnValue(true),
       getBetTypeModels: jest.fn().mockReturnValue([])
     } as unknown as AdvancedModeComponent;
-    // Mock the component's isSelectionNotValid method
-    jest.spyOn(component, 'isSelectionNotValid').mockReturnValue(true);
+    filterService.isSelectionNotValid = jest.fn().mockReturnValue(true);
     
     // Act
     const result = component.checkFilterParams();
@@ -408,7 +435,6 @@ describe('FilterComponent', () => {
     // Assert
     expect(result).toBe(false);
     expect(component.tooltip.display).toHaveBeenCalledWith('selection-dropdown-sub-parlay', expect.any(String));
-    expect(component.isSelectionNotValid).toHaveBeenCalled();
   });
 
   it('#isShowAdvancedMode should return true for SPORTS_BOOK', () => {
@@ -425,12 +451,16 @@ describe('FilterComponent', () => {
   it('#validateProduct should call filterService.invalidProduct', () => {
     // Arrange
     filterService.invalidProduct = jest.fn().mockReturnValue(true);
+    component.tooltip = new Tooltip();
+    component.tooltip.display = jest.fn();
+    component.tooltip.element = { nativeElement: { scrollIntoView: jest.fn() } } as any;
 
     // Act
     const result = component['validateProduct']();
 
     // Assert
-    expect(result).toBe(true);
+    expect(result).toBe(false);
+    expect(filterService.invalidProduct).toHaveBeenCalled();
   });
 
   it('#validateProduct should return false when product is invalid', () => {
@@ -439,6 +469,8 @@ describe('FilterComponent', () => {
     component.sportType = 100; // Set to invalid sport type
     component.tooltip = new Tooltip();
     component.tooltip.display = jest.fn();
+    component.tooltip.element = { nativeElement: { scrollIntoView: jest.fn() } } as any;
+    filterService.invalidProduct = jest.fn().mockReturnValue(true);
     
     // Act
     const result = component['validateProduct']();
@@ -465,13 +497,11 @@ describe('FilterComponent', () => {
       getBetTypeModels: jest.fn().mockReturnValue([])
     } as unknown as AdvancedModeComponent;
     component.query.product = Product.SPORTS_BOOK;
-    jest.spyOn(component, 'isNumber').mockReturnValue(true);
 
     // Act
     const result = component.checkFilterParams();
 
     // Assert
-    expect(component.isNumber).toHaveBeenCalledWith('123');
     expect(result).toBe(true);
   });
 

@@ -52,7 +52,7 @@ public class MapUserLogsServiceImp(RemotingRefWrapperService remotingRefService)
         return hybridParlayTickets
             .Where(x => hybridParlayTransIds.Contains(x.TransId))
             .GroupBy(x => x.MainTransId).Select(group => group.Count() > 1
-                ? $"{group.Key}({string.Join(", ", group.ToList().Select(x => x.TransId))})"
+                ? $"{group.Key}({string.Join(", ", group.Select(x => x.TransId))})"
                 : group.Key);
     }
 

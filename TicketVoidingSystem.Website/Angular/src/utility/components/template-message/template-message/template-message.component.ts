@@ -133,7 +133,8 @@ export class TemplateMessageComponent implements OnChanges {
 
   updateTemplate() {
     let templateId = 0;
-    if (StaticService.isAbnormalAccount(this.issueTypeId) || this.isAbnormalBetMixOrSystemParlay() || this.isAbnormalBetManyMatch()) {
+    if (StaticService.isAbnormalAccount(this.issueTypeId) || StaticService.isAbnormalBetMixOrSystemParlay(this.issueTypeId, this.value.filterBy) 
+      || this.isAbnormalBetManyMatch()) {
       templateId = MESSAGE_TEMPLATE_ID_37;
     } else if (this.isDuplicateTicketsMixParlay()) {
       templateId = MESSAGE_TEMPLATE_ID_65;
@@ -190,7 +191,7 @@ export class TemplateMessageComponent implements OnChanges {
     this.replaceCommonValuesService.replaceEventDate(this.value, this.message, this.issueTypeId);
     this.replaceCommonValuesService.replaceKickOffTime(this.value, this.message);
     this.replaceCommonValuesService.replacePlayerName(this.value, this.message);
-    this.replaceCommonValuesService.replaceParlay(this.isAbnormalBetMixOrSystemParlay(), this.message);
+    this.replaceCommonValuesService.replaceParlay(StaticService.isAbnormalBetMixOrSystemParlay(this.issueTypeId, this.value.filterBy), this.message);
     this.replaceCommonValuesService.replaceCheckStatement(this.value, this.message);
     this.replacePlacedFromTimeRangeService.execute(this.value, this.message, this.selectedTemplated.templateId);
   }
@@ -275,10 +276,6 @@ export class TemplateMessageComponent implements OnChanges {
     return this.isVoidSinglePage()
       && (StaticService.isWrongHDP(this.issueTypeId) || StaticService.isWrong1stHDP(this.issueTypeId)
         || StaticService.isWrongOU(this.issueTypeId) || StaticService.isWrong1stOU(this.issueTypeId));
-  }
-
-  isAbnormalBetMixOrSystemParlay(): boolean {
-    return StaticService.isAbnormalBet(this.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(this.value.filterBy);
   }
 
   isAbnormalBetManyMatch(): boolean {

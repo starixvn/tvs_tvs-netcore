@@ -21,11 +21,13 @@ public class ReCalculateTicketsServiceImp(
     public async Task<IEnumerable<Result>> Execute(AbnormalBetViewModel? abnormalBetInfo, int issueTypeId, string transIds)
     {
         var results = new List<Result>();
+        var filterByParlayId = new List<byte>
+            { FilterByConstant.MixParlay, FilterByConstant.SystemParlay, FilterByConstant.HybridParlay };
         try
         {
             if (issueTypeId.IsAbnormalBet() && !string.IsNullOrWhiteSpace(transIds) && abnormalBetInfo.IsConfirmCalculator)
             {
-                var matchId = abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay ? 29 : 0;
+                var matchId = abnormalBetInfo.FilterBy.HasValue && filterByParlayId.Contains((byte)abnormalBetInfo.FilterBy.Value) ? 29 : 0;
                 var x = await ExecuteParallel(matchId, transIds);
                 results = [.. x];
             }

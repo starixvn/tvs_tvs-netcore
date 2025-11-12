@@ -13,10 +13,6 @@ var recoverParlayDirective = {
             recoverParlayDirective.handleByTicketType();
         });
 
-        $("#matchId").on("blur", function (event) {
-            recoverParlayDirective.checkMatchId(event);
-        });
-
         $('#search').on('click', function (event) {
             recoverParlayDirective.search(event);
         });

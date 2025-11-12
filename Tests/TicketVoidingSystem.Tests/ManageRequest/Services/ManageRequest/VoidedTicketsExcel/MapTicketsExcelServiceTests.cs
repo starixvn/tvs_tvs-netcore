@@ -86,7 +86,7 @@ public class MapTicketsExcelServiceTests
             Name = "Group1",
             Tickets = new List<VoidedTicketModel>
             {
-                new() { TransId = 1 },
+                new() { TransId = 1, BetType = betTypeId },
                 new() { TransId = 2, BetType = betTypeId }
             }
         };
@@ -98,7 +98,13 @@ public class MapTicketsExcelServiceTests
             .MapToVoidedTicketViewModel(Arg.Any<VoidedTicketModel>(), Arg.Any<Match>(), ChoiceType.Excel, Arg.Any<GetVoidedTicketsQuery>())
             .Returns(new VoidedTicketViewModel
             {
-                Choice = "<span>abc</span>"
+                Choice = "<span class='bet-team-choice'>abc</span>",
+                BetId = "<span>BetId</span>",
+                Member = "<span>Member</span>",
+                Odds = "<span>Odds</span>",
+                Stake = "<span class='stake'>1.2</span>",
+                Status = "<span>Status</span>",
+                BetType = "<sup>1</sup>"
             });
 
         mapper.Map<ExcelVoidedTicketModel>(Arg.Any<VoidedTicketViewModel>()).Returns(excelTicket);

@@ -30,6 +30,7 @@ public class SendLetstalkAfterAddServiceImp(
         {
             FilterByConstant.MixParlay => "Add Request Abnormal Bet Notification - Mix Parlay",
             FilterByConstant.SystemParlay => "Add Request Abnormal Bet Notification - System Parlay",
+            FilterByConstant.HybridParlay => "Add Request Abnormal Bet Notification - Bet Builder+",
             _ => "Add Request Abnormal Bet Notification"
         };
     }
@@ -48,7 +49,7 @@ public class SendLetstalkAfterAddServiceImp(
         var content = new StringBuilder();
         content.AppendLine($"Request ID: {requestId}");
         content.AppendLine($"Sub Issue Type: {model.SubIssueTypeName}");
-        if (model.FilterBy != FilterByConstant.MixParlay && model.FilterBy != FilterByConstant.SystemParlay)
+        if (model.FilterBy != FilterByConstant.MixParlay && model.FilterBy != FilterByConstant.SystemParlay && model.FilterBy != FilterByConstant.HybridParlay)
         {
             var matchInfo = model.Matches.First(x => x.MatchId == sendLetstalkModel.MatchId);
             content.AppendLine($"Match ID: {matchInfo.MatchId}");

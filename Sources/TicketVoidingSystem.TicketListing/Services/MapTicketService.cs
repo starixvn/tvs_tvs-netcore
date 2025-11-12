@@ -49,6 +49,8 @@ public class MapTicketServiceImp(
         ticket.BallSequence = item.BallSequence;
         ticket.IsMarked = item.IsMarked;
         ticket.IsSite777 = item.IsSite777;
+        ticket.SubTransId = item.SubTransId.ToString();
+        ticket.IsHybrid = item.IsHybrid;
 
         return ticket;
     }
@@ -60,7 +62,7 @@ public class MapTicketServiceImp(
         {
             var ticket = new ExcelTicketModel
             {
-                BetId = item.BetId,
+                BetId = convertBetListForExcelService.BetIdToText(item),
                 TransDate = item.TransDate,
                 Member = item.Member,
                 Choice = convertBetListForExcelService.ChoiceHtmlToText(item.Choice, item.BetId),
@@ -110,6 +112,8 @@ public class MapTicketServiceImp(
         ticketHtml.Status = betListService.GetStatus(ticket, ticketHelper, null, false);
         ticketHtml.BetType = betListService.GetBetTypeName(ticket);
         ticketHtml.Choice = GetChoice(ticket, item, ticketHelper);
+        ticketHtml.SubTransId = item.SubTransId.ToString();
+        ticketHtml.IsHybrid = item.IsHybrid;
 
         return ticketHtml;
     }
@@ -123,7 +127,10 @@ public class MapTicketServiceImp(
 
         var comboParlayNames = betListService.GetComboParlayName(ticket);
         ticket = SetSubTicket(item);
-        return comboParlayNames + betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoice = $"<div {(item.IsHybrid ? "" : "hidden")} class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
+
+        return comboParlayNames + subChoice;
     }
 
     private Ticket SetMainTicket(DetailTicketModel item)

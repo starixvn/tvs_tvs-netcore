@@ -10,7 +10,7 @@ import { UserLogComponent } from './user-log.component';
 import { By } from '@angular/platform-browser';
 
 class Helper {
-  static readonly fakeLogsModel: LogsModel = {
+  static readonly fakeLogsModel = {
     totalLogs: 13,
     logList: [{
       no: 1,
@@ -26,7 +26,7 @@ class Helper {
       parlayTickets: ['22'],
       doneBy: 'sa'
     }]
-  };
+  } as LogsModel;
 
   static readonly fakeQuery: GetLogsQuery = {
     matchId: '113',

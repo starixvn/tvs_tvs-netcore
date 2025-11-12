@@ -23,7 +23,7 @@ class Helper {
             singleTickets: ['11', '12', '13'],
             parlayTickets: ['22', '23', '24'],
             doneBy: 'sa'
-        }];
+        }] as LogModel[];
     }
 }
 
@@ -107,7 +107,7 @@ describe('LogsListComponent', () => {
 
     it('should return empty array when getModalContent is called with empty arrays', () => {
         // Act
-        const result = component['getModalContent']([], []);
+        const result = component['getModalContent']([], [], []);
 
         // Assert
         expect(result.length).toBe(0);

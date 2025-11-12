@@ -4,45 +4,48 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
+using Fanex.Logging;
 using Polly;
 using TicketVoidingSystem.Criteria.JackTimeHybridParlay;
-using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.JackTimeHybridParlay;
 
 namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
 public interface LegOddsService
 {
-    Task<Result> Execute(int matchId, string mainTransId, DateTime triggerTime);
+    Task<bool> Execute(int matchId, string transIds, DateTime logDate, int siteDbGroupId);
 }
 
-public class LegOddsServiceImp(IDynamicRepository repository, LoggingService loggingService)
+public class LegOddsServiceImp(
+    IDynamicRepository repository,
+    LoggingService loggingService,
+    SessionService sessionService)
     : LegOddsService
 {
-    public async Task<Result> Execute(int matchId, string transIds, DateTime logDate)
+    public async Task<bool> Execute(int matchId, string transIds, DateTime logDate, int siteDbGroupId)
     {
         try
         {
             var legOdds = await RetryForGetLegOdds(matchId, transIds, logDate);
             if (legOdds.Any())
             {
-                return await UpdateLegOdds(legOdds);
+                return await UpdateLegOdds(legOdds, siteDbGroupId);
             }
 
-            return BuildErrorResult("Cannot get legOdds. Please try again!");
+            return false;
         }
         catch (Exception e)
         {
             await loggingService.ErrorAsync(e.Message, e);
 
-            return BuildErrorResult(e.Message);
+            return false;
         }
     }
 
     public async Task<IEnumerable<LegOddsModel>> RetryForGetLegOdds(int matchId, string transIds, DateTime logDate)
     {
-        const byte retryCount = 10;
-        const byte retryTimes = 5;
+        const byte retryCount = 5;
+        const byte retryTimes = 3;
         var legOdds = Enumerable.Empty<LegOddsModel>();
         await Policy
             .HandleResult<bool>(c => !c)
@@ -65,26 +68,25 @@ public class LegOddsServiceImp(IDynamicRepository repository, LoggingService log
             TransIds = transIds,
             LogDate = logDate
         };
+        LogService.InfoAsync("Retry for get odds:" + JsonSerializer.Serialize(criteria));
 
         return await repository.FetchAsync<LegOddsModel>(criteria);
     }
 
-    public async Task<Result> UpdateLegOdds(IEnumerable<LegOddsModel> legOdds)
+    public async Task<bool> UpdateLegOdds(IEnumerable<LegOddsModel> legOdds, int siteDbGroupId)
     {
+        var jsonLegOdds = JsonSerializer.Serialize(legOdds);
         var criteria = new HybridParlayUpdateLegOddsCriteria
         {
-            LegOddsJson = JsonSerializer.Serialize(legOdds)
+            LegOddsJson = jsonLegOdds,
+            MatchId = legOdds.First().MatchId,
+            Creator = sessionService.UserId,
+            SiteDbGroupId = siteDbGroupId
         };
 
-        return await repository.GetAsync<Result>(criteria);
-    }
+        await repository.ExecuteAsync(criteria);
+        await loggingService.InfoAsync($"Update leg odds: {jsonLegOdds} \nErrorCode: {criteria.ErrCode} \nErrMsg: {criteria.ErrMsg}");
 
-    public static Result BuildErrorResult(string errorMsg)
-    {
-        return new Result
-        {
-            ErrorMsg = errorMsg,
-            ErrorCode = 1
-        };
+        return criteria.ErrCode == 0 || string.IsNullOrWhiteSpace(criteria.ErrMsg);
     }
 }

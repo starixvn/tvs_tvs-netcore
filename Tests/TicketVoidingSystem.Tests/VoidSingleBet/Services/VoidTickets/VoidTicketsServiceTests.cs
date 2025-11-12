@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using NSubstitute;
+using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Models.SendMessage;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Models;
@@ -43,7 +45,10 @@ public class VoidTicketsServiceTests
             .ReturnsForAnyArgs(fakeData);
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService);
+        var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
+        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(true);
+        var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService, hybridParlayTicketService);
 
         // Act
         var result = await service.VoidBet(query);
@@ -82,7 +87,10 @@ public class VoidTicketsServiceTests
             .ReturnsForAnyArgs(fakeData);
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService);
+        var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
+        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(true);
+        var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService, hybridParlayTicketService);
         var combineValidation = new VoidTicketValidation
         {
             ErrorCode = 0,
@@ -122,7 +130,10 @@ public class VoidTicketsServiceTests
             .Do(_ => throw expectedException);
         var loggingService = Substitute.For<LoggingService>();
         var sessionService = Substitute.For<SessionService>();
-        var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService);
+        var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
+        hybridParlayTicketService.Execute(Arg.Any<IEnumerable<BetId>>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(),
+            Arg.Any<int>()).ReturnsForAnyArgs(true);
+        var service = new VoidTicketsServiceImp(sessionService, TestSetup.CreateMapper(), repository, loggingService, hybridParlayTicketService);
 
         // Act
         var result = await service.VoidBet(query);

@@ -17,6 +17,7 @@ export class ModeType {
   static readonly PARLAY = 4;
   static readonly VIRTUAL_SPORTS = 5;
   static readonly MARK_TICKET = 9;
+  static readonly HYBRID_PARLAY = 10;
 }
 
 export class Product {
@@ -25,18 +26,20 @@ export class Product {
   static readonly VIRTUAL_SPORTS = 2;
   static readonly BET_BUILDER = 3;
   static readonly BITCOIN = 4;
+  static readonly HYBRID_PARLAY = 5;
 
   static readonly PRODUCT_LIST = [
     { id: Product.SPORTS_BOOK, name: 'Sportsbook', note: 'SPORTS_BOOK' },
     { id: Product.NUMBER_GAME, name: 'Number Game', note: 'NUMBER_GAME' },
     { id: Product.VIRTUAL_SPORTS, name: 'Virtual Sports', note: 'VIRTUAL_SPORTS' },
     { id: Product.BET_BUILDER, name: 'Bet Builder', note: 'BET_BUILDER' },
-    { id: Product.BITCOIN, name: 'Bitcoin', note: 'BITCOIN' }
+    { id: Product.BITCOIN, name: 'Bitcoin', note: 'BITCOIN' },
+    { id: Product.HYBRID_PARLAY, name: 'Bet Builder+', note: 'HYBRID_PARLAY' }
   ];
 
   static readonly IS_MATCH_3RD = [Product.BITCOIN];
-  static readonly SHOW_SEND_COLUMN = [Product.SPORTS_BOOK, Product.NUMBER_GAME, Product.BET_BUILDER];
-  static readonly GET_BETTYPES = [Product.SPORTS_BOOK, Product.BET_BUILDER, Product.VIRTUAL_SPORTS];
+  static readonly SHOW_SEND_COLUMN = [Product.SPORTS_BOOK, Product.NUMBER_GAME, Product.BET_BUILDER, Product.HYBRID_PARLAY];
+  static readonly GET_BETTYPES = [Product.SPORTS_BOOK, Product.BET_BUILDER, Product.VIRTUAL_SPORTS, Product.HYBRID_PARLAY];
   static readonly STATIC_BETTYPES = [Product.NUMBER_GAME, Product.BITCOIN];
 }
 
@@ -200,12 +203,13 @@ export class AbnormalFilterBy {
   static readonly MIX_PARLAY = 1;
   static readonly SYSTEM_PARLAY = 2;
   static readonly MANY_MATCH = 3;
-
+  static readonly HYBRID_PARLAY = 4;
 
   items: Item[] = [
     { name: 'Single ticket', value: AbnormalFilterBy.SINGLE },
     { name: 'Mix Parlay ticket', value: AbnormalFilterBy.MIX_PARLAY },
-    { name: 'System Parlay ticket', value: AbnormalFilterBy.SYSTEM_PARLAY }
+    { name: 'System Parlay ticket', value: AbnormalFilterBy.SYSTEM_PARLAY },
+    { name: 'Bet Builder+', value: AbnormalFilterBy.HYBRID_PARLAY }
   ];
 
   duplicateTicketsFilterItems: Item[] = [

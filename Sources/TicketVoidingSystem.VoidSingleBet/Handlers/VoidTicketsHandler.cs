@@ -2,7 +2,6 @@
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
-using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
 
@@ -14,8 +13,7 @@ public class VoidTicketsHandler(
     ResultCacheService resultCacheService,
     NetPositionForCricketService netPositionForCricketService,
     VoidTicketsService voidTicketsService,
-    AfterVoidService afterVoidService,
-    HybridParlayTicketService hybridParlayTicketService)
+    AfterVoidService afterVoidService)
     : IRequestHandler<VoidTicketsRequest, IEnumerable<Result>?>
 {
     public async Task<IEnumerable<Result>?> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
@@ -32,8 +30,6 @@ public class VoidTicketsHandler(
     {
         var results = new List<Result>();
         await resultCacheService.SetVoidResultsCache(query.Guid, results);
-        var isCalledJackTimeHybridParlay = await hybridParlayTicketService
-            .Execute(query.Tickets.Union(query.TransIdCrickets).Where(t => t.IsHybrid), HybridParlayType.VoidSub);
         var updateNpResult = await netPositionForCricketService.Update(query);
         if (!updateNpResult.TicketsAfterUpdateNp.Any())
         {
@@ -42,7 +38,7 @@ public class VoidTicketsHandler(
         else
         {
             query.Tickets = updateNpResult.TicketsAfterUpdateNp;
-            var voidResult = await voidTicketsService.VoidBet(query, isCalledJackTimeHybridParlay);
+            var voidResult = await voidTicketsService.VoidBet(query);
             results.AddRange(await afterVoidService.ExecuteWhenVoidSuccess(query, voidResult, updateNpResult.WarningCricket));
             results.AddRange(afterVoidService.ExecuteWhenVoidFailed(voidResult.Validation));
             await netPositionForCricketService.Rollback(voidResult);

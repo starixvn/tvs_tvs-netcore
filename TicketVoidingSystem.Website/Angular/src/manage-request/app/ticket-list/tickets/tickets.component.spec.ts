@@ -1,7 +1,7 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { PagingModel } from '../../../../utility/components/paging/paging.model';
 import { TicketsComponent } from './tickets.component';
 import { TicketModel, TicketsModel } from './tickets.model';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 class Helper {
   static readonly titleSelector = '.title-tickets-list-label';
@@ -24,7 +24,7 @@ class Helper {
     choice: '',
     voidTime: '08/19/2020 05:14:35 AM',
     isCashOut: false
-  };
+  } as TicketModel;
 
   static readonly fakeTicketsModel: TicketsModel = {
     groups: [

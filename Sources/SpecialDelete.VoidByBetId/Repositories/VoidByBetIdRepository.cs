@@ -5,6 +5,7 @@ using SpecialDelete.VoidByBetId.Models;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VoidByBetId.Repositories;
@@ -16,7 +17,11 @@ public interface VoidByBetIdRepository
     Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
 }
 
-public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+public class VoidByBetIdRepositoryImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    SessionService sessionService,
+    HybridParlayTicketService hybridParlayTicketService)
     : VoidByBetIdRepository
 {
     public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query)
@@ -44,6 +49,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
             {
                 return Task.FromResult((Enumerable.Empty<VoidTicketValidation>(), Enumerable.Empty<TicketEmailModel>()));
             }
+            hybridParlayTicketService.Execute(ticketsInSiteDb.Where(t => t.IsHybrid), HybridParlayType.VoidMain, HybridParlayTicketType.Main, server.Id);
 
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
             criteria.SiteDbGroupId = server.Id;

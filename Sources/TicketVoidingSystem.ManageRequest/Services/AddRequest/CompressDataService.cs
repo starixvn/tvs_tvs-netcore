@@ -4,6 +4,7 @@ using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
 using TicketVoidingSystem.Utilities;
+using TicketVoidingSystem.Web.JsonConverter;
 
 namespace TicketVoidingSystem.ManageRequest.Services.AddRequest;
 
@@ -25,6 +26,12 @@ public class CompressDataAddRequestServiceImp : CompressDataService
         AllowTrailingCommas = false,
         MaxDepth = 64
     };
+
+    static CompressDataAddRequestServiceImp()
+    {
+        // Add converter to remove trailing zeros from decimal values
+        SerializerOptions.Converters.Add(new DecimalWithoutTrailingZerosJsonConverter());
+    }
 
     public string CompressTicket<T>(IEnumerable<T> tickets)
     {

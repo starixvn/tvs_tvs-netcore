@@ -35,7 +35,7 @@ export class GroupBetTypesComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(_: { [propKey: string]: SimpleChange }) {
-    this.display = this.product === Product.SPORTS_BOOK;
+    this.display = this.product === Product.SPORTS_BOOK || this.product === Product.HYBRID_PARLAY;
   }
 
   changeCheckedGroupToBetType(group: GroupBetType){

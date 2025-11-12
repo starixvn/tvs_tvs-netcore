@@ -20,6 +20,8 @@ export class TicketTableModel {
   siteDbGroupId: number;
   groupName: string;
   isChecked: boolean;
+  subTransId: string;
+  isHybrid: boolean;
 
   constructor(init?: Partial<TicketTableModel>) {
     Object.assign(this, init);

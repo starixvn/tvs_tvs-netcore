@@ -29,9 +29,10 @@ import { StaticService } from '../../../utility/services/static.service';
 import { AppComponent } from '../app.component';
 import { AppService } from '../app.service';
 import { GetSummaryQuery } from '../models/query.model';
-import { FilterEvent, Item, Licensee, Type } from './filter.model';
+import { FilterEvent, Item, Type } from './filter.model';
 import { BetTypesService } from '../../../utility/components/bettypes/bettypes.service';
 import { GroupBetTypesService } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.service';
+import { FilterService } from './filter.service';
 
 @Component({
   standalone: true,
@@ -58,7 +59,6 @@ export class FilterComponent implements OnInit {
   sportType: number;
   singleOrSubParlay = 'All';
   isReSettled = false;
-  licensees: Licensee[];
   licenseeSelectList: { id: number, name: string }[] = [];
   groupBy = new Type();
   ticketType = new Type();
@@ -85,7 +85,8 @@ export class FilterComponent implements OnInit {
   appComponent = inject(AppComponent);
   betTypesService = inject(BetTypesService);
   groupBetTypesService = inject(GroupBetTypesService);
-  
+  filterService = inject(FilterService);
+
   async ngOnInit() {
     this.tooltip.element = this.element;
     await this.initFilter();
@@ -123,23 +124,7 @@ export class FilterComponent implements OnInit {
   }
 
   async getLicensees() {
-    this.licensees = await this.appService.getLicensees();
-
-    this.licenseeSelectList = [
-      { id: 0, name: 'All' },
-      { id: -1, name: 'Credit' }
-    ];
-
-    if (this.licensees && this.licensees.length > 0) {
-      const licenseeItems = this.licensees.map(l => ({
-        id: l.id,
-        name: l.name,
-        group: 'Licensee'
-      }));
-
-      this.licenseeSelectList = [...this.licenseeSelectList, ...licenseeItems];
-    }
-
+    this.licenseeSelectList = await this.filterService.getLicenseeSelectList();
     this.query.licenseeId = 0;
   }
 
@@ -183,7 +168,7 @@ export class FilterComponent implements OnInit {
     this.isMatch3rd = Product.IS_MATCH_3RD.indexOf(value) > -1;
     this.switchMatch3rd = this.switchMatch3rd !== this.isMatch3rd;
     this.unCheckAffectedTickets()
-    if (value !== Product.SPORTS_BOOK) {
+    if (!this.filterService.isSportsBookOrHybridParlay(value)) {
       this.disabledTransDate = true;
       this.singleOrSubParlay = 'All';
       this.query.liveAwayScore = null;
@@ -198,7 +183,7 @@ export class FilterComponent implements OnInit {
       this.betTypes = this.commonBetTypes;
     }
 
-    if (Product.BET_BUILDER === value) {
+    if (this.filterService.isBetBuilder(value)) {
       this.betTypes = new BetTypesModel();
     }
 
@@ -206,8 +191,9 @@ export class FilterComponent implements OnInit {
   }
 
   async getBetTypes() {
+    const mode = this.query.product === Product.HYBRID_PARLAY ? ModeType.HYBRID_PARLAY : ModeType.TICKET_LISTING;
     const query: GetBetTypesQuery = {
-      mode: ModeType.TICKET_LISTING,
+      mode: mode,
       matchId: 0
     };
     this.blockUIService.start();
@@ -250,76 +236,14 @@ export class FilterComponent implements OnInit {
 
   validateProduct(): boolean {
     const product = this.query.product;
-    if (this.isInvalidProduct0(product, this.sportType)
-      || this.isInvalidProduct1(product, this.sportType)
-      || this.isInvalidProduct2(product, this.sportType)
-      || this.isInvalidProduct9(product, this.sportType)
-      || this.isInvalidOtherProducts(this.sportType)) {
+    if(this.filterService.invalidProduct(product, this.sportType)) {
       this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
       return false;
     }
 
     return true;
   }
-
-  private inValidSportTypeVirtualSport(sportType: number) { // NOSONAR
-    return (sportType < 180 || sportType > 186)                         //sportTypes invalid in  Virtual Sports
-      && ((sportType < 190 || sportType > 199) && sportType !== 177)      //sportTypes invalid in  Virtual Sports 2
-      && (sportType !== 178 && sportType !== 179)                         //sportTypes invalid in  Virtual Sports 3
-      && (sportType !== 188)                                              //sportTypes invalid in  Virtual Sports 4
-      && (sportType !== 147)                                              //sportTypes invalid in  Virtual Sports 5
-      && (sportType !== 134)                                              //sportTypes invalid in  Virtual Sports 6
-      && !this.isSportTypeVs7(sportType);                                 //sportTypes invalid in  Virtual Sports 7
-  }
-
-  private isSportTypeVs7(sportType: number) {
-    const sportTypeVs7 = [125, 126, 127];
-
-    return sportTypeVs7.includes(sportType);
-  }
-  private isInvalidProduct0(product: number, sportType: number): boolean {
-    return ((product === 0) && sportType > 99 && sportType !== 154);
-  }
-
-  private isInvalidProduct1(product: number, sportType: number): boolean {
-    return (product === 1 && sportType !== 161 && sportType !== 164);
-  }
-
-  isInvalidProduct2(product: number, sportType: number): boolean {
-    return (product === 2 && this.inValidSportTypeVirtualSport(sportType));
-  }
-
-  private isInvalidProduct9(product: number, sportType: number): boolean {
-    return (product === 9 && sportType !== 175);
-  }
-
-  private isInvalidOtherProducts(sportType: number): boolean {
-    return (
-      this.isInvalidFirstGroupOtherProducts(sportType) &&
-      this.isInvalidSecondGroupOtherProducts(sportType)
-    );
-  }
-
-  private isInvalidFirstGroupOtherProducts(sportType: number): boolean { // NOSONAR
-    return (
-      sportType > 99 &&
-      sportType !== 154 &&
-      sportType !== 161 &&
-      sportType !== 164 &&
-      (sportType < 180 || sportType > 186) &&
-      ((sportType < 190 || sportType > 199) && sportType !== 177) &&
-      sportType !== 178 && sportType !== 179 &&
-      sportType !== 188 && sportType !== 147 && sportType !== 134 &&
-      !this.isSportTypeVs7(sportType)
-    );
-  }
-
-  private isInvalidSecondGroupOtherProducts(sportType: number): boolean {
-    return (
-      sportType !== 175
-    );
-  }
-
+  
   async handleByProduct() {
     if (Product.GET_BETTYPES.indexOf(this.query.product) > -1) {
       this.groupBetTypes = new GroupBetTypesModel();
@@ -328,21 +252,18 @@ export class FilterComponent implements OnInit {
     }
   }
 
-  isNumber(value: string): boolean {
-    return /^\+?(0|[1-9]\d*)$/.test(value);
-  }
-
   async handleBetTypes() {
+    const mode = this.query.product === Product.HYBRID_PARLAY ? ModeType.HYBRID_PARLAY : ModeType.TICKET_LISTING;
     const query: GetBetTypesQuery = {
-      mode: ModeType.TICKET_LISTING,
+      mode: mode,
       matchId: parseInt(this.matchId, 10)
     };
 
-    if (this.query.product === Product.SPORTS_BOOK) {
+    if (this.filterService.isSportsBookOrHybridParlay(this.query.product)) {
       this.handleGroupBetTypesOfSportBook(query);
     }
 
-    if (this.query.product === Product.BET_BUILDER) {
+    if (this.filterService.isBetBuilder(this.query.product)) {
       this.handleBetTypesOfBetBuilder(query);
     }
 
@@ -366,7 +287,7 @@ export class FilterComponent implements OnInit {
       this.tooltip.display('match-id', data.result.errorMsg);
     }
 
-    if (this.query.product === Product.SPORTS_BOOK) {
+    if (this.filterService.isSportsBookOrHybridParlay(this.query.product)) {
       const specialGroups = filter(data.groupBetTypes, {
         groupName: 'Special'
       });
@@ -390,7 +311,7 @@ export class FilterComponent implements OnInit {
 
     const betTypes: BetTypeModel[] = [];
     data.forEach(item => {
-      betTypes.push(this.betTypesService.initBetTypeModel(item.selectionType.toString(), item.selectionName, false, Product.BET_BUILDER, true));
+      betTypes.push(this.betTypesService.initBetTypeModel(item.selectionType.toString(), item.selectionName, false, this.query.product, true));
     });
     this.betTypes = this.betTypesService.initBetTypesModel(betTypes, true);
   }
@@ -437,18 +358,13 @@ export class FilterComponent implements OnInit {
   }
 
   checkFilterParams(): boolean {
-    if (this.matchId === '' || this.matchId === undefined) {
-      this.tooltip.display('match-id', TEXT.REQUIRED_MATCHID);
-      return false;
-    }
-    if (!this.isNumber(this.matchId) || this.match === null) {
-      this.tooltip.display('match-id', TEXT.INVALID_MATCHID);
+    if(this.filterService.invalidMatch(this.matchId, this.match, this.tooltip)) {
       return false;
     }
     if (this.isShowFilterTime() && !this.disabledTransDate && !StaticService.isFromTimeSameOrBeforeToTime(this.fromDate, this.toDate, this.tooltip, 'from-date-time')) {
       return false;
     }
-    if (this.isSelectionNotValid()) {
+    if (this.filterService.isSelectionNotValid(this.singleOrSubParlay, this.selectedComboParlay)) {
       this.tooltip.display('selection-dropdown-sub-parlay', TEXT.SELECT_AT_LEAST_ONE_OPTION);
       return false;
     }
@@ -459,13 +375,8 @@ export class FilterComponent implements OnInit {
     return true;
   }
 
-  isSelectionNotValid() {
-    const selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay)
-    return this.singleOrSubParlay === "SubParlay" && selectionSubParlays === "";
-  }
-
   validateBetTypes() {
-    if (this.query.product === Product.SPORTS_BOOK) {
+    if (this.filterService.isSportsBookOrHybridParlay(this.query.product)) {
       if (this.checkMatch === '') {
         return this.groupBetTypesComponent.validate();
       } else {
@@ -490,9 +401,9 @@ export class FilterComponent implements OnInit {
     this.query.toTransDate = this.disabledTransDate ? null : this.toDate;
     this.query.singleOrSubParlay = this.singleOrSubParlay;
     this.query.isReSettled = this.isReSettled;
-    this.query.selectionSubParlays = this.getSelectionSubParlays(this.singleOrSubParlay);
+    this.query.selectionSubParlays = this.filterService.getSelectionSubParlays(this.singleOrSubParlay, this.selectedComboParlay);
 
-    if (this.query.product === Product.BET_BUILDER) {
+    if (this.filterService.isBetBuilder(this.query.product)) {
       this.query.betTypes = '38';
       this.query.selectionType = this.getCheckedBetTypes();
     } else {
@@ -510,16 +421,8 @@ export class FilterComponent implements OnInit {
     return this.query;
   }
 
-  private getSelectionSubParlays(bet: string) {
-    if (bet !== "SubParlay") {
-      return "";
-    }
-
-    return this.selectedComboParlay.join(',');
-  }
-
   private getCheckedBetTypes(): string {
-    if (this.query.product === Product.SPORTS_BOOK) {
+    if (this.filterService.isSportsBookOrHybridParlay(this.query.product)) {
       return this.groupBetTypesService.getValueCheckedBetTypes(this.groupBetTypes.groupBetTypes);
     } else if (this.query.product === Product.VIRTUAL_SPORTS) {
       return this.betTypesVSComponent.getCheckedBetTypes().join(',');
@@ -533,74 +436,22 @@ export class FilterComponent implements OnInit {
   }
 
   isShowCheckboxAffected(): boolean {
-    if (this.query.product === Product.SPORTS_BOOK) {
-      return this.groupBetTypes && this.groupBetTypes.groupBetTypes.length > 0;
-    }
-    if (this.query.product === Product.BET_BUILDER) {
-      return this.betTypes && this.betTypes.betTypes.length > 0;
-    }
-
-    return false;
+    return this.filterService.isShowCheckboxAffected(this.query.product, this.groupBetTypes, this.betTypes);
   }
 
   unCheckAffectedTickets(): void {
     this.isReSettled = false;
-    this.enableBetTypesAndAdvancedMode();
+    this.filterService.enableBetTypesAndAdvancedMode(this.betTypesComponent);
     this.handleBetTypesAndAdvancedMode();
   }
 
-  private enableGroupBetTypesAndAdvancedMode(): void {
-    if (this.groupBetTypesComponent) {
-      this.groupBetTypesComponent.isDisabledAllBetTypes = false;
-    }
-  }
-
-  private enableBetTypesAndAdvancedMode(): void {
-    if (this.betTypesComponent) {
-      this.betTypesComponent.isDisabledAllBetTypes = false;
-    }
-  }
-
-  private checkAndDisabledAllBetTypes(): void {
-    if (this.query.product === Product.BET_BUILDER) {
-      if (this.isReSettled) {
-        if (this.betTypesComponent) {
-          this.betTypesComponent.isDisabledAllBetTypes = true;
-        }
-        this.betTypes.isChecked = true;
-        this.betTypes.betTypes.forEach(x => {
-          x.isChecked = true;
-        });
-      } else {
-        this.enableBetTypesAndAdvancedMode();
-      }
-    }
-  }
-
-  private checkAndDisabledAllGroupBetTypes(): void {
-    if (this.query.product === Product.SPORTS_BOOK) {
-      if (this.isReSettled) {
-        if (this.groupBetTypesComponent) {
-          this.groupBetTypesComponent.isDisabledAllBetTypes = true;
-        }
-        this.groupBetTypes.isChecked = true;
-        this.groupBetTypes.groupBetTypes.forEach(x => {
-          x.isChecked = true;
-          x.betTypes.forEach(y => y.isChecked = true);
-        });
-      } else {
-        this.enableGroupBetTypesAndAdvancedMode();
-      }
-    }
-  }
-
   handleBetTypesAndAdvancedMode(): void {
-    this.checkAndDisabledAllBetTypes();
-    this.checkAndDisabledAllGroupBetTypes();
+    this.filterService.checkAndDisabledAllBetTypes(this.query.product, this.isReSettled, this.betTypesComponent, this.betTypes);
+    this.filterService.checkAndDisabledAllGroupBetTypes(this.query.product, this.isReSettled, this.groupBetTypesComponent, this.groupBetTypes);
   }
 
   isShowAdvancedMode(): boolean {
-    return this.query.product === Product.SPORTS_BOOK;
+    return this.filterService.isSportsBookOrHybridParlay(this.query.product);
   }
 
   isShowFilterTime(): boolean {

@@ -202,7 +202,7 @@ export class RequestInfoComponent implements OnInit, OnChanges {
   }
 
   public isAbnormalBetMixOrSystemParlay(): boolean {
-    return this.isAbnormalBetIssueType() && StaticService.isFilterByMixOrSystemParlay(this.model.abnormalBetModel?.filterBy);
+    return StaticService.isAbnormalBetMixOrSystemParlay(this.issue.issueTypeId?.toString(), this.model.abnormalBetModel?.filterBy);
   }
 
   public isDuplicateTicketsMixParlay(): boolean {

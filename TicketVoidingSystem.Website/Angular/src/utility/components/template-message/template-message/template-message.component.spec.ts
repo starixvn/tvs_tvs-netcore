@@ -215,18 +215,6 @@ describe('TemplateMessageComponent', () => {
     expect(result).toBeTruthy();
   });
 
-  it('should check if abnormal bet is mix or system parlay', () => {
-    // Arrange
-    component.issueTypeId = 11;
-    component.value.filterBy = 1;
-
-    // Act
-    const result = component.isAbnormalBetMixOrSystemParlay();
-
-    // Assert
-    expect(result).toBeTruthy();
-  });
-
   it('should check if duplicate tickets is mix parlay', () => {
     // Arrange
     component.issueTypeId = 20;

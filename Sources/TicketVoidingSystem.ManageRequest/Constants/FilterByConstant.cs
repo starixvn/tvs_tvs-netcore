@@ -11,4 +11,6 @@ public static class FilterByConstant
     public const byte MixParlay = 1;
 
     public const byte SystemParlay = 2;
+
+    public const byte HybridParlay = 4;
 }

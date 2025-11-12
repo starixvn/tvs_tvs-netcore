@@ -27,7 +27,8 @@ public class MapUserLogsServiceTests
         var userLogTicketInfo = new UserLogTicketInfo
         {
             SingleTickets = new List<TicketInfo> { new() { TransId = "100001" }, new() { TransId = "100004" }, new() { TransId = "100005" } },
-            ParlayTickets = new List<TicketInfo> { new() { TransId = "100002" }, new() { TransId = "100003" }, new() { TransId = "100006" } }
+            ParlayTickets = new List<TicketInfo> { new() { TransId = "100002" }, new() { TransId = "100003" }, new() { TransId = "100006" } },
+            HybridParlayTickets = new List<TicketInfo>()
         };
         var originalLogs = new List<GetUserLogModel>
         {

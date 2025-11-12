@@ -4,6 +4,7 @@ import { TicketsModel } from './tickets.model';
 import { GroupModel } from './group-tickets.model';
 import { TicketModel } from './ticket.model';
 import { IconCheckBox } from '../../../utility/constants/config';
+import { BetID } from '../../../utility/models/bet-id.model';
 
 describe('TicketsListService', () => {
   let service: TicketsListService;
@@ -27,7 +28,7 @@ describe('TicketsListService', () => {
       data.toTime = '2023-01-02';
       data.singleCount = 5;
       data.parlayCount = 5;
-      data.totalItemsList = [{ transId: '1', matchId: 1, siteDbGroupId: 1 }];
+      data.totalItemsList = [{ transId: '1', matchId: 1, siteDbGroupId: 1 }] as BetID[];
       data.uncheckedTransIds = ['1', '2'];
       data.groups = [];
 
@@ -217,7 +218,7 @@ describe('TicketsListService', () => {
         { transId: '1', matchId: 1, siteDbGroupId: 1 },
         { transId: '2', matchId: 2, siteDbGroupId: 2 },
         { transId: '3', matchId: 3, siteDbGroupId: 3 }
-      ];
+      ] as BetID[];
       ticketsModel.tempUncheckedList = ['1', '3'];
 
       // Act
@@ -234,7 +235,7 @@ describe('TicketsListService', () => {
       ticketsModel.totalItemsList = [
         { transId: '1', matchId: 1, siteDbGroupId: 1 },
         { transId: '2', matchId: 2, siteDbGroupId: 2 }
-      ];
+      ] as BetID[];
       ticketsModel.tempUncheckedList = [];
 
       // Act

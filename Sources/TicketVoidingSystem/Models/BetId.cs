@@ -7,4 +7,5 @@ public class BetId
     public int? MatchId { get; set; }
     public bool IsHybrid { get; set; }
     public int SubBetType { get; set; }
+    public string SubTransId { get; set; }
 }

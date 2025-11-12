@@ -126,11 +126,15 @@ describe('TemplateMessageService', () => {
     } as TicketsModel;
     voidMatch.logInfoDetail = new LogInfoDetail();
     voidMatch.logInfoDetail.liveScores = '1-9';
+    voidMatch.logInfoDetail.wrongMarket = '1-9';
+    voidMatch.logInfoDetail.actualMarket = '1-9';
     const requestDetail = Helper.fakeRequestDetailViewModel;
     requestDetail.dangerAcceptedModels = [new RedCardModel()];
     requestDetail.wrongScoreModels = [new WrongScoreModel()];
     requestDetail.wrongHdpModels = [new WrongHdpModel()];
     requestDetail.wrongOuModels = [new WrongOuModel()];
+    requestDetail.wrongOuModels[0].wrongMarket = '1-9';
+    requestDetail.wrongOuModels[0].actualMarket = '1-9';
     [
       IssueTypeConstant.DANGER_ACCEPTED,
       IssueTypeConstant.WRONG_SCORE,
@@ -208,10 +212,12 @@ describe('TemplateMessageService', () => {
     // Arrange
     const templateValue = new TemplateValue();
     const voidMatch = new VoidMatch();
-    const wrongOuModel = new WrongOuModel();
-    voidMatch.matchModel = new MatchModel();
     voidMatch.logInfoDetail = new LogInfoDetail();
     voidMatch.logInfoDetail.liveScores = '1|0';
+    const wrongOuModel = new WrongOuModel();
+    wrongOuModel.wrongMarket = '1-9';
+    wrongOuModel.actualMarket = '1-9';
+    voidMatch.matchModel = new MatchModel();
     voidMatch.voidTicketsMini = new TicketsModel();
     voidMatch.isAllLiveTickets = true;
 

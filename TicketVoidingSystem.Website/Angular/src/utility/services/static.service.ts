@@ -166,7 +166,12 @@ export class StaticService {
   }
 
   static isFilterByMixOrSystemParlay(filterBy: number): boolean {
-    return filterBy === AbnormalFilterBy.MIX_PARLAY || filterBy === AbnormalFilterBy.SYSTEM_PARLAY;
+    const filterByParlayItems = [AbnormalFilterBy.MIX_PARLAY, AbnormalFilterBy.SYSTEM_PARLAY, AbnormalFilterBy.HYBRID_PARLAY];
+    return filterByParlayItems.includes(filterBy);
+  }
+
+  static isAbnormalBetMixOrSystemParlay(issueTypeId: string | number, filterBy: number): boolean {
+    return StaticService.isAbnormalBet(issueTypeId) && StaticService.isFilterByMixOrSystemParlay(filterBy);
   }
 
   static isFilterByManyMatch(filterBy: number): boolean {

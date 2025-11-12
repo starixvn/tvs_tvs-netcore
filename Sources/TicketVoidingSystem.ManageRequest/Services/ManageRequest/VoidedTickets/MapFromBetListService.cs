@@ -48,6 +48,8 @@ public class MapFromBetListServiceImp(IMapper mapper, BetListService betListServ
         viewModel.Currency = item.CurrencyName;
         viewModel.Creator = item.Creator;
         viewModel.IsCashOut = item.IsCashOut;
+        viewModel.SubTransId = item.SubTransId.ToString();
+        viewModel.IsHybrid = item.IsHybrid;
 
         return viewModel;
     }

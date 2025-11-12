@@ -56,7 +56,7 @@ public class InsertAutoVoidRequestQueueServiceImp(OnlineServerRepository onlineS
     {
         if (abnormalBetInfo != null)
         {
-            return abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay
+            return abnormalBetInfo.FilterBy is FilterByConstant.MixParlay or FilterByConstant.SystemParlay or FilterByConstant.HybridParlay
                 ? new List<int> { BetTypeConstant.SystemParlay }
                 : abnormalBetInfo.Matches?.Select(x => x.MatchId);
         }

@@ -60,6 +60,7 @@ public class MapTicketsExcelServiceImp(
             excelTicket.Odds = ticketDetail.Odds.DefaultText();
             excelTicket.Stake = ticketDetail.Stake.StakeText();
             excelTicket.Status = ticketDetail.Status.DefaultText();
+            excelTicket.BetType = ticketDetail.BetType.Replace("<sup>", "").Replace("</sup>", "");
             excelTicket.Choice = BuildChoice(ticket, ticketDetail, query.IssueTypeId);
             excelTickets.Add(excelTicket);
         }

@@ -5,7 +5,6 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
 using TicketVoidingSystem.Services.JackTimeCashOut;
-using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.NetPosition;
 using TicketVoidingSystem.Utilities;
 
@@ -19,8 +18,7 @@ public class VoidTicketsHandler(
     LoggingService loggingService,
     ResultCacheService resultCacheService,
     CashOutApiService cashOutApiService,
-    AfterVoidService afterVoidService,
-    HybridParlayTicketService hybridParlayTicketService)
+    AfterVoidService afterVoidService)
     : IRequestHandler<VoidTicketsRequest, List<Result>>
 {
     public async Task<List<Result>> Handle(VoidTicketsRequest request, CancellationToken cancellationToken)
@@ -34,8 +32,6 @@ public class VoidTicketsHandler(
         await resultCacheService.SetVoidResultsCache(request.Guid, results);
 
         var warningCrickets = string.Empty;
-        await hybridParlayTicketService
-            .Execute(request.Tickets.Union(request.TransIdCrickets).Where(t => t.IsHybrid), HybridParlayType.VoidMain);
         var callNetPosition = await netPositionService.UpdateNetPosition(request.TransIdCrickets, NetPositionConstant.ActionVoid);
         if (!callNetPosition)
         {

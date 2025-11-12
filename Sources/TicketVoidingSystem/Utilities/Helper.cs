@@ -12,11 +12,24 @@ using System.Threading.Tasks;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
+using TicketVoidingSystem.Web.JsonConverter;
 
 namespace TicketVoidingSystem.Utilities;
 
 public static class Helper
 {
+    private static readonly JsonSerializerOptions DeserializeOptionsWithDecimalConverter = new()
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+        PropertyNameCaseInsensitive = true
+    };
+
+    static Helper()
+    {
+        // Add converter to remove trailing zeros from decimal values
+        DeserializeOptionsWithDecimalConverter.Converters.Add(new DecimalWithoutTrailingZerosJsonConverter());
+    }
+
     public static string GetSettingKeyBySiteDbGroupId(int siteDbGroupId, string spName)
     {
         var serverName = SiteDbGroupConstant.ServerList.First(x => x.Id == siteDbGroupId).ServerName;
@@ -79,13 +92,7 @@ public static class Helper
 
     public static T DeserializeObjectIgnoreNullValue<T>(string input)
     {
-        var options = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            PropertyNameCaseInsensitive = true
-        };
-
-        return JsonSerializer.Deserialize<T>(input, options);
+        return JsonSerializer.Deserialize<T>(input, DeserializeOptionsWithDecimalConverter);
     }
 
     public static StringContent CreateRequestStringContent<T>(T data)

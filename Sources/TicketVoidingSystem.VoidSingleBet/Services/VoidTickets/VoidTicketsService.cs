@@ -4,6 +4,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Models;
@@ -12,21 +13,22 @@ namespace TicketVoidingSystem.VoidSingleBet.Services.VoidTickets;
 
 public interface VoidTicketsService
 {
-    Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay);
+    Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query);
 }
 
 public class VoidTicketsServiceImp(
     SessionService sessionService,
     IMapper mapper,
     IDynamicRepository repository,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    HybridParlayTicketService hybridParlayTicketService)
     : VoidTicketsService
 {
-    public async Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
+    public async Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query)
     {
         try
         {
-            return await HandleVoidWhenSuccess(query, isCalledJackTimeHybridParlay);
+            return await HandleVoidWhenSuccess(query);
         }
         catch (Exception exception)
         {
@@ -45,26 +47,30 @@ public class VoidTicketsServiceImp(
         }
     }
 
-    private async Task<VoidTicketsModel> HandleVoidWhenSuccess(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
+    private async Task<VoidTicketsModel> HandleVoidWhenSuccess(VoidTicketsQuery query)
     {
-        var ticketsInAllServers = new List<TicketEmailModel>();
-        var validationsInAllServers = new List<VoidTicketValidation>();
-        var criteria = CreateVoidTicketsCriteria(query, isCalledJackTimeHybridParlay);
+        var criteria = CreateVoidTicketsCriteria(query);
         var serversWithTickets = query.Tickets.GroupBy(x => x.SiteDbGroupId);
-
-        foreach (var serverGroup in serversWithTickets)
+        var tasks = serversWithTickets.Select(async serverGroup =>
         {
             var serverId = serverGroup.Key;
             var ticketsInSiteDb = serverGroup.ToList();
+            var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(ticketsInSiteDb.Where(t => t.IsHybrid),
+                HybridParlayType.VoidSub, HybridParlayTicketType.Sub, serverId);
 
+            criteria.IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay;
             criteria.SiteDbGroupId = serverId;
             criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            var (validation, emailTicketsSiteDb) = await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
-            ticketsInAllServers.AddRange(emailTicketsSiteDb);
-            validationsInAllServers.AddRange(validation);
-        }
 
-        return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers, query);
+            return await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
+        });
+
+        var results = await Task.WhenAll(tasks);
+
+        var validationInAllServers = results.SelectMany(x => x.Item1).ToList();
+        var ticketsInAllServers = results.SelectMany(x => x.Item2).ToList();
+
+        return BuildResultVoidTickets(ticketsInAllServers, validationInAllServers, query);
     }
 
     private static VoidTicketValidation CreateVoidTicketValidation(IList<VoidTicketValidation> validations)
@@ -91,7 +97,7 @@ public class VoidTicketsServiceImp(
         };
     }
 
-    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query, bool isCalledJackTimeHybridParlay)
+    private VoidTicketsCriteria CreateVoidTicketsCriteria(VoidTicketsQuery query)
     {
         var criteria = mapper.Map<VoidTicketsCriteria>(query);
         criteria.FromTransDate = query.FromTransDate?.ZoneCanada();
@@ -102,7 +108,6 @@ public class VoidTicketsServiceImp(
         criteria.BetTypes = query.BetTypes.ToBetTypeXml();
         criteria.UserPassword = query.UserPassword;
         criteria.UserId = sessionService.UserId;
-        criteria.IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay;
 
         return criteria;
     }

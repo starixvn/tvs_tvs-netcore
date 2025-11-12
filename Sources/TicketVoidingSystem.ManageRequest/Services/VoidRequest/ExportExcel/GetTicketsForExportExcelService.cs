@@ -78,6 +78,7 @@ public class GetTicketsForExportExcelServiceImp(
             excelTicket.Stake = ticketDetail.Stake.StakeText();
             excelTicket.Status = ticketDetail.Status.DefaultText();
             excelTicket.Choice = BuildChoice(ticket, ticketDetail, issueTypeId);
+            excelTicket.BetType = ticketDetail.BetType.Replace("<sup>", "").Replace("</sup>", "");
             excelTickets.Add(excelTicket);
         }
 
@@ -127,6 +128,7 @@ public class GetTicketsForExportExcelServiceImp(
             excelTicket.Stake = ticketDetail.Stake.StakeText();
             excelTicket.Status = ticketDetail.Status.DefaultText();
             excelTicket.Choice = BuildChoice(ticket, ticketDetail, issueTypeId);
+            excelTicket.BetType = ticketDetail.BetType.Replace("<sup>", "").Replace("</sup>", "");
             excelTickets.Add(excelTicket);
         }
 

@@ -119,7 +119,9 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
             RefNo = 4,
             AwayId = 1,
             HomeId = 0,
-            LeagueId = 3
+            LeagueId = 3,
+            FinalOdds = 0,
+            IsHybrid = false
         };
         const ChoiceType choiceType = new();
         betListService.BuildChoice(Arg.Any<ITicket>(), Arg.Any<TicketHelper>(), null, false).ReturnsForAnyArgs("<div id=11");
@@ -129,6 +131,6 @@ public class BetListCoreServiceTests : IClassFixture<RemotingRefFixture>
         var actual = service.GetTicket(item, null, choiceType, issueTypeId);
 
         // Assert
-        Assert.Equal("<div id='dvFavorite_1'><div id=11</div><div id=11<div id='divEvent_1'></div>", actual.Choice);
+        Assert.Equal("<div id='dvFavorite_1'><div hidden class='sub-odds'><span class='label'>Sub Odds</span> @ 0</div><div id=11</div><div id=11<div id='divEvent_1'></div>", actual.Choice);
     }
 }
