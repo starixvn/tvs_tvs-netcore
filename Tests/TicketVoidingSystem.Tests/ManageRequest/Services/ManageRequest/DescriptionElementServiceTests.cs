@@ -323,4 +323,99 @@ public class DescriptionElementServiceTests
         // Assert
         Assert.Equal(expectedResult, actual);
     }
+
+    [Fact]
+    public void BuildKoTime_WhenCalled_ReturnString()
+    {
+        // Arrange
+        var time = new DateTime(2021, 01, 11, 14, 30, 45);
+        const string expectedResult = "<div class=\"ko-time\">KO Time: <span class=\"text-success\">2021/01/11 02:30:45 PM</span></div>";
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildKoTime(time);
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
+
+    [Fact]
+    public void BuildVoidTime_FilterByIsNull_ReturnString()
+    {
+        // Arrange
+        const string expectedResult =
+            "<div class=\"void-time\"><span class=\"text-success\">Void Trans Time: 12:00:00.000 PM - 12:00:00.000 PM</span></div>";
+        var time = new DateTime();
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildVoidTime(null, time, time);
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
+
+    [Fact]
+    public void BuildTotal_BettypeNamesHasTwoElements_ReturnString()
+    {
+        // Arrange
+        const int single = 1;
+        const int parlay = 1;
+        var bettypeNames = new List<string> { "abc", "def" };
+        var expectedResult = $"<div class=\"count-tickets\">Single: <span class=\"text-primary total-single\">"
+                             + $"{single}</span>, Parlay: <span class=\"text-primary total-parlay\">{parlay}</span> (abc, def)</div>";
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildTotal(single, parlay, bettypeNames);
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
+
+    [Fact]
+    public void BuildTotal_BettypeNamesHasThreeElements_ReturnString()
+    {
+        // Arrange
+        const int single = 1;
+        const int parlay = 1;
+        var bettypeNames = new List<string> { "abc", "def", "ghi" };
+        var expectedResult = $"<div class=\"count-tickets\">Single: <span class=\"text-primary total-single\">"
+                             + $"{single}</span>, Parlay: <span class=\"text-primary total-parlay\">{parlay}</span> (abc, def, ghi)</div>";
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildTotal(single, parlay, bettypeNames);
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
+
+    [Fact]
+    public void BuildHybridParlay_HasTotal_ReturnString()
+    {
+        // Arrange
+        const string expectedResult = "<div>Bet Builder<sup>+</sup>: <span class=\"text-primary total-bet-builder-plus\">5</span></div>";
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildHybridParlay(5);
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
+
+    [Fact]
+    public void BuildSystemParlay_HasTotal_ReturnString()
+    {
+        // Arrange
+        const string expectedResult = "<div>System Parlay: <span class=\"text-primary total-system-parlay\">10</span></div>";
+        var descriptionService = new DescriptionElementServiceImp();
+
+        // Act
+        var actual = descriptionService.BuildSystemParlay(10);
+
+        // Assert
+        Assert.Equal(expectedResult, actual);
+    }
 }

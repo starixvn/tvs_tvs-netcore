@@ -309,4 +309,104 @@ public class LanguageCacheRefTests
         // Assert
         remotingRefService.Received(1).GetTableGamesBetType("1", CurrentLanguage);
     }
+
+    [Fact]
+    public void GetVirtualSportMatchCodeFormat_RemotingRefServiceHasCalledGetVirtualSportMatchCodeFormat()
+    {
+        // Arrange
+        const string matchCode = "1";
+        const string refId = "1";
+
+        // Act
+        _ = languageCacheRef.GetVirtualSportMatchCodeFormat(matchCode, refId);
+
+        // Assert
+        remotingRefService.Received(1).GetVirtualSportMatchCodeFormat(matchCode, refId, CurrentLanguage);
+    }
+
+    [Fact]
+    public void GetKenoBetChoiceInfo_RemotingRefServiceHasCalledGetKenoBetChoice()
+    {
+        // Arrange
+        const string kenoBetChoiceId = "1";
+        const string expectedChoiceName = "Keno Choice";
+        const string expectedBetTypeId = "2";
+        remotingRefService.GetKenoBetChoice(kenoBetChoiceId, CurrentLanguage, out Arg.Any<string>())
+            .Returns(callInfo =>
+            {
+                callInfo[2] = expectedBetTypeId;
+                return expectedChoiceName;
+            });
+
+        // Act
+        var result = languageCacheRef.GetKenoBetChoiceInfo(kenoBetChoiceId);
+
+        // Assert
+        remotingRefService.Received(1).GetKenoBetChoice(kenoBetChoiceId, CurrentLanguage, out Arg.Any<string>());
+        Assert.NotNull(result);
+        Assert.Equal(expectedChoiceName, result.ChoiceName);
+        Assert.Equal(expectedBetTypeId, result.BetTypeId);
+    }
+
+    [Fact]
+    public void GetLotteryBetChoiceInfo_RemotingRefServiceHasCalledGetLotteryBetChoice()
+    {
+        // Arrange
+        const string lotteryBetChoiceId = "1";
+        const string expectedChoiceName = "Lottery Choice";
+        const string expectedBetTypeId = "3";
+        remotingRefService.GetLotteryBetChoice(lotteryBetChoiceId, CurrentLanguage, out Arg.Any<string>())
+            .Returns(callInfo =>
+            {
+                callInfo[2] = expectedBetTypeId;
+                return expectedChoiceName;
+            });
+
+        // Act
+        var result = languageCacheRef.GetLotteryBetChoiceInfo(lotteryBetChoiceId);
+
+        // Assert
+        remotingRefService.Received(1).GetLotteryBetChoice(lotteryBetChoiceId, CurrentLanguage, out Arg.Any<string>());
+        Assert.NotNull(result);
+        Assert.Equal(expectedChoiceName, result.ChoiceName);
+        Assert.Equal(expectedBetTypeId, result.BetTypeId);
+    }
+
+    [Fact]
+    public void GetTableGamesBetChoiceInfo_RemotingRefServiceHasCalledGetTableGamesBetChoice()
+    {
+        // Arrange
+        const string tableGamesBetChoiceId = "1";
+        const string expectedChoiceName = "Table Games Choice";
+        const string expectedBetTypeId = "4";
+        remotingRefService.GetTableGamesBetChoice(tableGamesBetChoiceId, CurrentLanguage, out Arg.Any<string>())
+            .Returns(callInfo =>
+            {
+                callInfo[2] = expectedBetTypeId;
+                return expectedChoiceName;
+            });
+
+        // Act
+        var result = languageCacheRef.GetTableGamesBetChoiceInfo(tableGamesBetChoiceId);
+
+        // Assert
+        remotingRefService.Received(1).GetTableGamesBetChoice(tableGamesBetChoiceId, CurrentLanguage, out Arg.Any<string>());
+        Assert.NotNull(result);
+        Assert.Equal(expectedChoiceName, result.ChoiceName);
+        Assert.Equal(expectedBetTypeId, result.BetTypeId);
+    }
+
+    [Fact]
+    public void GetLeagueName_WithLeagueGroupId_RemotingRefServiceHasCalledGetLeagueName()
+    {
+        // Arrange
+        const string leagueId = "1";
+        const string leagueGroupId = "2";
+
+        // Act
+        _ = languageCacheRef.GetLeagueName(leagueId, leagueGroupId);
+
+        // Assert
+        remotingRefService.Received(1).GetLeagueName(leagueId, leagueGroupId);
+    }
 }

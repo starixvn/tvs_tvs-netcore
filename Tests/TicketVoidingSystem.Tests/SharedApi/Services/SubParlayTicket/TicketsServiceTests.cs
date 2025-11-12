@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using Fanex.Data.Repository;
 using NSubstitute;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.SharedApi.Criteria.SubParlayTicket;
 using TicketVoidingSystem.SharedApi.Models.SubParlayTicket;
@@ -83,6 +86,262 @@ public class TicketsServiceTests : IClassFixture<AppSettingFixture>, IClassFixtu
         // Assert
         Assert.NotNull(result);
         AssertExtension.Equal(expected, result);
+        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public Task GetHybridTickets_WithValidTickets_ReturnsExpectedViewModel()
+    {
+        // Arrange
+        var tickets = new List<TicketModel>
+        {
+            new()
+            {
+                TransId = 1,
+                BetType = 1,
+                HomeId = 10,
+                AwayId = 20,
+                Hdp1 = 1.5m,
+                Hdp2 = 2.5m,
+                Odds = 1.8m,
+                BetTeam = "Home",
+                StatusId = TicketStatus.WonId,
+                Status = "Won",
+                EventDate = DateTime.Now,
+                LiveHomeScore = 0,
+                LiveAwayScore = 0,
+                LiveIndicator = false,
+                LeagueId = 100,
+                SportType = 1,
+                IsNeutral = false,
+                MatchId = 500,
+                Stake = 100m,
+                BetCheck = "CHECK",
+                TransDesc = "Test Description",
+                ShowTime = "12:00",
+                TransDate = DateTime.Now
+            }
+        };
+
+        var model = new HybridParlayChoiceModel
+        {
+            SubTransId = "SUB123",
+            Transdesc = "Hybrid Parlay Description",
+            Hdp1 = 1,
+            Hdp2 = 2,
+            BetCheck = "CHECK",
+            BetTeam = "TEAM",
+            Currency = "USD",
+            Stake = 200m
+        };
+
+        var expectedChoice = "<div>Hybrid Parlay Choice</div>";
+        betListService.BuildChoiceHybridParlay(
+            Arg.Any<ITicketHelper>(),
+            Arg.Any<IList<ITicket>>(),
+            Arg.Any<HybridParlayChoiceModel>(),
+            false)
+            .ReturnsForAnyArgs(expectedChoice);
+
+        // Act
+        var result = service.GetHybridTickets(tickets, model);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal(model.SubTransId, result.First().SubTransId);
+        Assert.Equal(expectedChoice, result.First().Choice);
+        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public Task GetHybridTickets_WithEmptyTicketsList_ReturnsSingleViewModelWithEmptyChoice()
+    {
+        // Arrange
+        var tickets = new List<TicketModel>();
+        var model = new HybridParlayChoiceModel
+        {
+            SubTransId = "SUB123",
+            Transdesc = "Test",
+            Hdp1 = 1,
+            Hdp2 = 2,
+            BetCheck = "CHECK",
+            BetTeam = "TEAM",
+            Currency = "USD",
+            Stake = 100m
+        };
+
+        betListService.BuildChoiceHybridParlay(
+            Arg.Any<ITicketHelper>(),
+            Arg.Any<IList<ITicket>>(),
+            Arg.Any<HybridParlayChoiceModel>(),
+            false)
+            .ReturnsForAnyArgs("");
+
+        // Act
+        var result = service.GetHybridTickets(tickets, model);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal(model.SubTransId, result.First().SubTransId);
+        Assert.Equal("", result.First().Choice);
+        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public Task GetHybridTickets_WithMultipleTickets_ReturnsSingleViewModel()
+    {
+        // Arrange
+        var tickets = new List<TicketModel>
+        {
+            new()
+            {
+                TransId = 1,
+                BetType = 1,
+                HomeId = 10,
+                AwayId = 20,
+                Hdp1 = 1.5m,
+                Hdp2 = 2.5m,
+                Odds = 1.8m,
+                BetTeam = "Home",
+                StatusId = TicketStatus.WonId,
+                Status = "Won",
+                EventDate = DateTime.Now,
+                LiveHomeScore = 0,
+                LiveAwayScore = 0,
+                LiveIndicator = false,
+                LeagueId = 100,
+                SportType = 1,
+                IsNeutral = false,
+                MatchId = 500,
+                Stake = 100m,
+                BetCheck = "CHECK",
+                TransDesc = "Ticket 1",
+                ShowTime = "12:00",
+                TransDate = DateTime.Now
+            },
+            new()
+            {
+                TransId = 2,
+                BetType = 2,
+                HomeId = 30,
+                AwayId = 40,
+                Hdp1 = 2.5m,
+                Hdp2 = 3.5m,
+                Odds = 2.0m,
+                BetTeam = "Away",
+                StatusId = TicketStatus.WonId,
+                Status = "Won",
+                EventDate = DateTime.Now,
+                LiveHomeScore = 0,
+                LiveAwayScore = 0,
+                LiveIndicator = false,
+                LeagueId = 200,
+                SportType = 1,
+                IsNeutral = false,
+                MatchId = 600,
+                Stake = 150m,
+                BetCheck = "CHECK2",
+                TransDesc = "Ticket 2",
+                ShowTime = "13:00",
+                TransDate = DateTime.Now
+            }
+        };
+
+        var model = new HybridParlayChoiceModel
+        {
+            SubTransId = "SUB456",
+            Transdesc = "Multiple Tickets Hybrid",
+            Hdp1 = 1,
+            Hdp2 = 2,
+            BetCheck = "CHECK",
+            BetTeam = "TEAM",
+            Currency = "EUR",
+            Stake = 300m
+        };
+
+        var expectedChoice = "<div>Multiple Tickets Choice</div>";
+        betListService.BuildChoiceHybridParlay(
+            Arg.Any<ITicketHelper>(),
+            Arg.Any<IList<ITicket>>(),
+            Arg.Any<HybridParlayChoiceModel>(),
+            false)
+            .ReturnsForAnyArgs(expectedChoice);
+
+        // Act
+        var result = service.GetHybridTickets(tickets, model);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Single(result);
+        Assert.Equal(model.SubTransId, result.First().SubTransId);
+        Assert.Equal(expectedChoice, result.First().Choice);
+        return Task.CompletedTask;
+    }
+
+    [Fact]
+    public Task GetHybridTickets_CallsBuildChoiceHybridParlayWithCorrectParameters()
+    {
+        // Arrange
+        var tickets = new List<TicketModel>
+        {
+            new()
+            {
+                TransId = 1,
+                BetType = 1,
+                HomeId = 10,
+                AwayId = 20,
+                Hdp1 = 1.5m,
+                Hdp2 = 2.5m,
+                Odds = 1.8m,
+                BetTeam = "Home",
+                StatusId = TicketStatus.WonId,
+                Status = "Won",
+                EventDate = DateTime.Now,
+                LiveHomeScore = 0,
+                LiveAwayScore = 0,
+                LiveIndicator = false,
+                LeagueId = 100,
+                SportType = 1,
+                IsNeutral = false,
+                MatchId = 500,
+                Stake = 100m,
+                BetCheck = "CHECK",
+                TransDesc = "Test",
+                ShowTime = "12:00",
+                TransDate = DateTime.Now
+            }
+        };
+
+        var model = new HybridParlayChoiceModel
+        {
+            SubTransId = "SUB789",
+            Transdesc = "Test Description",
+            Hdp1 = 1,
+            Hdp2 = 2,
+            BetCheck = "CHECK",
+            BetTeam = "TEAM",
+            Currency = "USD",
+            Stake = 100m
+        };
+
+        betListService.BuildChoiceHybridParlay(
+            Arg.Any<ITicketHelper>(),
+            Arg.Any<IList<ITicket>>(),
+            Arg.Any<HybridParlayChoiceModel>(),
+            false)
+            .ReturnsForAnyArgs("Test Choice");
+
+        // Act
+        _ = service.GetHybridTickets(tickets, model);
+
+        // Assert
+        betListService.Received(1).BuildChoiceHybridParlay(
+            Arg.Is<ITicketHelper>(helper => helper.IsShowOddsWithChoice == true),
+            Arg.Is<IList<ITicket>>(list => list.Count == 1),
+            Arg.Is<HybridParlayChoiceModel>(m => m.SubTransId == model.SubTransId),
+            false);
         return Task.CompletedTask;
     }
 }

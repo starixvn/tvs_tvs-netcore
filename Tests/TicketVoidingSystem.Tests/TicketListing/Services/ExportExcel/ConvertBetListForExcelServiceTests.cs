@@ -7,6 +7,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
 using TicketVoidingSystem.TicketListing.Services.ExportExcel;
+using TicketVoidingSystem.TicketListing.ViewModels;
 using Xunit;
 
 namespace TicketVoidingSystem.Tests.TicketListing.Services.ExportExcel;
@@ -66,6 +67,138 @@ public class ConvertBetListForExcelServiceTests
 
         // Assert
         Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenBetIdNotEqualSubTransIdAndIsHybrid_ReturnFormattedString()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = "12345",
+            SubTransId = "67890",
+            IsHybrid = true
+        };
+        var expected = $"12345\nSubId:\n67890";
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenBetIdEqualSubTransIdAndIsHybrid_ReturnBetId()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = "12345",
+            SubTransId = "12345",
+            IsHybrid = true
+        };
+        var expected = "12345";
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenBetIdNotEqualSubTransIdAndIsNotHybrid_ReturnBetId()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = "12345",
+            SubTransId = "67890",
+            IsHybrid = false
+        };
+        var expected = "12345";
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenBetIdEqualSubTransIdAndIsNotHybrid_ReturnBetId()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = "12345",
+            SubTransId = "12345",
+            IsHybrid = false
+        };
+        var expected = "12345";
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenSubTransIdIsNull_ReturnFormattedString()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = "12345",
+            SubTransId = null,
+            IsHybrid = true
+        };
+        var expected = $"12345\nSubId:\n";
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenBetIdIsNullAndSubTransIdIsNotNull_ReturnFormattedString()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = null,
+            SubTransId = "67890",
+            IsHybrid = true
+        };
+        var expected = $"\nSubId:\n67890";
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Equal(expected, actual);
+    }
+
+    [Fact]
+    public void BetIdToText_WhenBetIdIsNullAndSubTransIdIsNull_ReturnNull()
+    {
+        // Arrange
+        var ticket = new TicketViewModel
+        {
+            BetId = null,
+            SubTransId = null,
+            IsHybrid = true
+        };
+
+        // Act
+        var actual = service.BetIdToText(ticket);
+
+        // Assert
+        Assert.Null(actual);
     }
 }
 
