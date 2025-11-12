@@ -151,7 +151,7 @@ var recoverParlayService = {
 
     optionCustomRender: function (cell) {
         var disabled = cell.IsDisable ? "disabled" : "";
-        var checkBoxItem = "<input class='chk-ticket-all chk-ticket-" + cell.CssClass + "' value='" + cell.Value +
+        var checkBoxItem = "<input class='chk-ticket-all chk-ticket-" + cell.CssClass + "' value='" + cell.Value + "' subTransId='" + cell.SubTransId +
             "' type='checkbox'" + disabled;
 
         var isNotGroupSpecial = parseInt(cell.CssClass.indexOf(ContextMenu.Helper.groupBetFair)) === -1 &&
@@ -187,7 +187,7 @@ var recoverParlayService = {
             rows.push({
                 Columns: [
                     {
-                        Name: "CustomAdd", Value: currentRow.BetId,
+                        Name: "CustomAdd", Value: currentRow.BetId, SubTransId: currentRow.SubTransId,
                         CssClass: groupName + " checkBoxItem",
                         IsDisable: currentRow.IsDisable
                     },
@@ -225,9 +225,9 @@ var recoverParlayService = {
     },
 
     recoverSub: function () {
-        var transIds = NapTicketControl.Helper.getSubTicketsChecked("checkBoxItem").split(',');
+        var transIds = NapTicketControl.Helper.getSubTransIdChecked("checkBoxItem").split(',');
         var params = {
-            Tickets: recoverParlayService.tickets.filter(x => transIds.includes(x.TransId)),
+            Tickets: recoverParlayService.tickets.filter(x => transIds.includes(x.SubTransId)),
             MatchId: $('#matchId').val(),
             betType: $('#bet-type').val()
         };

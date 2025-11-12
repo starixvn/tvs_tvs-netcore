@@ -609,6 +609,18 @@ NapTicketControl.Helper = (function ($) {
             return checkedVals;
         },
 
+        getSubTransIdChecked: function (className) {
+            var checkedVals = '';
+            checkedVals = $('.' + className + ':checkbox:checked').not('#chk-ticket-all').map(function () {
+                var subTransId = $(this).attr('subtransid');
+                if (!isNaN(parseFloat(subTransId))) {
+                    return subTransId;
+                }
+            }).get().join(',');
+
+            return checkedVals;
+        },
+
         getSubTicketModelsChecked: function (className) {
             var tickets = $('.' + className + ':checkbox:checked').not('#chk-ticket-all').map(function () {
                 if (!isNaN(parseFloat(this.value))) {
