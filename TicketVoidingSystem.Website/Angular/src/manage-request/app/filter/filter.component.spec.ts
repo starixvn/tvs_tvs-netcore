@@ -8,7 +8,7 @@ import { Selection } from '../../../utility/models/selection.model';
 import { TestingModule } from '../../../utility/modules/testing.module';
 import { CommonService } from '../../../utility/services/common.service';
 import { FilterComponent } from './filter.component';
-import { FilterModel } from './filter.model';
+import { FilterModel } from '../../../manage-remark/app/models/filter.model';
 import { FilterService } from './filter.service';
 
 class Helper {

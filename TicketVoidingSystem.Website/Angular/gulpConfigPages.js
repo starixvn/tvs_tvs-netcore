@@ -102,6 +102,19 @@ const manageRequest = {
   indexEJSPath: './src/manage-request/index.ejs'
 };
 
+const manageRemark = {
+  pageName: 'ManageRemark',
+  tsconfigFiles: [
+    'manage-remark/main.ts',
+    'polyfills.ts'
+  ],
+  deployUrl: 'dist/ticket-voiding-system/manage-remark/',
+  index: 'src/manage-remark/index.cshtml',
+  main: 'src/manage-remark/main.ts',
+  transformFolder: '../wwwroot/dist/ticket-voiding-system/manage-remark',
+  indexEJSPath: './src/manage-remark/index.ejs'
+};
+
 const voidByBetId = {
   pageName: 'VoidByBetId',
   tsconfigFiles: [
@@ -362,7 +375,6 @@ const reducedOver = {
   transformFolder: '../wwwroot/dist/ticket-voiding-system/reduced-over'
 };
 
-
 const configPages = [
   //homePage,
   //anageVoidServices,
@@ -391,7 +403,8 @@ const configPages = [
   //abnormalBet,
   //duplicateTickets,
   //recoverTicket
-  //reducedOver
+  //reducedOver,
+  //manageRemark
 ];
 
 module.exports = configPages;

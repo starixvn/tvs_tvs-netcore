@@ -1,0 +1,31 @@
+.form-check-input {
+    margin-left: 10px;
+    margin-top: 3px;
+    position: inherit;
+}
+
+.select-date,
+.input-match-id,
+.input-remark-id,
+ng-select {
+    width: 140px;
+}
+
+.checkbox-exclude-test {
+    margin-bottom: 3px;
+    margin-right: 5px;
+}
+
+.min-width-1666 {
+    min-width: 1666px;
+}
+
+.filter-by-match, .filter-by-remark {
+    row-gap: 5px;
+}
+
+.input-group-text {
+    height: 100%;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0;
+}

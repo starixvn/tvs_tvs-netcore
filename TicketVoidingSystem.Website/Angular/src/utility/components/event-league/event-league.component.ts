@@ -12,6 +12,8 @@ import { CommonService } from '../../../utility/services/common.service';
 import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { ValidationService } from './validation.service';
+import { DateTimeFormat } from '../../constants/config';
+import moment from 'moment';
 
 @Component({
   standalone: true,
@@ -28,6 +30,7 @@ export class EventLeagueComponent implements OnChanges {
   @Input() isShowLeague = true;
   @Input() isShowSportType = true;
   @Input() subIssueTypeId?: string;
+  @Input() isShowKoTime = false;
   @Output() changeEvent = new EventEmitter<MatchModel>();
 
   selectedMatch = new MatchModel();
@@ -37,6 +40,7 @@ export class EventLeagueComponent implements OnChanges {
   validationMessage: string;
   warningSubType: string;
   isShowWarningSubType = false;
+  isTest = false;
 
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);
@@ -61,6 +65,10 @@ export class EventLeagueComponent implements OnChanges {
   isValidSubType(){
     return !this.selectedMatch.matchId || !this.subIssueTypeId
       || this.validationService.checkValidSubType(this.subIssueTypeId, this.selectedMatch?.subtype);
+  }
+
+  getKoTime(){
+    return moment(this.selectedMatch.kickOffTime).format(DateTimeFormat.SHORT_TIME_FORMAT);
   }
 
   async getMatchInEditPage(matchId: number): Promise<void> {

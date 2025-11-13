@@ -48,11 +48,6 @@ export class AddRequestApiService {
   }
 
   /* istanbul ignore next */
-  async GetDecidedBy(): Promise<string[]> {
-    return this.httpService.getJson('api/AddRequest/GetDecidedBy');
-  }
-
-  /* istanbul ignore next */
   async getSubIssueTypeNote(query: GetSubIssueTypeNoteQuery): Promise<SubIssueTypeNoteModel[]> {
     return this.httpService.postJson<GetSubIssueTypeNoteQuery, SubIssueTypeNoteModel[]>(query, 'api/AddRequest/GetSubIssueTypeNote');
   }

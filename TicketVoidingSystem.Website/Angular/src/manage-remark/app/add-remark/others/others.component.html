@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-3 mt-2">
+    <label class="col-form-label-sm">Mistaken By</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="model.mistakenBy" maxlength="200">
+  </div>
+  <div class="col-3">
+    <label class="col-form-label-sm">Decided By</label>
+    <div class="input-area">
+      <ng-select [items]="decidedBys" [(ngModel)]="model.decidedBy" [addTag]="true" (add)="addDecidedBy($event)" dropdownPosition="bottom">
+        <ng-template let-items="decidedBys" let-clear="clear">
+          @for (item of decidedBys; track item) {
+            <div class="ng-value">
+              <span class="ng-value-label">{{ item }}</span>
+              <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true"></span>
+            </div>
+          }
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="col-3">
+    <label class="col-form-label-sm">Performed By</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="model.performedBy" maxlength="200">
+  </div>
+  <div class="col-3">
+    <label class="col-form-label-sm">TV/IPTV</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="model.tvIptv" maxlength="200">
+  </div>
+</div>
+
+<div class="row">
+  @for (group of groupOperators; track group) {
+    <div class="col-3 mt-2">
+      <label class="col-form-label-sm">{{group.name}}</label>
+      <div class="operator-list">
+        <ng-select [items]="group.items" [multiple]="true" [closeOnSelect]="false" bindLabel="userName"
+          [(ngModel)]="group.selected" (change)="onSelectOperator()" [clearable]="false">
+          <ng-template ng-multi-label-tmp let-items="items" let-clear="clear">
+            @for (item of items | slice: 0:2; track item) {
+              <div class="ng-value">
+                <span class="ng-value-label">{{ item['userName'] }}</span>
+                <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+              </div>
+            }
+            @if (items.length > 2) {
+              <div class="ng-value">
+                <span class="ng-value-label">{{ items.length - 2 }} more...</span>
+              </div>
+            }
+          </ng-template>
+        </ng-select>
+      </div>
+    </div>
+  }
+  <div class="col-3 mt-2">
+    <label class="col-form-label-sm">Provider</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="model.provider" maxlength="200">
+  </div>
+  <div class="col-3 mt-2">
+    <label class="col-form-label-sm">Source</label>
+    <input type="text" class="form-control form-control-sm" [(ngModel)]="model.source" maxlength="200">
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-3 mt-2">
+    <label class="col-form-label-sm">Remark</label>
+    <textarea [(ngModel)]="model.remark" class="form-control form-control-sm" placeholder='Enter text here...' rows="3"></textarea>
+  </div>
+  <div class="col-3 mt-2">
+    <label class="col-form-label-sm">Message</label>
+    <textarea [(ngModel)]="model.message" class="form-control form-control-sm" placeholder='Enter text here...' rows="3"></textarea>
+  </div>
+  <div class="col-3 mt-2">
+    <label class="col-form-label-sm">Description</label>
+    <textarea [(ngModel)]="model.description" class="form-control form-control-sm" placeholder='Enter text here...' rows="3"></textarea>
+  </div>
+  <div class="col-3 mt-2 d-flex flex-column">
+    <label class="col-form-label-sm">Action</label>
+    <div class="input-area">
+      <ng-select [items]="actionOptions" [(ngModel)]="model.action" bindLabel="label" bindValue="value" dropdownPosition="bottom">
+      </ng-select>
+    </div>
+    <div class="d-flex button-confirm justify-content-end gap-2 mt-auto">
+        <button type="button" class="btn btn-primary" (click)="saveClick()">Save</button>
+        <button type="button" class="btn btn-danger" (click)="cancelClick()">Cancel</button>
+      </div>
+  </div>
+</div>
+

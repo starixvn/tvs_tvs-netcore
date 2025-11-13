@@ -21,7 +21,7 @@ import { IssueType, IssueTypesModel, SubIssueType } from '../../../utility/model
 import { Selection } from '../../../utility/models/selection.model';
 import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
-import { FilterModel } from './filter.model';
+import { FilterModel } from '../../../manage-remark/app/models/filter.model';
 import { FilterService } from './filter.service';
 
 @Component({

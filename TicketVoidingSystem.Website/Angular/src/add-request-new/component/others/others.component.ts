@@ -4,10 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import groupBy from 'lodash/groupBy';
 import { StaticService } from '../../../utility/services/static.service';
-import { AddRequestApiService } from '../../services/add-request-api.service';
 import { AddRequestStore } from '../../services/add-request.store';
 import { GroupOperator, OperatorDefault, OperatorInfo, OthersModel } from './others.model';
 import { OthersService } from './others.service';
+import { CommonService } from 'src/utility/services/common.service';
 
 @Component({
     selector: 'others',
@@ -29,13 +29,13 @@ export class OthersComponent implements OnChanges, OnInit {
   decidedBys = [];
   private readonly othersService = inject(OthersService);
   private readonly addRequestStore = inject(AddRequestStore);
-  private readonly addRequestApiService = inject(AddRequestApiService);
+  private readonly commonService = inject(CommonService);
 
   async ngOnInit() {
     this.operators = [OperatorDefault.TRADER, OperatorDefault.SUSPENDER];
     this.intDefaultValueGroupOperators();
     if(this.decidedBys.length === 0 && this.isIssueTypeSupportSuggestion()){
-      this.decidedBys = await this.addRequestApiService.GetDecidedBy();
+      this.decidedBys = await this.commonService.getDecidedBy();
     }
   }
 

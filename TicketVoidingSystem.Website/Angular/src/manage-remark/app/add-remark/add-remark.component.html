@@ -1,0 +1,34 @@
+@if (model.isOpen) {
+<div class="form-add-remark bg-gray">
+  <div class="add-remark">
+    <div class="modal-header success">
+      <div class="modal-title">
+        <strong>Add New Remark</strong>
+      </div>
+      <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeClick()"></button>
+    </div>
+    <div class="modal-body">
+      <event-league #leagueEvent [matchId]="model.matchId" [isShowKoTime]="true" (changeEvent)="changeMatchEvent()">
+      </event-league>
+      <div class="check-var">
+        <div class="var-check-selection mt-2" [ngClass]="{'highlight': model.isHighLightVarCheck}">
+          <label class="border-radius-left" (click)="changeVarCheckValue(false)"
+            [ngClass]="{'bg-success':model.isCheckedVar === false, 'bg-not-choose':model.isCheckedVar !== false}">NO
+            VAR
+          </label>
+          <label class="border-radius-right" (click)="changeVarCheckValue(true)"
+            [ngClass]="{'bg-danger':model.isCheckedVar === true, 'bg-not-choose':model.isCheckedVar !== true}">VAR
+          </label>
+        </div>
+        @if (model.isHighLightVarCheck) {
+        <div class="tooltip-var-check">
+          <em></em>
+          <span>{{tooltipVarMessage}}</span>
+        </div>
+        }
+      </div>
+      <others [model]="model"></others>
+    </div>
+  </div>
+</div>
+}

@@ -1,9 +1,9 @@
 <div class="event-leage">
   <div class="d-flex flex-wrap">
-    <div class="event col-12">
+    <div class="event match-id col-md-7 col-sm-7">
       <label class="col-form-label-sm">Event</label>
       <div class="d-flex">
-        <ng-select class="custom-sm match-id col-md-7 col-sm-7" [disabled]="isEdit" [items]="matches" bindLabel="name"
+        <ng-select class="custom-sm col-12" [disabled]="isEdit" [items]="matches" bindLabel="name"
           (blur)="blurMatchSelect()" bindValue="matchId" [(ngModel)]="selectedMatch.matchId" [clearable]="false"
           (change)="onChangeMatchEvent($event)" (search)="onSearchMatch($event)" [notFoundText]="validationMessage"
           [loading]="isBlock" placeholder="Input MatchID">
@@ -11,13 +11,24 @@
             {{item.name}}
           </ng-template>
         </ng-select>
-        @if (isShowWarningSubType) {
-        <div class="warning-sub-type">
-          <label><strong>This event does not match with Sub Type.</strong></label>
-        </div>
-        }
       </div>
     </div>
+    @if (isShowWarningSubType) {
+      <div class="warning-sub-type">
+        <label><strong>This event does not match with Sub Type.</strong></label>
+      </div>
+      }
+    @if (isShowKoTime) {
+      <div class="ko-time ms-4 col-md-2 col-sm-2 me-4">
+        <label class="col-form-label-sm">Ko Time (GMT+8)</label>
+        <input type="text" class="form-control form-control-sm disabled" [value]="getKoTime()">
+      </div>
+      <div class="d-flex align-items-end">
+        <label class="col-form-label col-form-label-sm">
+          <input class="checkbox-test me-2" type="checkbox" [(ngModel)]="isTest" />is Test
+        </label>
+      </div>
+    }
   </div>
   <div class="d-flex flex-wrap">
     @if (isShowLeague) {

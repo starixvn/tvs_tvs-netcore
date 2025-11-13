@@ -15,7 +15,7 @@ import { CommonService } from '../../utility/services/common.service';
 import { SignalRService } from '../../utility/services/signal-r.service.native';
 import { AppService } from './app.service';
 import { FilterComponent } from './filter/filter.component';
-import { FilterModel } from './filter/filter.model';
+import { FilterModel } from '../../manage-remark/app/models/filter.model';
 import { GetRequestsQuery } from './models/get-requests.query';
 import { PermissionManage } from './models/permission-manage.model';
 import { RequestListComponent } from './request-list/request-list.component';

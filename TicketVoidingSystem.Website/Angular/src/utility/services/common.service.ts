@@ -94,7 +94,7 @@ export class CommonService {
   }
 
   async getVoidedReason(subId: number, sportTypeId: number): Promise<VoidedReason> {
-    return this.httpService.postJson({subId: subId, sportTypeId: sportTypeId}, `api/VoidRequest/GetVoidedReason`);
+    return this.httpService.postJson({ subId: subId, sportTypeId: sportTypeId }, `api/VoidRequest/GetVoidedReason`);
   }
 
   async checkVoidBetPermission(query: CheckingPermissionModel): Promise<SqlResult> {
@@ -138,7 +138,7 @@ export class CommonService {
     return this.httpService.postJson({ matchId, productIds }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 
-  async getMatchInfoAddRequest(matchId: number, sportType: number, ): Promise<MatchInfoViewModel> {
+  async getMatchInfoAddRequest(matchId: number, sportType: number,): Promise<MatchInfoViewModel> {
     return this.httpService.postJson({ sportType, matchId }, 'api/MatchInfo/GetInfoForAddRequest');
   }
 
@@ -156,6 +156,10 @@ export class CommonService {
     } catch (error) {
       return false;
     }
+  }
+  
+  async getDecidedBy(): Promise<string[]> {
+    return this.httpService.getJson('api/AddRequest/GetDecidedBy');
   }
 }
 

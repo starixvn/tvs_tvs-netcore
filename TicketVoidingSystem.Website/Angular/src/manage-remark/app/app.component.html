@@ -1,0 +1,10 @@
+<menu-bar></menu-bar>
+
+<div class="title">
+  Home / Manage Remark
+</div>
+
+<div class="body mg-10" [blockUi]="false">
+  <filter #filterComponent [model]="filter" (openAddRemark)="openAddRemark()"></filter>
+  <add-remark #addRemarkComponent [model]="addRemarkModel"></add-remark>
+</div>

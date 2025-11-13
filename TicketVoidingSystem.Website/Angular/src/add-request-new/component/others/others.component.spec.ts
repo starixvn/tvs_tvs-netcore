@@ -7,6 +7,7 @@ import { AddRequestApiService } from '../../services/add-request-api.service';
 import { OthersComponent } from './others.component';
 import { GroupOperator, OperatorDefault, OthersModel } from './others.model';
 import { OthersService } from './others.service';
+import { CommonService } from '../../../utility/services/common.service';
 
 class Helper {
   static readonly fakeMatchId = 123;
@@ -24,7 +25,7 @@ describe('OthersComponent', () => {
   let fixture: ComponentFixture<OthersComponent>;
   let othersService: OthersService;
   let addRequestStore: AddRequestStore;
-  let addRequestApiService: AddRequestApiService;
+  let commonService: CommonService;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,7 +40,7 @@ describe('OthersComponent', () => {
     fixture = TestBed.createComponent(OthersComponent);
     othersService = fixture.debugElement.injector.get(OthersService);
     addRequestStore = fixture.debugElement.injector.get(AddRequestStore);
-    addRequestApiService = fixture.debugElement.injector.get(AddRequestApiService);
+    commonService = fixture.debugElement.injector.get(CommonService);
     component = fixture.componentInstance;
   });
 
@@ -53,14 +54,14 @@ describe('OthersComponent', () => {
     component.matchId = Helper.fakeMatchId;
     component.issueTypeId = Helper.fakeIssueTypeId;
     othersService.getOperators = jest.fn().mockResolvedValue(Helper.fakeOperators);
-    addRequestApiService.GetDecidedBy = jest.fn().mockResolvedValue(Helper.fakeDecidedBys);
+    commonService.getDecidedBy = jest.fn().mockResolvedValue(Helper.fakeDecidedBys);
     addRequestStore.changeBlockingUiStatus = jest.fn();
 
     // Act
     await component.ngOnInit();
 
     // Assert
-    expect(component.operators).toEqual([OperatorDefault.TRADER, OperatorDefault.SUSPENDER]);
+    expect(component.operators).toEqual([OperatorDefault.SUSPENDER, OperatorDefault.TRADER]);
     expect(component.groupOperators.length).toBeGreaterThan(0);
   });
 

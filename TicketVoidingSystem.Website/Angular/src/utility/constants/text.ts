@@ -28,6 +28,7 @@ export class TEXT {
     static readonly AB_WHITE_LIST_ADDED_SUCCESS = 'Added User(s) successfully';
     static readonly INPUT_REASON = 'Please input reason.';
     static readonly INPUT_PASSWORD = 'Please input password.';
+    static readonly INPUT_REMARK_ID = 'Please input RemarkId.';
 
     static readonly EMPTY_ENGLISH = 'You must enter English message.';
     static readonly INVALID_ENGLISH = 'You must include @@ in English message for replacing ticket number.';

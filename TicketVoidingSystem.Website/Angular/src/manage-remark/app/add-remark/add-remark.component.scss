@@ -1,0 +1,56 @@
+@import '../../../assets/styles/mixin.scss';
+
+.form-add-remark {
+    background-color: #ebebeb;
+}
+
+.add-remark {
+    background-color: #fff;
+    max-width: 1510px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.1);
+    padding-bottom: 5px;
+}
+
+.success {
+    background: #01833b;
+    color: #fff;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    font-family: Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    height: 34px;
+    line-height: 5px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+
+    .modal-title {
+        line-height: 5px;
+        cursor: unset;
+    }
+}
+
+.modal-body {
+    padding: 10px 15px;
+    font-family: Tahoma, sans-serif;
+    font-size: 12px;
+}
+
+.var-check-selection {
+    display: inline-block;
+    @include var-check-selection();
+}
+
+.highlight {
+    outline: 2px solid red;
+}
+
+.tooltip-var-check {
+    @include tooltip-var-check();
+}
