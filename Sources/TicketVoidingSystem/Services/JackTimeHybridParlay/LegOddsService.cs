@@ -8,6 +8,7 @@ using Fanex.Logging;
 using Polly;
 using TicketVoidingSystem.Criteria.JackTimeHybridParlay;
 using TicketVoidingSystem.Models.JackTimeHybridParlay;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
@@ -61,11 +62,22 @@ public class LegOddsServiceImp(
                     .Distinct()
                     .ToHashSet();
 
-                var allMatched = expectedTransIds.All(id => receivedTransIds.Contains(id));
+                var allMatched = expectedTransIds.SetEquals(receivedTransIds);
                 return allMatched;
             });
 
-        return legOdds;
+        var receivedFinalTransIds = legOdds.Select(x => x.TransId).Distinct().ToHashSet();
+        var isReceivedAllOdds = expectedTransIds.SetEquals(receivedFinalTransIds);
+
+        if (isReceivedAllOdds)
+        {
+            return legOdds;
+        }
+
+        await loggingService.InfoAsync($"Timeout or don't received enough number of ODDs \n" +
+                                       $"Requested: {Helper.JsonSerializerUnsafeRelaxed(ticketsWaitToUpdateOdds)} \n" +
+                                       $"Received: {Helper.JsonSerializerUnsafeRelaxed(legOdds)} \n");
+        return [];
     }
 
     public async Task<IEnumerable<LegOddsModel>> GetLegOdds(int matchId, DateTime logDate, IEnumerable<LegOddsModel> ticketsWaitToUpdateOdds)

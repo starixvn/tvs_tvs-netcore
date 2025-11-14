@@ -8,6 +8,7 @@ using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Criteria.JackTimeHybridParlay;
 using TicketVoidingSystem.Models.JackTimeHybridParlay;
+using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.JackTimeHybridParlay;
 
@@ -74,8 +75,10 @@ public class HybridParlayTicketServiceImp(
             SiteDbGroupId = siteDbGroupId
         };
         var result = await dynamicRepository.FetchAsync<HybridParlayTicketModel>(criteria);
-        await loggingService.InfoAsync($"Hybrid Parlay - GetTicketsDetail: {transIds} \nticketType: {ticketType} \nsiteDbGroupId: " +
-            $"{siteDbGroupId} \nresponse: {JsonSerializer.Serialize(result)}");
+        await loggingService.InfoAsync($"Hybrid Parlay - GetTicketsDetail: {transIds} \n" +
+                                       $"ticketType: {ticketType} \n" +
+                                       $"siteDbGroupId: {siteDbGroupId} \n" +
+                                       $"response: {Helper.JsonSerializerUnsafeRelaxed(result)}");
 
         return result;
     }
