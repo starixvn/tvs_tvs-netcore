@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { AllowanceTime } from '../../utility/models/allowance-time.model';
+import moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -77,5 +78,9 @@ export class AddRequestStore {
 
   changeAbnormalFilterBy(filterBy: number): void {
     this.abnormalFilterBySubject.next(filterBy);
+  }
+
+  getTimeFilterTicket(): number {
+    return moment(new Date()).diff(moment(this.startTimeFilterTicket), 'seconds');
   }
 }

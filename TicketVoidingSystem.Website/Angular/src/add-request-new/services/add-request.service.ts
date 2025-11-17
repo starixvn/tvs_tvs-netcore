@@ -1,6 +1,5 @@
 import { inject, Injectable } from '@angular/core';
 import { Guid } from 'guid-typescript';
-import moment from 'moment-timezone';
 import { TEXT } from '../../utility/constants/text';
 import { Result } from '../../utility/models/result';
 import { CommonService } from '../../utility/services/common.service';
@@ -31,7 +30,7 @@ export class AddRequestService {
   private async addRequest(query: AddRequestQuery, addRequestStore: AddRequestStore): Promise<void> {
     addRequestStore.changeSavingRequestStatus(true);
     query.guid = `AddRequest-${Guid.create().toString()}`;
-    query.sessionTime = this.getTimeFilterTicket(addRequestStore);
+    query.sessionTime = addRequestStore.getTimeFilterTicket();
     const result = await this.addRequestApiService.addRequest(query);
     if (result) {
       this.handleAfterAddRequest(query, result, addRequestStore);
@@ -59,7 +58,7 @@ export class AddRequestService {
     if (addResult.isSuccessful) {
       this.popupService.showAddedRequestSuccessful(query, addResult.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId))
     } else {
-      this.popupService.showSaveRequestError(query, addResult, TEXT.ADD_REQUEST_RESULT_TITLE);
+      this.popupService.showSaveRequestError(addResult.errorMsg, TEXT.ADD_REQUEST_RESULT_TITLE);
     }
 
     addRequestStore.changeSavingRequestStatus(false);
@@ -70,9 +69,9 @@ export class AddRequestService {
 
     const result = await this.addRequestApiService.editRequest(query);
     if (result.isSuccessful) {
-      this.popupService.showEditedRequestSuccessful(query, result.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId));
+      this.popupService.showEditedRequestSuccessful(result.data, () => this.reloadPageOrBackToManagePage(query.issueTypeId));
     } else {
-      this.popupService.showSaveRequestError(query, result, TEXT.EDIT_REQUEST_RESULT_TITLE);
+      this.popupService.showSaveRequestError(result.errorMsg, TEXT.EDIT_REQUEST_RESULT_TITLE);
     }
 
     addRequestStore.changeSavingRequestStatus(false);
@@ -82,10 +81,5 @@ export class AddRequestService {
     StaticService.isAbnormalBet(issueTypeId)
       ? window.location.reload()
       : window.location.assign(`TicketVoidingSystem/ManageRequest/Index`);
-  }
-
-  private getTimeFilterTicket(addRequestStore: AddRequestStore): number {
-    const startTime = addRequestStore.getStartTimeFilterTicket;
-    return moment(new Date()).diff(moment(startTime), 'seconds');
   }
 }

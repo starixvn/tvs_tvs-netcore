@@ -31,11 +31,10 @@ describe('PopupService', () => {
     it('should call modalService.open with error type', () => {
       // Arrange
       const messageContent = 'Test error message';
-      const onYesCallback = jest.fn();
       jest.spyOn(modalService, 'open');
 
       // Act
-      service.showError(messageContent, onYesCallback);
+      service.showError(messageContent);
 
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(
@@ -43,8 +42,7 @@ describe('PopupService', () => {
           title: TEXT.ADD_REQUEST_RESULT_TITLE,
           message: `Error: ${messageContent}`,
           type: ModalType.Error
-        },
-        onYesCallback
+        }
       );
     });
   });
@@ -133,7 +131,7 @@ describe('PopupService', () => {
       jest.spyOn(modalService, 'open');
 
       // Act
-      service.showEditedRequestSuccessful(query, addRequestResult, onOkCallback);
+      service.showEditedRequestSuccessful(addRequestResult, onOkCallback);
 
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(
@@ -166,7 +164,7 @@ describe('PopupService', () => {
       jest.spyOn(modalService, 'open');
 
       // Act
-      service.showSaveRequestError(query, addResult, titleMessage);
+      service.showSaveRequestError(addResult.errorMsg, titleMessage);
 
       // Assert
       expect(modalService.open).toHaveBeenCalledWith(

@@ -61,7 +61,7 @@ public class GetRequestsForExcelServiceImp(
     {
         var (requests, requestInfoGetCalcTimes) = await getRequestsService.GetRequests(query);
         var calculateTimeSets = await calculateTimeService.GetCalculateTime(requestInfoGetCalcTimes);
-        var owpData = await owpDataService.GetIPTV(requests);
+        var owpData = await owpDataService.GetIPTVForRequests(requests);
         var outputRequests = AssignExtraInfo(requests, calculateTimeSets, owpData);
         return outputRequests.OrderByDescending(x => x.RequestId);
     }

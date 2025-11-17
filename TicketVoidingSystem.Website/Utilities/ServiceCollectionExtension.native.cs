@@ -191,6 +191,7 @@ public static class ServiceCollectionExtension
         services.AddRecoverCashOutServices();
         services.AddRecoverBetServices();
         services.AddRecoverParlayBetServices();
+        services.AddManageRemarkServices();
     }
 
     public static void AddMediatR(this IServiceCollection services)

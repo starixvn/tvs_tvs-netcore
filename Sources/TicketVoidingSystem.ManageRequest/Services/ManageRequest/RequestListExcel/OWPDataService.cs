@@ -8,26 +8,32 @@ namespace TicketVoidingSystem.ManageRequest.Services.ManageRequest.RequestListEx
 
 public interface OWPDataService
 {
-    public Task<IEnumerable<OWPData>> GetIPTV(IEnumerable<RequestModel> requests);
+    public Task<IEnumerable<OWPData>> GetIPTV(IEnumerable<MatchEventDate> requests);
+    public Task<IEnumerable<OWPData>> GetIPTVForRequests(IEnumerable<RequestModel> requests);
 }
 
 public class OWPDataServiceImp(IDynamicRepository repository, LoggingService loggingService)
     : OWPDataService
 {
-    public async Task<IEnumerable<OWPData>> GetIPTV(IEnumerable<RequestModel> requests)
+    public async Task<IEnumerable<OWPData>> GetIPTVForRequests(IEnumerable<RequestModel> requests)
     {
-        try
-        {
-            var matchEventDates = requests.Where(x => x.MatchId > 0 && !x.MatchId.Value.IsParlay())
+        var matchEventDates = requests.Where(x => x.MatchId > 0 && !x.MatchId.Value.IsParlay())
                 .Select(x => new MatchEventDate
                 {
                     MatchId = x.ParentMatchId is not null && x.ParentMatchId > 0 ? x.ParentMatchId.Value : x.MatchId ?? 0,
                     EventDate = x.EventDateMatch
                 }).DistinctBy(x => x.MatchId);
 
+        return await GetIPTV(matchEventDates);
+    }
+
+    public async Task<IEnumerable<OWPData>> GetIPTV(IEnumerable<MatchEventDate> requests)
+    {
+        try
+        {
             var criteria = new GetIPTVFromOWPCriteria
             {
-                MatchInfoJson = JsonSerializer.Serialize(matchEventDates)
+                MatchInfoJson = JsonSerializer.Serialize(requests)
             };
 
             return await repository.FetchAsync<OWPData>(criteria);

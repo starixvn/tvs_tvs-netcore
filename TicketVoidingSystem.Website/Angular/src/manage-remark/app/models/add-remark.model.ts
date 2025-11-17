@@ -6,7 +6,7 @@ export class AddRemarkModel {
   mistakenBy: string;
   decidedBy: string;
   performedBy: string;
-  tvIptv: string;
+  iptv: string;
   suspender: string;
   provider: string;
   trader: string;

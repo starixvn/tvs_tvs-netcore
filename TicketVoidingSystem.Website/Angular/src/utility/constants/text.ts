@@ -109,6 +109,7 @@ export class TEXT {
     static readonly INVALID_UNSUPPORTED_DATE_RANGE_TICKETS = 'Unsupported date range';
     static readonly ADD_REQUEST_RESULT_TITLE = 'Add Request Result';
     static readonly EDIT_REQUEST_RESULT_TITLE = 'Edit Request Result';
+    static readonly ADD_REMARK_RESULT_TITLE = 'Add Remark Result';
     static readonly INVALID_TO_DATE = 'Invalid To Date';
 
     static readonly INVALID_REQUESTID = 'Invalid RequestId.';

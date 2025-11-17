@@ -5,7 +5,9 @@ import { AddRemarkModel } from '../models/add-remark.model';
 import { TEXT } from '../../../utility/constants/text';
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { OthersComponent } from './others/others.component';
-import clone from 'lodash/clone';
+import cloneDeep from 'lodash/cloneDeep';
+import { AppService } from '../app.service';
+import { AddRemarkService } from './add-remark.service';
 
 @Component({
   standalone: true,
@@ -22,7 +24,9 @@ export class AddRemarkComponent implements OnInit {
   tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
 
   element = inject(ElementRef);
-
+  appService = inject(AppService);
+  addRemarkService = inject(AddRemarkService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -31,9 +35,18 @@ export class AddRemarkComponent implements OnInit {
 
   }
   
-  changeMatchEvent(): void {
+  async changeMatchEvent(): Promise<void> {
     this.model.matchId = this.leagueEvent.matchId;
-    this.model = clone(this.model);
+    this.model.iptv = await this.getIpTv();
+    this.model = cloneDeep(this.model);
+  }
+
+  private async getIpTv() {
+    const matchId = this.leagueEvent.selectedMatch.matchId === this.leagueEvent.selectedMatch.parentId
+    ? this.leagueEvent.selectedMatch.matchId
+    : this.leagueEvent.selectedMatch.parentId;
+    
+    return await this.appService.getIptv(matchId, this.leagueEvent.selectedMatch.eventDate);
   }
 
   closeClick(): void {
@@ -43,5 +56,16 @@ export class AddRemarkComponent implements OnInit {
   changeVarCheckValue(isVarChecked: boolean): void {
     this.model.isCheckedVar = isVarChecked;
     this.model.isHighLightVarCheck = false;
+  }
+
+  resetData(): void {
+    this.model = new AddRemarkModel();
+  }
+
+  async saveRemark(): Promise<void> {
+    const remarkId = await this.addRemarkService.addRemark(this.model);
+    if (remarkId) {
+      this.resetData();
+    }
   }
 }

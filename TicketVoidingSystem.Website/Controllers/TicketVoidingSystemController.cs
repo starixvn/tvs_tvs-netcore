@@ -36,13 +36,6 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     }
 
     [HttpGet]
-    [Route("Index/{id}")]
-    public ActionResult EditRequest(int id)
-    {
-        return View("~/wwwroot/dist/ticket-voiding-system/edit-request/index.cshtml");
-    }
-
-    [HttpGet]
     [Route("")]
     [Route("Index")]
     [NapAuth(FunctionKey = SpecialDeleteFunctionKeys.AfterVoidHistory, Policy = Constant.Policy.Read)]
@@ -97,9 +90,10 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
     [HttpGet]
     [Route("")]
     [Route("Index")]
-    public ActionResult AddRequest()
+    public IActionResult ManageRemark()
     {
-        return View("~/wwwroot/dist/ticket-voiding-system/add-request/index.cshtml");
+        //userActionLogService.LogAccessFunction(nameof(ManageRemark));
+        return View("~/wwwroot/dist/ticket-voiding-system/manage-remark/index.cshtml");
     }
 
     [HttpGet]

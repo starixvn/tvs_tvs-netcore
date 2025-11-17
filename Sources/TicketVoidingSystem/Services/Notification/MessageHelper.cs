@@ -39,4 +39,14 @@ public static class MessageHelper
         var action = isStore ? "store" : "un-store";
         return $"<strong>Request {requestId}</strong> has failed to {action}";
     }
+
+    public static string CreateAddRemarkSuccessfully(int remarkId)
+    {
+        return $"<strong>Remark {remarkId}</strong> is added successfully";
+    }
+
+    public static string CreateAddRemarkFailed()
+    {
+        return $"Add remark has error";
+    }
 }

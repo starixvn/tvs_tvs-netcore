@@ -29,7 +29,7 @@ public class OWPDataServiceTests
         service = new OWPDataServiceImp(repository, null);
 
         // Act
-        var result = await service.GetIPTV(requests);
+        var result = await service.GetIPTVForRequests(requests);
 
         // Assert
         AssertExtension.Equal(expected, result);
@@ -45,7 +45,7 @@ public class OWPDataServiceTests
         service = new OWPDataServiceImp(null, loggingService);
 
         // Act
-        var result = await service.GetIPTV(requests);
+        var result = await service.GetIPTVForRequests(requests);
 
         // Assert
         Assert.Empty(result);

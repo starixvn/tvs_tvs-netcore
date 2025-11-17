@@ -2,7 +2,6 @@ import { inject, Injectable } from '@angular/core';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { TEXT } from '../../utility/constants/text';
-import { Result } from '../../utility/models/result';
 import { StaticService } from '../../utility/services/static.service';
 import { AddRequestQuery } from '../models/add-request.query';
 import { AddRequestResultModel } from '../models/request.model';
@@ -13,14 +12,13 @@ import { AddRequestResultModel } from '../models/request.model';
 export class PopupService {
   private readonly modalService = inject(ModalService);
 
-  showError(messageContent: string, onYesCallback?: () => void) {
+  showError(messageContent: string, title = TEXT.ADD_REQUEST_RESULT_TITLE) {
     this.modalService.open(
       {
-        title: TEXT.ADD_REQUEST_RESULT_TITLE,
+        title: title,
         message: `Error: ${messageContent}`,
         type: ModalType.Error
       },
-      onYesCallback
     );
   }
 
@@ -36,7 +34,7 @@ export class PopupService {
     );
   }
 
-  showEditedRequestSuccessful(query: AddRequestQuery, addRequestResult: AddRequestResultModel, onOkCallback: () => void) {
+  showEditedRequestSuccessful(addRequestResult: AddRequestResultModel, onOkCallback: () => void) {
     this.modalService.open(
       {
         title: TEXT.EDIT_REQUEST_RESULT_TITLE,
@@ -47,11 +45,11 @@ export class PopupService {
     );
   }
 
-  showSaveRequestError(query: AddRequestQuery, addResult: Result<AddRequestResultModel>, titleMessage: string) {
+  showSaveRequestError(errorMsg: string, titleMessage: string) {
     this.modalService.open(
       {
         title: titleMessage,
-        message: `Error: ${addResult.errorMsg}`,
+        message: `Error: ${errorMsg}`,
         type: ModalType.Error
       },
       () => { }

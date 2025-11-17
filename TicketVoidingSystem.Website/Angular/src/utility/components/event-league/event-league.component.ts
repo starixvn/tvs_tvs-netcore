@@ -68,6 +68,7 @@ export class EventLeagueComponent implements OnChanges {
   }
 
   getKoTime(){
+    if(!this.selectedMatch.kickOffTime) return '';
     return moment(this.selectedMatch.kickOffTime).format(DateTimeFormat.SHORT_TIME_FORMAT);
   }
 

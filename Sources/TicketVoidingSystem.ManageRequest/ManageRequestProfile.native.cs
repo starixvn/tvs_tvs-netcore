@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using TicketVoidingSystem.ManageRequest.Criteria.AddRequest;
+using TicketVoidingSystem.ManageRequest.Criteria.ManageRemark;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRequest.VoidedTickets;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
+using TicketVoidingSystem.ManageRequest.Models.ManageRemark;
 using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest;
@@ -43,5 +45,6 @@ public class ManageRequestProfile : Profile
         CreateMap<MatchInfoAddRequest, Match>();
         CreateMap<Match, MatchInfoAddRequest>();
         CreateMap<RequestEventModel, Match>();
+        CreateMap<AddRemarkQuery, AddRemarkCommand>();
     }
 }

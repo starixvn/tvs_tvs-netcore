@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChange } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,47 +19,44 @@ import { ActionRemark } from '../../constants/action-remark.constant';
 export class OthersComponent implements OnInit, OnChanges {
   @Input() model: AddRemarkModel;
   @Output() save = new EventEmitter();
-  @Output() cancel = new EventEmitter();
   decidedBys: string[] = [];
   operators: OperatorInfo[] = [];
   groupOperators: GroupOperator[] = [];
   actionOptions: { label: string; value: string }[] = [];
-  
+
   private readonly commonService = inject(CommonService);
   private readonly othersService = inject(OthersService);
 
   async ngOnInit() {
-    if (this.model?.matchId) {
-      this.operators = await this.othersService.getOperators(this.model.matchId.toString());
-    } else {
-      this.operators = [OperatorDefault.SUSPENDER, OperatorDefault.TRADER];
-    }
-    this.intDefaultValueGroupOperators();
-    this.updateSelectedValueGroupOperators();
-    
-    if(this.decidedBys.length === 0){
+    await this.reloadData();
+    if (this.decidedBys.length === 0) {
       this.decidedBys = await this.commonService.getDecidedBy();
     }
 
     this.initActionOptions();
   }
 
-  private initActionOptions() {
-    this.actionOptions = Array.from(ActionRemark.ACTION_REMARK.entries()).map(([value, label]) => 
-      ({value, label}));
+
+  async ngOnChanges(changes: SimpleChanges) {
+    if (changes['model']) {
+      await this.reloadData();
+    }
   }
 
-  async ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (changes['model'] && this.model?.matchId) {
-      if (this.model.matchId) {
-        this.operators = await this.othersService.getOperators(this.model.matchId.toString());
-      } else {
-        this.operators = [OperatorDefault.SUSPENDER, OperatorDefault.TRADER];
-      }
-
-      this.intDefaultValueGroupOperators();
-      this.updateSelectedValueGroupOperators();
+  private async reloadData() {
+    if (this.model.matchId) {
+      this.operators = await this.othersService.getOperators(this.model.matchId.toString());
+    } else {
+      this.operators = [OperatorDefault.SUSPENDER, OperatorDefault.TRADER];
     }
+
+    this.intDefaultValueGroupOperators();
+    this.updateSelectedValueGroupOperators();
+  }
+
+  private initActionOptions() {
+    this.actionOptions = Array.from(ActionRemark.ACTION_REMARK.entries()).map(([value, label]) =>
+      ({ value, label }));
   }
 
   private intDefaultValueGroupOperators() {
@@ -80,7 +77,7 @@ export class OthersComponent implements OnInit, OnChanges {
     this.groupOperators.forEach(group => {
       const groupName = group.name.toLowerCase();
       let selectedOperators: OperatorInfo[] = [];
-      
+
       if (groupName === 'suspender' && this.model.suspender) {
         const matchedOperator = group.items.find(x => x.userName === this.model.suspender);
         if (matchedOperator) {
@@ -92,9 +89,9 @@ export class OthersComponent implements OnInit, OnChanges {
           selectedOperators = [matchedOperator];
         }
       }
-      
-      group.selected = selectedOperators.length > 0 
-        ? selectedOperators 
+
+      group.selected = selectedOperators.length > 0
+        ? selectedOperators
         : [group.items.find(x => x.operatorId === 0)];
     });
   }
@@ -119,7 +116,7 @@ export class OthersComponent implements OnInit, OnChanges {
     this.groupOperators.forEach(group => {
       const selectedOperator = group.selected.find(x => x.operatorId !== 0);
       const groupName = group.name.toLowerCase();
-      
+
       if (groupName === 'suspender') {
         this.model.suspender = selectedOperator ? selectedOperator.userName : '';
       } else if (groupName === 'trader') {
@@ -128,7 +125,7 @@ export class OthersComponent implements OnInit, OnChanges {
     });
   }
 
-  addDecidedBy(decidedBy: string){
+  addDecidedBy(decidedBy: string) {
     this.decidedBys.push(decidedBy);
   }
 
@@ -136,11 +133,10 @@ export class OthersComponent implements OnInit, OnChanges {
   }
 
   saveClick() {
-    // this.isProcessingSave = true;
-    // this.save.emit();
+    this.save.emit();
   }
 
   cancelClick(): void {
-    this.cancel.emit();
+    this.model.isOpen = false;
   }
 }

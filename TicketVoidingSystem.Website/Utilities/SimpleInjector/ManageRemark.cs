@@ -1,0 +1,12 @@
+﻿using Microsoft.Extensions.DependencyInjection;
+using TicketVoidingSystem.ManageRequest.Services.ManageRemark;
+
+namespace TicketVoidingSystem.Website.Utilities.SimpleInjector;
+
+public static class ManageRemark
+{
+    public static void AddManageRemarkServices(this IServiceCollection services)
+    {
+        services.AddTransient<AddRemarkService, AddRemarkServiceImp>();
+    }
+}
