@@ -24,6 +24,11 @@ public class HybridParlayTicketServiceImp(
     LegOddsService legOddsService)
     : HybridParlayTicketService
 {
+    public static readonly int[] MainStatusNotCallJackTime =
+    [
+        TicketStatus.VoidId
+    ];
+
     public async Task<bool> Execute(string hybridParlayTransIds, HybridParlayType type, int ticketType, int siteDbGroupId)
     {
         try
@@ -107,9 +112,10 @@ public class HybridParlayTicketServiceImp(
     private static (HybridParlayApiModel ApiModel, List<LegOddsModel> TicketsWaitToUpdateOdds) CreateRequestSubTicket(
         IEnumerable<HybridParlayTicketModel> ticketsDetail)
     {
+        var ticketWillBeCallJackTime = ticketsDetail.Where(x => !MainStatusNotCallJackTime.Contains(x.StatusId));
         var voidBetInfosList = new List<HybridParlayVoidBetInfo>();
         var ticketsWaitToUpdateOdds = new List<LegOddsModel>();
-        var groups = ticketsDetail.GroupBy(ticket => ticket.MainTransId);
+        var groups = ticketWillBeCallJackTime.GroupBy(ticket => ticket.MainTransId);
         foreach (var group in groups)
         {
             var firstItem = group.First();
