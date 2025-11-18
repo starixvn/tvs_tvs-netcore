@@ -1,17 +1,22 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { FilterModel } from '../models/filter.model';
 import moment from 'moment-timezone';
 import { NgbDate } from '@ng-bootstrap/ng-bootstrap';
 import { MultipleSelection } from '../../../utility/components/multiple-selection/multiple-selection.model';
 import { ActionRemark } from '../constants/action-remark.constant';
 import { ItemsSelectService } from '../../../utility/components/multiple-selection/items-select.service';
-import { Tooltip } from 'src/utility/components/tooltip/tooltip.model';
-import { TEXT } from 'src/utility/constants/text';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../utility/constants/text';
+import { GetRemarksQuery } from '../models/get-remarks.query';
+import { StaticService } from '../../../utility/services/static.service';
+import { MultipleSelectionService } from '../../../utility/components/multiple-selection/multiple-selection.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FilterService {
+  private readonly multipleSelectionService = inject(MultipleSelectionService);
+  
   initDefaultFilter(model: FilterModel){
     const date = new Date(moment.utc().tz('America/Caracas').format('YYYY-MM-DD HH:mm:ss.SSS'));
     model.ngbFromDate = new NgbDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
@@ -21,7 +26,6 @@ export class FilterService {
     model.createdBy = '0'; // All
     model.createdBySelectList = [{ name: 'All', value: '0' }, { name: '<<<< Me >>>>', value: model.userId }];
     model.actionSelectList = this.initMultiSelectAction();
-    model.action = model.actionSelectList.items.map(item => item.value).join(','); // All
   }
 
   private initMultiSelectAction(): MultipleSelection {
@@ -53,10 +57,28 @@ export class FilterService {
   }
 
   private inValidSearchByMatchId(model: FilterModel, tooltip: Tooltip): boolean {
-    if(!model.action || model.action === "") {
+    const action = this.multipleSelectionService.getValueItems(model.actionSelectList);
+    if(!action || action === "") {
       tooltip.display('action', TEXT.REQUIRED_FIELD);
       return true;
     }
     return false;
+  }
+
+  createGetRemarksQuery(model: FilterModel): GetRemarksQuery {
+    if(model.searchBy === '1') {
+      return {
+        remarkId: model.remarkId
+      };
+    }
+    
+    return {
+      matchId: model.matchId,
+      fromDate: StaticService.getDateStringFromNgbDate(model.ngbFromDate),
+      toDate: StaticService.getDateStringFromNgbDate(model.ngbToDate),
+      action: this.multipleSelectionService.getValueItems(model.actionSelectList),
+      createdBy: model.createdBy,
+      isExcludeTest: model.isExcludeTest
+    };
   }
 }

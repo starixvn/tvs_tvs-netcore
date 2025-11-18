@@ -18,7 +18,9 @@ import { AddRemarkService } from './add-remark.service';
 })
 export class AddRemarkComponent implements OnInit {
   @Input() model: AddRemarkModel;
+  @Input() isEdit: boolean;
   @ViewChild('leagueEvent') leagueEvent: EventLeagueComponent;
+  @ViewChild('othersComponent') othersComponent: OthersComponent;
 
   tooltip = new Tooltip();
   tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
@@ -34,11 +36,16 @@ export class AddRemarkComponent implements OnInit {
   ngOnInit(): void {
 
   }
+
+  getTitle(): string {
+    return this.isEdit ? `Edit Remark - ${this.model.remarkId}` : "Add New Remark";
+  }
   
   async changeMatchEvent(): Promise<void> {
-    this.model.matchId = this.leagueEvent.matchId;
+    this.model.matchId = this.leagueEvent.selectedMatch.matchId;
     this.model.iptv = await this.getIpTv();
     this.model = cloneDeep(this.model);
+    this.othersComponent.reloadData();
   }
 
   private async getIpTv() {
@@ -60,11 +67,22 @@ export class AddRemarkComponent implements OnInit {
 
   resetData(): void {
     this.model = new AddRemarkModel();
+    this.leagueEvent.updateUndefinedMatchAndLeague();
+
   }
 
   async saveRemark(): Promise<void> {
+    console.log('saveRemark', this.model);
+    if(!this.leagueEvent.isMatchIdValid() || this.addRemarkService.inValidCheckVar(this.model, this.tooltip) ) {
+      return;
+    }
+    this.othersComponent.isOpenConfirmAddRemark = true;
+  }
+
+  async confirmAddRemark(): Promise<void> {
     const remarkId = await this.addRemarkService.addRemark(this.model);
-    if (remarkId) {
+    if (remarkId > 0) {
+      this.othersComponent.isOpenConfirmAddRemark = false;
       this.resetData();
     }
   }

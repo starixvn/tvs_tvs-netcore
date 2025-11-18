@@ -8,6 +8,7 @@ import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.co
 import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
 import { FilterService } from './filter.service';
 import { OnlyNumberDirective } from '../../../utility/directives/number.directive';
+import { GetRemarksQuery } from '../models/get-remarks.query';
 
 @Component({
   standalone: true,
@@ -20,6 +21,7 @@ export class FilterComponent implements OnInit {
   @Input() model: FilterModel;
   @Input() minDate: NgbDate;
   @Output() openAddRemark = new EventEmitter<void>();
+  @Output() searchEvent = new EventEmitter<GetRemarksQuery>();
 
   tooltip = new Tooltip();
 
@@ -32,14 +34,11 @@ export class FilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterService.initDefaultFilter(this.model);
+    this.clickSearch();
   }
 
   isFilterByMatch(): boolean {
     return this.model.searchBy === '0';
-  }
-
-  updateSelectedAction(selectedItems: string[]): void {
-    this.model.action = selectedItems.join(',');
   }
 
   changeSearchBy() {
@@ -52,6 +51,9 @@ export class FilterComponent implements OnInit {
     if(this.filterService.inValidFilter(this.model, this.tooltip)) {
       return;
     }
+
+    const query = this.filterService.createGetRemarksQuery(this.model);
+    this.searchEvent.emit(query);
   }
 
   newRemark() { 

@@ -4,12 +4,14 @@ import { Tooltip } from '../../..//utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../..//utility/constants/text';
 import { AddRemarkQuery, AddRemarkResultData } from '../models/add-remark-query.model';
 import { Guid } from 'guid-typescript';
-import { AddRequestStore } from '../../..//add-request-new/services/add-request.store';
+import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
 import { AppService } from '../app.service';
 import { Result } from '../../../utility/models/result';
 import { PopupService } from '../../../add-request-new/services/popup.service';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 
 @Injectable({
   providedIn: 'root'
@@ -20,42 +22,52 @@ export class AddRemarkService {
   private readonly popupService = inject(PopupService);
   private readonly modalService = inject(ModalService);
 
-  inValidData(model: AddRemarkModel, tooltip: Tooltip): boolean {
-    if (!model.isCheckedVar) {
-      tooltip.display('var-check', TEXT.SELECTED_VAR_OPTIONS);
+  inValidCheckVar(model: AddRemarkModel, tooltip: Tooltip): boolean {
+    if (isNull(model.isCheckedVar) || isUndefined(model.isCheckedVar)) {
+      model.isHighLightVarCheck = true;
+      tooltip.display('check-var', TEXT.SELECTED_VAR_OPTIONS);
       return true;
     }
+  
     return false;
   }
 
   async addRemark(model: AddRemarkModel): Promise<number> {
     const query: AddRemarkQuery = {
       ...model,
-      guid: `AddRemark-${Guid.create().toString()}`,
+      guid: model.isEdit ? null : `AddRemark-${Guid.create().toString()}`,
       sessionTime: this.addRequestStore.getTimeFilterTicket()
     };
 
-    const result = await this.appService.addRemark(query);
-    return this.handleAfterAddRemark(result);
+    const result = model.isEdit ? await this.appService.editRemark(query) : await this.appService.addRemark(query);
+    return await this.handleAfterAddRemark(result, model.isEdit);
   }
 
-  private handleAfterAddRemark(result: Result<AddRemarkResultData>): number {
+  private async handleAfterAddRemark(result: Result<AddRemarkResultData>, isEdit: boolean): Promise<number> {
+    const title = isEdit ? TEXT.EDIT_REMARK_RESULT_TITLE : TEXT.ADD_REMARK_RESULT_TITLE;
     if (!result.isSuccessful) {
-      this.popupService.showError(result.errorMsg, TEXT.ADD_REMARK_RESULT_TITLE);
+      this.popupService.showError(result.errorMsg, title);
       return null;
     }
 
-    this.showAddRemarkSuccessful(result.data.remarkId);
+    await this.showAddRemarkSuccessful(result.data.remarkId, isEdit);
     return result.data.remarkId;
   }
 
-  private showAddRemarkSuccessful(remarkId: number): void {
-    this.modalService.confirm(
-      {
-        title: TEXT.ADD_REMARK_RESULT_TITLE,
-        message: `<div>Remark No.<strong>${remarkId}</strong> added successfully</div>`,
-        type: ModalType.Alert
-      }
-    );
+  private showAddRemarkSuccessful(remarkId: number, isEdit: boolean): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const title = isEdit ? TEXT.EDIT_REMARK_RESULT_TITLE : TEXT.ADD_REMARK_RESULT_TITLE;
+      const message = isEdit ? `<div>Remark No.<strong>${remarkId}</strong> edited successfully</div>` : `<div>Remark No.<strong>${remarkId}</strong> added successfully</div>`;
+      this.modalService.open(
+        {
+          title: title,
+          message: message,
+          type: ModalType.Alert
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
   }
 }

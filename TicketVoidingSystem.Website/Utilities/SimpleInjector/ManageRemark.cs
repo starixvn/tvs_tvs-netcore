@@ -8,5 +8,6 @@ public static class ManageRemark
     public static void AddManageRemarkServices(this IServiceCollection services)
     {
         services.AddTransient<AddRemarkService, AddRemarkServiceImp>();
+        services.AddTransient<UpdateRemarkService, UpdateRemarkServiceImp>();
     }
 }

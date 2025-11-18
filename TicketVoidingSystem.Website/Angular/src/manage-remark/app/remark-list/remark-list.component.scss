@@ -1,0 +1,121 @@
+@import '../../../assets/styles/mixin.scss';
+
+.remark-list {
+  width: 1510px;
+
+  .title-remark-list {
+    @include grid-title('../images/excel-icon.png')
+  }
+
+  .col-tb-1 {
+    width: 48px;
+  }
+
+  .col-tb-2 {
+    width: 100px;
+  }
+
+  .col-tb-3 {
+    width: 85px;
+  }
+
+  .col-tb-4 {
+    width: 305px;
+  }
+
+  .col-tb-5 {
+    width: 100px;
+  }
+
+  .col-tb-6 {
+    width: 90px;
+  }
+
+  .col-tb-7 {
+    width: 105px;
+
+    div {
+      width: 105px;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .col-tb-8 {
+    width: 95px;
+
+    div {
+      width: 95px;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .col-tb-9, .col-tb-10, .col-tb-11, .col-tb-12, .col-tb-13 {
+    width: 85px;
+  }
+
+  .col-tb-14 {
+    width: 70px;
+  }
+
+  table {
+    text-align: center;
+  }
+
+  .table-header {
+    border: solid #888888;
+    border-width: 1px 1px 0 1px;
+    table {
+      @include setTable();
+      @include setHeaderTable();
+
+    }
+  }
+
+  .table-content {
+    max-height: 545px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border: 1px solid #888888;
+    @include scroll-style();
+
+    table {
+      @include setTable();
+      border: 1px solid #888888;
+
+      tbody:nth-child(odd) {
+        background-color: #dde2ed;
+      }
+
+      tbody:hover td[rowspan], tr:hover td {
+        background: #aebad4;
+     }
+
+      tbody {
+        td {
+          border-color: #888888;
+          border-style: solid;
+          border-width: 0 1px 1px 0;
+          line-height: 18px;
+          overflow: hidden;
+          white-space: normal;
+        }
+      }
+    }
+  }
+
+  .icon-delete {
+    font-size: 18px;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .paging-spacer {
+    margin-top: 1px;
+  }
+}
+

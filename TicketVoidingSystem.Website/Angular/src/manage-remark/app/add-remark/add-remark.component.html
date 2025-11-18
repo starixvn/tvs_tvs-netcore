@@ -3,13 +3,15 @@
   <div class="add-remark">
     <div class="modal-header success">
       <div class="modal-title">
-        <strong>Add New Remark</strong>
+        <strong>{{getTitle()}}</strong>
       </div>
       <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="closeClick()"></button>
     </div>
     <div class="modal-body">
-      <event-league #leagueEvent [matchId]="model.matchId" [isShowKoTime]="true" (changeEvent)="changeMatchEvent()">
-      </event-league>
+      <div class="event-league-wrapper wrapper-tooltip">
+        <event-league #leagueEvent [matchId]="model.matchId" [isShowKoTime]="true" (changeEvent)="changeMatchEvent()">
+        </event-league>
+      </div>
       <div class="check-var">
         <div class="var-check-selection mt-2" [ngClass]="{'highlight': model.isHighLightVarCheck}">
           <label class="border-radius-left" (click)="changeVarCheckValue(false)"
@@ -27,7 +29,7 @@
         </div>
         }
       </div>
-      <others [model]="model" (save)="saveRemark()"></others>
+      <others #othersComponent [model]="model" (save)="saveRemark()" (confirmAddRemark)="confirmAddRemark()"></others>
     </div>
   </div>
 </div>

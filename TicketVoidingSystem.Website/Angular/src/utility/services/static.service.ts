@@ -482,4 +482,8 @@ export class StaticService {
   static isCashOut(betdaqId: number): boolean {
     return betdaqId === -2;
   };
+
+  static getDateStringFromNgbDate(date: NgbDate): string {
+    return `${date.year}/${date.month}/${date.day}`;
+  }
 }

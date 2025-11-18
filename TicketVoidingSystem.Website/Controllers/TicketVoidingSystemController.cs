@@ -87,14 +87,14 @@ public class TicketVoidingSystemController(IMediator mediator, UserActionLogServ
         return View("~/wwwroot/dist/ticket-voiding-system/manage-request/index.cshtml");
     }
 
-    [HttpGet]
-    [Route("")]
-    [Route("Index")]
-    public IActionResult ManageRemark()
-    {
-        //userActionLogService.LogAccessFunction(nameof(ManageRemark));
-        return View("~/wwwroot/dist/ticket-voiding-system/manage-remark/index.cshtml");
-    }
+    //[HttpGet]
+    //[Route("")]
+    //[Route("Index")]
+    //public IActionResult ManageRemark()
+    //{
+    //    userActionLogService.LogAccessFunction(nameof(ManageRemark));
+    //    return View("~/wwwroot/dist/ticket-voiding-system/manage-remark/index.cshtml");
+    //}
 
     [HttpGet]
     [Route("Add")]

@@ -20,6 +20,7 @@ import { GetRequestsQuery } from './models/get-requests.query';
 import { PermissionManage } from './models/permission-manage.model';
 import { RequestListComponent } from './request-list/request-list.component';
 import { RequestModel } from './request-list/request.model';
+import { StaticService } from '../../utility/services/static.service';
 
 const DATETIME_FORMAT = 'YYYY/M/D hh:mm:ss.SSS A';
 @Component({
@@ -104,8 +105,8 @@ export class AppComponent implements OnInit {
     return {
       requestId: this.filter.requestId?.toString(),
       matchId: this.filter.matchId ? this.filter.matchId : null,
-      fromDate: this.isFilterById() ? null : this.getDateStringFromNgbDate(this.filter.ngbFromDate),
-      toDate: this.isFilterById() ? null : this.getDateStringFromNgbDate(this.filter.ngbToDate),
+      fromDate: this.isFilterById() ? null : StaticService.getDateStringFromNgbDate(this.filter.ngbFromDate),
+      toDate: this.isFilterById() ? null : StaticService.getDateStringFromNgbDate(this.filter.ngbToDate),
       issueTypeId: this.filter.issueTypeId,
       subIssueType: this.filter.subIssueType,
       statusIds: this.filter.statusIds,
@@ -134,7 +135,7 @@ export class AppComponent implements OnInit {
   }
 
   isDateBeforeBUDay(date: NgbDate): boolean {
-    const momentFrom = moment(this.getDateStringFromNgbDate(date), DateTimeFormat.SHORT_DATE_FORMAT);
+    const momentFrom = moment(StaticService.getDateStringFromNgbDate(date), DateTimeFormat.SHORT_DATE_FORMAT);
     const momentBU = moment(this.bUDay).format(DateTimeFormat.SHORT_DATE_FORMAT);
     return momentFrom.isBefore(moment(momentBU, DateTimeFormat.SHORT_DATE_FORMAT));
   }
@@ -166,10 +167,6 @@ export class AppComponent implements OnInit {
     this.filterComponent.isSelectedAllIssueType = this.filter.issueTypeId.split(',').length > 1;
     this.filterComponent.filterByMatch = this.cacheFilterByMatch;
     this.filterComponent.filterByValue = this.cacheFilterByValue;
-  }
-
-  getDateStringFromNgbDate(date: NgbDate): string {
-    return `${date.year}/${date.month}/${date.day}`;
   }
 
   private timeoutEvent(): void {

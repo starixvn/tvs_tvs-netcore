@@ -1,0 +1,133 @@
+<div class="remark-list">
+  @if (paging.total > 0) {
+    <div class="title-remark-list">
+      <div class="title-remark-list-label">Manage Remark</div>
+      <div class="title-remark-list-toolbox">
+        <input type="button" class="title-remark-list-toolbox-excel" title="Export to Excel" (click)="exportExcel()">
+      </div>
+    </div>
+  }
+  <div class="table-header">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col" class="col-tb-1">
+            <div>No</div>
+          </th>
+          <th scope="col" class="col-tb-2">
+            <div>Remark No</div>
+          </th>
+          <th scope="col" class="col-tb-3">
+            <div>Match ID</div>
+          </th>
+          <th scope="col" class="col-tb-4">
+            <div>Description</div>
+          </th>
+          <th scope="col" class="col-tb-5">
+            <div>Created By</div>
+          </th>
+          <th scope="col" class="col-tb-6">
+            <div>Created Time</div>
+            (GMT+8)
+          </th>
+          <th scope="col" class="col-tb-7">
+            <div>Mistaken By</div>
+          </th>
+          <th scope="col" class="col-tb-8">
+            <div>Decided By</div>
+          </th>
+          <th scope="col" class="col-tb-9">
+            <div>Performed By</div>
+          </th>
+          <th scope="col" class="col-tb-10">
+            <div>TV/IPTV</div>
+          </th>
+          <th scope="col" class="col-tb-11">
+            <div>Suspender</div>
+          </th>
+          <th scope="col" class="col-tb-12">
+            <div>Close Case By</div>
+          </th>
+          <th scope="col" class="col-tb-13">
+            <div>Action</div>
+          </th>
+          <th scope="col" class="col-tb-14">
+            <div>DELETE</div>
+          </th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="table-content">
+    <table>
+      @for (item of displayedModels; track remarkListTrackByFn($index, item); let i = $index) {
+        <tbody>
+          <tr>
+            <td class="col-tb-1">
+              <div class="number-text">{{i + 1}}</div>
+            </td>
+            <td class="col-tb-2">
+              <div class="d-flex align-items-center justify-content-center">
+                <span class="remark-no link" (click)="openEditRemark(item.remarkId)">{{item.remarkId}}
+                </span>
+              </div>
+            </td>
+            <td class="col-tb-3">
+              <div>{{item.matchId}}</div>
+              <div class="mb-1">
+                @if (item.settlementStatus) {
+                  <span [ngClass]="{'ht-settlement': isSettlementHT(item.settlementStatus) === true,
+                  'ft-settlement': isSettlementHT(item.settlementStatus) === false}">{{item.settlementStatus}}
+                  </span>
+                }
+              </div>
+            </td>
+            <td class="col-tb-4">
+              <div class="text-end" [innerHtml]="item.description | sanitizeHtml"></div>
+            </td>
+            <td class="col-tb-5">
+              <div>{{item.createdBy}}</div>
+            </td>
+            <td class="col-tb-6">
+              <div>{{item.createdDate | date:'yyyy/MM/dd hh:mm:ss a'}}</div>
+            </td>
+            <td class="col-tb-7">
+              <div>{{item.mistakenBy}}</div>
+            </td>
+            <td class="col-tb-8">
+              <div>{{item.decidedBy}}</div>
+            </td>
+            <td class="col-tb-9">
+              <div>{{item.performedBy}}</div>
+            </td>
+            <td class="col-tb-10">
+              <div>{{item.iptv}}</div>
+            </td>
+            <td class="col-tb-11">
+              <div>{{item.suspender}}</div>
+            </td>
+            <td class="col-tb-12">
+              <div>{{item.closeCaseBy}}</div>
+            </td>
+            <td class="col-tb-13">
+              <div> {{item.actionName}}</div>
+            </td>
+            <td class="col-tb-14">
+              <div><i class="fa fa-trash icon-delete" (click)="deleteRemark(item.remarkId)" aria-hidden="true"></i></div>
+            </td>
+          </tr>
+        </tbody>
+      }
+    </table>
+    @if (displayedModels.length == 0 || displayedModels == null) {
+      <table>
+        <tbody>
+          <tr>
+            <td class="no-data">There is no data</td>
+          </tr>
+        </tbody>
+      </table>
+    }
+  </div>
+  <paging [(model)]="paging" (modelChange)="pagingEvent()" class="paging-spacer"></paging>
+</div>

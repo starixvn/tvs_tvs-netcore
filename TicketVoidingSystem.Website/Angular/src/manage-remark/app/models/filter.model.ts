@@ -8,7 +8,6 @@ export class FilterModel {
   matchId?: number;
   ngbFromDate: NgbDate;
   ngbToDate: NgbDate;
-  action: string;
   createdBy: string;
   isExcludeTest = true;
 

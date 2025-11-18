@@ -1,0 +1,24 @@
+@if (isOpen) {
+<div>
+  <div style="z-index: 1050" aria-hidden="true" class="modal-backdrop fade show"></div>
+  <div role="dialog" class="fade modal show d-block wrapper-tooltip">
+    <div role="document" class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header primary">
+          <div class="modal-title">
+            <strong>Confirm</strong>
+          </div>
+          <button type="button" class="btn-close btn-close-white" aria-label="Close" (click)="onClickCancel()"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mg-top-10"><i class="fa fa-question-circle text-confirm"></i> ARE YOU SURE YOU WANT TO ADD THIS REMARK?</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn confirm" (click)="onClickOk()">OK</button>
+          <button type="button" class="btn cancel" (click)="onClickCancel()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+}

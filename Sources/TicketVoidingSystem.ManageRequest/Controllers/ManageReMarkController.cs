@@ -13,4 +13,10 @@ public class ManageReMarkController(IMediator mediator) : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> AddRemark(AddRemark request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> GetRemarks(GetRemarks request) => Ok(await mediator.Send(request));
+
+    [HttpPost]
+    public async Task<IActionResult> UpdateRemark(UpdateRemark request) => Ok(await mediator.Send(request));
 }

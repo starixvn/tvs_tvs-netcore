@@ -23,6 +23,7 @@ import { CommonService } from '../../../utility/services/common.service';
 import { PermissionManage } from '../models/permission-manage.model';
 import { FilterModel } from '../../../manage-remark/app/models/filter.model';
 import { FilterService } from './filter.service';
+import { StaticService } from '../../../utility/services/static.service';
 
 @Component({
   standalone: true,
@@ -110,13 +111,9 @@ export class FilterComponent implements OnInit {
   }
 
   checkAutoRefresh(): void {
-    const momentFrom = moment(this.getDateStringFromNgbDate(this.model.ngbFromDate), DateTimeFormat.SHORT_DATE_FORMAT);
+    const momentFrom = moment(StaticService.getDateStringFromNgbDate(this.model.ngbFromDate), DateTimeFormat.SHORT_DATE_FORMAT);
     const momentBU = moment(this.bUDay).format(DateTimeFormat.SHORT_DATE_FORMAT);
     this.isShowAutoRefresh = !momentFrom.isBefore(moment(momentBU, DateTimeFormat.SHORT_DATE_FORMAT)) || this.filterByMatch === false;
-  }
-
-  private getDateStringFromNgbDate(date: NgbDate): string {
-    return `${date.year}/${date.month}/${date.day}`;
   }
 
   initDefaultFilter() {

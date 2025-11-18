@@ -5,6 +5,7 @@
 </div>
 
 <div class="body mg-10" [blockUi]="false">
-  <filter #filterComponent [model]="filter" (openAddRemark)="openAddRemark()"></filter>
+  <filter #filterComponent [model]="filter" (openAddRemark)="openAddRemark()" (searchEvent)="searchEvent($event)"></filter>
   <add-remark #addRemarkComponent [model]="addRemarkModel"></add-remark>
+  <remark-list [remarks]="remarks"></remark-list>
 </div>

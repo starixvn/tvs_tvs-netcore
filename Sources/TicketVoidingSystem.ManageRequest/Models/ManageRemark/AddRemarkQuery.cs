@@ -5,7 +5,7 @@ public class AddRemarkQuery
     public int? RemarkId { get; set; }
     public string Guid { get; set; } = string.Empty;
     public int SessionTime { get; set; }
-    public string MatchId { get; set; }
+    public int MatchId { get; set; }
     public bool IsTest { get; set; }
     public bool IsCheckedVar { get; set; }
     public string MistakenBy { get; set; }

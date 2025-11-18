@@ -54,3 +54,7 @@
 .tooltip-var-check {
     @include tooltip-var-check();
 }
+
+.event-league-wrapper {
+    position: relative;
+}

@@ -2,6 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { HttpService } from '../../utility/services/http.service';
 import { AddRemarkQuery, AddRemarkResultData } from './models/add-remark-query.model';
 import { Result } from '../../utility/models/result';
+import { GetRemarksQuery } from './models/get-remarks.query';
+import { RemarkModel } from './models/remark.model';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +21,17 @@ export class AppService {
 
   /* istanbul ignore next */
   async addRemark(query: AddRemarkQuery): Promise<Result<AddRemarkResultData>> {
+    console.log('addRemark', query);
     return await this.httpService.postJson<AddRemarkQuery, Result<AddRemarkResultData>>(query, 'api/ManageReMark/AddRemark');
+  }
+
+  /* istanbul ignore next */
+  async editRemark(query: AddRemarkQuery): Promise<Result<AddRemarkResultData>> {
+    return await this.httpService.postJson<AddRemarkQuery, Result<AddRemarkResultData>>(query, 'api/ManageReMark/UpdateRemark');
+  }
+
+  /* istanbul ignore next */
+  async getRemarks(query: GetRemarksQuery): Promise<RemarkModel[]> {
+    return await this.httpService.postJson<GetRemarksQuery, RemarkModel[]>(query, 'api/ManageReMark/GetRemarks');
   }
 }

@@ -8,7 +8,7 @@ public class AddRemarkCommand : NonQueryCommand
     public int SessionTime { get; set; }
     public int UserId { get; set; }
     public string IP { get; set; }
-    public string MatchId { get; set; }
+    public int MatchId { get; set; }
     public bool IsTest { get; set; }
     public bool IsCheckedVar { get; set; }
     public string MistakenBy { get; set; }
