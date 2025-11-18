@@ -117,7 +117,8 @@ public class MapFromBetListServiceImp(IMapper mapper, BetListService betListServ
         }
 
         SetValueSubTicket(ticket, item);
-        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoice = $"<div {(item.IsHybrid ? "" : "hidden")} class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
         mainChoice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
 
         return mainChoice + $"<div id='divEvent_{item.SubTransId}'></div>";

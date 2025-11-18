@@ -55,4 +55,5 @@ public class VoidedTicketModel
     public int MatchId { get; set; }
     public decimal MasterOdds { get; set; }
     public bool IsHybrid { get; set; }
+    public decimal FinalOdds { get; set; }
 }
