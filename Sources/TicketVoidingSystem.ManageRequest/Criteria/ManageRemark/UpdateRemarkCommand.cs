@@ -19,8 +19,9 @@ public class UpdateRemarkCommand : NonQueryCommand
     public string Remark { get; set; }
     public string Message { get; set; }
     public string Description { get; set; }
-    public string Action { get; set; }
+    public string ActionId { get; set; }
+
     public override string GetSettingKey() => "TicketVoiding_Remark_Update";
+
     public override bool IsValid() => true;
 }
-

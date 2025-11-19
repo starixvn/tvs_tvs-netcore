@@ -11,8 +11,8 @@ import { AddRemarkComponent } from './add-remark/add-remark.component';
 import { AddRemarkModel } from './models/add-remark.model';
 import { RemarkListComponent } from './remark-list/remark-list.component';
 import { RemarkModel } from './models/remark.model';
-import { GetRemarksQuery } from './models/get-remarks.query';
 import clone from 'lodash/clone';
+import { ModalType } from '../../utility/components/modal/modal.model';
 
 @Component({
   standalone: true,
@@ -33,12 +33,33 @@ export class AppComponent {
   modalService = inject(ModalService);
   signalRService = inject(SignalRService);
   
+  isBlock = false;
+
   openAddRemark() {
     this.addRemarkModel = clone(new AddRemarkModel());
     this.addRemarkModel.isOpen = true;
   }
 
-  async searchEvent(query: GetRemarksQuery) {
+  async searchEvent() {
+    let query = this.filterComponent.getQuery();
+    this.isBlock = true;
     this.remarks = await this.appService.getRemarks(query);
+    this.isBlock = false;
+  }
+
+  async exportExcel() {
+    let query = this.filterComponent.getQuery();
+    this.isBlock = true;
+    await this.appService.exportRemark(query, () => this.timeoutEvent());
+    this.isBlock = false;
+  }
+
+  private timeoutEvent(): void {
+    this.modalService.open(
+      {
+        title: 'Warning!',
+        message: 'Export Excel timeout. Please try again!!',
+        type: ModalType.Warning
+      });
   }
 }

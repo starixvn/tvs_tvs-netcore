@@ -18,5 +18,5 @@ public class AddRemarkQuery
     public string Remark { get; set; }
     public string Message { get; set; }
     public string Description { get; set; }
-    public string Action { get; set; }
+    public string ActionId { get; set; }
 }

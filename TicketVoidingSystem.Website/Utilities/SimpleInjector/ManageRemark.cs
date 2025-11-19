@@ -9,5 +9,9 @@ public static class ManageRemark
     {
         services.AddTransient<AddRemarkService, AddRemarkServiceImp>();
         services.AddTransient<UpdateRemarkService, UpdateRemarkServiceImp>();
+        services.AddTransient<GetRemarksService, GetRemarksServiceImp>();
+        services.AddTransient<GetRemarksInActiveTableService, GetRemarksInActiveTableServiceImp>();
+        services.AddTransient<GetRemarksInArchivedTableService, GetRemarksInArchivedTableServiceImp>();
+        services.AddTransient<RenderRemarkService, RenderRemarkServiceImp>();
     }
 }

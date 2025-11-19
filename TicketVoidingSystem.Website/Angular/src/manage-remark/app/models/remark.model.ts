@@ -10,6 +10,6 @@ export class RemarkModel {
   iptv: string;
   suspender: string;
   closeCaseBy: string;
-  actionName: string;
+  actionId: string;
   settlementStatus?: string;
 }

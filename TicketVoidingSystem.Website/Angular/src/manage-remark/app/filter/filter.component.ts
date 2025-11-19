@@ -21,7 +21,7 @@ export class FilterComponent implements OnInit {
   @Input() model: FilterModel;
   @Input() minDate: NgbDate;
   @Output() openAddRemark = new EventEmitter<void>();
-  @Output() searchEvent = new EventEmitter<GetRemarksQuery>();
+  @Output() searchEvent = new EventEmitter<void>();
 
   tooltip = new Tooltip();
 
@@ -47,13 +47,16 @@ export class FilterComponent implements OnInit {
   }
 
 
+  getQuery(): GetRemarksQuery {
+    return this.filterService.createGetRemarksQuery(this.model);
+  }
+
   clickSearch() { 
     if(this.filterService.inValidFilter(this.model, this.tooltip)) {
       return;
     }
 
-    const query = this.filterService.createGetRemarksQuery(this.model);
-    this.searchEvent.emit(query);
+    this.searchEvent.emit();
   }
 
   newRemark() { 

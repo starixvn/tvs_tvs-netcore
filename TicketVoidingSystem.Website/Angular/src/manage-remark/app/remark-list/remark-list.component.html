@@ -110,7 +110,7 @@
               <div>{{item.closeCaseBy}}</div>
             </td>
             <td class="col-tb-13">
-              <div> {{item.actionName}}</div>
+              <div>{{getActionName(item.actionId)}}</div>
             </td>
             <td class="col-tb-14">
               <div><i class="fa fa-trash icon-delete" (click)="deleteRemark(item.remarkId)" aria-hidden="true"></i></div>

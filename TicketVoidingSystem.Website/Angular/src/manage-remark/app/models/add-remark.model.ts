@@ -16,6 +16,6 @@ export class AddRemarkModel {
   remark: string;
   message: string;
   description: string;
-  action: string;
+  actionId: string;
   operatorsList: OperatorInfo[];
 }

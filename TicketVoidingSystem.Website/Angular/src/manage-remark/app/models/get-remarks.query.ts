@@ -3,7 +3,7 @@ export class GetRemarksQuery {
   matchId?: number;
   fromDate?: string;
   toDate?: string;
-  action?: string;
+  actionIds?: string;
   createdBy?: string;
   isExcludeTest?: boolean;
 }

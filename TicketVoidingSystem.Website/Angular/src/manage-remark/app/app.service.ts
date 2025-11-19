@@ -34,4 +34,9 @@ export class AppService {
   async getRemarks(query: GetRemarksQuery): Promise<RemarkModel[]> {
     return await this.httpService.postJson<GetRemarksQuery, RemarkModel[]>(query, 'api/ManageReMark/GetRemarks');
   }
+
+  async exportRemark(query: GetRemarksQuery, timeoutEvent?: () => void) {
+    const url = 'api/ManageReMark/ExportRemark';
+    return this.httpService.downloadFile(query, url, timeoutEvent);
+  }
 }

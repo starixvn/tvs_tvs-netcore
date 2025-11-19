@@ -1,17 +1,19 @@
-using Fanex.Data.Repository;
 using MediatR;
-using TicketVoidingSystem.ManageRequest.Criteria.ManageRemark;
 using TicketVoidingSystem.ManageRequest.Models.ManageRemark;
+using TicketVoidingSystem.ManageRequest.Services.ManageRemark;
 
 namespace TicketVoidingSystem.ManageRequest.Handlers.ManageRemark;
 
-public class GetRemarks : GetRemarksCriteria, IRequest<IEnumerable<RemarkModel>>;
+public class GetRemarks : SelectRemarksQuery, IRequest<IEnumerable<RemarkModel>>;
 
-public class GetRemarksHandler(IDynamicRepository repository)
+public class GetRemarksHandler(GetRemarksService getRemarksService, RenderRemarkService renderRemarkService)
     : IRequestHandler<GetRemarks, IEnumerable<RemarkModel>>
 {
     public async Task<IEnumerable<RemarkModel>> Handle(GetRemarks request, CancellationToken cancellationToken)
     {
-        return await repository.FetchAsync<RemarkModel>(request);
+        var remarks = await getRemarksService.GetRemarks(request);
+        renderRemarkService.UpdateDescription(remarks);
+
+        return remarks;
     }
 }

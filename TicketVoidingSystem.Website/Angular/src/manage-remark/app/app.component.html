@@ -4,8 +4,8 @@
   Home / Manage Remark
 </div>
 
-<div class="body mg-10" [blockUi]="false">
-  <filter #filterComponent [model]="filter" (openAddRemark)="openAddRemark()" (searchEvent)="searchEvent($event)"></filter>
+<div class="body mg-10" [blockUi]="isBlock">
+  <filter #filterComponent [model]="filter" (openAddRemark)="openAddRemark()" (searchEvent)="searchEvent()"></filter>
   <add-remark #addRemarkComponent [model]="addRemarkModel"></add-remark>
-  <remark-list [remarks]="remarks"></remark-list>
+  <remark-list [remarks]="remarks" (exportExcelEvent)="exportExcel()"></remark-list>
 </div>

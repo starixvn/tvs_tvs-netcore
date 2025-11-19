@@ -4,6 +4,7 @@ import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { RemarkModel } from '../models/remark.model';
+import { ActionRemark } from '../constants/action-remark.constant';
 
 @Component({
   standalone: true,
@@ -53,5 +54,9 @@ export class RemarkListComponent implements OnChanges {
   openEditRemark(remarkId: number) {
     // this.editRemarkEvent.emit(remarkId);
     console.log(remarkId);
+  }
+
+  getActionName(actionId: string) {
+    return ActionRemark.ACTION_REMARK.get(actionId);
   }
 }

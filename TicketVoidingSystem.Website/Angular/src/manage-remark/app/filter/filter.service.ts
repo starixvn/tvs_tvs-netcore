@@ -76,7 +76,7 @@ export class FilterService {
       matchId: model.matchId,
       fromDate: StaticService.getDateStringFromNgbDate(model.ngbFromDate),
       toDate: StaticService.getDateStringFromNgbDate(model.ngbToDate),
-      action: this.multipleSelectionService.getValueItems(model.actionSelectList),
+      actionIds: this.multipleSelectionService.getValueItems(model.actionSelectList),
       createdBy: model.createdBy,
       isExcludeTest: model.isExcludeTest
     };
