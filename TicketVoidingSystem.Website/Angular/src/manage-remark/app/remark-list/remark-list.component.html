@@ -1,5 +1,5 @@
 <div class="remark-list">
-  @if (paging.total > 0) {
+  @if (remarks?.length > 0) {
     <div class="title-remark-list">
       <div class="title-remark-list-label">Manage Remark</div>
       <div class="title-remark-list-toolbox">
@@ -110,7 +110,7 @@
               <div>{{item.closeCaseBy}}</div>
             </td>
             <td class="col-tb-13">
-              <div>{{getActionName(item.actionId)}}</div>
+              <div [innerHtml]="item.actionName | sanitizeHtml"></div>
             </td>
             <td class="col-tb-14">
               <div><i class="fa fa-trash icon-delete" (click)="deleteRemark(item.remarkId)" aria-hidden="true"></i></div>

@@ -34,7 +34,6 @@ export class FilterComponent implements OnInit {
 
   ngOnInit(): void {
     this.filterService.initDefaultFilter(this.model);
-    this.clickSearch();
   }
 
   isFilterByMatch(): boolean {

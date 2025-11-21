@@ -4,7 +4,6 @@ import { PagingModel } from '../../../utility/components/paging/paging.model';
 import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
 import { RemarkModel } from '../models/remark.model';
-import { ActionRemark } from '../constants/action-remark.constant';
 
 @Component({
   standalone: true,
@@ -16,12 +15,14 @@ import { ActionRemark } from '../constants/action-remark.constant';
 export class RemarkListComponent implements OnChanges {
   @Input() remarks: RemarkModel[] = [];
   @Output() exportExcelEvent = new EventEmitter<boolean>();
+  @Output() editRemark = new EventEmitter<number>();
+  @Output() deleteRemarkEvent = new EventEmitter<number>();
 
   displayedModels: RemarkModel[] = [];
   paging = new PagingModel();
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (changes['models']) {
+    if (changes['remarks']) {
       this.paging.total = this.remarks?.length;
       this.filterDisplayRemarks();
     }
@@ -48,15 +49,10 @@ export class RemarkListComponent implements OnChanges {
   }
 
   deleteRemark(remarkId: number) {
-    // this.deleteRemarkEvent.emit(remarkId);
+    this.deleteRemarkEvent.emit(remarkId);
   }
 
   openEditRemark(remarkId: number) {
-    // this.editRemarkEvent.emit(remarkId);
-    console.log(remarkId);
-  }
-
-  getActionName(actionId: string) {
-    return ActionRemark.ACTION_REMARK.get(actionId);
+    this.editRemark.emit(remarkId);
   }
 }

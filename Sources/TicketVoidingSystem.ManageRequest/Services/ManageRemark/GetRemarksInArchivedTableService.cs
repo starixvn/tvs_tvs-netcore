@@ -23,7 +23,7 @@ public class GetRemarksInArchivedTableServiceImp(
         {
             criteriaArchived.ToDate = query.BUDay;
         }
+
         return await repository.FetchAsync<RemarkModel>(criteriaArchived);
     }
 }
-

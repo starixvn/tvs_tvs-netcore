@@ -32,6 +32,15 @@ export class HttpService {
     }
   }
 
+  public async deleteJson<T>(url: string): Promise<T> {
+    try {
+      const response = await this.http.delete(url).toPromise();
+      return response as T;
+    } catch (error) {
+      return null;
+    }
+  }
+
   public async downloadFile<T>(query: T, url: string, timeoutEvent?: () => void) {
     const response = await this.getResponseBlob(query, url, timeoutEvent);
     if(response) {

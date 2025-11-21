@@ -18,6 +18,7 @@ public static class TemplateExcelPath
     public const string TicketVoiding_VoidedTickets = "App_Data/Template/TicketVoiding_VoidedTickets.xlsx";
     public const string TicketVoiding_RecoveredTickets = "App_Data/Template/TicketVoiding_RecoveredTickets.xlsx";
     public const string TicketVoiding_ManageRequest = "App_Data/Template/TicketVoiding_ManageRequest.xlsx";
+    public const string TicketVoiding_ManageRemark = "App_Data/Template/Manage_Remark_TVS.xlsx";
     public const string TicketVoiding_AbnormalBet = "App_Data/Template/TicketVoiding_AbnormalBet.xlsx";
     public const string TicketVoiding_AbnormalAccount = "App_Data/Template/TicketVoiding_AbnormalAccount.xlsx";
 }

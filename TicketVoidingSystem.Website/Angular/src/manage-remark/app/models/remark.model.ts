@@ -12,4 +12,5 @@ export class RemarkModel {
   closeCaseBy: string;
   actionId: string;
   settlementStatus?: string;
+  actionName: string;
 }

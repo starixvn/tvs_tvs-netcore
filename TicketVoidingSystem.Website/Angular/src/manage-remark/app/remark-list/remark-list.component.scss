@@ -98,6 +98,50 @@
           line-height: 18px;
           overflow: hidden;
           white-space: normal;
+
+          ::ng-deep {
+            .refund {
+              background-color: #003366;
+              padding: 1px;
+              color: white;
+              margin-bottom: 4px;
+            }
+
+            .take-note {
+              background-color: #ff6600;
+              padding: 1px;
+              color: white;
+              margin-bottom: 4px;
+            }
+
+            .Waiting {
+              background-color: green;
+              padding: 1px;
+              color: white;
+              margin-bottom: 4px;
+            }
+
+            .void-ticket {
+              background-color: brown;
+              padding: 1px;
+              color: white;
+              margin-bottom: 4px;
+            }
+          }
+        }
+
+        .ht-settlement {
+          background-color: #003366;
+          padding: 1px;
+          color: white;
+          margin-bottom: 4px;
+        }
+
+        .ft-settlement {
+          background-color: #ff6600;
+          padding: 1px;
+          color: white;
+          margin-bottom: 4px;
         }
       }
     }

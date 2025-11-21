@@ -31,6 +31,7 @@ export class EventLeagueComponent implements OnChanges {
   @Input() isShowSportType = true;
   @Input() subIssueTypeId?: string;
   @Input() isShowKoTime = false;
+  @Input() isTest = false;
   @Output() changeEvent = new EventEmitter<MatchModel>();
 
   selectedMatch = new MatchModel();
@@ -40,7 +41,6 @@ export class EventLeagueComponent implements OnChanges {
   validationMessage: string;
   warningSubType: string;
   isShowWarningSubType = false;
-  isTest = false;
 
   private delayForSearchSubscription: Subscription;
   private readonly observableTimer = timer(300);

@@ -6,6 +6,6 @@
 
 <div class="body mg-10" [blockUi]="isBlock">
   <filter #filterComponent [model]="filter" (openAddRemark)="openAddRemark()" (searchEvent)="searchEvent()"></filter>
-  <add-remark #addRemarkComponent [model]="addRemarkModel"></add-remark>
-  <remark-list [remarks]="remarks" (exportExcelEvent)="exportExcel()"></remark-list>
+  <add-remark #addRemarkComponent [model]="addRemarkModel" [isEdit]="isEditRemark" (reLoadRemarks)="searchEvent()"></add-remark>
+  <remark-list [remarks]="remarks" (exportExcelEvent)="exportExcel()" (editRemark)="openEditRemark($event)" (deleteRemarkEvent)="deleteRemark($event)"></remark-list>
 </div>

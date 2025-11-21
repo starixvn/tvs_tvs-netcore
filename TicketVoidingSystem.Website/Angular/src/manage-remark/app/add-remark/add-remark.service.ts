@@ -32,15 +32,16 @@ export class AddRemarkService {
     return false;
   }
 
-  async addRemark(model: AddRemarkModel): Promise<number> {
+  async addRemark(model: AddRemarkModel, isEdit: boolean, isTest: boolean): Promise<number> {
     const query: AddRemarkQuery = {
       ...model,
-      guid: model.isEdit ? null : `AddRemark-${Guid.create().toString()}`,
+      isTest: isTest,
+      guid: isEdit ? null : `AddRemark-${Guid.create().toString()}`,
       sessionTime: this.addRequestStore.getTimeFilterTicket()
     };
 
-    const result = model.isEdit ? await this.appService.editRemark(query) : await this.appService.addRemark(query);
-    return await this.handleAfterAddRemark(result, model.isEdit);
+    const result = isEdit ? await this.appService.editRemark(query) : await this.appService.addRemark(query);
+    return await this.handleAfterAddRemark(result, isEdit);
   }
 
   private async handleAfterAddRemark(result: Result<AddRemarkResultData>, isEdit: boolean): Promise<number> {
@@ -61,6 +62,37 @@ export class AddRemarkService {
       this.modalService.open(
         {
           title: title,
+          message: message,
+          type: ModalType.Alert
+        },
+        () => {
+          resolve();
+        }
+      );
+    });
+  }
+
+  async deleteRemark(remarkId: number): Promise<boolean> {
+    const result = await this.appService.deleteRemark(remarkId);
+    return await this.handleAfterDeleteRemark(result, remarkId);
+  }
+
+  private async handleAfterDeleteRemark(result: Result<void>, remarkId: number): Promise<boolean> {
+    if (!result?.isSuccessful) {
+      this.popupService.showError(result?.errorMsg || 'Delete remark failed', TEXT.DELETE_REMARK_RESULT_TITLE);
+      return false;
+    }
+
+    await this.showDeleteRemarkSuccessful(remarkId);
+    return true;
+  }
+
+  private showDeleteRemarkSuccessful(remarkId: number): Promise<void> {
+    return new Promise<void>((resolve) => {
+      const message = `<div>Remark No.<strong>${remarkId}</strong> deleted successfully</div>`;
+      this.modalService.open(
+        {
+          title: TEXT.DELETE_REMARK_RESULT_TITLE,
           message: message,
           type: ModalType.Alert
         },

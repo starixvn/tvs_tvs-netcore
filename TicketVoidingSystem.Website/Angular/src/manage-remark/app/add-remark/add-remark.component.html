@@ -9,7 +9,7 @@
     </div>
     <div class="modal-body">
       <div class="event-league-wrapper wrapper-tooltip">
-        <event-league #leagueEvent [matchId]="model.matchId" [isShowKoTime]="true" (changeEvent)="changeMatchEvent()">
+        <event-league #leagueEvent [matchId]="model.matchId" [isEdit]="isEdit" [isTest]="model.isTest" [isShowKoTime]="true" (changeEvent)="changeMatchEvent()">
         </event-league>
       </div>
       <div class="check-var">
@@ -29,7 +29,7 @@
         </div>
         }
       </div>
-      <others #othersComponent [model]="model" (save)="saveRemark()" (confirmAddRemark)="confirmAddRemark()"></others>
+      <others #othersComponent [model]="model" [isEdit]="isEdit" (save)="saveRemark()" (confirmAddRemark)="confirmAddRemark()"></others>
     </div>
   </div>
 </div>

@@ -1,0 +1,29 @@
+using TicketVoidingSystem.ManageRequest.Models;
+
+namespace TicketVoidingSystem.ManageRequest.Models.ManageRemark;
+
+public class AddRemarkModel
+{
+    public int? RemarkId { get; set; }
+    public int MatchId { get; set; }
+    public string MatchCode { get; set; }
+    public int HomeId { get; set; }
+    public int AwayId { get; set; }
+    public DateTime? KickOffTime { get; set; }
+    public int LeagueId { get; set; }
+    public bool IsTest { get; set; }
+    public bool IsCheckedVar { get; set; }
+    public string MistakenBy { get; set; }
+    public string DecidedBy { get; set; }
+    public string PerformedBy { get; set; }
+    public string Iptv { get; set; }
+    public string OperatorInfo { get; set; }
+    public List<OperatorQuery>? OperatorsList { get; set; } = [];
+    public string Provider { get; set; }
+    public string Source { get; set; }
+    public string Remark { get; set; }
+    public string Message { get; set; }
+    public string Description { get; set; }
+    public string ActionId { get; set; }
+}
+

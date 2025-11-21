@@ -442,9 +442,11 @@
         <Setting Key="TicketVoiding_Json_Test" SpName="TicketVoiding_Json_Test" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="AddRemark">
-        <Setting Key="TicketVoiding_Remark_Insert" SpName="TicketVoiding_Remark_Insert_uat2" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Remark_Insert" SpName="TicketVoiding_Remark_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_Remark_Update" SpName="TicketVoiding_Remark_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_RemarkList_Select" SpName="TicketVoiding_RemarkList_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_RemarkList_Archive_Select" SpName="TicketVoiding_RemarkList_Archive_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Remark_Select" SpName="TicketVoiding_Remark_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="TicketVoiding_Remark_Delete" SpName="TicketVoiding_Remark_Delete" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
     </Function>
 </Functions>

@@ -78,7 +78,7 @@
   <div class="col-3 mt-2 d-flex flex-column">
     <label class="col-form-label-sm">Action</label>
     <div class="input-area">
-      <ng-select [items]="actionOptions" [(ngModel)]="model.action" bindLabel="label" bindValue="value" dropdownPosition="bottom">
+      <ng-select [items]="actionOptions" [(ngModel)]="model.actionId" bindLabel="label" bindValue="value" dropdownPosition="bottom">
       </ng-select>
     </div>
     <div class="d-flex button-confirm justify-content-end gap-2 mt-auto">
@@ -88,4 +88,4 @@
   </div>
 </div>
 
-<confirm-add-remark [isOpen]="isOpenConfirmAddRemark" (clickOk)="onClickOkConfirmAddRemark()" (clickCancel)="onClickCancelConfirmAddRemark()"></confirm-add-remark>
+<confirm-add-remark [isOpen]="isOpenConfirmAddRemark" [isEdit]="isEdit" (clickOk)="onClickOkConfirmAddRemark()" (clickCancel)="onClickCancelConfirmAddRemark()"></confirm-add-remark>

@@ -111,6 +111,7 @@ export class TEXT {
     static readonly EDIT_REQUEST_RESULT_TITLE = 'Edit Request Result';
     static readonly ADD_REMARK_RESULT_TITLE = 'Add Remark Result';
     static readonly EDIT_REMARK_RESULT_TITLE = 'Edit Remark Result';
+    static readonly DELETE_REMARK_RESULT_TITLE = 'Delete Remark Result';
     static readonly INVALID_TO_DATE = 'Invalid To Date';
 
     static readonly INVALID_REQUESTID = 'Invalid RequestId.';

@@ -4,6 +4,7 @@ import { AddRemarkQuery, AddRemarkResultData } from './models/add-remark-query.m
 import { Result } from '../../utility/models/result';
 import { GetRemarksQuery } from './models/get-remarks.query';
 import { RemarkModel } from './models/remark.model';
+import { AddRemarkModel } from './models/add-remark.model';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,14 @@ export class AppService {
   async exportRemark(query: GetRemarksQuery, timeoutEvent?: () => void) {
     const url = 'api/ManageReMark/ExportRemark';
     return this.httpService.downloadFile(query, url, timeoutEvent);
+  }
+
+  async getRemark(remarkId: number): Promise<AddRemarkModel> {
+    return await this.httpService.getJson<AddRemarkModel>(`api/ManageReMark/GetRemark/${remarkId}`);
+  }
+
+  /* istanbul ignore next */
+  async deleteRemark(remarkId: number): Promise<Result<void>> {
+    return await this.httpService.deleteJson<Result<void>>(`api/ManageReMark/DeleteRemark/${remarkId}`);
   }
 }

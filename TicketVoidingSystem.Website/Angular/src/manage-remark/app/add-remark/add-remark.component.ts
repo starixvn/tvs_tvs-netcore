@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { EventLeagueComponent } from '../../../utility/components/event-league/event-league.component';
 import { AddRemarkModel } from '../models/add-remark.model';
@@ -16,9 +16,10 @@ import { AddRemarkService } from './add-remark.service';
   styleUrl: './add-remark.component.scss',
   imports: [CommonModule, EventLeagueComponent, OthersComponent]
 })
-export class AddRemarkComponent implements OnInit {
+export class AddRemarkComponent {
   @Input() model: AddRemarkModel;
   @Input() isEdit: boolean;
+  @Output() reLoadRemarks = new EventEmitter<AddRemarkModel>();
   @ViewChild('leagueEvent') leagueEvent: EventLeagueComponent;
   @ViewChild('othersComponent') othersComponent: OthersComponent;
 
@@ -31,10 +32,6 @@ export class AddRemarkComponent implements OnInit {
   
   constructor() {
     this.tooltip.element = this.element;
-  }
-
-  ngOnInit(): void {
-
   }
 
   getTitle(): string {
@@ -72,7 +69,6 @@ export class AddRemarkComponent implements OnInit {
   }
 
   async saveRemark(): Promise<void> {
-    console.log('saveRemark', this.model);
     if(!this.leagueEvent.isMatchIdValid() || this.addRemarkService.inValidCheckVar(this.model, this.tooltip) ) {
       return;
     }
@@ -80,7 +76,7 @@ export class AddRemarkComponent implements OnInit {
   }
 
   async confirmAddRemark(): Promise<void> {
-    const remarkId = await this.addRemarkService.addRemark(this.model);
+    const remarkId = await this.addRemarkService.addRemark(this.model, this.isEdit, this.leagueEvent.isTest);
     if (remarkId > 0) {
       this.othersComponent.isOpenConfirmAddRemark = false;
       this.resetData();

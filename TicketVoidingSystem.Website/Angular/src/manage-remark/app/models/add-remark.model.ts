@@ -2,7 +2,6 @@ import { OperatorInfo } from "../../../add-request-new/component/others/others.m
 
 export class AddRemarkModel {
   remarkId?: number;
-  isEdit = false;
   matchId: number;
   isOpen = false;
   isCheckedVar: boolean;
@@ -18,4 +17,5 @@ export class AddRemarkModel {
   description: string;
   actionId: string;
   operatorsList: OperatorInfo[];
+  isTest: boolean;
 }

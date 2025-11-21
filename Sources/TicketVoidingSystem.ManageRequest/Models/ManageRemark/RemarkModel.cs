@@ -21,4 +21,19 @@ public class RemarkModel
     public int AwayId { get; set; }
     public int LeagueId { get; set; }
     public int SportType { get; set; }
+    public string ActionName { get; set; }
+
+
+    // More Info for Excel
+    public string Trader { get; set; }
+    public string Source { get; set; }
+    public string Remark { get; set; }
+    public string Message { get; set; }
+    public DateTime EventDate { get; set; }
+    public DateTime KickOffTime { get; set; }
+    public string LeagueName { get; set; }
+    public string EventName { get; set; }
+    public string SportTypeName { get; set; }
+    public string Provider { get; set; }
+    public string DescriptionInput { get; set; }
 }

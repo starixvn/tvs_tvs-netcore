@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -18,6 +18,7 @@ import { ConfirmAddRemarkComponent } from '../confirm-add-remark/confirm-add-rem
 })
 export class OthersComponent implements OnInit {
   @Input() model: AddRemarkModel;
+  @Input() isEdit: boolean;
   @Output() save = new EventEmitter();
   @Output() confirmAddRemark = new EventEmitter();
   

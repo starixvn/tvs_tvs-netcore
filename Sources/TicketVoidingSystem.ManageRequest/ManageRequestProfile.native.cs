@@ -46,6 +46,7 @@ public class ManageRequestProfile : Profile
         CreateMap<Match, MatchInfoAddRequest>();
         CreateMap<RequestEventModel, Match>();
         CreateMap<AddRemarkQuery, AddRemarkCommand>();
+        CreateMap<AddRemarkQuery, UpdateRemarkCommand>();
         CreateMap<SelectRemarksQuery, SelectActiveRemarksCriteria>();
         CreateMap<SelectRemarksQuery, SelectArchivedRemarksCriteria>();
     }

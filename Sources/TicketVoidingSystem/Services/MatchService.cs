@@ -129,7 +129,7 @@ public class MatchServiceImp(IDynamicRepository repository, RemotingRefWrapperSe
             SportType161 => StringResource.NumberGameNo + match.MatchCode,
             SportType164 => $"Happy 5 No .{match.MatchCode}",
             SportType207 => $"{remotingRefWrapperService.GetBFName(match.HomeId)} - vs - {remotingRefWrapperService.GetBFName(match.AwayId)}",
-            _ => match.IsOutright ? $"{match.HomeName} - {match.LeauegName}" : $"{match.HomeName} - vs - {match.AwayName}"
+            _ => match.IsOutright ? $"{match.HomeName} - {match.LeagueName}" : $"{match.HomeName} - vs - {match.AwayName}"
         };
     }
 

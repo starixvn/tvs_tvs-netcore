@@ -1,4 +1,4 @@
-import { Component, ViewChild, inject } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, inject } from '@angular/core';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
 import { BlockUiDirective } from '../../utility/components/block-ui/block-ui.directive';
 import { AppService } from './app.service';
@@ -13,6 +13,7 @@ import { RemarkListComponent } from './remark-list/remark-list.component';
 import { RemarkModel } from './models/remark.model';
 import clone from 'lodash/clone';
 import { ModalType } from '../../utility/components/modal/modal.model';
+import { AddRemarkService } from './add-remark/add-remark.service';
 
 @Component({
   standalone: true,
@@ -20,20 +21,26 @@ import { ModalType } from '../../utility/components/modal/modal.model';
   templateUrl: './app.component.html',
   imports: [MenuBarComponent, BlockUiDirective, FilterComponent, AddRemarkComponent, RemarkListComponent]
 })
-export class AppComponent {
+export class AppComponent implements AfterViewInit {
   @ViewChild('filterComponent') filterComponent: FilterComponent;
   @ViewChild('addRemarkComponent') addRemarkComponent: AddRemarkComponent;
 
   filter = new FilterModel();
   addRemarkModel = new AddRemarkModel();
   remarks: RemarkModel[] = [];
+  isEditRemark = false;
 
   appService = inject(AppService);
   commonService = inject(CommonService);
   modalService = inject(ModalService);
   signalRService = inject(SignalRService);
+  addRemarkService = inject(AddRemarkService);
   
   isBlock = false;
+
+  ngAfterViewInit(): void {
+    this.searchEvent();
+  }
 
   openAddRemark() {
     this.addRemarkModel = clone(new AddRemarkModel());
@@ -41,7 +48,7 @@ export class AppComponent {
   }
 
   async searchEvent() {
-    let query = this.filterComponent.getQuery();
+    let query = this.filterComponent?.getQuery();
     this.isBlock = true;
     this.remarks = await this.appService.getRemarks(query);
     this.isBlock = false;
@@ -61,5 +68,18 @@ export class AppComponent {
         message: 'Export Excel timeout. Please try again!!',
         type: ModalType.Warning
       });
+  }
+
+  async openEditRemark(remarkId: number) {
+    this.addRemarkModel = clone(await this.appService.getRemark(remarkId));
+    this.isEditRemark = true;
+    this.addRemarkModel.isOpen = true;
+  }
+
+  async deleteRemark(remarkId: number) {
+    this.isBlock = true;
+    await this.addRemarkService.deleteRemark(remarkId);
+    this.searchEvent();
+    this.isBlock = false;
   }
 }

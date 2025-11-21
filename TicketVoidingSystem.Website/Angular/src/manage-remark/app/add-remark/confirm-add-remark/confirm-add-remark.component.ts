@@ -10,6 +10,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class ConfirmAddRemarkComponent {
   @Input() isOpen: boolean;
+  @Input() isEdit: boolean;
   @Output() clickOk = new EventEmitter();
   @Output() clickCancel = new EventEmitter();
 
@@ -19,5 +20,9 @@ export class ConfirmAddRemarkComponent {
 
   onClickOk() {
     this.clickOk.emit();
+  }
+
+  getTitle(): string {
+    return this.isEdit ? "ARE YOU SURE YOU WANT TO EDIT THIS REMARK?" : "ARE YOU SURE YOU WANT TO ADD THIS REMARK?";
   }
 }

@@ -13,6 +13,7 @@ public class GetRemarksHandler(GetRemarksService getRemarksService, RenderRemark
     {
         var remarks = await getRemarksService.GetRemarks(request);
         renderRemarkService.UpdateDescription(remarks);
+        renderRemarkService.UpdateActionName(remarks);
 
         return remarks;
     }
