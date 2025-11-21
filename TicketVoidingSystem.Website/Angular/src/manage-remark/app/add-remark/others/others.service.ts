@@ -10,7 +10,7 @@ export class OthersService {
 
   async getOperators(matchId: number | null): Promise<OperatorInfo[]> {
     if (matchId) {
-      return await this.baseOthersService.getOperators(matchId.toString());
+      return this.baseOthersService.getOperators(matchId.toString());
     }
     return [OperatorDefault.SUSPENDER, OperatorDefault.TRADER];
   }

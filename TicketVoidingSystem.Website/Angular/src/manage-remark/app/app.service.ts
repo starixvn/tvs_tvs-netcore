@@ -22,18 +22,17 @@ export class AppService {
 
   /* istanbul ignore next */
   async addRemark(query: AddRemarkQuery): Promise<Result<AddRemarkResultData>> {
-    console.log('addRemark', query);
-    return await this.httpService.postJson<AddRemarkQuery, Result<AddRemarkResultData>>(query, 'api/ManageReMark/AddRemark');
+    return this.httpService.postJson<AddRemarkQuery, Result<AddRemarkResultData>>(query, 'api/ManageReMark/AddRemark');
   }
 
   /* istanbul ignore next */
   async editRemark(query: AddRemarkQuery): Promise<Result<AddRemarkResultData>> {
-    return await this.httpService.postJson<AddRemarkQuery, Result<AddRemarkResultData>>(query, 'api/ManageReMark/UpdateRemark');
+    return this.httpService.postJson<AddRemarkQuery, Result<AddRemarkResultData>>(query, 'api/ManageReMark/UpdateRemark');
   }
 
   /* istanbul ignore next */
   async getRemarks(query: GetRemarksQuery): Promise<RemarkModel[]> {
-    return await this.httpService.postJson<GetRemarksQuery, RemarkModel[]>(query, 'api/ManageReMark/GetRemarks');
+    return this.httpService.postJson<GetRemarksQuery, RemarkModel[]>(query, 'api/ManageReMark/GetRemarks');
   }
 
   async exportRemark(query: GetRemarksQuery, timeoutEvent?: () => void) {
@@ -42,11 +41,11 @@ export class AppService {
   }
 
   async getRemark(remarkId: number): Promise<AddRemarkModel> {
-    return await this.httpService.getJson<AddRemarkModel>(`api/ManageReMark/GetRemark/${remarkId}`);
+    return this.httpService.getJson<AddRemarkModel>(`api/ManageReMark/GetRemark/${remarkId}`);
   }
 
   /* istanbul ignore next */
   async deleteRemark(remarkId: number): Promise<Result<void>> {
-    return await this.httpService.deleteJson<Result<void>>(`api/ManageReMark/DeleteRemark/${remarkId}`);
+    return this.httpService.deleteJson<Result<void>>(`api/ManageReMark/DeleteRemark/${remarkId}`);
   }
 }

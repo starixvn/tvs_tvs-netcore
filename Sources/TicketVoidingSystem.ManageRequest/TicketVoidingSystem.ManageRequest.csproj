@@ -14,6 +14,7 @@
   <ItemGroup>
     <PackageReference Include="Epplus.Mapper" Version="7.5.0" />
     <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="System.Collections.Immutable" Version="9.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TicketVoidingSystem.MarkTickets\TicketVoidingSystem.MarkTickets.csproj" />

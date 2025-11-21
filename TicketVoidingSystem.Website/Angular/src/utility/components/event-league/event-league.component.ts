@@ -13,7 +13,7 @@ import { TooltipComponent } from '../tooltip/tooltip.component';
 import { Tooltip } from '../tooltip/tooltip.model';
 import { ValidationService } from './validation.service';
 import { DateTimeFormat } from '../../constants/config';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 @Component({
   standalone: true,
@@ -68,8 +68,8 @@ export class EventLeagueComponent implements OnChanges {
   }
 
   getKoTime(){
-    if(!this.selectedMatch.kickOffTime) return '';
-    return moment(this.selectedMatch.kickOffTime).format(DateTimeFormat.SHORT_TIME_FORMAT);
+    return this.selectedMatch.kickOffTime 
+      ? moment(this.selectedMatch.kickOffTime).format(DateTimeFormat.SHORT_TIME_FORMAT) : '';
   }
 
   async getMatchInEditPage(matchId: number): Promise<void> {

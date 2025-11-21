@@ -41,7 +41,7 @@ export class AddRemarkService {
     };
 
     const result = isEdit ? await this.appService.editRemark(query) : await this.appService.addRemark(query);
-    return await this.handleAfterAddRemark(result, isEdit);
+    return this.handleAfterAddRemark(result, isEdit);
   }
 
   private async handleAfterAddRemark(result: Result<AddRemarkResultData>, isEdit: boolean): Promise<number> {
@@ -74,7 +74,7 @@ export class AddRemarkService {
 
   async deleteRemark(remarkId: number): Promise<boolean> {
     const result = await this.appService.deleteRemark(remarkId);
-    return await this.handleAfterDeleteRemark(result, remarkId);
+    return this.handleAfterDeleteRemark(result, remarkId);
   }
 
   private async handleAfterDeleteRemark(result: Result<void>, remarkId: number): Promise<boolean> {

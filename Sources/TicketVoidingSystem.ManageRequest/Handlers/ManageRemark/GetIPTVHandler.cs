@@ -30,6 +30,6 @@ public class GetIPTVHandler(OWPDataService owpDataService)
         var firstItem = tvIptvData.FirstOrDefault();
         var iptvValue = firstItem != null ? $"{firstItem.TV}\n{firstItem.IPTV}" : string.Empty;
 
-        return new GetIPTVResponse { Value = "tv/iptv" };
+        return new GetIPTVResponse { Value = iptvValue };
     }
 }

@@ -42,13 +42,11 @@ public class GetRemarksServiceImp(
         {
             query.FromDate = query.BUDay;
         }
-        query.ToDate = query.ToDate;
         return await getRemarksInActiveTableService.GetRemarksInActiveTable(query);
     }
 
     private async Task<IEnumerable<RemarkModel>> HandleForArchivedDataSearchByDate(SelectRemarksQuery query)
     {
-        query.FromDate = query.FromDate;
         if (query.IsToDateBeforeBUDay == false)
         {
             query.ToDate = query.BUDay;

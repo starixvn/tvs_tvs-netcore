@@ -50,7 +50,7 @@ export class AddRemarkComponent {
     ? this.leagueEvent.selectedMatch.matchId
     : this.leagueEvent.selectedMatch.parentId;
     
-    return await this.appService.getIptv(matchId, this.leagueEvent.selectedMatch.eventDate);
+    return this.appService.getIptv(matchId, this.leagueEvent.selectedMatch.eventDate);
   }
 
   closeClick(): void {

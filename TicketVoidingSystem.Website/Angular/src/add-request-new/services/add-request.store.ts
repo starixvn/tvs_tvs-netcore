@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable, Subject } from 'rxjs';
 import { AllowanceTime } from '../../utility/models/allowance-time.model';
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 @Injectable({
   providedIn: 'root'

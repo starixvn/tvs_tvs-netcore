@@ -48,14 +48,14 @@ export class AppComponent implements AfterViewInit {
   }
 
   async searchEvent() {
-    let query = this.filterComponent?.getQuery();
+    const query = this.filterComponent?.getQuery();
     this.isBlock = true;
     this.remarks = await this.appService.getRemarks(query);
     this.isBlock = false;
   }
 
   async exportExcel() {
-    let query = this.filterComponent.getQuery();
+    const query = this.filterComponent.getQuery();
     this.isBlock = true;
     await this.appService.exportRemark(query, () => this.timeoutEvent());
     this.isBlock = false;
