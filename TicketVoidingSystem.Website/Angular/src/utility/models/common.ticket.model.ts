@@ -19,6 +19,8 @@ export class CommonTicketModel {
     soldId: string;
     mainTransId: string;
     siteDbGroupId: number;
+    isHybrid: boolean;
+    subTransId: string;
 
     constructor(item = null) {
         for (const key in item) {

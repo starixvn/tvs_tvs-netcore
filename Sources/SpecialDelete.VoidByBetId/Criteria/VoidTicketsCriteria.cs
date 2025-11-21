@@ -22,7 +22,6 @@ public class VoidTicketsCriteria : CriteriaBase
 
     public byte? AbnormalBetType { get; set; }
 
-
     [SpParam(Ignored = true)]
     public int SiteDbGroupId { get; set; }
 

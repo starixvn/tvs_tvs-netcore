@@ -1,17 +1,41 @@
 import { TestBed } from '@angular/core/testing';
 import { FilterService } from './filter.service';
+import { AppService } from '../app.service';
 import { Product } from '../../../utility/constants/config';
 import { GroupBetTypesModel } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.model';
 import { GroupBetTypesComponent } from '../../../utility/components/advanced-mode/group-bettypes/group-bettypes.component';
 import { BetTypesModel } from '../../../utility/components/bettypes/bettypes.model';
 import { BetTypesComponent } from '../../../utility/components/bettypes/bettypes.component';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../utility/constants/text';
+import { MatchModel } from '../../../utility/models/match.model';
+import { Licensee } from './filter.model';
+import { StaticService } from '../../../utility/services/static.service';
 
 describe('FilterService', () => {
   let service: FilterService;
+  let appService: jest.Mocked<AppService>;
 
   beforeEach(() => {
+    const appServiceMock = {
+      getLicensees: jest.fn()
+    };
+
+    TestBed.configureTestingModule({
+      providers: [
+        FilterService,
+        { provide: AppService, useValue: appServiceMock }
+      ]
+    });
+
+    service = TestBed.inject(FilterService);
+    appService = TestBed.inject(AppService) as jest.Mocked<AppService>;
     jest.clearAllMocks();
-    service = new FilterService();
+
+    // Mock StaticService.isNumber
+    jest.spyOn(StaticService, 'isNumber').mockImplementation((value: string) => {
+      return /^\+?(0|[1-9]\d*)$/.test(value);
+    });
   });
 
   it('should be created', () => {
@@ -394,6 +418,268 @@ describe('FilterService', () => {
       // Assert
       expect(groupBetTypesComponent.isDisabledAllBetTypes).toBe(false);
       expect(groupBetTypes.isChecked).toBe(false);
+    });
+  });
+
+  describe('#getLicenseeSelectList', () => {
+    it('should return default list when no licensees', async () => {
+      // Arrange
+      appService.getLicensees.mockResolvedValue([]);
+
+      // Act
+      const result = await service.getLicenseeSelectList();
+
+      // Assert
+      expect(result).toEqual([
+        { id: 0, name: 'All' },
+        { id: -1, name: 'Credit' }
+      ]);
+      expect(appService.getLicensees).toHaveBeenCalledTimes(1);
+    });
+
+    it('should return list with licensees when available', async () => {
+      // Arrange
+      const licensees: Licensee[] = [
+        { id: 1, name: 'Licensee 1' },
+        { id: 2, name: 'Licensee 2' }
+      ];
+      appService.getLicensees.mockResolvedValue(licensees);
+
+      // Act
+      const result = await service.getLicenseeSelectList();
+
+      // Assert
+      expect(result).toEqual([
+        { id: 0, name: 'All' },
+        { id: -1, name: 'Credit' },
+        { id: 1, name: 'Licensee 1', group: 'Licensee' },
+        { id: 2, name: 'Licensee 2', group: 'Licensee' }
+      ]);
+      expect(appService.getLicensees).toHaveBeenCalledTimes(1);
+    });
+
+    it('should handle empty licensees array', async () => {
+      // Arrange
+      appService.getLicensees.mockResolvedValue([]);
+
+      // Act
+      const result = await service.getLicenseeSelectList();
+
+      // Assert
+      expect(result.length).toBe(2);
+      expect(result[0]).toEqual({ id: 0, name: 'All' });
+      expect(result[1]).toEqual({ id: -1, name: 'Credit' });
+    });
+  });
+
+  describe('#inValidSportTypeVirtualSport', () => {
+    it('should return true for invalid sport types for Virtual Sports', () => {
+      // Arrange
+      const invalidSportTypes = [100, 150, 200, 300];
+
+      // Act & Assert
+      invalidSportTypes.forEach(sportType => {
+        expect(service.inValidSportTypeVirtualSport(sportType)).toBe(true);
+      });
+    });
+
+    it('should return false for valid Virtual Sports sport types (180-186)', () => {
+      // Arrange
+      const validSportTypes = [180, 181, 183, 186];
+
+      // Act & Assert
+      validSportTypes.forEach(sportType => {
+        expect(service.inValidSportTypeVirtualSport(sportType)).toBe(false);
+      });
+    });
+
+    it('should return false for valid Virtual Sports 2 sport types (190-199, 177)', () => {
+      // Arrange
+      const validSportTypes = [177, 190, 195, 199];
+
+      // Act & Assert
+      validSportTypes.forEach(sportType => {
+        expect(service.inValidSportTypeVirtualSport(sportType)).toBe(false);
+      });
+    });
+    it('should return false for valid Virtual Sports 4, 5, 6, 7 sport types', () => {
+      // Arrange
+      const validSportTypes = [188, 147, 134, 125, 126, 127];
+
+      // Act & Assert
+      validSportTypes.forEach(sportType => {
+        expect(service.inValidSportTypeVirtualSport(sportType)).toBe(false);
+      });
+    });
+  });
+
+  describe('#isShowCheckboxAffected', () => {
+    it('should return true for SPORTS_BOOK when groupBetTypes has items', () => {
+      // Arrange
+      const product = Product.SPORTS_BOOK;
+      const groupBetTypes = {
+        groupBetTypes: [
+          { isChecked: false, betTypes: [] }
+        ]
+      } as unknown as GroupBetTypesModel;
+      const betTypes = null;
+
+      // Act
+      const result = service.isShowCheckboxAffected(product, groupBetTypes, betTypes);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false for SPORTS_BOOK when groupBetTypes is empty', () => {
+      // Arrange
+      const product = Product.SPORTS_BOOK;
+      const groupBetTypes = {
+        groupBetTypes: []
+      } as unknown as GroupBetTypesModel;
+      const betTypes = null;
+
+      // Act
+      const result = service.isShowCheckboxAffected(product, groupBetTypes, betTypes);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return true for BET_BUILDER when betTypes has items', () => {
+      // Arrange
+      const product = Product.BET_BUILDER;
+      const groupBetTypes = null;
+      const betTypes = {
+        betTypes: [
+          { isChecked: false }
+        ]
+      } as unknown as BetTypesModel;
+
+      // Act
+      const result = service.isShowCheckboxAffected(product, groupBetTypes, betTypes);
+
+      // Assert
+      expect(result).toBe(true);
+    });
+
+    it('should return false for BET_BUILDER when betTypes is empty', () => {
+      // Arrange
+      const product = Product.BET_BUILDER;
+      const groupBetTypes = null;
+      const betTypes = {
+        betTypes: []
+      } as unknown as BetTypesModel;
+
+      // Act
+      const result = service.isShowCheckboxAffected(product, groupBetTypes, betTypes);
+
+      // Assert
+      expect(result).toBe(false);
+    });
+
+    it('should return false for other products', () => {
+      // Arrange
+      const products = [Product.NUMBER_GAME, Product.VIRTUAL_SPORTS, Product.BITCOIN];
+      const groupBetTypes = null;
+      const betTypes = null;
+
+      // Act & Assert
+      products.forEach(product => {
+        expect(service.isShowCheckboxAffected(product, groupBetTypes, betTypes)).toBe(false);
+      });
+    });
+  });
+
+  describe('#invalidMatch', () => {
+    it('should return true and display tooltip when matchId is empty', () => {
+      // Arrange
+      const matchId = '';
+      const match = null;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.invalidMatch(matchId, match, tooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(tooltip.display).toHaveBeenCalledWith('match-id', TEXT.REQUIRED_MATCHID);
+    });
+
+    it('should return true and display tooltip when matchId is undefined', () => {
+      // Arrange
+      const matchId = undefined;
+      const match = null;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.invalidMatch(matchId, match, tooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(tooltip.display).toHaveBeenCalledWith('match-id', TEXT.REQUIRED_MATCHID);
+    });
+
+    it('should return true and display tooltip when matchId is not a number', () => {
+      // Arrange
+      const matchId = 'abc';
+      const match = null;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.invalidMatch(matchId, match, tooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(tooltip.display).toHaveBeenCalledWith('match-id', TEXT.INVALID_MATCHID);
+    });
+
+    it('should return true and display tooltip when match is null', () => {
+      // Arrange
+      const matchId = '123';
+      const match = null;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.invalidMatch(matchId, match, tooltip);
+
+      // Assert
+      expect(result).toBe(true);
+      expect(tooltip.display).toHaveBeenCalledWith('match-id', TEXT.INVALID_MATCHID);
+    });
+
+    it('should return false when matchId is valid number and match exists', () => {
+      // Arrange
+      const matchId = '123';
+      const match = {} as MatchModel;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.invalidMatch(matchId, match, tooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(tooltip.display).not.toHaveBeenCalled();
+    });
+
+    it('should return false for numeric matchId string', () => {
+      // Arrange
+      const matchId = '999';
+      const match = { id: 999 } as unknown as MatchModel;
+      const tooltip = new Tooltip();
+      tooltip.display = jest.fn();
+
+      // Act
+      const result = service.invalidMatch(matchId, match, tooltip);
+
+      // Assert
+      expect(result).toBe(false);
+      expect(tooltip.display).not.toHaveBeenCalled();
     });
   });
 });

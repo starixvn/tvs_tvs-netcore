@@ -70,14 +70,15 @@ public class MapTicketsServiceTests
             new()
             {
                 TransDate = new DateTime(2022, 9, 5, 1, 1, 1).ToString(FormatKey.DateTimeWithMillisecondAndSlash),
-                BetId = "1", Value = "1", MainTransId = "1", WinLoss = "0", Score = null, IsDisable = true
+                BetId = "1", Value = "1", MainTransId = "1", WinLoss = "0", Score = null, IsDisable = true,
+                SubTransId = "1"
             },
             new()
             {
                 No = 1, IsParlay = true,
                 TransDate = new DateTime(2022, 9, 5, 1, 1, 1).ToString(FormatKey.DateTimeWithMillisecondAndSlash),
                 BetId = "1<br>(Follow: 1)", Value = "1", MainTransId = "2", WinLoss = "-", Score = null, IsDisable = true,
-                Member = "<br>(Follow: 123)"
+                Member = "<br>(Follow: 123)", SubTransId = "1"
             }
         };
 

@@ -5,6 +5,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Resources;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.SendMessage;
 using TicketVoidingSystem.Utilities;
 
@@ -21,31 +22,29 @@ public class RecoverSubTicketsServiceImp(
     SessionService sessionService,
     Repository repository,
     SendMessageService sendMessageService,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    HybridParlayTicketService hybridParlayTicketService)
     : SeparabilityService<RecoverSubTicketModel, RecoverSubTicketsQuery>
 {
     public async Task<(RecoverValidationModel Validation, IEnumerable<RecoverSubTicketModel> Tickets)> RecoverTickets(RecoverSubTicketsQuery query)
     {
         try
         {
-            var criteria = new RecoverSubTicketsCriteria
+            var tasks = SiteDbGroupConstant.ServerList.Select(async server =>
             {
-                UserId = sessionService.UserId,
-                MatchId = query.MatchId,
-                Ip = sessionService.GetClientIp()
-            };
-            var tasks = SiteDbGroupConstant.ServerList.Select(server =>
-            {
-                criteria.SiteDbGroupId = server.Id;
-                criteria.MainTransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId));
-                return repository.RecoverTickets<RecoverSubTicketModel>(criteria);
+                var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+                var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.SubTransId));
+                var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.RecoverSub, HybridParlayTicketType.Sub, server.Id);
+                var criteria = CreateRecoverSubTicketsCriteria(query, isCalledJackTimeHybridParlay, server.Id, ticketsInServer);
+
+                return await repository.RecoverTickets<RecoverSubTicketModel>(criteria);
             });
 
             var results = await Task.WhenAll(tasks);
             var validationInAllServers = results.SelectMany(x => x.Validation);
             var ticketsInAllServers = results.SelectMany(x => x.Tickets);
 
-            RemoveMessage(ticketsInAllServers);
+            await RemoveMessage(ticketsInAllServers);
 
             var firstErrorResult = validationInAllServers.FirstOrDefault(x => !x.IsSuccessful);
             var combineValidation = new RecoverValidationModel
@@ -77,12 +76,32 @@ public class RecoverSubTicketsServiceImp(
             new Result { ErrorMsg = StringResource.RecoverParlaySettledMessage };
     }
 
-    private void RemoveMessage(IEnumerable<RecoverSubTicketModel> tickets)
+    private async Task RemoveMessage(IEnumerable<RecoverSubTicketModel> tickets)
     {
         var transIds = string.Join(",", tickets.Select(x => x.TransId));
         var userId = sessionService.UserId;
-        sendMessageService.RemoveMessage(userId, transIds);
-        sendMessageService.DeleteTransaction(tickets.Select(x => new BetId { TransId = x.TransId.ToString(), MatchId = x.MatchId }));
+        await sendMessageService.RemoveMessage(userId, transIds);
+        await sendMessageService.DeleteTransaction(tickets.Select(x => new BetId { TransId = x.TransId.ToString(), MatchId = x.MatchId }));
+    }
+
+    private RecoverSubTicketsCriteria CreateRecoverSubTicketsCriteria(RecoverSubTicketsQuery query, bool isCalledJackTimeHybridParlay, int siteDbGroupId,
+        IEnumerable<BetId> ticketsInServer)
+    {
+        var criteria = new RecoverSubTicketsCriteria
+        {
+            UserId = sessionService.UserId,
+            MatchId = query.MatchId,
+            Ip = sessionService.GetClientIp(),
+            BetType = query.BetType,
+            IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay,
+            SiteDbGroupId = siteDbGroupId,
+            MainTransIds = string.Join(",", ticketsInServer.Select(x => x.TransId)),
+            SubTransIdsHP = ticketsInServer.Any(x => x.IsHybrid)
+                ? string.Join(",", ticketsInServer.Where(x => x.IsHybrid).Select(x => x.SubTransId))
+                : null,
+        };
+
+        return criteria;
     }
 }
 
@@ -90,7 +109,8 @@ public class RecoverMainTicketsServiceImp(
     SessionService sessionService,
     Repository repository,
     SendMessageService sendMessageService,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    HybridParlayTicketService hybridParlayTicketService)
     : SeparabilityService<RecoverMainTicketModel, RecoverMainTicketsQuery>
 {
     public async Task<(RecoverValidationModel Validation, IEnumerable<RecoverMainTicketModel> Tickets)> RecoverTickets(RecoverMainTicketsQuery query)
@@ -104,8 +124,12 @@ public class RecoverMainTicketsServiceImp(
             };
             var tasks = SiteDbGroupConstant.ServerList.Select(server =>
             {
+                var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+                var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.TransId));
+                hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.RecoverMain, HybridParlayTicketType.Main, server.Id);
+
                 criteria.SiteDbGroupId = server.Id;
-                criteria.TransIds = string.Join(",", query.Tickets.Where(x => x.SiteDbGroupId == server.Id).Select(x => x.TransId));
+                criteria.TransIds = string.Join(",", ticketsInServer.Select(x => x.TransId));
                 return repository.RecoverTickets<RecoverMainTicketModel>(criteria);
             });
 

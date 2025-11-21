@@ -1,8 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { NotParticipateModel } from '../../../../add-request-new/models/event-not-participate.model';
+import { OtherIssuesModel } from '../../../../add-request-new/models/event-other-issues.model';
+import { ReducedOverModel } from '../../../../add-request-new/models/event-reduced-over.model';
 import { RedCardModel } from '../../../../add-request-new/models/event-red-card.model';
+import { TechnicalErrorModel } from '../../../../add-request-new/models/event-technical-error.model';
+import { WrongOddsSportsBookModel } from '../../../../add-request-new/models/event-wrong-odds-sports-book.model';
 import { GetLogInfoModel, GetLogInfoViewModel, TicketRequest, Validation } from '../../../../add-request-new/models/get-log-info.model';
-import { PlayerName, RequestDetailModel, RequestDetailViewModel } from '../../../../add-request-new/models/request-detail.model';
+import { PlayerName, RequestDetailModel, RequestDetailViewModel, RequestEventModel } from '../../../../add-request-new/models/request-detail.model';
 import { TransInfoAddRequestModel } from '../../../../add-request-new/models/trans-info-add-request.model';
 import { TemplateValue } from '../../../../utility/components/template-message/template-message/template.model';
 import { IssueTypeConstant } from '../../../../utility/constants/issue-type.constant';
@@ -60,7 +64,15 @@ class Helper {
     { issueTypeId: 13, issueTypeName: 'Abnormal Account'},
     { issueTypeId: 8, issueTypeName: 'Early Kick Off'},
     { issueTypeId: 20, issueTypeName: 'Duplicate Tickets'},
-    { issueTypeId: 21, issueTypeName: 'Not Participate'}
+    { issueTypeId: 21, issueTypeName: 'Not Participate'},
+    { issueTypeId: 17, issueTypeName: 'Archived Ticket'},
+    { issueTypeId: 18, issueTypeName: 'Other Issues'},
+    { issueTypeId: 19, issueTypeName: 'Reduced Over'},
+    { issueTypeId: 23, issueTypeName: 'Abandoned'},
+    { issueTypeId: 24, issueTypeName: 'Technical Error'},
+    { issueTypeId: 25, issueTypeName: 'Wrong Odds Sports Book'},
+    { issueTypeId: 27, issueTypeName: 'Match Early Completed'},
+    { issueTypeId: 28, issueTypeName: 'Second Team Batting'}
   ];
   static readonly fakeSubIssueTypeList: SubIssueType[] = [
     {
@@ -103,6 +115,54 @@ class Helper {
       subIssueTypeId: 1,
       issueTypeId: 12,
       subIssueTypeName: 'WMO',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 17,
+      subIssueTypeName: 'Archived Ticket Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 18,
+      subIssueTypeName: 'Other Issues Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 19,
+      subIssueTypeName: 'Reduced Over Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 23,
+      subIssueTypeName: 'Abandoned Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 24,
+      subIssueTypeName: 'Technical Error Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 25,
+      subIssueTypeName: 'Wrong Odds Sports Book Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 27,
+      subIssueTypeName: 'Match Early Completed Sub',
+      subIssueTypeNameCS: ''
+    },
+    {
+      subIssueTypeId: 1,
+      issueTypeId: 28,
+      subIssueTypeName: 'Second Team Batting Sub',
       subIssueTypeNameCS: ''
     }
   ];
@@ -389,5 +449,344 @@ describe('VoidPageService', () => {
     await expect(voidPageService['getVoidedReason'](voidItem))
       .rejects
       .toThrow('Test error');
+  });
+
+  // Tests for initBasicRequestInfo - TechnicalError
+  it('#getBasicVoidPageItemsData should handle TechnicalError issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.TECHNICAL_ERROR);
+    fakeRequestDetailViewModel.technicalErrorModel = new TechnicalErrorModel();
+    fakeRequestDetailViewModel.technicalErrorModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.technicalErrorModel.subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - SecondTeamBatting
+  it('#getBasicVoidPageItemsData should handle SecondTeamBatting issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.SECOND_TEAM_BATTING);
+    fakeRequestDetailViewModel.technicalErrorModel = new TechnicalErrorModel();
+    fakeRequestDetailViewModel.technicalErrorModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.technicalErrorModel.subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - WrongOddsSportsBook
+  it('#getBasicVoidPageItemsData should handle WrongOddsSportsBook issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK);
+    fakeRequestDetailViewModel.wrongOddsSportsBookModel = new WrongOddsSportsBookModel();
+    fakeRequestDetailViewModel.wrongOddsSportsBookModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.wrongOddsSportsBookModel.subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - OtherIssues
+  it('#getBasicVoidPageItemsData should handle OtherIssues issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.OTHER_ISSUES);
+    fakeRequestDetailViewModel.otherIssuesModel = new OtherIssuesModel();
+    fakeRequestDetailViewModel.otherIssuesModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.otherIssuesModel.subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - MatchEarlyCompleted
+  it('#getBasicVoidPageItemsData should handle MatchEarlyCompleted issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.MATCH_EARLY_COMPLETED);
+    fakeRequestDetailViewModel.otherIssuesModel = new OtherIssuesModel();
+    fakeRequestDetailViewModel.otherIssuesModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.otherIssuesModel.subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - ReducedOver
+  it('#getBasicVoidPageItemsData should handle ReducedOver issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
+    fakeRequestDetailViewModel.reducedOverModels = [new ReducedOverModel()];
+    fakeRequestDetailViewModel.reducedOverModels[0].matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.reducedOverModels[0].subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - Abandoned
+  it('#getBasicVoidPageItemsData should handle Abandoned issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABANDONED);
+    fakeRequestDetailViewModel.reducedOverModels = [new ReducedOverModel()];
+    fakeRequestDetailViewModel.reducedOverModels[0].matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.reducedOverModels[0].subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - ArchivedTicket
+  it('#getBasicVoidPageItemsData should handle ArchivedTicket issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.ARCHIVED_TICKET);
+    fakeRequestDetailViewModel.event = new RequestEventModel();
+    fakeRequestDetailViewModel.event.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.event.subIssueTypeId = 1;
+
+    commonService.getMatch = jest.fn().mockResolvedValue(new MatchModel());
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty());
+
+    expect(commonService.getMatch).toHaveBeenCalledWith(Helper.fakeMatchId);
+    expect(result).toBeDefined();
+    expect(result.id).toBe(1);
+  });
+
+  // Tests for initBasicRequestInfo - Returns null when no match
+  it('#getBasicVoidPageItemsData should return null when issue type does not match any condition', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = 999; // Unknown issue type
+
+    await expect(voidPageService.getBasicVoidPageItemsData(Helper.fakeIssueTypesModel, fakeRequestDetailViewModel, new CommonPrimitiveProperty()))
+      .rejects
+      .toThrow();
+  });
+
+  // Tests for getSubIssueTypeModel
+  it('#getSubIssueTypeModel should return subIssueType when found', () => {
+    const issueTypesModel = Helper.fakeIssueTypesModel;
+    const subIssueTypeId = 1;
+
+    const result = voidPageService['getSubIssueTypeModel'](subIssueTypeId, issueTypesModel);
+
+    expect(result).toBeDefined();
+    expect(result.subIssueTypeId).toBe(subIssueTypeId);
+  });
+
+  it('#getSubIssueTypeModel should return undefined when not found', () => {
+    const issueTypesModel = Helper.fakeIssueTypesModel;
+    const subIssueTypeId = 999; // Non-existent ID
+
+    const result = voidPageService['getSubIssueTypeModel'](subIssueTypeId, issueTypesModel);
+
+    expect(result).toBeUndefined();
+  });
+
+  // Tests for getLogInfo - TechnicalError
+  it('#getLogInfo should handle TechnicalError issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.TECHNICAL_ERROR);
+    fakeRequestDetailViewModel.technicalErrorModel = new TechnicalErrorModel();
+    fakeRequestDetailViewModel.technicalErrorModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.technicalErrorModel.subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - WrongOddsSportsBook
+  it('#getLogInfo should handle WrongOddsSportsBook issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.WRONG_ODDS_SPORTS_BOOK);
+    fakeRequestDetailViewModel.wrongOddsSportsBookModel = new WrongOddsSportsBookModel();
+    fakeRequestDetailViewModel.wrongOddsSportsBookModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.wrongOddsSportsBookModel.subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - OtherIssues
+  it('#getLogInfo should handle OtherIssues issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.OTHER_ISSUES);
+    fakeRequestDetailViewModel.otherIssuesModel = new OtherIssuesModel();
+    fakeRequestDetailViewModel.otherIssuesModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.otherIssuesModel.subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - MatchEarlyCompleted
+  it('#getLogInfo should handle MatchEarlyCompleted issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.MATCH_EARLY_COMPLETED);
+    fakeRequestDetailViewModel.otherIssuesModel = new OtherIssuesModel();
+    fakeRequestDetailViewModel.otherIssuesModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.otherIssuesModel.subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - ReducedOver
+  it('#getLogInfo should handle ReducedOver issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.REDUCED_OVER);
+    fakeRequestDetailViewModel.reducedOverModels = [new ReducedOverModel()];
+    fakeRequestDetailViewModel.reducedOverModels[0].matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.reducedOverModels[0].subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - Abandoned
+  it('#getLogInfo should handle Abandoned issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.ABANDONED);
+    fakeRequestDetailViewModel.reducedOverModels = [new ReducedOverModel()];
+    fakeRequestDetailViewModel.reducedOverModels[0].matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.reducedOverModels[0].subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - SecondTeamBatting
+  it('#getLogInfo should handle SecondTeamBatting issue type', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.SECOND_TEAM_BATTING);
+    fakeRequestDetailViewModel.technicalErrorModel = new TechnicalErrorModel();
+    fakeRequestDetailViewModel.technicalErrorModel.matchId = Helper.fakeMatchId;
+    fakeRequestDetailViewModel.technicalErrorModel.subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+
+    commonService.getLogInfo = jest.fn().mockResolvedValue(Helper.fakeGetLogInfoViewModel);
+
+    const result = await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(primitiveProperty.isBlockUI).toBe(false);
+    expect(commonService.getLogInfo).toHaveBeenCalled();
+    expect(result).toBeDefined();
+  });
+
+  // Tests for getLogInfo - isBlockUI flag
+  it('#getLogInfo should set isBlockUI to true then false', async () => {
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+    fakeRequestDetailViewModel.notParticipateModels = [new NotParticipateModel()];
+    fakeRequestDetailViewModel.notParticipateModels[0].subIssueTypeId = 1;
+    const primitiveProperty = new CommonPrimitiveProperty();
+    primitiveProperty.isBlockUI = false;
+
+    let isBlockUIAtCallTime = false;
+    commonService.getLogInfo = jest.fn().mockImplementation(() => {
+      isBlockUIAtCallTime = primitiveProperty.isBlockUI;
+      return Promise.resolve(Helper.fakeGetLogInfoViewModel);
+    });
+
+    await voidPageService['getLogInfo'](fakeRequestDetailViewModel, primitiveProperty);
+
+    expect(isBlockUIAtCallTime).toBe(true);
+    expect(primitiveProperty.isBlockUI).toBe(false);
+  });
+
+  // Tests for loadUnderneathVoidPageItemsData - clone licenseeAffectedList
+  it('#loadUnderneathVoidPageItemsData should clone licenseeAffectedList', async () => {
+    const voidItem = new VoidNotParticipateModel();
+    voidItem.subIssueType = new SubIssueType();
+    const fakeRequestDetailViewModel = Helper.fakeRequestDetailViewModel;
+    fakeRequestDetailViewModel.request.issueTypeId = Number(IssueTypeConstant.NOT_PARTICIPATE);
+
+    const originalLicenseeList = [{ group: 'normal', licenseesName: 'Test Licensee', message: '', show: false, color: '' }];
+    const ticketsModel = { licenseeAffectedList: originalLicenseeList } as any;
+    ticketsService.getVoidTicketsMini = jest.fn().mockResolvedValue(ticketsModel);
+
+    await voidPageService.loadUnderneathVoidPageItemsData(voidItem, fakeRequestDetailViewModel);
+
+    expect(voidItem.licenseeAffectedList).toBeDefined();
+    expect(voidItem.licenseeAffectedList).not.toBe(originalLicenseeList);
+    expect(voidItem.licenseeAffectedList).toEqual(originalLicenseeList);
   });
 });

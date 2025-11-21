@@ -5,6 +5,7 @@ using SpecialDelete.VoidByBetId.Models;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 
 namespace SpecialDelete.VoidByBetId.Repositories;
@@ -16,7 +17,11 @@ public interface VoidByBetIdRepository
     Task<VoidTicketsModel> VoidTickets(VoidTicketsQuery query);
 }
 
-public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository repository, SessionService sessionService)
+public class VoidByBetIdRepositoryImp(
+    IMapper mapper,
+    IDynamicRepository repository,
+    SessionService sessionService,
+    HybridParlayTicketService hybridParlayTicketService)
     : VoidByBetIdRepository
 {
     public async Task<(IEnumerable<GetTicketModel> Tickets, string InvalidTransIds, string MovedTransIds, int MatchId)> GetTickets(GetTicketsQuery query)
@@ -39,13 +44,15 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
         var criteria = CreateVoidTicketsCriteria(query);
         var tasks = SiteDbGroupConstant.ServerList.Select(server =>
         {
-            var ticketsInSiteDb = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
-            if (!ticketsInSiteDb.Any())
+            var ticketsInServer = query.Tickets.Where(x => x.SiteDbGroupId == server.Id);
+            if (!ticketsInServer.Any())
             {
                 return Task.FromResult((Enumerable.Empty<VoidTicketValidation>(), Enumerable.Empty<TicketEmailModel>()));
             }
+            var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.TransId));
+            hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.VoidMain, HybridParlayTicketType.Main, server.Id);
 
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
+            criteria.TransIds = Helper.JoinBetIdList(ticketsInServer);
             criteria.SiteDbGroupId = server.Id;
             return repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
         });
@@ -105,7 +112,7 @@ public class VoidByBetIdRepositoryImp(IMapper mapper, IDynamicRepository reposit
             Reason = query.Reason,
             ReasonSC = query.ReasonSC,
             Ip = sessionService.GetClientIp(),
-            AbnormalBetType = query.AbnormalBetType,
+            AbnormalBetType = query.AbnormalBetType
         };
     }
 }

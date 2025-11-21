@@ -112,4 +112,8 @@ public class DetailTicketModel : ExcelOicModel
     public bool IsMarked { get; set; }
 
     public bool IsSite777 { get; set; }
+
+    public bool IsHybrid { get; set; }
+
+    public decimal FinalOdds { get; set; }
 }

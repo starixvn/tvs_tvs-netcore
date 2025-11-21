@@ -437,3 +437,126 @@ div.match {
     word-break: break-word;
     white-space: normal;
 }
+
+.hybrid-parlay-match-ticket-list .list-builder {
+    list-style: none;
+    padding: 5px 10px 5px 5px;
+    margin: 0;
+    border-radius: 3px;
+    background-color: #EDFCFF;
+    margin-bottom: 3px;
+}
+
+    .hybrid-parlay-match-ticket-list .list-builder li {
+        position: relative;
+        padding-right: 20px;
+        padding: 5px 10px 5px 0;
+        border-right: 2px solid #0066CC;
+        font-weight: bold;
+        color: #003399;
+    }
+
+        .hybrid-parlay-match-ticket-list .list-builder li:after {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            right: -5px;
+            width: 6px;
+            height: 6px;
+            border: 1px solid #0066CC;
+            background-color: #fff;
+            border-radius: 50%;
+            content: '';
+        }
+
+        .hybrid-parlay-match-ticket-list .list-builder li:first-child:before {
+            position: absolute;
+            content: '';
+            top: 0;
+            right: -2px;
+            background-color: #E7FBFF;
+            width: 3px;
+            height: 50%;
+        }
+
+        .hybrid-parlay-match-ticket-list .list-builder li:last-child:before {
+            position: absolute;
+            content: '';
+            bottom: 0;
+            right: -2px;
+            background-color: #E7FBFF;
+            width: 3px;
+            height: 50%;
+        }
+
+.hybrid-parlay-match-ticket-list .status {
+    border-radius: 23px;
+    border: 1px solid #0066CC;
+    padding: 0 5px 1px 5px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #0066CC;
+    margin: 2px 0 2px 5px;
+    display: inline-block;
+    text-transform: capitalize;
+}
+
+.hybrid-parlay-match-ticket-list .list-builder.single {
+    padding: 0;
+    background: none;
+}
+
+    .hybrid-parlay-match-ticket-list .list-builder.single li {
+        border: 0;
+        padding: 0;
+    }
+
+        .hybrid-parlay-match-ticket-list .list-builder.single li:after, .hybrid-parlay-match-ticket-list .list-builder.single li:before {
+            display: none;
+        }
+
+.hybrid-parlay-match-ticket-list .info .league {
+    margin-bottom: 3px;
+}
+
+.hybrid-parlay-match-ticket-list .info .live {
+    color: #B50000;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.hybrid-parlay-match-ticket-list .odds {
+    font-weight: bold;
+    color: #039;
+}
+
+    .hybrid-parlay-match-ticket-list .odds .old-odds {
+        color: #9B9B9B;
+        text-decoration: line-through;
+        margin-right: 4px;
+    }
+
+    .hybrid-parlay-match-ticket-list .odds .cur-odds {
+        font-weight: bold;
+    }
+
+.offer-name-list.void {
+    text-decoration: line-through;
+}
+
+.hybrid-parlay-match-ticket-list.void, .hybrid-parlay-match-ticket-list .list-builder .void {
+    text-decoration: line-through;
+}
+
+.list-builder-bg-none {
+    background: none !important;
+}
+
+.sub-odds {
+    color: #003399;
+    font-weight: bold;
+}
+
+    .sub-odds .label {
+        color: #01122B;
+    }

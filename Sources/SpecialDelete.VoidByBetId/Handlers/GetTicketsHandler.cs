@@ -69,7 +69,7 @@ public class GetTicketsHandler(
     {
         var singleTickets = tickets.Where(item => !item.BetType.IsParlayAndBetBuilder());
         var parlayTickets = tickets.Where(item => item.BetType.IsParlayAndBetBuilder());
-        viewModel.Tickets = tickets.Select(x => new BetId { TransId = x.TransId.ToString(), SiteDbGroupId = x.SiteDbGroupId, MatchId = x.MatchId });
+        viewModel.Tickets = tickets.Select(x => new BetId { TransId = x.TransId.ToString(), SiteDbGroupId = x.SiteDbGroupId, MatchId = x.MatchId, IsHybrid = x.IsHybrid });
         viewModel.SingleCount = singleTickets.Count();
         viewModel.ParlayCount = parlayTickets.Count();
         var licensees = tickets.Where(item => item.GroupName.ToLowerInvariant() == "deposit")

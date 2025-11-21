@@ -29,4 +29,8 @@ public class TicketViewModel
     public bool IsMarked { get; set; }
 
     public bool IsSite777 { get; set; }
+
+    public string SubTransId { get; set; }
+
+    public bool IsHybrid { get; set; }
 }

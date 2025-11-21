@@ -54,9 +54,10 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         viewModel.TransDate = item.TransDate.ToString(FormatKey.DateTimeWithMillisecondAndSlash);
         viewModel.Member = string.IsNullOrEmpty(item.FollowedUsername) ? item.UserName : $"{item.UserName}<br>(Follow: {item.FollowedUsername})";
         viewModel.BetId = item.FollowedId > 0 ? $"{item.TransId}<br>(Follow: {item.FollowedId})" : item.TransId.ToString();
+        viewModel.SubTransId = item.SubTransId.ToString();
         viewModel.WinLoss = item.Status.IsRunningOrWaiting() ? "-" : Convert.ToDecimal(item.WinLost).ToString("#,##0.##");
         viewModel.Currency = item.CurrencyName;
-
+        viewModel.IsHybrid = item.IsHybrid;
         viewModel.SiteDbGroupId = item.SiteDbGroupId;
         return viewModel;
     }
@@ -65,7 +66,6 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
     {
         var viewModel = MapToTicketViewModel(item, match);
         viewModel.SecondAcceptFlag = item.SecAcceptFlag ? "x" : string.Empty;
-
         var excelTicket = mapper.Map<ExcelTicketModel>(viewModel);
         excelTicket.BetId = viewModel.BetId.LineBreak();
         excelTicket.Member = viewModel.Member.LineBreak();
@@ -73,8 +73,8 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         excelTicket.Stake = viewModel.Stake.StakeText();
         excelTicket.Status = viewModel.Status.DefaultText();
         excelTicket.Sa = item.SecAcceptFlag ? "√" : string.Empty;
-        excelTicket.Choice = viewModel.Choice.ChoiceSubParlay(item.IsMixParlay);
-
+        excelTicket.Choice = viewModel.Choice.ChoiceSubParlay(item.IsMixParlay, item.IsHybrid);
+        excelTicket.BetType = viewModel.BetType.Replace("<sup>", "").Replace("</sup>", "");
         return excelTicket;
     }
 
@@ -97,6 +97,7 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
         ticket.RefCode = 0;
         ticket.SettlementStatus = item.IsMixParlay ? default : item.SettlementStatus;
         ticket.IsLive = item.IsLiveIndicator;
+        ticket.Currency = item.CurrencyName;
 
         return ticket;
     }
@@ -115,7 +116,8 @@ public class MapTicketServiceImp(BetListService betListService, IMapper mapper, 
     private string SetValueChoice(ITicket ticket, ITicketHelper ticketHelper, GetTicketModel item, string mainChoice)
     {
         SetValueSubTicket(ticket, item);
-        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoice = $"<div {(item.IsHybrid ? "" : "hidden")} class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
         var choice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
         return choice + $"<div id='divEvent_{item.SubTransId}'></div>";
     }

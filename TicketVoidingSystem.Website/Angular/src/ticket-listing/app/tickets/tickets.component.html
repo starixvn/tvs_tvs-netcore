@@ -81,7 +81,8 @@
           @for (ticket of model.tickets; track ticket) {
             <tr>
               <td>
-                <div [class.betIdBorder]="ticket.isMarked === true">{{ticket.betId}}</div>
+                <div [class.betIdBorder]="ticket.isMarked === true"
+                      [innerHTML]="(ticket.betId + (ticket.betId !== ticket.subTransId && ticket.isHybrid ? '<br>SubId: ' + ticket.subTransId : '')) | sanitizeHtml"></div>
               </td>
               <td>
                 <div>{{ticket.transDate}}</div>

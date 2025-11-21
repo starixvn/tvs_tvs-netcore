@@ -5,6 +5,7 @@ using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 using TicketVoidingSystem.Services.BetList;
 using TicketVoidingSystem.SharedApi.Criteria.SubParlayTicket;
 using TicketVoidingSystem.SharedApi.Models.SubParlayTicket;
@@ -17,6 +18,8 @@ public interface TicketsService
     Task<IList<TicketModel>> GetTickets(string refNo);
 
     IList<TicketViewModel> GetTickets(IList<TicketModel> tickets);
+
+    IList<TicketViewModel> GetHybridTickets(IList<TicketModel> tickets, HybridParlayChoiceModel model);
 
     string[] GetComboName(QueryComboParlay query);
 }
@@ -59,6 +62,23 @@ public class TicketsServiceImp(
         return ticketViewModels;
     }
 
+    public IList<TicketViewModel> GetHybridTickets(IList<TicketModel> tickets, HybridParlayChoiceModel model)
+    {
+        var ticketHelper = new TicketHelper { IsShowOddsWithChoice = true };
+        var detailTickets = tickets
+            .Select(ITicket (t) => SetValue(t))
+            .ToList();
+
+        return new List<TicketViewModel>
+        {
+            new()
+            {
+                SubTransId = model.SubTransId,
+                Choice = betListService.BuildChoiceHybridParlay(ticketHelper, detailTickets, model, false)
+            }
+        };
+    }
+
     private string GetChoice(TicketModel item)
     {
         var ticket = SetValue(item);
@@ -90,7 +110,9 @@ public class TicketsServiceImp(
             BetCheck = item.BetCheck,
             TransDesc = item.TransDesc,
             ShowTime = item.ShowTime,
-            TransDate = item.TransDate
+            Status = item.Status,
+            TransDate = item.TransDate,
+            EventDate = item.EventDate
         };
     }
 

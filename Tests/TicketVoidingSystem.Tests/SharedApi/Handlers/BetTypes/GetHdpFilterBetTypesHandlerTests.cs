@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -150,5 +151,71 @@ public class GetHdpFilterBetTypesHandlerTests
 
         // Assert
         remotingRefWrapperService.Received().GetDisplayedBetTypeName(Arg.Any<string>());
+    }
+
+    [Fact]
+    public async Task Handle_ValidRequestWithMultipleItems_ReturnResultsOrderedByName()
+    {
+        // Arrange
+        var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        var appDataPath = Path.Combine(baseDirectory, "App_Data", "Data");
+        Directory.CreateDirectory(appDataPath);
+        var jsonFilePath = Path.Combine(appDataPath, "HdpFilterBetTypes.json");
+
+        // Setup test data with multiple items that will match the request
+        const string jsonContent = @"{
+            ""BetTypes"": [
+              {
+                ""IssueType"": 1,
+                ""Sports"": ""1"",
+                ""BetType"": ""10""
+              },
+              {
+                ""IssueType"": 1,
+                ""Sports"": ""1"",
+                ""BetType"": ""20""
+              },
+              {
+                ""IssueType"": 1,
+                ""Sports"": ""1"",
+                ""BetType"": ""30""
+              },
+              {
+                ""IssueType"": 1,
+                ""Sports"": ""2"",
+                ""BetType"": ""40""
+              }
+            ]
+        }";
+        File.WriteAllText(jsonFilePath, jsonContent);
+
+        var request = new GetHdpFilterBetTypesRequest
+        {
+            SportId = "1",
+            IssueTypeId = 1
+        };
+
+        // Setup mock to return different names for different bet types
+        remotingRefWrapperService.GetDisplayedBetTypeName("10").Returns("Zebra");
+        remotingRefWrapperService.GetDisplayedBetTypeName("20").Returns("Alpha");
+        remotingRefWrapperService.GetDisplayedBetTypeName("30").Returns("Beta");
+
+        // Act
+        var result = await handler.Handle(request, CancellationToken.None);
+
+        // Assert
+        Assert.NotNull(result);
+        var resultList = result.ToList();
+        Assert.Equal(3, resultList.Count);
+
+        // Verify results are ordered by Name alphabetically
+        var names = resultList.Select(x => x.Name).ToList();
+        var expectedOrder = new List<string> { "Alpha", "Beta", "Zebra" };
+        Assert.Equal(expectedOrder, names);
+
+        // Verify each item is in correct position
+        Assert.Equal("Alpha", resultList[0].Name);
+        Assert.Equal("Beta", resultList[1].Name);
+        Assert.Equal("Zebra", resultList[2].Name);
     }
 }

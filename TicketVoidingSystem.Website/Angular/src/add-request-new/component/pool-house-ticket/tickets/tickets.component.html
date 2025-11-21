@@ -62,7 +62,7 @@
             <tr [ngClass]="{'display-none':!group.isExpanded || !ticket.isChecked}">
               <td class="col-tb-1">{{ticket.no}}</td>
               <td class="col-tb-3">
-                <div [innerHTML]="ticket.betId | sanitizeHtml"></div>
+                <div [innerHTML]="(ticket.betId +(ticket.betId !== ticket.subTransId && ticket.isHybrid ? '<br>SubId: ' + ticket.subTransId : '')) | sanitizeHtml"></div>
               </td>
               <td class="col-tb-4">
                 <div>{{ticket.transDate}}</div>

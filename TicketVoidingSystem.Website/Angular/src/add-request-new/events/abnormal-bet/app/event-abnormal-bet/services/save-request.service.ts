@@ -64,7 +64,7 @@ export class SaveRequestService {
   }
 
   private isAbnormalBetMixOrSystemParlay(args: SaveRequestArg): boolean {
-    return StaticService.isAbnormalBet(args.filter.issueTypeId) && StaticService.isFilterByMixOrSystemParlay(args.abnormalBetModel.filterBy);
+    return StaticService.isAbnormalBetMixOrSystemParlay(args.filter.issueTypeId, args.abnormalBetModel.filterBy);
   }
 
   private createAbnormalBetModel(args: SaveRequestArg): AbnormalBetModel {

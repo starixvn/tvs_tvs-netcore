@@ -104,7 +104,9 @@
                     <div>{{ticket.no}}</div>
                   </td>
                   <td class="col-tb-3">
-                    <div [class.betIdBorder]="ticket.isMarked" [innerHTML]="ticket.betId | sanitizeHtml"></div>
+                    <div [class.betIdBorder]="ticket.isMarked" [innerHTML]="(ticket.betId
+                      + (ticket.betId !== ticket.subTransId && ticket.isHybrid ? '<br>SubId: ' + ticket.subTransId : '')) | sanitizeHtml">
+                    </div>
                   </td>
                   <td class="col-tb-4">
                     <div>{{ticket.transDate}}</div>

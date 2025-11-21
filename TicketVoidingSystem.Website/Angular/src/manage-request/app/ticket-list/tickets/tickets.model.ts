@@ -36,4 +36,6 @@ export class TicketModel {
   choice: string;
   voidTime: string;
   isCashOut: boolean;
+  subTransId: string;
+  isHybrid: boolean;
 }

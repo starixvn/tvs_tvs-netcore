@@ -12,6 +12,7 @@ using ONEbook.UM.Filters;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest;
 using TicketVoidingSystem.ManageRequest.Services.AddRequest.LinkedLog;
 using TicketVoidingSystem.Services.JackTimeCashOut;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.SignalR;
 using TicketVoidingSystem.TicketListing.Services.SendDataOic;
 using TicketVoidingSystem.Web;
@@ -31,6 +32,7 @@ services.AddHttpClient<AmendmentOicHttpClientService, AmendmentOicHttpClientServ
 services.AddHttpClient<CashOutHttpClientService, CashOutHttpClientServiceImp>();
 services.AddHttpClient<LinkedLogHttpClientService, LinkedLogHttpClientServiceImp>();
 services.AddHttpClient<OWPHttpClientService, OWPHttpClientServiceImp>();
+services.AddHttpClient<JackTimeHybridParlayService, JackTimeHybridParlayServiceImp>();
 services.AddFanexData(configuration);
 services.AddExceptionHandler();
 services.AddFanexLogSentry(configuration);

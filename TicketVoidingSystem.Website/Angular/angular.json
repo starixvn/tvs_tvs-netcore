@@ -19,8 +19,8 @@
           "options": {
             "aot": true,
             "outputPath": "dist",
-            "index": "src/add-request-new/shared/index.html",
-            "main": "src/add-request-new/events/wrong-score/main.ts",
+            "index": "src/void-request/index.html",
+            "main": "src/void-request/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "assets": [],

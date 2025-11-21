@@ -144,7 +144,7 @@ public static class HtmlExtension
             return string.Empty;
         }
 
-        var node = doc.DocumentNode.SelectNodes("//span")[0];
+        var node = doc.DocumentNode.SelectNodes("//span[contains(@class, 'bet-team-choice')]")[0];
         return html switch
         {
             _ when html.Contains(HtmlClass.ExcludingChoices) =>
@@ -155,6 +155,17 @@ public static class HtmlExtension
 
             _ => node.InnerText.StripHtml()
         };
+    }
+
+    public static string SubOdds(this string html, HtmlDocument doc)
+    {
+        if (string.IsNullOrEmpty(html))
+        {
+            return string.Empty;
+        }
+
+        var node = doc.DocumentNode.SelectNodes("//div[@class='sub-odds']")[0];
+        return node.InnerText;
     }
 
     public static string ChoiceParlay(string html)
@@ -214,22 +225,28 @@ public static class HtmlExtension
             .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
     }
 
-    public static string ChoiceSubParlay(this string html, bool isParlay)
+    public static string ChoiceSubParlay(this string html, bool isParlay, bool isHybrid)
     {
         if (string.IsNullOrEmpty(html))
         {
             return string.Empty;
         }
-
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var choice = isParlay ? HeaderParlay(doc) : string.Empty;
+        var subOdds = html.SubOdds(doc);
         var handicap = html.Handicap(doc);
         var bettype = GetBetType(doc);
         var match = doc.DocumentNode.SelectNodes("//div[@class='match']")[0];
         var league = doc.DocumentNode.SelectNodes("//div[@class='league']")[0];
 
-        return choice.AppendWithNewLine(handicap.StripHtml())
+        var result = choice;
+        if (isHybrid)
+        {
+            result = result.AppendWithNewLine(subOdds.StripHtml());
+        }
+
+        return result.AppendWithNewLine(handicap.StripHtml())
             .AppendWithNewLine(bettype)
             .AppendWithNewLine(match.InnerHtml.StripHtml())
             .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");

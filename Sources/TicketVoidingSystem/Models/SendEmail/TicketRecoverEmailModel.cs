@@ -91,4 +91,8 @@ public class TicketRecoverEmailModel
     public string CurrencyName { get; set; }
 
     public decimal MasterOdds { get; set; }
+
+    public long SubTransId { get; set; }
+
+    public bool IsHybrid { get; set; }
 }

@@ -17,7 +17,8 @@ import { SaveRequestService } from './save-request.service';
 jest.mock('../../../../../../utility/services/static.service', () => ({
   StaticService: {
     isAbnormalBet: jest.fn(),
-    isFilterByMixOrSystemParlay: jest.fn()
+    isFilterByMixOrSystemParlay: jest.fn(),
+    isAbnormalBetMixOrSystemParlay: jest.fn()
   }
 }));
 
@@ -101,6 +102,7 @@ describe('SaveRequestService', () => {
       } as unknown as SaveRequestArg;
 
       jest.spyOn(addRequestService, 'executeSaveRequest');
+      (StaticService.isAbnormalBetMixOrSystemParlay as jest.Mock).mockReturnValue(false);
 
       // Act
       await service.executeSave(mockArgs);
@@ -146,8 +148,7 @@ describe('SaveRequestService', () => {
         confirmAbnormalBetComponent: new ConfirmAbnormalBetComponent()
       } as unknown as SaveRequestArg;
 
-      (StaticService.isAbnormalBet as jest.Mock).mockReturnValue(true);
-      (StaticService.isFilterByMixOrSystemParlay as jest.Mock).mockReturnValue(true);
+      (StaticService.isAbnormalBetMixOrSystemParlay as jest.Mock).mockReturnValue(true);
 
       // Act
       const result = (service as any).isAbnormalBetMixOrSystemParlay(mockArgs);
@@ -186,8 +187,7 @@ describe('SaveRequestService', () => {
         confirmAbnormalBetComponent: new ConfirmAbnormalBetComponent()
       } as unknown as SaveRequestArg;
 
-      (StaticService.isAbnormalBet as jest.Mock).mockReturnValue(false);
-      (StaticService.isFilterByMixOrSystemParlay as jest.Mock).mockReturnValue(true);
+      (StaticService.isAbnormalBetMixOrSystemParlay as jest.Mock).mockReturnValue(false);
 
       // Act
       const result = (service as any).isAbnormalBetMixOrSystemParlay(mockArgs);

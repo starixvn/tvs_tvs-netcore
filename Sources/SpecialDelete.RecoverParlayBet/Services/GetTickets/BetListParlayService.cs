@@ -1,8 +1,8 @@
-﻿using Fanex.BetList.Core.Entities;
+﻿using System.Globalization;
+using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using SpecialDelete.RecoverParlayBet.Models;
 using SpecialDelete.RecoverParlayBet.ViewModels;
-using System.Globalization;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services.BetList;
 
@@ -33,7 +33,8 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
         ticketViewModel.BetType = betListService.GetBetTypeName(ticket);
         var mainChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
         SetValueSubTicket(ticket, item);
-        var subChoice = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoiceBetList = betListService.BuildChoice(ticket, ticketHelper, null, false);
+        var subChoice = $"<div {(item.IsHybrid ? "" : "hidden")} class='sub-odds'><span class='label'>Sub Odds</span> @ {item.FinalOdds}</div>" + subChoiceBetList;
         var choice = mainChoice.Replace("<div id=", $"<div id='dvFavorite_{item.SubTransId}'>{subChoice}</div><div id=");
         ticketViewModel.Choice = choice + $"<div id='divEvent_{item.SubTransId}'></div>";
         ticketViewModel.IsDisable = isOnlyReadPermission || item.Status.IsVoided();
@@ -65,7 +66,8 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
             TransId = item.SubTransId,
             TransDate = item.TransDate,
             ActualStake = item.ActualStake,
-            ExtraInfo = item.ExtraInfo
+            ExtraInfo = item.ExtraInfo,
+            OddsSpread = item.OddsSpread
         };
     }
 
@@ -118,7 +120,8 @@ public class BetListMainParlayServiceImp<T>(BetListService betListService) : Bet
             TransId = item.RefNo,
             RefNo = item.RefNo.ToString(CultureInfo.InvariantCulture),
             ActualStake = item.ActualStake,
-            ExtraInfo = item.ExtraInfo
+            ExtraInfo = item.ExtraInfo,
+            OddsSpread = item.OddsSpread
         };
 
         return ticket;

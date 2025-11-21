@@ -18,7 +18,7 @@ var recoverParlayService = {
         return betIds;
     },
 
-    checkMatchId: function (event) {
+    checkMatchId: function () {
         var matchId = $('#matchId').val();
         if (!matchId) {
             return true;
@@ -39,6 +39,10 @@ var recoverParlayService = {
             data: JSON.stringify(param),
             success: function (match) {
                 result = match !== null;
+            },
+            error: function () {
+                result = false;
+                $('#msg').html(tooltip.show('matchId', messages.invalidCheckMatch)).show();
             }
         });
 
@@ -147,7 +151,7 @@ var recoverParlayService = {
 
     optionCustomRender: function (cell) {
         var disabled = cell.IsDisable ? "disabled" : "";
-        var checkBoxItem = "<input class='chk-ticket-all chk-ticket-" + cell.CssClass + "' value='" + cell.Value +
+        var checkBoxItem = "<input class='chk-ticket-all chk-ticket-" + cell.CssClass + "' value='" + cell.Value + "' subTransId='" + cell.SubTransId +
             "' type='checkbox'" + disabled;
 
         var isNotGroupSpecial = parseInt(cell.CssClass.indexOf(ContextMenu.Helper.groupBetFair)) === -1 &&
@@ -183,12 +187,12 @@ var recoverParlayService = {
             rows.push({
                 Columns: [
                     {
-                        Name: "CustomAdd", Value: currentRow.BetId,
+                        Name: "CustomAdd", Value: currentRow.BetId, SubTransId: currentRow.SubTransId,
                         CssClass: groupName + " checkBoxItem",
                         IsDisable: currentRow.IsDisable
                     },
                     { Name: "No", Value: currentRow.No, CssClass: "NoColumn" },
-                    { Name: "BetId", Value: currentRow.BetId },
+                    { Name: "BetId", Value: `${currentRow.BetId}${currentRow.IsHybrid && currentRow.BetId !== currentRow.SubTransId ? `<div>SubId:<br/>${currentRow.SubTransId}</div>` : ''}` },
                     { Name: "Member", Value: currentRow.Player },
                     { Name: "TransDate", Value: currentRow.TransDate },
                     { Name: "BetType", Value: currentRow.BetType },
@@ -221,10 +225,11 @@ var recoverParlayService = {
     },
 
     recoverSub: function () {
-        var transIds = NapTicketControl.Helper.getSubTicketsChecked("checkBoxItem").split(',');
+        var transIds = NapTicketControl.Helper.getSubTransIdChecked("checkBoxItem").split(',');
         var params = {
-            Tickets: recoverParlayService.tickets.filter(x => transIds.includes(x.TransId)),
-            MatchId: $('#matchId').val()
+            Tickets: recoverParlayService.tickets.filter(x => transIds.includes(x.SubTransId)),
+            MatchId: $('#matchId').val(),
+            betType: $('#bet-type').val()
         };
         $.ajax({
             type: "POST",

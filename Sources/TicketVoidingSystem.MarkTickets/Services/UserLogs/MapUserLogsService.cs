@@ -2,6 +2,7 @@
 using System.Linq;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.MarkTickets.Constants;
+using TicketVoidingSystem.MarkTickets.Models;
 using TicketVoidingSystem.MarkTickets.Models.UserLogs;
 using TicketVoidingSystem.MarkTickets.ViewModels;
 using TicketVoidingSystem.Services;
@@ -18,22 +19,41 @@ public class MapUserLogsServiceImp(RemotingRefWrapperService remotingRefService)
     public IEnumerable<GetUserLogViewModel> MapToUserLogViewModels(IEnumerable<GetUserLogModel> originalLogs, UserLogTicketInfo ticketInfo)
     {
         var index = 1;
-        return originalLogs.Select(log => new GetUserLogViewModel
+        return originalLogs.Select(log =>
         {
-            No = index++,
-            ActionId = log.SessionId,
-            LogDate = log.CreatedDate,
-            Action = UpdateAction(log.LogActionId),
-            SingleTickets = log.TransIds.Where(id => ticketInfo.SingleTickets.Any(y => y.TransId == id)),
-            ParlayTickets = log.TransIds.Where(id => ticketInfo.ParlayTickets.Any(y => y.TransId == id)),
-            MatchId = log.MatchId,
-            Event = $"{remotingRefService.GetTeamName(log.SportType, log.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(log.SportType, log.AwayId, LanguageCode.English)}",
-            DoneBy = log.DoneBy,
-            HTScore = log.HTScore,
-            FTScore = log.FTScore,
-            KickOffTime = log.KickOffTime,
-            ChildMatchId = log.ChildMatchId
+            var singleTransIds = log.TransIds.Where(id => ticketInfo.SingleTickets.Any(y => y.TransId == id));
+            var parlayTransIds = log.TransIds.Where(id => ticketInfo.ParlayTickets.Any(y => y.TransId == id));
+            var hybridParlayTransIds = log.TransIds.Where(id => ticketInfo.HybridParlayTickets.Any(y => y.TransId == id));
+            var model = new GetUserLogViewModel
+            {
+                No = index++,
+                ActionId = log.SessionId,
+                LogDate = log.CreatedDate,
+                Action = UpdateAction(log.LogActionId),
+                SingleTickets = singleTransIds,
+                ParlayTickets = parlayTransIds,
+                HybridParlayTickets = GetHybridParlayTickets(hybridParlayTransIds, ticketInfo.HybridParlayTickets),
+                Count = singleTransIds.Count() + parlayTransIds.Count() + hybridParlayTransIds.Count(),
+                MatchId = log.MatchId,
+                Event = $"{remotingRefService.GetTeamName(log.SportType, log.HomeId, LanguageCode.English)} - vs - {remotingRefService.GetTeamName(log.SportType, log.AwayId, LanguageCode.English)}",
+                DoneBy = log.DoneBy,
+                HTScore = log.HTScore,
+                FTScore = log.FTScore,
+                KickOffTime = log.KickOffTime,
+                ChildMatchId = log.ChildMatchId
+            };
+
+            return model;
         }).ToList();
+    }
+
+    private IEnumerable<string> GetHybridParlayTickets(IEnumerable<string> hybridParlayTransIds, IEnumerable<TicketInfo> hybridParlayTickets)
+    {
+        return hybridParlayTickets
+            .Where(x => hybridParlayTransIds.Contains(x.TransId))
+            .GroupBy(x => x.MainTransId).Select(group => group.Count() > 1
+                ? $"{group.Key}({string.Join(", ", group.Select(x => x.TransId))})"
+                : group.Key);
     }
 
     private static string UpdateAction(int logActionId)

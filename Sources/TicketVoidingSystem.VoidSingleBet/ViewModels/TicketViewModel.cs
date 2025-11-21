@@ -4,6 +4,8 @@ public class TicketViewModel
 {
     public string BetId { get; set; }
 
+    public string SubTransId { get; set; }
+
     public string Value { get; set; }
 
     public int No { get; set; }
@@ -43,4 +45,6 @@ public class TicketViewModel
     public int SiteDbGroupId { get; set; }
 
     public long BetdaqId { get; set; }
+    
+    public bool IsHybrid { get; set; }
 }

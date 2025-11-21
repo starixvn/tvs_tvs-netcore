@@ -32,4 +32,10 @@ public class CheckTicketValidationOutput
     public IEnumerable<RequestDetailTicketModel> RecoverSingleTickets14 { get; set; }
 
     public IEnumerable<RequestDetailTicketModel> RecoverParlayTickets14 { get; set; }
+
+    public IEnumerable<RequestDetailTicketModel> VoidHybridParlayTickets { get; set; }
+
+    public IEnumerable<RequestDetailTicketModel> VoidSubHybridParlayTickets { get; set; }
+
+    public IEnumerable<RequestDetailTicketModel> VoidHybridParlay14Tickets { get; set; }
 }

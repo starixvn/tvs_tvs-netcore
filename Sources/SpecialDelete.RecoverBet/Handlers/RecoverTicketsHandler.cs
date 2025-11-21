@@ -58,7 +58,7 @@ public class RecoverTicketsHandler(
         await CallUndoCashOutApi(model.Tickets);
         try
         {
-            result = ContactUser(model, usersNegativeCredit);
+            result = await ContactUser(model, usersNegativeCredit);
         }
         catch (Exception exception)
         {
@@ -73,12 +73,12 @@ public class RecoverTicketsHandler(
         return result;
     }
 
-    private RecoverResult ContactUser(RecoverTicketsModel model, string usersNegativeCredit)
+    private async Task<RecoverResult> ContactUser(RecoverTicketsModel model, string usersNegativeCredit)
     {
         var result = new RecoverResult { IsSettledBet = model.Tickets.Any(t => t.IsSettled) };
         var isRequiredResettleMatch = model.Tickets.Any(x => !x.IsCashOut) && model.Tickets.Any(x => x.IsSettled);
-        recoverTicketsService.RemoveMessage(model);
-        recoverTicketsService.SendEmail(model.Tickets.ToList(), usersNegativeCredit);
+        await recoverTicketsService.RemoveMessage(model);
+        await recoverTicketsService.SendEmail(model.Tickets.ToList(), usersNegativeCredit);
         result.Results.AddRange(recoverTicketsService.CreateResultMessage(model.Validation.AutoReSettledTransIds, isRequiredResettleMatch));
 
         return result;

@@ -124,6 +124,68 @@ var subTicketMP = {
                 NapTicketControl.enableInput();
             }
         });
+    },
+
+    getHybridTickets: function (subTransId, transIndex, refNo, custId, transDesc, handicap1, handicap2, betcheck, betteam, currency, stake) {
+        var param = {
+            RefNo: refNo,
+            TransDesc: transDesc,
+            subTransId: subTransId,
+            hdp1: handicap1,
+            hdp2: handicap2,
+            betCheck: betcheck,
+            betTeam: betteam,
+            custId: custId,
+            currency: currency,
+            stake: stake
+        };
+
+        var subTicket = $(`#divEvent_${subTransId}`);
+
+        if (subTicket.html() !== '') {
+            var display = subTicket.css('display');
+            if (display === 'block') {
+                subTicket.hide();
+                $(`#dvFavorite_${subTransId}`).show();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').show();
+            } else {
+                subTicket.show();
+                $(`#dvFavorite_${subTransId}`).hide();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
+            }
+
+            $("#ticketInfo").fanexGrid('resizeGrid');
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: window.rootUrl + "api/SubParlayTicket/GetHybridParlay",
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(param),
+            beforeSend: function () {
+                NapTicketControl.disableInput();
+            },
+            success: function (rs) {
+                var arrChoice = rs[0].choice;
+
+                $(`#divEvent_${subTransId}`).html(arrChoice).show();
+                $(`#dvFavorite_${subTransId}`).hide();
+                $(`#combinationOfferName_${subTransId}${transIndex}`).find('div').hide();
+                $('.hybrid-parlay-match-ticket-list .list-builder').addClass('list-builder-bg-none');
+                $(`.${subTransId}`).css('background-color', '#EDFCFF');
+                $("#ticketInfo").fanexGrid('resizeGrid');
+            },
+            error: function () {
+            },
+            complete: function (e) {
+                if (parseInt(e.status) === 403) {
+                    NapTicketControl.Helper.showMsgBox('You are not authorized on this function.');
+                }
+                NapTicketControl.enableInput();
+            }
+        });
     }
 };
 
@@ -137,6 +199,11 @@ function showCombMP(subTransId, type, refNo) {
 
 function showNewCombMP(subTransId, transIndex, refNo, handicap1, handicap2, betcheck, betteam) {
     subTicketMP.getSubTicketAndComboParlay(subTransId, transIndex, refNo, handicap1, handicap2, betcheck, betteam);
+}
+
+function showBetBuilderPlus(transId, transIndex, refNo, custId, transDesc, handicap1, handicap2, betcheck, betteam, currency, stake) {
+    const transDescJson = JSON.stringify(transDesc);
+    subTicketMP.getHybridTickets(transId, transIndex, refNo, custId, transDescJson, handicap1, handicap2, betcheck, betteam, currency, stake);
 }
 
 function showSingleMatchParlayDetail(transId, cusId, status, index) {

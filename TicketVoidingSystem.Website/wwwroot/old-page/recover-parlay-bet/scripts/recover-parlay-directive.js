@@ -13,10 +13,6 @@ var recoverParlayDirective = {
             recoverParlayDirective.handleByTicketType();
         });
 
-        $("#matchId").on("blur", function (event) {
-            recoverParlayDirective.checkMatchId(event);
-        });
-
         $('#search').on('click', function (event) {
             recoverParlayDirective.search(event);
         });
@@ -27,6 +23,12 @@ var recoverParlayDirective = {
 
         $(document).click(function () {
             $('#show-error-move-bet').hide();
+        });
+
+        $(document).on('change', 'select[name="bet-type"], #bet-type, .bet-type', function () {
+            if (!$(this).prop('disabled')) {
+                recoverParlayDirective.clearClassOfInputTransId();
+            }
         });
     },
 
@@ -53,6 +55,12 @@ var recoverParlayDirective = {
         ticketType === 'sub' ? $('#matchId').prop('disabled', false) : $('#matchId').prop('disabled', true);
         $('#report-content').hide();
         recoverParlayDirective.clearInput();
+    },
+
+    clearClassOfInputTransId: function () {
+        $('#txtTransId').removeClass("text-number-invalid");
+        $('#txtTransId').addClass("text-number");
+        $('.item-number .value-number-invalid').removeClass("value-number-invalid").addClass("value-number");
     },
 
     clearInput: function () {

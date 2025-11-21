@@ -28,7 +28,14 @@ public class GetTicketsServiceImp<T, U>(
             viewModel.Groups.Add(await getTicketsService.AssignData(item));
         }
 
-        viewModel.Tickets = model.Tickets.Select(x => new BetId { TransId = x.TransId.ToString(), SiteDbGroupId = x.SiteDbGroupId, MatchId = matchId });
+        viewModel.Tickets = model.Tickets.Select(x => new BetId
+        {
+            TransId = x.TransId.ToString(),
+            SiteDbGroupId = x.SiteDbGroupId,
+            MatchId = matchId,
+            IsHybrid = x.IsHybrid,
+            SubTransId = x.SubTransId.ToString()
+        });
 
         return viewModel;
     }

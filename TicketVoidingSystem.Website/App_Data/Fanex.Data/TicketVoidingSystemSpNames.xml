@@ -29,6 +29,12 @@
         <Setting Key="TicketVoiding_Email_OperatorInfo_Select" SpName="TicketVoiding_Email_OperatorInfo_Select" DbName="DBCUST.SiteConfig.wsv_nap" TimeOut="600" />
         <Setting Key="SpecialDelete_MailingList_Select" SpName="SpecialDelete_MailingList_Select" DbName="DBOIC.bodb_OIC.wsv_nap" TimeOut="600" />
         <Setting Key="TicketVoiding_UserActionLog_Update" SpName="TicketVoiding_UserActionLog_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+
+        <Setting Key="NAP_Admin_HybridParlayLog_Sel" SpName="NAP_Admin_HybridParlayLog_Sel" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBCTG.TicketVoiding_TicketsDetail_Select" SpName="TicketVoiding_TicketsDetail_Select" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.TicketVoiding_TicketsDetail_Select" SpName="TicketVoiding_TicketsDetail_Select" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.TicketVoiding_TicketsDetail_Select" SpName="TicketVoiding_TicketsDetail_Select" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.TicketVoiding_TicketsDetail_Select" SpName="TicketVoiding_TicketsDetail_Select" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
     </Function>
     <Function Name="ABExceptionList">
         <Setting Key="TicketVoiding_ABWhiteList_Insert" SpName="TicketVoiding_ABWhiteList_Insert" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
@@ -65,6 +71,11 @@
         <Setting Key="DBSITE01.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE02.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE03.TicketVoiding_BetTicket14_Insert" SpName="TicketVoiding_BetTicket14_Insert" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
+
+        <Setting Key="DBCTG.NAP_Admin_HybridParlay_LegOddsUpd" SpName="NAP_Admin_HybridParlay_LegOddsUpd" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE01.NAP_Admin_HybridParlay_LegOddsUpd" SpName="NAP_Admin_HybridParlay_LegOddsUpd" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE02.NAP_Admin_HybridParlay_LegOddsUpd" SpName="NAP_Admin_HybridParlay_LegOddsUpd" DbName="DBSITE02.bodb02.wsv_nap" TimeOut="600" />
+        <Setting Key="DBSITE03.NAP_Admin_HybridParlay_LegOddsUpd" SpName="NAP_Admin_HybridParlay_LegOddsUpd" DbName="DBSITE03.bodb02.wsv_nap" TimeOut="600" />
 
         <Setting Key="DBCTG.TicketVoiding_SummaryTicket19999_Update" SpName="TicketVoiding_SummaryTicket19999_Update" DbName="DBCTG.bodb02.wsv_nap" TimeOut="600" />
         <Setting Key="DBSITE01.TicketVoiding_SummaryTicket19999_Update" SpName="TicketVoiding_SummaryTicket19999_Update" DbName="DBSITE01.bodb02.wsv_nap" TimeOut="600" />

@@ -1,9 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.TicketHelper;
 using SpecialDelete.NumberGame.Models;
 using SpecialDelete.NumberGame.ViewModels;
-using System.Globalization;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Services.BetList;

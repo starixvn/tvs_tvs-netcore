@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
+import { IconCheckBox } from '../../../utility/constants/config';
+import { SPECIALGROUP } from '../../../utility/constants/tickets-list.constant';
 import { BetID } from '../../../utility/models/bet-id.model';
 import { GroupModel } from './group-tickets.model';
 import { TicketModel } from './ticket.model';
 import { TicketsModel } from './tickets.model';
-import { IconCheckBox } from '../../../utility/constants/config';
-import { SPECIALGROUP } from '../../../utility/constants/tickets-list.constant';
 
 @Injectable({
   providedIn: 'root'
@@ -67,10 +67,11 @@ export class TicketsListService {
       group.tickets.forEach(ticket => {
         if (ticket.isChecked === true && ticket.isDisable === false) {
           result.push({
+            isHybrid: ticket.isHybrid,
             transId: ticket.value,
             matchId: null,
             siteDbGroupId: ticket.siteDbGroupId
-          });
+          } as BetID);
         }
       });
     });
@@ -82,10 +83,11 @@ export class TicketsListService {
     groups.forEach(group => {
       group.tickets.forEach(ticket => {
         result.push({
+          isHybrid: ticket.isHybrid,
           transId: ticket.value,
           matchId: null,
           siteDbGroupId: ticket.siteDbGroupId
-        });
+        } as BetID);
       });
     });
     return result;

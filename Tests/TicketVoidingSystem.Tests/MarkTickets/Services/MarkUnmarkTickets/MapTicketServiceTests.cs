@@ -194,6 +194,7 @@ public class MapTicketServiceTests : IClassFixture<RemotingRefFixture>
             Status = "",
             BetId = $"100000021{Environment.NewLine}(Follow: 2)",
             Member = "",
+            BetType = "",
             Odds = "",
             Stake = "",
             Choice = "",

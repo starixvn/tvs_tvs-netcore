@@ -220,7 +220,7 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
     {
         // Arrange
         var comboNames = new[] { "1", "" };
-        var ticket = new Ticket{ BetCheck = betCheck};
+        var ticket = new Ticket { BetCheck = betCheck };
         remotingRefWrapperService.GetComboParlayName(null, null, 0, 0).ReturnsForAnyArgs(comboNames);
         service = new BetListServiceImp(remotingRefWrapperService, null);
 
@@ -445,5 +445,71 @@ public class BetListServiceTests : IClassFixture<RemotingRefFixture>
         AssertExtension.Equal("1", result);
         remotingRefWrapperService.Received(0).GetMatchCodeVS345(1, "1");
         remotingRefWrapperService.Received(0).GetMatchCodeBetRadar("1");
+    }
+
+    [Fact]
+    public void BuildChoiceBlock_ReturnsChoiceTemplate()
+    {
+        // Arrange
+        var ticket = new Ticket { BetTypeId = 1 };
+        var ticketHelper = new TicketHelper();
+        var ticketData = new List<ITicketData>();
+        service = new BetListServiceImp(null, null);
+
+        // Act
+        var result = service.BuildChoiceBlock(ticket, ticketHelper, ticketData, false);
+
+        // Assert
+        Assert.NotNull(result);
+    }
+
+    [Fact]
+    public void BuildChoice_ReturnsStringWithBetTeamChoiceClass()
+    {
+        // Arrange
+        var ticket = new Ticket { BetTypeId = 1 };
+        var ticketHelper = new TicketHelper();
+        var ticketData = new List<ITicketData>();
+        service = new BetListServiceImp(null, null);
+
+        // Act
+        var result = service.BuildChoice(ticket, ticketHelper, ticketData, false);
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Contains("bet-team-choice", result);
+    }
+
+    [Fact]
+    public void BuildChoiceExcel_ReturnsString()
+    {
+        // Arrange
+        var ticket = new Ticket { BetTypeId = 1 };
+        var ticketHelper = new TicketHelper();
+        var ticketData = new List<ITicketData>();
+        service = new BetListServiceImp(null, null);
+
+        // Act
+        var result = service.BuildChoiceExcel(ticket, ticketHelper, ticketData, false);
+
+        // Assert
+        Assert.NotNull(result);
+    }
+
+    [Theory]
+    [InlineData(1, true, 2, 1, "2 - 1")]  // Live indicator true, not Baseball
+    [InlineData(1, false, 2, 1, "")]     // Live indicator false
+    [InlineData(SportTypeConstant.Baseball, true, 2, 1, "")]  // Live indicator true but Baseball
+    [InlineData(2, true, 0, 0, "0 - 0")]  // Live indicator true, zero scores
+    public void GetScoreBetListUi_ReturnsExpectedScore(int sportType, bool isLiveIndicator, short liveHomeScore, short liveAwayScore, string expected)
+    {
+        // Arrange
+        service = new BetListServiceImp(null, null);
+
+        // Act
+        var result = service.GetScoreBetListUi(sportType, isLiveIndicator, liveHomeScore, liveAwayScore);
+
+        // Assert
+        Assert.Equal(expected, result);
     }
 }

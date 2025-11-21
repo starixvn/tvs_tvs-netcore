@@ -6,6 +6,7 @@ using TicketVoidingSystem.Extensions.TN;
 using TicketVoidingSystem.TicketListing.Constants;
 using TicketVoidingSystem.TicketListing.Criteria;
 using TicketVoidingSystem.TicketListing.Models;
+using TicketVoidingSystem.TicketListing.ViewModels;
 
 namespace TicketVoidingSystem.TicketListing.Services.ExportExcel;
 
@@ -14,6 +15,8 @@ public interface ConvertBetListForExcelService
     decimal? WinLossHtmlToText(string html);
 
     string ChoiceHtmlToText(string html, string betId);
+
+    string BetIdToText(TicketViewModel ticket);
 }
 
 public class ConvertBetListForExcelServiceImp(IDynamicRepository repository) : ConvertBetListForExcelService
@@ -39,6 +42,12 @@ public class ConvertBetListForExcelServiceImp(IDynamicRepository repository) : C
             _ when html.Contains(HtmlClass.BetTypeDescription) => GetChoiceBetTypeDescription(doc, html, choice),
             _ => GetChoiceRefund(doc, html, choice)
         };
+    }
+
+    public string BetIdToText(TicketViewModel ticket)
+    {
+        return ticket.BetId != ticket.SubTransId && ticket.IsHybrid ?
+         $"{ticket.BetId}\nSubId:\n{ticket.SubTransId}" : ticket.BetId;
     }
 
     private static string GetChoiceRefund(HtmlDocument doc, string html, string choice)

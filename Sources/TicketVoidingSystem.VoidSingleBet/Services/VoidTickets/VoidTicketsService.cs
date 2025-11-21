@@ -4,6 +4,7 @@ using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
 using TicketVoidingSystem.Models.SendEmail;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Models;
@@ -19,7 +20,8 @@ public class VoidTicketsServiceImp(
     SessionService sessionService,
     IMapper mapper,
     IDynamicRepository repository,
-    LoggingService loggingService)
+    LoggingService loggingService,
+    HybridParlayTicketService hybridParlayTicketService)
     : VoidTicketsService
 {
     public async Task<VoidTicketsModel> VoidBet(VoidTicketsQuery query)
@@ -47,25 +49,28 @@ public class VoidTicketsServiceImp(
 
     private async Task<VoidTicketsModel> HandleVoidWhenSuccess(VoidTicketsQuery query)
     {
-        var ticketsInAllServers = new List<TicketEmailModel>();
-        var validationsInAllServers = new List<VoidTicketValidation>();
         var criteria = CreateVoidTicketsCriteria(query);
-
         var serversWithTickets = query.Tickets.GroupBy(x => x.SiteDbGroupId);
-
-        foreach (var serverGroup in serversWithTickets)
+        var tasks = serversWithTickets.Select(async serverGroup =>
         {
             var serverId = serverGroup.Key;
-            var ticketsInSiteDb = serverGroup.ToList();
+            var ticketsInServer = serverGroup.ToList();
+            var hybridParlayTransIds = Helper.GetUnionTransIdString(ticketsInServer.Where(t => t.IsHybrid).Select(x => x.TransId));
+            var isCalledJackTimeHybridParlay = await hybridParlayTicketService.Execute(hybridParlayTransIds, HybridParlayType.VoidSub, HybridParlayTicketType.Sub, serverId);
 
+            criteria.IsCalledJackTimeHybridParlay = isCalledJackTimeHybridParlay;
             criteria.SiteDbGroupId = serverId;
-            criteria.TransIds = Helper.JoinBetIdList(ticketsInSiteDb);
-            var (validation, emailTicketsSiteDb) = await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
-            ticketsInAllServers.AddRange(emailTicketsSiteDb);
-            validationsInAllServers.AddRange(validation);
-        }
+            criteria.TransIds = Helper.JoinBetIdList(ticketsInServer);
 
-        return BuildResultVoidTickets(ticketsInAllServers, validationsInAllServers, query);
+            return await repository.FetchMultipleAsync<VoidTicketValidation, TicketEmailModel>(criteria);
+        });
+
+        var results = await Task.WhenAll(tasks);
+
+        var validationInAllServers = results.SelectMany(x => x.Item1).ToList();
+        var ticketsInAllServers = results.SelectMany(x => x.Item2).ToList();
+
+        return BuildResultVoidTickets(ticketsInAllServers, validationInAllServers, query);
     }
 
     private static VoidTicketValidation CreateVoidTicketValidation(IList<VoidTicketValidation> validations)

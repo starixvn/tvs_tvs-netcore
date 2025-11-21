@@ -65,12 +65,9 @@ public class AddRequestAutoVoidProviderMistakeServiceImp(
         var command = CreateAddRequestCommand(matchId, validationResult);
         await repository.ExecuteAsync(command);
 
-        if (command.RequestId <= 0)
-        {
-            return (0, new Result { ErrorCode = 1, ErrorMsg = "Failed to add void request" });
-        }
-
-        return (command.RequestId, new Result { ErrorCode = 0, ErrorMsg = $"Successfully add void request: {command.RequestId}" });
+        return command.RequestId <= 0
+            ? (0, new Result { ErrorCode = 1, ErrorMsg = "Failed to add void request" })
+            : (command.RequestId, new Result { ErrorCode = 0, ErrorMsg = $"Successfully add void request: {command.RequestId}" });
     }
 
     private static AddRequestCommand CreateAddRequestCommand(int matchId, CheckProviderMistakeTicketsResultModel validationResult)

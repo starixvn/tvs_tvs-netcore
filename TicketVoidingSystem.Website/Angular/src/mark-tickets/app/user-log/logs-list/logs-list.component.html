@@ -95,10 +95,10 @@
                 <div>{{log.ftScore}}</div>
               </td>
               <td>
-                <div>{{countTotalTicket(log.singleTickets, log.parlayTickets)}}</div>
+                <div>{{log.count}}</div>
               </td>
               <td>
-                <div><em ngbTooltip="List of BetID" (click)="displayTransIdList(log.singleTickets, log.parlayTickets)"
+                <div><em ngbTooltip="List of BetID" (click)="displayTransIdList(log.singleTickets, log.parlayTickets, log.hybridParlayTickets)"
                 class="fa fa-align-justify text-primary cursor-pointer"></em></div>
               </td>
               <td>

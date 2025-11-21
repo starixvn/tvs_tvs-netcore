@@ -17,14 +17,22 @@ public class SheetServiceTest
     public async Task GetTickets_ValidData_CallTicketService()
     {
         // Arrange
-        const string choice = "<a></a><span></span><div class='offer-name-list'></div><div class='bettype'></div><div class='match'></div><div class='league'>";
+        const string choice = "<a>Choice</a><div class='offer-name-list'></div><div class='bettype'>BetType</div><span class='bet-team-choice'>Handicap</span><div class='match'>Match</div><div class='league'>League</div>";
         var query = new ExportExcelQuery { MatchId = 123 };
         var fakeModel = new GetTicketsModel { Tickets = [new GetTicketModel { TransId = 9999 }] };
         var getTicketsService = Substitute.For<GetTicketsService>();
         getTicketsService.ExecuteQuery(query).ReturnsForAnyArgs(fakeModel);
         var ticketService = Substitute.For<TicketService>();
         ticketService.GetTicket(new GetTicketModel())
-            .ReturnsForAnyArgs(new TicketViewModel { Stake = string.Empty, Choice = choice });
+            .ReturnsForAnyArgs(new TicketViewModel 
+            { 
+                Stake = string.Empty, 
+                Choice = choice,
+                TransDate = string.Empty,
+                Odds = string.Empty,
+                Status = string.Empty,
+                WinLoss = string.Empty
+            });
         var service = new SheetServiceImp(getTicketsService, ticketService);
 
         // Act

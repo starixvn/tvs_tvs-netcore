@@ -31,4 +31,6 @@ public class VoidedTicketViewModel
     public string VoidTime { get; set; }
     public bool IsCashOut { get; set; }
     public string BettypeCombination { get; set; }
+    public bool IsHybrid { get; set; }
+    public string SubTransId { get; set; }
 }

@@ -1,11 +1,12 @@
-﻿using NSubstitute;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NSubstitute;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
+using TicketVoidingSystem.Services.JackTimeHybridParlay;
 using TicketVoidingSystem.VoidSingleBet.Criteria;
 using TicketVoidingSystem.VoidSingleBet.Handlers;
 using TicketVoidingSystem.VoidSingleBet.Models;
@@ -49,7 +50,11 @@ public class VoidTicketsHandlerTests
         var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, null, null);
 
         // Act
-        var actual = await handler.Handle(new VoidTicketsRequest(), CancellationToken.None);
+        var actual = await handler.Handle(new VoidTicketsRequest
+        {
+            Tickets = new List<BetId>(),
+            TransIdCrickets = new List<BetId>()
+        }, CancellationToken.None);
 
         // Assert
         await voidResultCacheService.ReceivedWithAnyArgs(2).SetVoidResultsCache(null, null);
@@ -79,6 +84,9 @@ public class VoidTicketsHandlerTests
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 0 } });
         afterVoidService.ExecuteWhenVoidFailed(null)
             .ReturnsForAnyArgs(new List<Result> { new() { ErrorCode = 1 } });
+        var hybridParlayTicketService = Substitute.For<HybridParlayTicketService>();
+        hybridParlayTicketService.Execute(Arg.Any<string>(), Arg.Any<HybridParlayType>(), Arg.Any<int>(), Arg.Any<int>())
+            .ReturnsForAnyArgs(Task.FromResult(false));
         voidTicketsService.VoidBet(Arg.Any<VoidTicketsQuery>()).Returns(new VoidTicketsModel());
         var handler = new VoidTicketsHandler(voidResultCacheService, netPositionForCricketService, voidTicketsService, afterVoidService);
 

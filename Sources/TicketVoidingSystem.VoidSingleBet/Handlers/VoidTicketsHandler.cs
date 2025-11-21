@@ -30,7 +30,6 @@ public class VoidTicketsHandler(
     {
         var results = new List<Result>();
         await resultCacheService.SetVoidResultsCache(query.Guid, results);
-
         var updateNpResult = await netPositionForCricketService.Update(query);
         if (!updateNpResult.TicketsAfterUpdateNp.Any())
         {

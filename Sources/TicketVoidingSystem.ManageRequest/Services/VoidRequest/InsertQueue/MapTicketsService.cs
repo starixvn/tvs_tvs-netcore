@@ -40,6 +40,9 @@ public class MapTicketsServiceImp : MapTicketsService
         AddTicketsToGroup(groupTickets, validation.VoidCricketTickets, VoidingTypeConstant.Cricket);
         AddTicketsToGroup(groupTickets, validation.VoidSingleTickets14, VoidingTypeConstant.Single14);
         AddTicketsToGroup(groupTickets, validation.VoidParlayTickets14, VoidingTypeConstant.Parlay14);
+        AddTicketsToGroup(groupTickets, validation.VoidHybridParlayTickets, VoidingTypeConstant.HybridParlay);
+        AddTicketsToGroup(groupTickets, validation.VoidSubHybridParlayTickets, VoidingTypeConstant.SubHybridParlay);
+        AddTicketsToGroup(groupTickets, validation.VoidHybridParlay14Tickets, VoidingTypeConstant.HybridParlay14);
 
         AddTicketsToGroup(groupTickets, validation.RecoverSingleTickets, VoidingTypeConstant.RecoverSingle);
         AddTicketsToGroup(groupTickets, validation.RecoverParlayTickets, VoidingTypeConstant.RecoverParlay);

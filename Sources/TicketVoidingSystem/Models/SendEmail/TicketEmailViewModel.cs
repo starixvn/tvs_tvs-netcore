@@ -39,4 +39,8 @@ public class TicketEmailViewModel
     public bool IsVipMember { get; set; }
 
     public decimal MasterOdds { get; set; }
+
+    public bool IsHybrid { get; set; }
+
+    public string SubTransId { get; set; }
 }

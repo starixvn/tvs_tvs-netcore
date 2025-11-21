@@ -52,12 +52,13 @@ public class UserLogsServiceImp(IMapper mapper, IDynamicRepository repository, M
     private async Task<UserLogTicketInfo> GetTicketsInfo(IEnumerable<string> transIdsInAllLogs)
     {
         var criteria = new GetUserLogTicketInfoCriteria { TransIdsXml = transIdsInAllLogs.ToTransIdsXml() };
-        var (singleTickets, parlayTickets) = await repository.FetchMultipleAsync<TicketInfo, TicketInfo>(criteria);
+        var (singleTickets, parlayTickets, hybridParlayTickets) = await repository.FetchMultipleAsync<TicketInfo, TicketInfo, TicketInfo>(criteria);
 
         return new UserLogTicketInfo
         {
             SingleTickets = singleTickets,
-            ParlayTickets = parlayTickets
+            ParlayTickets = parlayTickets,
+            HybridParlayTickets = hybridParlayTickets,
         };
     }
 }

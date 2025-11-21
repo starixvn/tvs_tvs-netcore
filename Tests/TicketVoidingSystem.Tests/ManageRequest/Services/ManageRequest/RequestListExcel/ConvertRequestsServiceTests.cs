@@ -349,4 +349,215 @@ public class ConvertRequestsServiceTests
         // Assert
         Assert.Equal(string.Empty, result);
     }
+
+    [Fact]
+    public async Task GetAllIssueTypes_ReturnsEmptyList()
+    {
+        // Arrange
+        repository.FetchAsync<IssueType>(Arg.Any<GetIssueTypeCriteria>()).Returns(new List<IssueType>());
+
+        // Act
+        var result = await convertRequestsServiceImp.GetAllIssueTypes();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GetAllSubIssueTypes_ReturnsEmptyList()
+    {
+        // Arrange
+        repository.FetchAsync<SubIssueType>(Arg.Any<GetSubIssueTypeCriteria>())
+            .Returns(new List<SubIssueType>());
+
+        // Act
+        var result = await convertRequestsServiceImp.GetAllSubIssueTypes();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public async Task GetAllVoidActions_ReturnsEmptyList()
+    {
+        // Arrange
+        repository.FetchAsync<VoidAction>(Arg.Any<GetActionsCriteria>()).Returns(new List<VoidAction>());
+
+        // Act
+        var result = await convertRequestsServiceImp.GetAllVoidActions();
+
+        // Assert
+        Assert.Empty(result);
+    }
+
+    [Fact]
+    public void GetIssueTypeName_ReturnsNullWhenEmptyList()
+    {
+        // Arrange
+        var issueTypes = new List<IssueType>();
+
+        // Act
+        var typeName = convertRequestsServiceImp.GetIssueTypeName(1, issueTypes);
+
+        // Assert
+        Assert.Null(typeName);
+    }
+
+    [Fact]
+    public void GetIssueTypeName_ThrowsArgumentNullExceptionWhenNullList()
+    {
+        // Arrange
+        IEnumerable<IssueType> issueTypes = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => convertRequestsServiceImp.GetIssueTypeName(1, issueTypes));
+    }
+
+    [Fact]
+    public void GetSubIssueTypeName_ReturnsNullWhenEmptyList()
+    {
+        // Arrange
+        var subIssueTypes = new List<SubIssueType>();
+
+        // Act
+        var typeName = convertRequestsServiceImp.GetSubIssueTypeName(1, subIssueTypes);
+
+        // Assert
+        Assert.Null(typeName);
+    }
+
+    [Fact]
+    public void GetSubIssueTypeName_ThrowsArgumentNullExceptionWhenNullList()
+    {
+        // Arrange
+        IEnumerable<SubIssueType> subIssueTypes = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => convertRequestsServiceImp.GetSubIssueTypeName(1, subIssueTypes));
+    }
+
+    [Fact]
+    public void GetVoidActionName_ReturnsNullWhenEmptyList()
+    {
+        // Arrange
+        var voidActions = new List<VoidAction>();
+
+        // Act
+        var actionName = convertRequestsServiceImp.GetVoidActionName(1, voidActions);
+
+        // Assert
+        Assert.Null(actionName);
+    }
+
+    [Fact]
+    public void GetVoidActionName_ThrowsArgumentNullExceptionWhenNullList()
+    {
+        // Arrange
+        IEnumerable<VoidAction> voidActions = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => convertRequestsServiceImp.GetVoidActionName(1, voidActions));
+    }
+
+    [Theory]
+    [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-mix-parlay'>10</div>", "Mix Parlay: 10")]
+    [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-bet-builder-plus'>5</div>", "Bet Builder+: 5")]
+    [InlineData(IssueTypeConstant.AbnormalBet, "<div class='text-primary total-system-parlay'>3</div>", "System Parlay: 3")]
+    [InlineData(IssueTypeConstant.AbnormalBet, "<div>No match</div>", "")]
+    [InlineData(IssueTypeConstant.WrongOddsSportsBook, "<div class='void-time'>2024-01-01 10:00</div>", "2024-01-01 10:00")]
+    [InlineData(IssueTypeConstant.WrongMarketOffered, "<div class='void-time'>2024-01-01 11:00</div>", "2024-01-01 11:00")]
+    [InlineData(IssueTypeConstant.Abandoned, "<div>Any content</div>", "")]
+    public void GetDescription_AdditionalCases_ReturnsExpectedDescription(int issueId, string html, string description)
+    {
+        // Arrange
+
+        // Act
+        var result = convertRequestsServiceImp.GetDescription(issueId, html);
+
+        // Assert
+        Assert.Equal(description, result);
+    }
+
+    [Fact]
+    public void GetDescription_AbnormalAccount_WithVoidTime_ReturnsFormattedDescription()
+    {
+        // Arrange
+        const string html = "<div class='void-time'>2024-01-01 10:00</div><div class='text-primary total-account'>5</div>";
+
+        // Act
+        var result = convertRequestsServiceImp.GetDescription(IssueTypeConstant.AbnormalAccount, html);
+
+        // Assert
+        Assert.Contains("2024-01-01 10:00", result);
+        Assert.Contains("No. of Account: 5", result);
+    }
+
+    [Fact]
+    public void GetSportName_ThrowsArgumentNullExceptionWhenHtmlIsNull()
+    {
+        // Arrange
+        const string html = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => convertRequestsServiceImp.GetSportName(html));
+    }
+
+    [Fact]
+    public void GetSportName_ReturnsEmptyStringWhenHtmlIsEmpty()
+    {
+        // Arrange
+        const string html = "";
+
+        // Act
+        var result = convertRequestsServiceImp.GetSportName(html);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GetEvent_ThrowsArgumentNullExceptionWhenHtmlIsNull()
+    {
+        // Arrange
+        const string html = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => convertRequestsServiceImp.GetEvent(html));
+    }
+
+    [Fact]
+    public void GetEvent_ReturnsEmptyStringWhenHtmlIsEmpty()
+    {
+        // Arrange
+        const string html = "";
+
+        // Act
+        var result = convertRequestsServiceImp.GetEvent(html);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
+
+    [Fact]
+    public void GetLeague_ThrowsArgumentNullExceptionWhenHtmlIsNull()
+    {
+        // Arrange
+        const string html = null;
+
+        // Act & Assert
+        Assert.Throws<ArgumentNullException>(() => convertRequestsServiceImp.GetLeague(html));
+    }
+
+    [Fact]
+    public void GetLeague_ReturnsEmptyStringWhenHtmlIsEmpty()
+    {
+        // Arrange
+        const string html = "";
+
+        // Act
+        var result = convertRequestsServiceImp.GetLeague(html);
+
+        // Assert
+        Assert.Equal(string.Empty, result);
+    }
 }

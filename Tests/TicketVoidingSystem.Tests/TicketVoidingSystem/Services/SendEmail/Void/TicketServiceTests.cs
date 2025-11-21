@@ -34,7 +34,9 @@ public class TicketServiceTests
             TransDate = new DateTime(2022, 2, 2, 2, 2, 2).ToString(FormatKey.LongDateFormatTimeWithSlash),
             WinLoss = "0",
             Score = "",
-            BetFrom = "Internet"
+            BetFrom = "Internet",
+            SubTransId = "0",
+            IsHybrid = false
         };
 
         // Act

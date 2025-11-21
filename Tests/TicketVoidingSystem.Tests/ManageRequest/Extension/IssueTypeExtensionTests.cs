@@ -256,19 +256,6 @@ public class IssueTypeExtensionTests
     }
 
     [Theory]
-    [InlineData(28, true)]
-    [InlineData(1, false)]
-    public void IsSecondTeamBatting_ValidParams_ReturnResult(int issueTypeId, bool result)
-    {
-        // Arrange
-        // Act
-        var actual = issueTypeId.IsSecondTeamBatting();
-
-        // Assert
-        Assert.Equal(result, actual);
-    }
-
-    [Theory]
     [InlineData(1, true)]
     [InlineData(10, true)]
     [InlineData(3, true)]

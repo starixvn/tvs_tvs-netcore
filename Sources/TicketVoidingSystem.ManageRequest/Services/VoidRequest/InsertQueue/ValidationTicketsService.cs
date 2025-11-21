@@ -2,6 +2,7 @@
 using Fanex.Data.Repository;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.ManageRequest.Criteria.VoidRequest;
+using TicketVoidingSystem.Models;
 
 namespace TicketVoidingSystem.ManageRequest.Services.VoidRequest.InsertQueue;
 
@@ -28,13 +29,21 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
         var validationTickets = new CheckTicketValidationOutput
         {
             VoidSingleTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.SingleTickets, query.RequestId, query.IssueTypeId),
-            VoidParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets, query.RequestId, query.IssueTypeId),
+            VoidParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets.Where(x => !x.IsHybrid), query.RequestId, query.IssueTypeId),
             VoidCricketTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CricketTickets, query.RequestId, query.IssueTypeId),
-            CancelCOTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId)
+            CancelCOTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.CancelCashOutTickets, query.RequestId, query.IssueTypeId),
+            VoidHybridParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets.Where(IsMainHybridParlay), query.RequestId, query.IssueTypeId),
+            VoidSubHybridParlayTickets = mapTicketsService.MapBetIdToRequestDetailTicket(query.ParlayTickets.Where(x => !IsMainHybridParlay(x)), query.RequestId, query.IssueTypeId)
         };
+
         var ticketsInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
 
         return ticketsInsertQueue;
+    }
+
+    private bool IsMainHybridParlay(BetId ticket)
+    {
+        return ticket.IsHybrid && ticket.SubBetType == 0;
     }
 
     private CheckTicketValidationOutput CreateTicketTypeModelByServer(InsertQueueQuery query, int siteDbGroupId)
@@ -57,6 +66,9 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
         var cancelCOTickets = results.Where(x => x.ValidationType == 7);
         var voidSingleTickets14 = results.Where(x => x.ValidationType == 8);
         var voidParlayTickets14 = results.Where(x => x.ValidationType == 9);
+        var voidHybridParlayTickets = results.Where(x => x.ValidationType == 10);
+        var voidSubHybridParlayTickets = results.Where(x => x.ValidationType == 12);
+        var voiHybridParlay14Tickets = results.Where(x => x.ValidationType == 13);
 
         var validationTickets = new CheckTicketValidationOutput
         {
@@ -65,7 +77,10 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
             VoidCricketTickets = voidCricketTickets,
             CancelCOTickets = cancelCOTickets,
             VoidSingleTickets14 = voidSingleTickets14,
-            VoidParlayTickets14 = voidParlayTickets14
+            VoidParlayTickets14 = voidParlayTickets14,
+            VoidHybridParlayTickets = voidHybridParlayTickets,
+            VoidSubHybridParlayTickets = voidSubHybridParlayTickets,
+            VoidHybridParlay14Tickets = voiHybridParlay14Tickets
         };
 
         var ticketsInsertQueue = mapTicketsService.SetVoidingTypeForTickets(validationTickets);
@@ -110,7 +125,8 @@ public class ValidationTicketsServiceImp(IDynamicRepository repository, MapTicke
             IssueTypeConstant.AbnormalAccount,
             IssueTypeConstant.AbnormalBet,
             IssueTypeConstant.WrongMarketOffered,
-            IssueTypeConstant.TechnicalError
+            IssueTypeConstant.TechnicalError,
+            IssueTypeConstant.SecondTeamBatting
         }.Contains(issueTypeId);
     }
 }

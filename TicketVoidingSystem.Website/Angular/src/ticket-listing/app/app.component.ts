@@ -167,7 +167,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   private getSingleOrSubParlayParam(item: SummaryItem): string {
-    if (item.betTypes === '29') {
+    if (item.betTypes === '29' || this.commonQuery.product === Product.HYBRID_PARLAY) {
       return 'SubParlay';
     }
 
@@ -287,7 +287,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   private getTitleAmendmentOic() {
     const eventDate = moment(this.matchViewModel.eventDate).format('MMM Do, YYYY');
     const title =
-      this.commonQuery.product === Product.SPORTS_BOOK
+      this.commonQuery.product === Product.SPORTS_BOOK || this.commonQuery.product === Product.HYBRID_PARLAY
         ? this.matchViewModel.matchEvent + ' - ' + this.matchViewModel.matchCode + ' - ' + eventDate
         : this.matchViewModel.matchEvent + ' - ' + eventDate;
 

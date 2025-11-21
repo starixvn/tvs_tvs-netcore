@@ -45,6 +45,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
             WalletType = 1,
             BetdaqId = 2,
             Status = "running",
+            SubTransId = 0,
             TransDate = new DateTime(2022, 2, 2, 2, 2, 2),
             VoidedTime = new DateTime(2022, 2, 2, 2, 2, 2)
         };
@@ -72,6 +73,7 @@ public class MapFromBetListServiceTests : IClassFixture<RemotingRefFixture>
             Member = "testUser",
             Score = "",
             Choice = "",
+            SubTransId = "0",
             VoidTime = new DateTime(2022, 2, 2, 2, 2, 2).ToString(FormatKey.LongDateFormatTimeWithSlash),
             BettypeCombination = "Non-Live BetType (betTeam)",
             IsCashOut = true

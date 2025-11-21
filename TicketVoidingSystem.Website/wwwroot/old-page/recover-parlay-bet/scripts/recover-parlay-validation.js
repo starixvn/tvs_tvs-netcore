@@ -13,12 +13,14 @@ var recoverParlayValidation = {
 
         return true;
     },
-
     
-
     validSubBeforeSearch: function () {
         if ($('#matchId').val().toString() === '') {
             $('#msg').html(tooltip.show('matchId', messages.matchIdRequired)).show();
+            return false;
+        }
+        if (!recoverParlayService.checkMatchId()) {
+            $('#msg').html(tooltip.show('matchId', messages.invalidCheckMatch)).show();
             return false;
         }
         if (recoverParlayService.getBetIds().length === 0) {

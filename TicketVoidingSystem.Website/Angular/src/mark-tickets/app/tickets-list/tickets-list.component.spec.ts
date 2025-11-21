@@ -199,7 +199,7 @@ describe('TicketsListComponent', () => {
     component.updateMarkedTickets.emit = mockEmit;
     
     // Mock service methods
-    const mockTickets = [{ transId: '108936575088', matchId: null, siteDbGroupId: 1 }];
+    const mockTickets = [{ transId: '108936575088', matchId: null, siteDbGroupId: 1 }] as BetID[];
     mockTicketsListService.getTicketsParam.mockReturnValue(mockTickets);
     mockTicketsListService.getAllTickets.mockReturnValue(mockTickets);
 
@@ -235,7 +235,7 @@ describe('TicketsListComponent', () => {
     component.updateMarkedTickets.emit = mockEmit;
     
     // Mock service methods
-    const mockTickets = [{ transId: '108936575088', matchId: null, siteDbGroupId: 1 }];
+    const mockTickets = [{ transId: '108936575088', matchId: null, siteDbGroupId: 1 }] as BetID[];
     mockTicketsListService.getTicketsParamWithAllPage.mockReturnValue(mockTickets);
     mockTicketsListService.getAllTickets.mockReturnValue(mockTickets);
 

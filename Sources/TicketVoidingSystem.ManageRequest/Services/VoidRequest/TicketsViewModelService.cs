@@ -98,7 +98,9 @@ public class TicketsViewModelServiceImp(
         {
             TransId = model.IsMixParlay ? model.SubTransId.ToString() : model.TransId.ToString(),
             SiteDbGroupId = model.SiteDbGroupId,
-            MatchId = model.MatchId
+            MatchId = model.MatchId,
+            IsHybrid = model.IsHybrid,
+            SubBetType = model.SubBetType
         };
     }
 

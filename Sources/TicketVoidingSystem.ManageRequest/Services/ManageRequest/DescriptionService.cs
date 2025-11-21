@@ -51,6 +51,7 @@ public class DescriptionServiceImp(DescriptionElementService elementService) : D
         {
             FilterByConstant.MixParlay => elementService.BuildMixParlay(item.TotalSingle),
             FilterByConstant.SystemParlay => elementService.BuildSystemParlay(item.TotalSingle),
+            FilterByConstant.HybridParlay => elementService.BuildHybridParlay(item.TotalSingle),
             _ => BuildMatchLeagueTotal(item)
         };
     }

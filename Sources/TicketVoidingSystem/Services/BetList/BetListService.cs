@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Fanex.BetList.Core.Builder;
+using Fanex.BetList.Core.Builder.HybridParlayBuilder;
 using Fanex.BetList.Core.Entities;
 using Fanex.BetList.Core.Factories;
 using Fanex.BetList.Core.Templates;
@@ -8,6 +9,7 @@ using Fanex.BetList.Core.TicketHelper;
 using HtmlAgilityPack;
 using TicketVoidingSystem.Constants;
 using TicketVoidingSystem.Extensions;
+using TicketVoidingSystem.Models.JackTimeHybridParlay;
 using TicketVoidingSystem.Utilities;
 
 namespace TicketVoidingSystem.Services.BetList;
@@ -17,6 +19,8 @@ public interface BetListService
     Choice_Template BuildChoiceBlock(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
 
     string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
+
+    string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, HybridParlayChoiceModel model, bool isShowScoreMap);
 
     string BuildChoiceExcel(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap);
 
@@ -67,6 +71,8 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         }
     }
 
+    private static HyBridParlayBuilder HybridParlayBuilder => new();
+
     private static BetListExcelBuilder ExcelBuilder
     {
         get
@@ -83,7 +89,15 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
 
     public string BuildChoice(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap)
     {
-        return Builder.BuildChoice(ticket, ticketHelper, ticketData, isShowScoreMap);
+        var choiceBlock = BuildChoiceBlock(ticket, ticketHelper, ticketData, isShowScoreMap);
+        choiceBlock.betTeamClassName += " bet-team-choice";
+
+        return choiceBlock;
+    }
+
+    public string BuildChoiceHybridParlay(ITicketHelper ticketHelper, IList<ITicket> detailsTickets, HybridParlayChoiceModel model, bool isShowScoreMap)
+    {
+        return HybridParlayBuilder.Build(ticketHelper, detailsTickets, model.Transdesc, model.Hdp1, model.Hdp2, model.BetCheck, model.BetTeam, model.Currency, model.Stake, isShowScoreMap);
     }
 
     public string BuildChoiceExcel(ITicket ticket, ITicketHelper ticketHelper, List<ITicketData> ticketData, bool isShowScoreMap)
@@ -155,6 +169,7 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
         {
             ticketCopy.RefNo = null;
         }
+
         return builder.GetBetTypeName(ticketCopy, ticketHelper);
     }
 

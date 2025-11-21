@@ -14,7 +14,9 @@ export class TicketModel {
   betType: string;
   status: string;
   secondAcceptFlag: string;
-    isMarked: boolean;
+  isMarked: boolean;
+  subTransId: string;
+  isHybrid: boolean;
 }
 
 export class TicketsModel {

@@ -51,4 +51,10 @@ public class GetMainTicket
     public decimal ActualStake { get; set; }
 
     public int SiteDbGroupId { get; set; }
+
+    public bool IsHybrid { get; set; }
+
+    public decimal OddsSpread { get; set; }
+
+    public long SubTransId { get; set; }
 }
