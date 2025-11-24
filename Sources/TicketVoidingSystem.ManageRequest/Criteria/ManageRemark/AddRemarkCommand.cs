@@ -5,7 +5,6 @@ namespace TicketVoidingSystem.ManageRequest.Criteria.ManageRemark;
 public class AddRemarkCommand : NonQueryCommand
 {
     public int RemarkId { get; set; }
-    public int SessionTime { get; set; }
     public int UserId { get; set; }
     public string IP { get; set; }
     public int MatchId { get; set; }
