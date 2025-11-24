@@ -147,7 +147,6 @@ public class HtmlExtensionTests
         Assert.Equal($"10.00{Environment.NewLine}(+5.00){Environment.NewLine}7.00", result);
     }
 
-
     [Fact]
     public void LineBreak_HtmlIsNull_ReturnsEmptyString()
     {
@@ -301,12 +300,9 @@ public class HtmlExtensionTests
         var html = string.Empty;
 
         // Act
-        var result = html.ChoiceShortSubParlay(true);
+        var result = html.ChoiceShortSubParlay(true, false);
 
         // Assert
         Assert.Equal(string.Empty, result);
     }
-
-
 }
-
