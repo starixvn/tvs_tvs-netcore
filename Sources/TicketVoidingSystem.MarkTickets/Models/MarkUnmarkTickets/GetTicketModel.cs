@@ -65,6 +65,8 @@ public class GetTicketModel
 
     public decimal OddsSpread { get; set; }
 
+    public decimal SubOddsSpread { get; set; }
+
     public string WinLost { get; set; }
 
     public string LicenseeName { get; set; }

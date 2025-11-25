@@ -116,5 +116,6 @@ public class BetListCoreServiceImp(IMapper mapper, BetListService betListService
         ticket.Handicap2 = item.SubHdp2;
         ticket.Odds = item.SubOdds;
         ticket.TransDesc = item.TransDesc;
+        ticket.OddsSpread = item.SubOddsSpread;
     }
 }

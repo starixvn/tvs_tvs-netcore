@@ -30,5 +30,7 @@ public class GetSubTicket : GetMainTicket
 
     public bool SubLiveIndicator { get; set; }
 
+    public decimal SubOddsSpread { get; set; }
+
     public decimal FinalOdds { get; set; }
 }

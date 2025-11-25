@@ -80,6 +80,7 @@ public class BetListSubParlayServiceImp<T>(BetListService betListService) : BetL
         ticket.Handicap1 = item.SubHdp1;
         ticket.Handicap2 = item.SubHdp2;
         ticket.Odds = item.SubOdds;
+        ticket.OddsSpread = item.SubOddsSpread;
     }
 }
 
