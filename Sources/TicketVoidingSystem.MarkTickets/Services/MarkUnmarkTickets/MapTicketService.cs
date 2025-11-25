@@ -178,5 +178,6 @@ public class MapTicketServiceImp(IMapper mapper, BetListService betListService, 
         ticket.Handicap1 = item.SubHdp1;
         ticket.Handicap2 = item.SubHdp2;
         ticket.Odds = item.SubOdds;
+        ticket.OddsSpread = item.SubOddsSpread;
     }
 }

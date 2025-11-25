@@ -90,6 +90,8 @@ public class GetTicketModel
 
     public decimal OddsSpread { get; set; }
 
+    public decimal SubOddsSpread { get; set; }
+
     public byte SettlementStatus { get; set; }
 
     public bool IsMarked { get; set; }

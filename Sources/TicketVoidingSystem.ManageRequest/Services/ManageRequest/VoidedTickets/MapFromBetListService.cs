@@ -135,6 +135,7 @@ public class MapFromBetListServiceImp(IMapper mapper, BetListService betListServ
         ticket.Handicap2 = item.SubHdp2;
         ticket.Odds = item.SubOdds;
         ticket.TransDesc = item.SubTransdesc;
+        ticket.OddsSpread = item.SubOddsSpread;
     }
 
     private string CombineBetType(Ticket ticketFromBetList, VoidedTicketModel voidedTicketModel, string betType, TicketHelper ticketHelper)

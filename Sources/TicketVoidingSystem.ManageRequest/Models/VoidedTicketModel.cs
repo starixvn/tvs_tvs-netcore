@@ -28,6 +28,7 @@ public class VoidedTicketModel
     public decimal Odds { get; set; }
     public int OddsType { get; set; }
     public decimal OddsSpread { get; set; }
+    public decimal SubOddsSpread { get; set; }
     public byte WalletType { get; set; }
     public long? RefCode { get; set; }
     public string ExtraInfo { get; set; }
