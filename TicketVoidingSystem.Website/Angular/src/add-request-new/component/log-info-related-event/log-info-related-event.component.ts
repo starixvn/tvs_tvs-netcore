@@ -22,6 +22,9 @@ import { SubIssueTypeDialogModel } from '../filter/sub-issue-type-dialog/sub-iss
 import { LogInfoRelatedEvent } from './log-info-related-event.model';
 import { LogInfoRelatedEventService } from './log-info-related-event.service';
 import { PrimitiveProperty } from './primitive-property.model';
+import { AffectedTicketService } from '../affected-ticket/affected-ticket.service';
+import { AffectedTicketComponent } from '../affected-ticket/affected-ticket.component';
+import { AffectedTicketsModel } from '../../models/live-game-early-ticket.model';
 
 @Component({
   standalone: true,
@@ -29,8 +32,8 @@ import { PrimitiveProperty } from './primitive-property.model';
   templateUrl: './log-info-related-event.component.html',
   styleUrls: ['./log-info-related-event.component.scss'],
   imports: [CommonModule, FormsModule, TooltipComponent, SubIssueTypeDialogComponent,
-    FilterTimeWithAllowanceComponent, BlockUiDirective, SanitizeHtmlPipe],
-  providers: [LogInfoRelatedEventService]
+    FilterTimeWithAllowanceComponent, BlockUiDirective, SanitizeHtmlPipe, AffectedTicketComponent],
+  providers: [LogInfoRelatedEventService, AffectedTicketService]
 })
 export class LogInfoRelatedEventComponent {
   @Input() isEdit: boolean;
@@ -46,6 +49,7 @@ export class LogInfoRelatedEventComponent {
   @Output() deleteEvent = new EventEmitter<number>();
   @Output() clearInfoSiteDBDownModel = new EventEmitter<void>();
   @ViewChild('filterTimeWithAllowance') filterTimeWithAllowanceComponent: FilterTimeWithAllowanceComponent;
+  @ViewChild('affectedTicket') affectedTicketComponent: AffectedTicketComponent;
 
   isBlock = false;
   isCollapse: boolean;
@@ -54,11 +58,13 @@ export class LogInfoRelatedEventComponent {
   tooltipVarMessage = TEXT.SELECTED_VAR_OPTIONS;
   acceptTypeName = "";
   tooltip = new Tooltip();
+  affectedTicketsModel = new AffectedTicketsModel();
 
   private readonly element = inject(ElementRef);
   private readonly modalService = inject(ModalService);
   private readonly logInfoRelatedEventService = inject(LogInfoRelatedEventService);
-
+  private readonly affectedTicketService = inject(AffectedTicketService);
+  
   constructor() {
     this.tooltip.element = this.element;
   }
@@ -94,6 +100,8 @@ export class LogInfoRelatedEventComponent {
   hideValidationDetail() {
     if (this.logInfo?.logInfoDetail) {
       this.logInfo.logInfoDetail.isHasWarningRangeTime = false;
+      this.logInfo.logInfoDetail.excludedTicketsJson = null;
+      this.logInfo.logInfoDetail.excludedTicketsCount = 0;
     }
 
     this.isShowValidation = false;
@@ -196,5 +204,14 @@ export class LogInfoRelatedEventComponent {
 
   isDangerAccepted(): boolean {
     return StaticService.isDangerAccepted(this.filter.issueTypeId);
+  }
+
+  isShowExcludedTickets(): boolean {
+    return this.logInfo.logInfoDetail?.excludedTicketsCount > 0;
+  }
+
+  showExcludedTicketsDetails(): void {
+    this.affectedTicketService.updateShowAffectedTicketsDetails(this.affectedTicketsModel, this.logInfo.logInfoDetail.excludedTicketsJson, Number(this.filter.issueTypeId), true);
+    this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 }

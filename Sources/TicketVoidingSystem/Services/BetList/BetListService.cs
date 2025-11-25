@@ -91,6 +91,18 @@ public class BetListServiceImp(RemotingRefWrapperService remotingRefWrapperServi
     {
         var choiceBlock = BuildChoiceBlock(ticket, ticketHelper, ticketData, isShowScoreMap);
         choiceBlock.betTeamClassName += " bet-team-choice";
+        if (!ticketHelper.ShowBetType)
+        {
+            choiceBlock.BetType = null;
+        }
+        if (!ticketHelper.ShowMatch)
+        {
+            choiceBlock.Match = null;
+        }
+        if (!ticketHelper.ShowLeague)
+        {
+            choiceBlock.League = null;
+        }
 
         return choiceBlock;
     }

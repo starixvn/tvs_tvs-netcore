@@ -55,6 +55,7 @@ export class LogInfoWrongOuComponent implements OnInit {
   private readonly eventWrongOuService = inject(EventWrongOuService);
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly logAnalysisService = inject(LogAnalysisService);
+  private readonly affectedTicketService = inject(AffectedTicketService);
 
   public ngOnInit(): void {
     if (this.isEdit) {
@@ -109,9 +110,7 @@ export class LogInfoWrongOuComponent implements OnInit {
   }
 
   public showAffectedTicketsDetails() {
-    this.affectedTicketsModel.issueTypeId = Number(this.filter.issueTypeId);
-    this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketService.updateShowAffectedTicketsDetails(this.affectedTicketsModel, this.logInfo.logInfoDetail.logInfoTicketsJson, Number(this.filter.issueTypeId));
     this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 

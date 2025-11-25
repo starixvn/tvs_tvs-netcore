@@ -164,8 +164,8 @@ public static class HtmlExtension
             return string.Empty;
         }
 
-        var node = doc.DocumentNode.SelectNodes("//div[@class='sub-odds']")[0];
-        return node.InnerText;
+        var node = doc.DocumentNode.SelectNodes("//div[@class='sub-odds']");
+        return node is null ? string.Empty : node[0].InnerText;
     }
 
     public static string ChoiceParlay(string html)
@@ -240,13 +240,12 @@ public static class HtmlExtension
         var match = doc.DocumentNode.SelectNodes("//div[@class='match']")[0];
         var league = doc.DocumentNode.SelectNodes("//div[@class='league']")[0];
 
-        var result = choice;
         if (isHybrid)
         {
-            result = result.AppendWithNewLine(subOdds.StripHtml());
+            choice = choice.AppendWithNewLine(subOdds.StripHtml());
         }
 
-        return result.AppendWithNewLine(handicap.StripHtml())
+        return choice.AppendWithNewLine(handicap.StripHtml())
             .AppendWithNewLine(bettype)
             .AppendWithNewLine(match.InnerHtml.StripHtml())
             .AppendWithNewLine(league.InnerHtml.StripHtml()).Replace("\r\n", "\n");
@@ -262,8 +261,8 @@ public static class HtmlExtension
     private static string HeaderParlay(HtmlDocument doc)
     {
         var choice = doc.DocumentNode.SelectNodes("//a")[0].InnerHtml.StripHtml();
-        var offerName = doc.DocumentNode.SelectNodes("//div[@class='offer-name-list']//div");
-        if (offerName == null)
+        var offerName = doc.DocumentNode.SelectNodes("//div[contains(@class, 'offer-name-list')]//div");
+        if (offerName is null)
         {
             return choice;
         }
@@ -272,7 +271,7 @@ public static class HtmlExtension
         return offerNameList.Aggregate(choice, (current, item) => current.AppendWithNewLine(item.InnerHtml.StripHtml()));
     }
 
-    public static string ChoiceShortSubParlay(this string html, bool isParlay)
+    public static string ChoiceShortSubParlay(this string html, bool isParlay, bool isHybrid)
     {
         if (string.IsNullOrEmpty(html))
         {
@@ -282,8 +281,15 @@ public static class HtmlExtension
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
         var choice = isParlay ? HeaderParlay(doc) : string.Empty;
+        var subOdds = html.SubOdds(doc);
         var bettypeDescription = GetBetTypeDescription(doc);
         var handicap = html.Handicap(doc);
+
+        if (isHybrid)
+        {
+            choice = choice.AppendWithNewLine(subOdds.StripHtml());
+        }
+
         return choice.AppendWithNewLine(handicap.StripHtml())
             .AppendWithNewLine(bettypeDescription);
     }

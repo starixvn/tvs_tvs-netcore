@@ -44,11 +44,13 @@ export class EventDangerAcceptedService {
       event.isMainMatch = x.isMainMatch;
       event.eventName = x.name;
       event.logInfoDetail = x.logInfoDetail;
-      event.logInfoDetail.isHasWarningRangeTime = this.validationService.isHasWarningRangeTime(x.filterFromTransTime, x.logInfoDetail.transVoidToTime);
       event.voidTimeArea = this.getVoidTimeModel(x);
       event.tvDetectionModel = this.getTvDetectionModel(x);
       event.eventDate = x.eventDate;
       event.sportType = x.sportType;
+      if(event.logInfoDetail){
+        event.logInfoDetail.isHasWarningRangeTime = this.validationService.isHasWarningRangeTime(x.filterFromTransTime, x.logInfoDetail?.transVoidToTime);
+      }
 
       allEvents.push(event);
     });

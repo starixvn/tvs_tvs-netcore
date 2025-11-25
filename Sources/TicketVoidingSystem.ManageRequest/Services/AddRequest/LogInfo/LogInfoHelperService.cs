@@ -83,6 +83,8 @@ public static class LogInfoHelper
             PoolHouseSettleCount = selectedItems.Sum(x => x.PoolHouseSettleCount),
             PoolHouseSingleCount = selectedItems.Sum(x => x.PoolHouseSingleCount),
             LogInfoTicketsJson = JoinStringValue(",", selectedItems.Select(x => x.LogInfoTicketsJson)),
+            ExcludedTicketsJson = JoinStringValue(",", selectedItems.Select(x => x.ExcludedTicketsJson)),
+            ExcludedTicketsCount = selectedItems.Sum(x => x.ExcludedTicketsCount),
             VoidFromTime = CombineVoidFromTime(selectedItems),
             VoidToTime = CombineVoidToTime(selectedItems),
             MinTransId = minObject?.MinTransId,

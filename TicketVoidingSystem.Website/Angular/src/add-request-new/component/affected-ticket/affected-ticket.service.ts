@@ -11,6 +11,7 @@ import { TicketsService } from '../pool-house-ticket/tickets/tickets.service';
 export class AffectedTicketService {
   private readonly addRequestApiService = inject(AddRequestApiService);
   private readonly ticketsService = inject(TicketsService);
+
   async getAffectedTickets(issueTypeId: number, logInfoTicketsJson: string) {
     if (logInfoTicketsJson) {
       const query: LogInfoTicketsQuery = {
@@ -50,12 +51,22 @@ export class AffectedTicketService {
   }
 
   getAffectedTicketsDetails(issueTypeId: number, betTypeCount: BetTypeCountModel[], logInfoTicketsJson: string): AffectedTicketsModel {
-    return {
-      groupBetTypesCount: this.updateBetTypeCountModel(betTypeCount),
-      isShowDetailBetTypeCount: true,
-      issueTypeId: issueTypeId,
-      logInfoTicketsJson: logInfoTicketsJson,
-      isOpen: true
-    }
+    const affectedTicketsModel = new AffectedTicketsModel();
+    this.updateShowAffectedTicketsDetails(affectedTicketsModel, logInfoTicketsJson, issueTypeId);
+    affectedTicketsModel.groupBetTypesCount = this.updateBetTypeCountModel(betTypeCount);
+    affectedTicketsModel.isShowDetailBetTypeCount = true;
+   
+    return affectedTicketsModel;
+  }
+
+  updateShowAffectedTicketsDetails(affectedTicketsModel: AffectedTicketsModel, logInfoTicketsJson: string, issueTypeId: number, isExcludeBetType = false) {
+    affectedTicketsModel.logInfoTicketsJson = logInfoTicketsJson;
+    affectedTicketsModel.issueTypeId = issueTypeId;
+    affectedTicketsModel.isOpen = true;
+    affectedTicketsModel.isExcludeBetType = isExcludeBetType;
+  }
+
+  getGroupBetTypesCount(betTypeCount: BetTypeCountModel[]): GroupBetTypeCountModel[] {
+    return this.updateBetTypeCountModel(betTypeCount);
   }
 }

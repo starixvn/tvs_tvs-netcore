@@ -29,8 +29,9 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   @Input() issueTypeId: string;
   @Output() searchEvent = new EventEmitter<string>();
   affectedTicketsModel = new AffectedTicketsModel();
+  
   private readonly modalService = inject(ModalService);
-
+  private readonly affectedTicketService = inject(AffectedTicketService);
   ngOnInit(): void {
     if (this.isEdit) {
       this.primitiveProps.isShowValidation = true;
@@ -63,9 +64,7 @@ export class LogInfoWrongOddsSportsBookComponent implements OnInit {
   }
 
   public showAffectedTicketsDetails() {
-    this.affectedTicketsModel.issueTypeId = Number(this.issueTypeId);
-    this.affectedTicketsModel.logInfoTicketsJson = this.logInfo.logInfoDetail.logInfoTicketsJson;
-    this.affectedTicketsModel.isOpen = true;
+    this.affectedTicketService.updateShowAffectedTicketsDetails(this.affectedTicketsModel, this.logInfo.logInfoDetail.logInfoTicketsJson, Number(this.issueTypeId));
     this.affectedTicketsModel = clone(this.affectedTicketsModel);
   }
 }

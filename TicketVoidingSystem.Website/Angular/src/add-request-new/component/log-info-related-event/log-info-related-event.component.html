@@ -53,7 +53,6 @@
     </div>
     <div class="list-group-item flex-column align-items-start wrapper-tooltip" [hidden]="isCollapse"
       [ngClass]="{'body-log-info-main': isMainMatch, 'body-log-info-child': !isMainMatch}">
-
       <div class="log" [blockUi]="isBlock">
         <filter-time-with-allowance #filterTimeWithAllowance [isEdit]="isEdit" [isDisabled]="isDisabled"
           [isUseInLogInfo]="true" [filterTimeWithAllowanceModel]="logInfo.voidTimeArea"
@@ -78,6 +77,11 @@
           Cancel Cash Out: <strong>{{logInfo.logInfoDetail.cancelCashOutCount}}</strong>
         </div>
         }
+        @if (isShowExcludedTickets()) {
+          <span>Excluded: </span><strong>{{logInfo.logInfoDetail.excludedTicketsCount}} </strong>
+          <span class="text-primary text-decoration-underline details-hover" (click)="showExcludedTicketsDetails()">Details</span><br/>
+        }
+  
         @if (isShowMessageRangeVoidTime()) {
         <span class="text-red"><strong>Filter time to last accept (Duration: {{getDurationTime()}}) - Please consider
             using Wrong Score or Red Card issue type</strong></span>
@@ -109,4 +113,5 @@
   [isMainEvent]="false">
 </sub-issue-type-dialog>
 
+<affected-ticket #affectedTicket [model]="affectedTicketsModel"></affected-ticket>
 <tooltip [tooltip]="tooltip"></tooltip>

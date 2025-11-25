@@ -51,6 +51,11 @@ public class LogInfoDetail
 
     //Wrong HDP/1stHDP, Wrong OU/1H OU, Wrong Odds Wrong Market Offered & Technical Error
     public string? LogInfoTicketsJson { get; set; }
+
+    // Danger Accepted & Wrong Score
+    public int ExcludedTicketsCount { get; set; }
+
+    public string? ExcludedTicketsJson { get; set; }
 }
 
 public class Validation

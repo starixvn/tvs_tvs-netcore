@@ -366,7 +366,7 @@ function showMP(subTransId, refNo) {
 }
 
 function showCombMP(subTransId, type, refNo) {
-    if (subTicketParlay > 0) {
+    if (subTransId > 0) {
         subTicketParlay.getSubTicketParlay(subTransId, refNo);
     }
     else {

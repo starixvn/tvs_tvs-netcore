@@ -138,3 +138,12 @@ span {
   left: 50px;
 }
 
+.details-hover {
+  cursor: pointer;
+  transition: font-weight 0.2s ease;
+  
+  &:hover {
+    font-weight: bold;
+  }
+}
+
