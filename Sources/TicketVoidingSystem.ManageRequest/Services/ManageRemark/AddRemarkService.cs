@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Fanex.Data.Repository;
 using TicketVoidingSystem.ManageRequest.Criteria.ManageRemark;
+using TicketVoidingSystem.ManageRequest.Extension;
 using TicketVoidingSystem.ManageRequest.Models.ManageRemark;
 using TicketVoidingSystem.Models;
 using TicketVoidingSystem.Services;
@@ -38,6 +39,7 @@ public class AddRemarkServiceImp(IMapper mapper, SessionService sessionService, 
     private async Task<int> ExecuteAddRemark(AddRemarkQuery query)
     {
         var command = mapper.Map<AddRemarkCommand>(query);
+        command.Operators = query.OperatorsList?.OperatorToXml();
         command.UserId = sessionService.UserId;
         command.IP = sessionService.GetClientIp();
         await repository.ExecuteAsync(command);

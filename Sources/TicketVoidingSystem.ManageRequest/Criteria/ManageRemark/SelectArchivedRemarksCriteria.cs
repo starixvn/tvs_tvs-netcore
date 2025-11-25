@@ -12,7 +12,7 @@ public class SelectArchivedRemarksCriteria : CriteriaBase
     public string? CreatedBy { get; set; }
     public bool? IsExcludeTest { get; set; }
 
-    public override string GetSettingKey() => "TicketVoiding_RemarkListInfo_Archive_Select";
+    public override string GetSettingKey() => "TicketVoiding_RemarkList_Archive_Select";
 
     public override bool IsValid() => true;
 }
