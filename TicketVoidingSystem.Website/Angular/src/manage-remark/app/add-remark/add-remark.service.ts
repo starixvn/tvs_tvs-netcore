@@ -1,23 +1,21 @@
 import { inject, Injectable } from '@angular/core';
-import { AddRemarkModel } from '../models/add-remark.model';
+import { Guid } from 'guid-typescript';
+import isNull from 'lodash/isNull';
+import isUndefined from 'lodash/isUndefined';
 import { Tooltip } from '../../..//utility/components/tooltip/tooltip.model';
 import { TEXT } from '../../..//utility/constants/text';
-import { AddRemarkQuery, AddRemarkResultData } from '../models/add-remark-query.model';
-import { Guid } from 'guid-typescript';
-import { AddRequestStore } from '../../../add-request-new/services/add-request.store';
-import { AppService } from '../app.service';
-import { Result } from '../../../utility/models/result';
 import { PopupService } from '../../../add-request-new/services/popup.service';
 import { ModalType } from '../../../utility/components/modal/modal.model';
 import { ModalService } from '../../../utility/components/modal/modal.service';
-import isNull from 'lodash/isNull';
-import isUndefined from 'lodash/isUndefined';
+import { Result } from '../../../utility/models/result';
+import { AppService } from '../app.service';
+import { AddRemarkQuery, AddRemarkResultData } from '../models/add-remark-query.model';
+import { AddRemarkModel } from '../models/add-remark.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AddRemarkService {
-  private readonly addRequestStore = inject(AddRequestStore);
   private readonly appService = inject(AppService);
   private readonly popupService = inject(PopupService);
   private readonly modalService = inject(ModalService);
@@ -28,7 +26,7 @@ export class AddRemarkService {
       tooltip.display('check-var', TEXT.SELECTED_VAR_OPTIONS);
       return true;
     }
-  
+
     return false;
   }
 
@@ -37,7 +35,6 @@ export class AddRemarkService {
       ...model,
       isTest: isTest,
       guid: isEdit ? null : `AddRemark-${Guid.create().toString()}`,
-      sessionTime: this.addRequestStore.getTimeFilterTicket()
     };
 
     const result = isEdit ? await this.appService.editRemark(query) : await this.appService.addRemark(query);

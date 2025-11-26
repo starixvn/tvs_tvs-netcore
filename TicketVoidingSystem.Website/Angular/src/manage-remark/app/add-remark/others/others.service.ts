@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import groupBy from 'lodash/groupBy';
 import { GroupOperator, OperatorDefault, OperatorInfo } from '../../../../add-request-new/component/others/others.model';
 import { OthersService as BaseOthersService } from '../../../../add-request-new/component/others/others.service';
 import { ActionRemark } from '../../constants/action-remark.constant';
-import groupBy from 'lodash/groupBy';
 
 @Injectable()
 export class OthersService {
@@ -28,7 +28,7 @@ export class OthersService {
         groupOperators.push(group);
       }
     }
-    
+
     return groupOperators;
   }
 

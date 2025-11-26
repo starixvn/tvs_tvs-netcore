@@ -1,12 +1,12 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { AddRemarkModel } from '../../models/add-remark.model';
-import { CommonService } from '../../../../utility/services/common.service';
 import { GroupOperator } from '../../../../add-request-new/component/others/others.model';
-import { OthersService } from './others.service';
+import { CommonService } from '../../../../utility/services/common.service';
+import { AddRemarkModel } from '../../models/add-remark.model';
 import { ConfirmAddRemarkComponent } from '../confirm-add-remark/confirm-add-remark.component';
+import { OthersService } from './others.service';
 
 @Component({
   standalone: true,
@@ -21,7 +21,7 @@ export class OthersComponent implements OnInit {
   @Input() isEdit: boolean;
   @Output() save = new EventEmitter();
   @Output() confirmAddRemark = new EventEmitter();
-  
+
   decidedBys: string[] = [];
   groupOperators: GroupOperator[] = [];
   actionOptions: { label: string; value: string }[] = [];
@@ -48,6 +48,7 @@ export class OthersComponent implements OnInit {
     const operators = await this.othersService.getOperators(this.model.matchId);
     this.groupOperators = this.othersService.initializeGroupOperators(operators);
     this.othersService.updateSelectedOperators(this.groupOperators, this.model.operatorsList);
+    this.model.operatorsList = this.othersService.extractOperatorList(this.groupOperators);
   }
 
   onSelectOperator(): void {
