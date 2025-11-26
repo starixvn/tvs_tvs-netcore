@@ -382,8 +382,8 @@ const configPages = [
   //markTickets,
   //ticketListing,
   //voidSingleBet,
-  voidRequest,
-  manageRequest,
+  //voidRequest,
+  //manageRequest,
   //voidByBetId
   //archivedTicket,
   //dangerAccepted,
@@ -391,7 +391,7 @@ const configPages = [
   //wrongScore,
   //technicalError,
   // wrongHdp,
-  wrongOu,
+  //wrongOu,
   // wrongOdds,
   //wrongOddsSportsBook,
   //earlyKickOff,
@@ -404,7 +404,7 @@ const configPages = [
   //duplicateTickets,
   //recoverTicket
   //reducedOver,
-  //manageRemark
+  manageRemark
 ];
 
 module.exports = configPages;

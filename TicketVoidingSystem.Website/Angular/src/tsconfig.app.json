@@ -4,6 +4,6 @@
     "outDir": "../out-tsc/app",
     "types": []
   },
-  "files": ["add-request-new/events/wrong-ou/main.ts", "polyfills.ts"],
+  "files": ["manage-remark/main.ts", "polyfills.ts"],
   "exclude": ["test.ts", "**/*.spec.ts"]
 }
