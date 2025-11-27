@@ -87,6 +87,7 @@ public static class SpecialDeleteFunctionKeys
     public const string VoidUnSettledParlayBet = "VoidUnSettledParlayBet";
     public const string VoidUnSettledSingleBet = "VoidUnSettledSingleBet";
     public const string VoidUnsettledTickets = "VoidUnsettledTickets";
+    public const string VoidOnlyUUSTickets = "VoidOnlyUUSTickets";
     public const string Wrong1stHDP = "Wrong1stHDP";
     public const string Wrong1stOU = "Wrong1stOU";
     public const string WrongHDP = "WrongHDP";
