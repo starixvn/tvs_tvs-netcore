@@ -2,7 +2,7 @@
 
 namespace TicketVoidingSystem.ManageRequest.Criteria.ManageRequest;
 
-public class ValidateErrorRequestCriteria : CriteriaBase
+public class ValidateRequestCriteria : CriteriaBase
 {
     public int RequestId { get; set; }
 

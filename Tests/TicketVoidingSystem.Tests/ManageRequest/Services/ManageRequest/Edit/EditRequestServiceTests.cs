@@ -28,7 +28,7 @@ public class EditRequestServiceTests
         var markTicketResult = new MarkTicketsResult { MarkedResults = [], MarkedTickets = [] };
         var resultMarkTicket = new Result { ErrorMsg = "Has Error Mark Tickets", ErrorCode = 1 };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketResult);
-        marketTicketsWhenEditService.GetStateMarkTickets(null).ReturnsForAnyArgs(new ValidateErrorRequestModel());
+        marketTicketsWhenEditService.GetStateMarkTickets(1, null, null).ReturnsForAnyArgs(new ValidateRequestModel());
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns(resultMarkTicket);
         var service = new EditRequestServiceImp(marketTicketsWhenEditService, null, null,
             getUpdateResultService, loggingService, notificationService);
@@ -50,7 +50,7 @@ public class EditRequestServiceTests
         var reCalcTicketError = new Result { ErrorMsg = "Has Error ReCalculate Ticket", ErrorCode = 1 };
         List<Result> reCalcTicketsAbnormalResults = [new()];
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketResult);
-        marketTicketsWhenEditService.GetStateMarkTickets(null).ReturnsForAnyArgs(new ValidateErrorRequestModel());
+        marketTicketsWhenEditService.GetStateMarkTickets(1, null, null).ReturnsForAnyArgs(new ValidateRequestModel());
         getUpdateResultService.GetFirstError(markTicketResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns((Result)null);
         reCalculateTicketsService.Execute(query.AbnormalBetInfo, query.IssueTypeId, query.RemoveTransIds).Returns(reCalcTicketsAbnormalResults);
         getUpdateResultService.GetFirstError(reCalcTicketsAbnormalResults, nameof(ReCalculateTicketsService)).Returns(reCalcTicketError);

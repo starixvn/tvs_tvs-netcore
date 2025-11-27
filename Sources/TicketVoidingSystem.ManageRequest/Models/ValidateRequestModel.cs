@@ -1,6 +1,6 @@
 ﻿namespace TicketVoidingSystem.ManageRequest.Models;
 
-public class ValidateErrorRequestModel
+public class ValidateRequestModel
 {
     public string MarkTransIds { get; set; }
 

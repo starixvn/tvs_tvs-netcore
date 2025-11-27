@@ -22,10 +22,10 @@ public static class MessageHelper
                + $"{Environment.NewLine}Marked ticket: @marked/@total";
     }
 
-    public static string CreateEditRequestFailed(int requestId, int? expectTotalMarkTickets)
+    public static string CreateEditRequestFailed(int requestId)
     {
         return $"Edit request {requestId} has error"
-               + $"{Environment.NewLine}Marked ticket: @marked/{expectTotalMarkTickets}";
+               + $"{Environment.NewLine}Marked ticket:  @marked/@total";
     }
 
     public static string CreateStoredRequestSuccessfully(int requestId, bool isStore, string username)

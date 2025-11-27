@@ -52,10 +52,10 @@ public class EditRequestServiceImp(
 
     private async Task HandleErrorEditRequest(EditRequestQuery query)
     {
-        var result = await marketTicketsWhenEditService.GetStateMarkTickets(query);
+        var result = await marketTicketsWhenEditService.GetStateMarkTickets(query.RequestId, query.MarkTransIds, query.UnMarkTransIds);
         await marketTicketsWhenEditService.Execute(query.IssueTypeId, result.MarkTransIds, result.UnMarkTransIds);
 
-        var content = MessageHelper.CreateEditRequestFailed(query.RequestId, query.MarkTransIds?.Split(",").Length);
+        var content = MessageHelper.CreateEditRequestFailed(query.RequestId);
         notificationService.ExecuteBackground(() => notificationService.InsertNotification(NotificationType.Error, content, NotificationTargetType.IgnoreCurrentUser, query.RequestId));
     }
 }

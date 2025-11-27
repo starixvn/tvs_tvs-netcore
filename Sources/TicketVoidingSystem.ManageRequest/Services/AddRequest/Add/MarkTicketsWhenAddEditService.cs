@@ -11,24 +11,24 @@ public interface MarkTicketsWhenAddEditService
 {
     Task<MarkTicketsResult> Execute(int issueTypeId, string markTransIds, string unMarkTransIds);
 
-    Task<ValidateErrorRequestModel> GetStateMarkTickets(EditRequestQuery query);
+    Task<ValidateRequestModel> GetStateMarkTickets(int requestId, string markTransIds, string unMarkTransIds);
 }
 
 public class MarkTicketsWhenAddEditServiceImp(MarkTicketsService markTicketsService,
     SessionService sessionService, IDynamicRepository dynamicRepository)
     : MarkTicketsWhenAddEditService
 {
-    public async Task<ValidateErrorRequestModel> GetStateMarkTickets(EditRequestQuery query)
+    public async Task<ValidateRequestModel> GetStateMarkTickets(int requestId, string markTransIds, string unMarkTransIds)
     {
-        var criteria = new ValidateErrorRequestCriteria
+        var criteria = new ValidateRequestCriteria
         {
-            RequestId = query.RequestId,
-            MarkTransIds = query.MarkTransIds,
-            UnMarkTransIds = query.UnMarkTransIds,
+            RequestId = requestId,
+            MarkTransIds = markTransIds,
+            UnMarkTransIds = unMarkTransIds,
             UserId = sessionService.UserId
         };
 
-        return await dynamicRepository.GetAsync<ValidateErrorRequestModel>(criteria);
+        return await dynamicRepository.GetAsync<ValidateRequestModel>(criteria);
     }
 
     public async Task<MarkTicketsResult> Execute(int issueTypeId, string markTransIds, string unMarkTransIds)

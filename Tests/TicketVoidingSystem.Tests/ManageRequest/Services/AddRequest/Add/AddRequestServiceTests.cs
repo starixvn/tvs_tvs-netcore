@@ -40,6 +40,7 @@ public class AddRequestServiceTests
             MarkedTickets = []
         };
         marketTicketsWhenEditService.Execute(query.IssueTypeId, query.MarkTransIds, query.UnMarkTransIds).Returns(markTicketsResult);
+        marketTicketsWhenEditService.GetStateMarkTickets(1, null, null).ReturnsForAnyArgs(new ValidateRequestModel());
         var result = new Result { ErrorCode = 1, ErrorMsg = "has error" };
         getUpdateResultService.GetFirstError(markTicketsResult.MarkedResults, nameof(MarkTicketsWhenAddEditService)).Returns(result);
 

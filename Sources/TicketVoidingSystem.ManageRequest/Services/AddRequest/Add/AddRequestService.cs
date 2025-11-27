@@ -42,8 +42,8 @@ public class AddRequestServiceImp(
 
     private async Task HandleErrorAddRequest(AddRequestQuery query)
     {
-        var undoMarkTransIds = query.MarkTransIds;
-        await marketTicketsWhenEditService.Execute(query.IssueTypeId, null, undoMarkTransIds);
+        var result = await marketTicketsWhenEditService.GetStateMarkTickets(0, query.MarkTransIds, null);
+        await marketTicketsWhenEditService.Execute(query.IssueTypeId, result.MarkTransIds, result.UnMarkTransIds);
 
         var content = MessageHelper.CreateAddRequestFailed(0);
         notificationService.ExecuteBackground(() => notificationService.InsertNotification(NotificationType.Error, content, NotificationTargetType.IgnoreCurrentUser, null));
