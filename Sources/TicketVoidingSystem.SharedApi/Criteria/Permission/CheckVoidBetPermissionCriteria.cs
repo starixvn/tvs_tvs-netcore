@@ -16,7 +16,9 @@ public abstract class CheckVoidBetPermissionCriteria : NonQueryCommand
 
     public bool IsHostVoidUnsettledTickets { get; set; }
 
-    public bool IsHostVoidOnlyUUSTickets { get; set; }
+    public bool IsHostVoidRealTickets { get; set; }
+
+    public bool IsHostVoidUusTickets { get; set; }
 
     public string TransInfoJson { get; set; }
 
