@@ -12,8 +12,8 @@ import { Confirmation } from '../../utility/components/confirmation/confirmation
 import { AffectedLicensee } from '../../utility/components/licensee-affected-list/licensee-affected-list.model';
 import { MatchDetailComponent } from '../../utility/components/match-detail/match-detail.component';
 import { MenuBarComponent } from '../../utility/components/menu-bar/menu-bar.component';
-import { MessagesResult } from '../../utility/components/messages-result/messages-result.model';
 import { MessagesResultComponent } from '../../utility/components/messages-result/messages-result.component';
+import { MessagesResult } from '../../utility/components/messages-result/messages-result.model';
 import { ModalType } from '../../utility/components/modal/modal.model';
 import { ModalService } from '../../utility/components/modal/modal.service';
 import { Notification } from '../../utility/components/notification/notification';
@@ -22,8 +22,10 @@ import { PagingModel } from '../../utility/components/paging/paging.model';
 import { TemplateService } from '../../utility/components/template-message/template-message/services/template.service';
 import { TemplateMessageComponent } from '../../utility/components/template-message/template-message/template-message.component';
 import { TemplateValue } from '../../utility/components/template-message/template-message/template.model';
+import { GroupService } from '../../utility/components/tickets/group.service';
 import { TicketsComponent } from '../../utility/components/tickets/tickets.component';
 import { TicketsModel } from '../../utility/components/tickets/tickets.model';
+import { TicketsService } from '../../utility/components/tickets/tickets.service';
 import { TooltipComponent } from '../../utility/components/tooltip/tooltip.component';
 import { Tooltip } from '../../utility/components/tooltip/tooltip.model';
 import { FunctionConst } from '../../utility/constants/config';
@@ -40,8 +42,6 @@ import { FilterComponent } from './filter/filter.component';
 import { ModalComponent } from './modal/modal.component';
 import { Modal } from './modal/modal.model';
 import { FilterParams, GetTicketsQuery, VoidTicketsQuery } from './models/query.model';
-import { TicketsService } from '../../utility/components/tickets/tickets.service';
-import { GroupService } from '../../utility/components/tickets/group.service';
 
 @Component({
   standalone: true,
@@ -363,7 +363,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async confirmEvent() {
     const checkingPermissionModel = new CheckingPermissionModel();
-    checkingPermissionModel.setParam(this.ticketsService.getAllTicket(this.ticketsModel.groups), this.matchViewModel.matchId,
+    checkingPermissionModel.setParam(this.ticketsService.getTicketEnable(this.ticketsModel.groups), this.matchViewModel.matchId,
       'void-single-bet-check-void-bet-permission', true, StaticService.checkHandlingCashOutAsUnSettledTicketByFunction(FunctionConst.SINGLE), false);
     this.modalService.confirmPermission(checkingPermissionModel, {
       title: 'WARNING!',

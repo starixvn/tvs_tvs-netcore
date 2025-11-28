@@ -1,19 +1,19 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BaseTicketsListComponent } from '../../../utility/components/base-tickets-list/base-tickets-list.component';
-import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
+import { PagingComponent } from '../../../utility/components/paging/paging.component';
 import { TooltipComponent } from '../../../utility/components/tooltip/tooltip.component';
+import { Tooltip } from '../../../utility/components/tooltip/tooltip.model';
+import { TEXT } from '../../../utility/constants/text';
 import { SanitizeHtmlPipe } from '../../../utility/modules/sanitize-html.pipe';
-import { TEXT} from '../../../utility/constants/text';
 import { MarkedTicketQuery } from '../models/query.model';
 import { DataPermission } from '../models/result.model';
-import { TicketsModel } from './tickets.model';
-import { PagingComponent } from '../../../utility/components/paging/paging.component';
-import { BlockUiDirective } from '../../../utility/components/block-ui/block-ui.directive';
-import { TicketsListService } from './tickets-list.service';
-import { TicketModel } from './ticket.model';
 import { GroupModel } from './group-tickets.model';
+import { TicketModel } from './ticket.model';
+import { TicketsListService } from './tickets-list.service';
+import { TicketsModel } from './tickets.model';
 
 @Component({
   standalone: true,
@@ -49,7 +49,7 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
       this.tooltip.display('invalid-data', TEXT.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
-      this.markedTicketsQuery.checkPermissionTickets = this.ticketsListService.getAllTickets(this.model.groups);
+      this.markedTicketsQuery.checkPermissionTickets = tickets;
       this.updateMarkedTickets.emit(this.markedTicketsQuery);
     }
   }
@@ -60,7 +60,7 @@ export class TicketsListComponent extends BaseTicketsListComponent<TicketsModel>
       this.tooltip.display('invalid-data', TEXT.EMPTY_TICKET);
     } else {
       this.markedTicketsQuery.tickets = tickets;
-      this.markedTicketsQuery.checkPermissionTickets = this.ticketsListService.getAllTickets(this.model.groups);
+      this.markedTicketsQuery.checkPermissionTickets = this.ticketsListService.getTicketsParamWithAllPage(this.model);
       this.updateMarkedTickets.emit(this.markedTicketsQuery);
     }
   }
